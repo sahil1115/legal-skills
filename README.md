@@ -4,7 +4,7 @@
 
 Legal Skills is a static web app. There is no backend, no account, no API key and no tracking. Every skill is a structured, provider-neutral prompt that you copy into Claude, ChatGPT, Gemini, Cursor, a local model, or your own tooling.
 
-> **Not legal advice.** Every skill here produces AI-assisted legal research and drafting support. It is not legal advice, it does not create a lawyer–client relationship, and it may be incomplete or out of date. Verify every citation, deadline and conclusion against primary sources, and have a qualified lawyer in the relevant jurisdiction review the output before you rely on it.
+> **Not legal advice.** Every skill here produces AI-assisted legal research and drafting support. It is not legal advice, it does not create a lawyer–client relationship, and it may be incomplete or out of date. Verify every citation, deadline and conclusion against primary sources, and have a qualified lawyer in the relevant jurisdiction review the output before you rely on it. See [DISCLAIMER.md](DISCLAIMER.md).
 
 ---
 
@@ -208,3 +208,5 @@ New skills, corrections to existing ones, and jurisdiction expertise are all wel
 ## Licence
 
 [MIT](LICENSE). Use it, fork it, ship it commercially — attribution appreciated, not required.
+
+The licence covers the software. It is not a warranty about the law: see [DISCLAIMER.md](DISCLAIMER.md).

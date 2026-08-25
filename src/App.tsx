@@ -278,6 +278,9 @@ export default function App() {
             <a href={`${REPO_URL}/blob/main/LICENSE`} target="_blank" rel="noreferrer noopener">
               MIT License
             </a>
+            <a href={`${REPO_URL}/blob/main/DISCLAIMER.md`} target="_blank" rel="noreferrer noopener">
+              Disclaimer
+            </a>
           </nav>
         </div>
       </footer>
