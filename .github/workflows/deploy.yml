@@ -1,11 +1,17 @@
 # Builds the static bundle and publishes it to GitHub Pages.
-# Enable via Settings -> Pages -> Source: GitHub Actions.
+#
+# This workflow is MANUAL by default, so a repository with Pages switched off
+# does not collect a failed run on every push. To go live:
+#
+#   1. Settings -> Pages -> Source: GitHub Actions
+#   2. Either run this workflow once from the Actions tab, or uncomment the
+#      `push` trigger below to deploy automatically on every push to main.
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
+  # push:
+  #   branches: [main]
 
 permissions:
   contents: read

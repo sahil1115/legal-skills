@@ -67,9 +67,14 @@ The build output in `dist/` is a plain static bundle — any static host will se
 
 ### GitHub Pages
 
-The workflow is already in the repo at [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml). Push to `main`, then enable **Settings → Pages → Source: GitHub Actions**. That is the whole setup — no base path to configure, because the build is already relative.
+The workflow ships in the repo at [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), set to **manual** so a repo with Pages switched off doesn't collect a failed run on every push. To go live:
 
-There is also a [`ci.yml`](.github/workflows/ci.yml) that lints and builds every pull request.
+1. **Settings → Pages → Source: GitHub Actions**
+2. Run **Deploy to GitHub Pages** once from the Actions tab — or uncomment the `push` trigger in the workflow to deploy automatically on every push to `main`.
+
+There is no base path to configure: the build is already relative, so it works at `<user>.github.io/<repo>/` as-is.
+
+[`ci.yml`](.github/workflows/ci.yml) lints and builds every push and pull request, and runs unconditionally.
 
 ### Netlify, Vercel, Cloudflare Pages
 
