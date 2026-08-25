@@ -1,0 +1,12 @@
+# Normalise line endings so contributors on Windows, macOS and Linux don't
+# produce whole-file diffs. Text files are stored LF in the repo and checked
+# out with each platform's native endings.
+* text=auto eol=lf
+
+# Binary and generated files git should not try to diff or normalise.
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+package-lock.json -diff linguist-generated

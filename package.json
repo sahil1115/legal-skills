@@ -1,0 +1,52 @@
+{
+  "name": "legal-skills",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A free, open-source catalogue of reusable legal AI skills, browsable by jurisdiction.",
+  "license": "MIT",
+  "homepage": "https://github.com/sahil1115/legal-skills",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sahil1115/legal-skills.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sahil1115/legal-skills/issues"
+  },
+  "keywords": [
+    "legal",
+    "legaltech",
+    "legal-ops",
+    "ai",
+    "prompts",
+    "skills",
+    "compliance",
+    "privacy",
+    "contracts",
+    "open-source"
+  ],
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "lint": "oxlint",
+    "audit": "node scripts/audit-skills.mjs",
+    "typecheck": "tsc -b --force"
+  },
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.1.0",
+    "oxlint": "^1.79.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.2"
+  }
+}
