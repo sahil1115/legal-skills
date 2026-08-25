@@ -34,6 +34,26 @@ You do not need to be a developer to contribute a skill. If you can edit a text 
   jurisdiction: 'eu',
   category: 'privacy',
   tags: ['data-protection', 'assessment', 'something-specific'],
+
+  // --- Provenance. All four are required. ---
+  sources: [
+    {
+      citation: 'Regulation (EU) 2016/679 (General Data Protection Regulation)',
+      authority: 'primary',            // primary | regulator | guidance | secondary
+      publisher: 'European Union',
+      jurisdiction: 'eu',
+      url: 'https://eur-lex.europa.eu', // LANDING PAGE ONLY - never a deep link
+      note: 'What this source is relied on for, or a caveat about it.',
+    },
+  ],
+  lastReviewed: '2026-08-26',          // ISO date, not in the future
+  reviewStatus: 'unverified',          // see "Review status" below
+  version: '1.0.0',                    // semver
+
+  // --- Optional. ---
+  industries: ['technology'],          // omit entirely if industry-agnostic
+  relatedSkills: ['eu-dpia-ropa-builder'],
+
   whatItDoes: 'Two to four sentences of substance...',
   whenToUse: 'The situation that should make someone reach for this...',
   inputs: [
@@ -43,7 +63,7 @@ You do not need to be a developer to contribute a skill. If you can edit a text 
   outputs: [
     { name: 'The deliverable', description: 'What comes back.' },
   ],
-  prompt: `You are a ...`,
+  prompt: `You are a ...`,             // do NOT paste the safety block here
   example: {
     scenario: 'A concrete situation, in one or two sentences.',
     result: 'What the user actually gets back.',
@@ -51,9 +71,31 @@ You do not need to be a developer to contribute a skill. If you can edit a text 
 }
 ```
 
+### Sources: the rules that are enforced
+
+- **At least one source per skill**, each with a `citation` and an `authority` tier.
+- **Name only instruments you are confident exist**, under the name a practitioner would use. If you are not sure of the name, that is a reason to research it, not to guess.
+- **No pinpoint citations in metadata.** No section, article or rule numbers. They belong in verified content, not machine-generated provenance.
+- **URLs are HTTPS landing pages only.** `https://eur-lex.europa.eu`, not a path into it. `npm run audit` **fails** on any URL containing a path, because a rotted or fabricated deep link is worse than no link.
+- **Be honest about tier.** A workflow skill that is not grounded in an instrument should say so with a `secondary` source describing the practice — do not dress practice up as primary law.
+
+### Review status
+
+| Status | Means |
+| --- | --- |
+| `unverified` | Drafted against the named sources. No practitioner sign-off. **Use this for new skills.** |
+| `community-reviewed` | Checked by a contributor with relevant knowledge, not a qualified practitioner. |
+| `practitioner-reviewed` | Checked by a lawyer qualified in the skill's jurisdiction, as at `lastReviewed`. |
+
+**Only raise a status if you personally did the review**, and say so in the PR — including your jurisdiction of qualification for `practitioner-reviewed`. Never raise statuses in a bulk edit. A wrong status here is more dangerous than a wrong prompt, because it tells a reader to relax.
+
+### The legal-safety block
+
+`src/data/safety.ts` holds one shared block, composed onto every prompt by `composePrompt()`. **Do not paste it into your skill's `prompt`** — the audit fails if you do. If you think a rule is missing from it, open an issue: changing it changes all 38 skills at once, which is exactly why it lives in one place.
+
 ### 3. Rules that the build enforces
 
-- **`id` must be unique** and follow `<jurisdiction>-<slug>`. It is the deep-link fragment, so treat it as permanent once merged.
+- **`id` must be unique** and follow `<jurisdiction>-<slug>`. It is a published deep link, so treat it as permanent once merged. If a rename is genuinely warranted, add the old id to `ID_ALIASES` in `src/data/skills/index.ts` and **never delete that entry**.
 - **`jurisdiction` and `category` must be valid.** TypeScript rejects a typo at build time. Valid categories are in `src/data/categories.ts`.
 - **At least one tag from `src/data/tags.ts`.** `npm run audit` fails a skill whose tags are all words no other skill uses, and the dev server warns in the console. A tag used once is a name, not a filter.
 
@@ -66,7 +108,7 @@ npm run dev     # open the app, find your skill, open it, copy the prompt
 npm run build   # must pass before you open a PR
 ```
 
-`npm run audit` checks what TypeScript cannot: thin `whatItDoes` or examples, a prompt missing its `INPUTS` / `TASK` / `RULES` / `OUTPUT FORMAT` sections, malformed ids and tags, orphan tags, and provider names leaking into a prompt. It prints a per-jurisdiction and per-category count so you can see where the catalogue is thin.
+`npm run audit` checks what TypeScript cannot: source metadata and authority tiers, deep links in source URLs, review dates and semver, the safety block's own integrity, required prompt sections, provider names leaking into prompts, an inlined safety block, thin content, malformed or duplicate ids/names/tags/sources, broken or self-referencing `relatedSkills`, dangling `ID_ALIASES`, and that both export formats round-trip with their safety block intact. Errors fail CI; warnings report without blocking.
 
 ---
 

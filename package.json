@@ -34,6 +34,7 @@
     "preview": "vite preview",
     "lint": "oxlint",
     "audit": "node scripts/audit-skills.mjs",
+    "packs": "node scripts/build-skill-packs.mjs",
     "typecheck": "tsc -b --force"
   },
   "dependencies": {

@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
-import type { Skill, TabId } from './types/skill';
-import { getSkill, skills } from './data/skills';
+import type { TabId } from './types/skill';
+import { skills } from './data/skills';
 import { jurisdictions } from './data/jurisdictions';
 import { categories } from './data/categories';
 import { useSkillFilters } from './hooks/useSkillFilters';
+import { useSkillRoute } from './hooks/useSkillRoute';
 import { FilterBar } from './components/FilterBar';
 import { SkillCard } from './components/SkillCard';
 import { SkillDetail } from './components/SkillDetail';
@@ -31,8 +32,10 @@ const activeCategories = categories.filter((c) => skills.some((s) => s.category 
 
 export default function App() {
   const [tab, setTab] = useState<TabId>('skills');
-  const [openSkill, setOpenSkill] = useState<Skill | null>(null);
   const [theme, setTheme] = useState<'light' | 'dark'>(getInitialTheme);
+
+  // The URL owns which skill is open, so Back/Forward stay in sync.
+  const { openSkill, open: handleOpen, close: handleClose } = useSkillRoute();
 
   const {
     filters,
@@ -43,6 +46,7 @@ export default function App() {
     setQuery,
     setJurisdiction,
     setCategory,
+    setIndustry,
     toggleTag,
     clearFilters,
   } = useSkillFilters();
@@ -55,27 +59,6 @@ export default function App() {
       // Private browsing or blocked storage — the theme just won't persist.
     }
   }, [theme]);
-
-  // Skills are deep-linkable via #skill-id so a card can be shared as a URL.
-  useEffect(() => {
-    function applyHash() {
-      const id = window.location.hash.replace(/^#/, '');
-      setOpenSkill(id ? (getSkill(id) ?? null) : null);
-    }
-    applyHash();
-    window.addEventListener('hashchange', applyHash);
-    return () => window.removeEventListener('hashchange', applyHash);
-  }, []);
-
-  const handleOpen = useCallback((skill: Skill) => {
-    setOpenSkill(skill);
-    window.history.pushState(null, '', `#${skill.id}`);
-  }, []);
-
-  const handleClose = useCallback(() => {
-    setOpenSkill(null);
-    window.history.pushState(null, '', window.location.pathname + window.location.search);
-  }, []);
 
   const handleTagSelect = useCallback(
     (tag: string) => {
@@ -200,6 +183,7 @@ export default function App() {
                   onQueryChange={setQuery}
                   onJurisdictionChange={setJurisdiction}
                   onCategoryChange={setCategory}
+                  onIndustryChange={setIndustry}
                   onTagToggle={toggleTag}
                   onClear={clearFilters}
                 />
@@ -286,7 +270,12 @@ export default function App() {
       </footer>
 
       {openSkill && (
-        <SkillDetail skill={openSkill} onClose={handleClose} onTagSelect={handleTagSelect} />
+        <SkillDetail
+          skill={openSkill}
+          onClose={handleClose}
+          onTagSelect={handleTagSelect}
+          onOpenSkill={handleOpen}
+        />
       )}
     </div>
   );

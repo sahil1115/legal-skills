@@ -11,6 +11,13 @@ export const globalSkills: Skill[] = [
     jurisdiction: 'global',
     category: 'contracts',
     tags: ['contract-lifecycle', 'programme-design', 'playbook', 'negotiation', 'contract-review', 'standards', 'legal-ops'],
+    sources: [
+      { citation: 'General commercial contracting and legal operations practice', authority: 'secondary', note: 'A workflow skill: no single binding instrument governs it. The output must still be checked against the law of the governing jurisdiction.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['global-playbook-cleaner', 'global-smart-redline', 'global-draft-builder'],
     whatItDoes:
       'Reads a sample of your executed agreements and reverse-engineers the positions your team actually accepts, rather than the ones your template asks for. For each key clause it derives a preferred position, one or two fallbacks, and a walk-away line, then records how often each position appeared in the sample so reviewers know which fallbacks are genuinely routine. The output is structured so it can be handed to a reviewer, pasted into a CLM tool, or used as the system prompt for a first-pass review agent.',
     whenToUse:
@@ -68,6 +75,13 @@ A markdown table per clause (Position | Language | Frequency | Approver), follow
     jurisdiction: 'global',
     category: 'contracts',
     tags: ['contract-lifecycle', 'drafting', 'templates', 'playbook', 'first-draft', 'contract-generation'],
+    sources: [
+      { citation: 'General commercial contracting and legal operations practice', authority: 'secondary', note: 'A workflow skill: no single binding instrument governs it. The output must still be checked against the law of the governing jurisdiction.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['global-playbook-maker', 'cross-contract-localizer', 'global-smart-redline'],
     whatItDoes:
       'Takes a deal summary and produces a complete, internally consistent first draft rather than a fill-in-the-blanks template. It selects clause language from your playbook or precedent, resolves defined terms so they are used consistently throughout, wires cross-references correctly, and leaves explicit bracketed placeholders wherever a commercial decision has not yet been made. Every substantive choice is logged in a drafting note so the reviewing lawyer can see what was assumed.',
     whenToUse:
@@ -127,6 +141,13 @@ OUTPUT FORMAT
     jurisdiction: 'global',
     category: 'contracts',
     tags: ['contract-lifecycle', 'extraction', 'obligations', 'contract-management', 'deadlines', 'post-signature', 'legal-ops'],
+    sources: [
+      { citation: 'General commercial contracting and legal operations practice', authority: 'secondary', note: 'A workflow skill: no single binding instrument governs it. The output must still be checked against the law of the governing jurisdiction.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['global-contract-finder', 'global-contract-triage'],
     whatItDoes:
       'Reads an executed contract and produces a structured obligation register: who owes what, to whom, by when, and what happens if it is missed. It distinguishes recurring obligations from one-off ones, converts relative deadlines ("within 30 days of the Effective Date") into absolute dates when the effective date is supplied, and separates true obligations from mere permissions and conditions precedent. Every row cites the clause it came from, so nothing in the register is unverifiable.',
     whenToUse:
@@ -183,6 +204,13 @@ Markdown tables as above, in the order listed.`,
     jurisdiction: 'global',
     category: 'contracts',
     tags: ['contract-lifecycle', 'extraction', 'search', 'due-diligence', 'clause-search', 'portfolio', 'legal-ops'],
+    sources: [
+      { citation: 'General commercial contracting and legal operations practice', authority: 'secondary', note: 'A workflow skill: no single binding instrument governs it. The output must still be checked against the law of the governing jurisdiction.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['global-obligation-extraction', 'global-smart-redline'],
     whatItDoes:
       'Answers questions across a set of agreements — "which contracts let the customer audit us?", "where did we agree to uncapped liability?" — by reasoning about what clauses mean rather than matching words. It returns the specific contracts and clause numbers that answer the question, quotes the operative language, and explicitly lists the contracts it examined and excluded, so a null result is trustworthy rather than merely empty.',
     whenToUse:
@@ -234,6 +262,13 @@ Four markdown sections: MATCHES (table), NEAR MISSES, EXCLUDED, COVERAGE GAPS.`,
     jurisdiction: 'global',
     category: 'contracts',
     tags: ['contract-lifecycle', 'review', 'redline', 'contract-review', 'negotiation', 'playbook', 'markup'],
+    sources: [
+      { citation: 'General commercial contracting and legal operations practice', authority: 'secondary', note: 'A workflow skill: no single binding instrument governs it. The output must still be checked against the law of the governing jurisdiction.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['global-playbook-maker', 'global-contract-triage', 'au-acl-unfair-terms'],
     whatItDoes:
       'Compares an incoming third-party paper against your playbook positions and produces concrete edits — the exact replacement wording, not "consider narrowing this". Each proposed change is tagged by severity so a reviewer can triage: blockers that must change, negotiables worth trading, and acceptable-as-is clauses that need no time spent. It also drafts the covering note to the counterparty explaining the changes in business language.',
     whenToUse:
@@ -295,6 +330,13 @@ Redline table, then the three sections above.`,
     jurisdiction: 'global',
     category: 'contracts',
     tags: ['contract-lifecycle', 'assessment', 'triage', 'intake', 'risk-scoring', 'legal-ops', 'workflow'],
+    sources: [
+      { citation: 'General commercial contracting and legal operations practice', authority: 'secondary', note: 'A workflow skill: no single binding instrument governs it. The output must still be checked against the law of the governing jurisdiction.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['global-smart-redline', 'global-obligation-extraction'],
     whatItDoes:
       'Applies a transparent scoring rubric to an inbound contract — value, data sensitivity, liability exposure, term length, regulatory touchpoints, counterparty type — and recommends a review path. Crucially it shows the score breakdown, so the routing decision can be audited and the rubric tuned over time rather than remaining an opaque judgement call. Low-risk paper gets a green light with a short checklist; high-risk paper gets routed with a specific list of what the reviewer should look at first.',
     whenToUse:
@@ -349,16 +391,27 @@ Score table, band and lane, reviewer briefing, escalation triggers.`,
     },
   },
   {
-    id: 'global-dsar-handler',
-    name: 'DSAR Request Handler',
-    description: 'Triages a data subject request, sets the response clock and drafts the reply.',
+    id: 'global-data-rights-request-handler',
+    name: 'Data Rights Request Handler',
+    description: 'Triages a data subject or consumer rights request, sets the response clock and drafts the reply.',
     jurisdiction: 'global',
     category: 'privacy',
-    tags: ['data-protection', 'drafting', 'dsar', 'data-subject-rights', 'gdpr', 'privacy-ops', 'response-drafting'],
+    tags: ['data-protection', 'drafting', 'data-subject-rights', 'consumer-rights', 'dsar', 'privacy-ops', 'response-drafting'],
+    sources: [
+      { citation: 'Regulation (EU) 2016/679 (General Data Protection Regulation)', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu' },
+      { citation: 'California Consumer Privacy Act, as amended by the California Privacy Rights Act', authority: 'primary', publisher: 'State of California', jurisdiction: 'us' },
+      { citation: 'Personal Data Protection Act 2012 (Singapore)', authority: 'primary', publisher: 'Singapore Statutes Online', jurisdiction: 'sg', url: 'https://sso.agc.gov.sg' },
+      { citation: 'Privacy Act 1988 (Cth) and the Australian Privacy Principles', authority: 'primary', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au' },
+      { citation: 'Data subject and consumer rights regimes generally', authority: 'secondary', note: 'This skill spans several regimes. It identifies which apply and what each requires; it does not state the current text of any one of them.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-privacy-request-router', 'eu-dpia-ropa-builder', 'sg-pdpa-obligation-mapper', 'au-privacy-ndb-assessor'],
     whatItDoes:
-      'Classifies an incoming data subject request by the right exercised (access, erasure, portability, objection, rectification, restriction), identifies which privacy regimes plausibly apply given the requester’s location and your operations, calculates the response deadline under each, and drafts both the acknowledgement and the substantive response. It also flags where an exemption may apply and what evidence you would need to rely on it, rather than assuming every request must be fulfilled in full.',
+      'Classifies an incoming data subject or consumer rights request by the right exercised (access, erasure, portability, objection, rectification, restriction), identifies which privacy regimes plausibly apply given the requester’s location and your operations, calculates the response deadline under each, and drafts both the acknowledgement and the substantive response. It also flags where an exemption may apply and what evidence you would need to rely on it, rather than assuming every request must be fulfilled in full.',
     whenToUse:
-      'On receipt of any request that might be a data subject request — including one that arrives as an angry support ticket rather than a formal letter.',
+      'On receipt of any request that might engage an individual’s data or privacy rights under any regime — including one that arrives as an angry support ticket rather than a formal letter.',
     inputs: [
       { name: 'The request', description: 'The message as received, with its date and channel.', required: true },
       { name: 'Requester context', description: 'Location, relationship to you (customer, employee, applicant), and identity-verification status.' },
@@ -372,7 +425,7 @@ Score table, band and lane, reviewer briefing, escalation triggers.`,
       { name: 'Draft correspondence', description: 'Acknowledgement letter and substantive response, ready to adapt.' },
       { name: 'Internal action list', description: 'Systems to search, teams to notify, and identity checks to complete.' },
     ],
-    prompt: `You are a privacy operations specialist handling an inbound data subject request.
+    prompt: `You are a privacy operations specialist handling an inbound data subject or consumer rights request.
 
 INPUTS
 - The request as received: <paste, with date and channel>
@@ -410,6 +463,13 @@ Six sections matching the tasks above.`,
     jurisdiction: 'global',
     category: 'contracts',
     tags: ['contract-lifecycle', 'review', 'playbook', 'audit', 'quality', 'maintenance', 'legal-ops'],
+    sources: [
+      { citation: 'General commercial contracting and legal operations practice', authority: 'secondary', note: 'A workflow skill: no single binding instrument governs it. The output must still be checked against the law of the governing jurisdiction.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['global-playbook-maker', 'global-smart-redline'],
     whatItDoes:
       'Reads a playbook that has accreted over years and finds the places it has quietly broken: positions that contradict each other, fallbacks stricter than the preferred position, references to superseded laws or repealed mechanisms, clauses covered twice with different answers, and gaps where a common negotiation point has no guidance at all. Each finding comes with a proposed fix, so the audit produces a corrected playbook rather than a list of complaints.',
     whenToUse:
@@ -468,6 +528,13 @@ Findings register (table), then the cleaned playbook.`,
     jurisdiction: 'global',
     category: 'compliance',
     tags: ['regulatory-change', 'assessment', 'horizon-scanning', 'monitoring', 'prioritisation', 'compliance'],
+    sources: [
+      { citation: 'Regulatory horizon-scanning and change-management practice', authority: 'secondary', note: 'A method for triaging developments. The developments themselves must be supplied by the user; this skill does not know what has been published.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['cross-four-regime-gap-analyzer', 'eu-member-state-delta'],
     whatItDoes:
       'Takes raw regulatory developments — consultations, new statutes, enforcement decisions, guidance updates — and filters them against your actual business footprint to separate what matters from what merely sounds important. Each relevant item gets an impact assessment, a compliance deadline, the internal owner best placed to act, and a first concrete step. Items judged irrelevant are listed with the reason, so the scan is defensible if a regulator later asks why you did nothing.',
     whenToUse:
@@ -527,6 +594,13 @@ Six sections matching the tasks above.`,
     jurisdiction: 'global',
     category: 'research',
     tags: ['research', 'drafting', 'memo', 'analysis', 'citations', 'verification'],
+    sources: [
+      { citation: 'Legal research and drafting methodology', authority: 'secondary', note: 'A method, not a statement of law. All substantive output requires verification against primary sources.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-fifty-state-survey', 'eu-member-state-delta'],
     whatItDoes:
       'Converts a loose question into a properly framed legal issue, works through the analysis in IRAC structure, and returns a memo that separates what it is confident about from what must be verified. It is deliberately built to make its own limits visible: every proposition carries a confidence marker, every citation is flagged for checking against the primary source, and the counter-argument section is mandatory rather than optional.',
     whenToUse:

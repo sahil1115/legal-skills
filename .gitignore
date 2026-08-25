@@ -3,6 +3,7 @@ node_modules/
 
 # Build output
 dist/
+dist-packs/
 dist-ssr/
 *.local
 
@@ -32,3 +33,7 @@ pnpm-debug.log*
 
 # TypeScript build info
 *.tsbuildinfo
+
+# Python bytecode (from local tooling scripts)
+__pycache__/
+*.pyc

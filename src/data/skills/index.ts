@@ -1,4 +1,4 @@
-import type { CategoryId, JurisdictionId, Skill } from '../../types/skill';
+import type { CategoryId, IndustryId, JurisdictionId, Skill } from '../../types/skill';
 import { SHARED_TAGS } from '../tags';
 import { globalSkills } from './global';
 import { usSkills } from './us';
@@ -24,33 +24,23 @@ export const skills: Skill[] = [
 ];
 
 /**
- * Development-only registry checks. These run in `npm run dev` and are dropped
- * from the production bundle, so a contributor sees the problem immediately
- * without the app needing a test runner to catch it.
+ * Retired ids, mapped to their replacements.
+ *
+ * A skill id is a published deep link, so renaming one breaks every URL anyone
+ * has shared. When a rename is genuinely warranted, the old id is recorded here
+ * and `getSkill()` keeps resolving it. Never delete an entry from this map.
  */
-if (import.meta.env.DEV) {
-  const seen = new Set<string>();
-  for (const skill of skills) {
-    // Ids are React keys and deep-link fragments, so they must be unique.
-    if (seen.has(skill.id)) {
-      console.error(`[legal-skills] Duplicate skill id: ${skill.id}`);
-    }
-    seen.add(skill.id);
-
-    // A skill tagged only with words no other skill uses is unfilterable.
-    if (!skill.tags.some((t) => SHARED_TAGS.includes(t))) {
-      console.warn(
-        `[legal-skills] "${skill.name}" has no tag from the shared vocabulary ` +
-          `in src/data/tags.ts — it will be hard to find by tag.`,
-      );
-    }
-  }
-}
+export const ID_ALIASES: Record<string, string> = {
+  // Renamed 2026-08-26: "DSAR" is UK/EU vocabulary, but the skill always
+  // covered US, Singapore and Australian rights regimes too.
+  'global-dsar-handler': 'global-data-rights-request-handler',
+};
 
 export const skillsById = new Map<string, Skill>(skills.map((s) => [s.id, s]));
 
+/** Resolves a current id, or a retired one via {@link ID_ALIASES}. */
 export function getSkill(id: string): Skill | undefined {
-  return skillsById.get(id);
+  return skillsById.get(id) ?? skillsById.get(ID_ALIASES[id] ?? '');
 }
 
 /** Skill counts per jurisdiction, used for the filter chips. */
@@ -62,6 +52,16 @@ export const countsByJurisdiction = skills.reduce<Record<string, number>>((acc, 
 /** Skill counts per category, used for the filter chips. */
 export const countsByCategory = skills.reduce<Record<string, number>>((acc, skill) => {
   acc[skill.category] = (acc[skill.category] ?? 0) + 1;
+  return acc;
+}, {});
+
+/**
+ * Skill counts per industry. A skill with no `industries` is industry-agnostic
+ * and counts toward every industry, matching how the filter treats it.
+ */
+export const countsByIndustry = skills.reduce<Record<string, number>>((acc, skill) => {
+  const ids: IndustryId[] = skill.industries ?? [];
+  for (const id of ids) acc[id] = (acc[id] ?? 0) + 1;
   return acc;
 }, {});
 
@@ -78,4 +78,37 @@ export const allTags: { tag: string; count: number }[] = (() => {
     .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
 })();
 
-export type { CategoryId, JurisdictionId, Skill };
+/**
+ * Development-only registry checks. These run in `npm run dev` and are dropped
+ * from the production bundle, so a contributor sees the problem immediately.
+ * `npm run audit` runs the full set of checks — this is the fast subset.
+ */
+if (import.meta.env.DEV) {
+  const seen = new Set<string>();
+  for (const skill of skills) {
+    if (seen.has(skill.id)) {
+      console.error(`[legal-skills] Duplicate skill id: ${skill.id}`);
+    }
+    seen.add(skill.id);
+
+    if (!skill.tags.some((t) => SHARED_TAGS.includes(t))) {
+      console.warn(
+        `[legal-skills] "${skill.name}" has no tag from the shared vocabulary ` +
+          `in src/data/tags.ts — it will be hard to find by tag.`,
+      );
+    }
+  }
+
+  // Broken relatedSkills references would render as dead links in the UI.
+  for (const skill of skills) {
+    for (const ref of skill.relatedSkills ?? []) {
+      if (ref === skill.id) {
+        console.error(`[legal-skills] "${skill.id}" lists itself in relatedSkills.`);
+      } else if (!skillsById.has(ref)) {
+        console.error(`[legal-skills] "${skill.id}" references unknown skill "${ref}".`);
+      }
+    }
+  }
+}
+
+export type { CategoryId, IndustryId, JurisdictionId, Skill };

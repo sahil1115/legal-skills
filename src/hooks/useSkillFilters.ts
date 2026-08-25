@@ -1,9 +1,15 @@
 import { useCallback, useMemo, useState } from 'react';
-import type { CategoryId, FilterState, JurisdictionId } from '../types/skill';
+import type { CategoryId, FilterState, IndustryId, JurisdictionId } from '../types/skill';
 import { skills } from '../data/skills';
 import { availableTags, buildIndex, searchSkills } from '../lib/search';
 
-const EMPTY: FilterState = { query: '', jurisdiction: 'all', category: 'all', tags: [] };
+const EMPTY: FilterState = {
+  query: '',
+  jurisdiction: 'all',
+  category: 'all',
+  industry: 'all',
+  tags: [],
+};
 
 /**
  * Owns all filter state and derives the visible skill list from it. Kept in one
@@ -30,6 +36,10 @@ export function useSkillFilters() {
     setFilters((f) => ({ ...f, category }));
   }, []);
 
+  const setIndustry = useCallback((industry: IndustryId | 'all') => {
+    setFilters((f) => ({ ...f, industry }));
+  }, []);
+
   const toggleTag = useCallback((tag: string) => {
     setFilters((f) => ({
       ...f,
@@ -43,6 +53,7 @@ export function useSkillFilters() {
     filters.query !== '' ||
     filters.jurisdiction !== 'all' ||
     filters.category !== 'all' ||
+    filters.industry !== 'all' ||
     filters.tags.length > 0;
 
   return {
@@ -54,6 +65,7 @@ export function useSkillFilters() {
     setQuery,
     setJurisdiction,
     setCategory,
+    setIndustry,
     toggleTag,
     clearFilters,
   };

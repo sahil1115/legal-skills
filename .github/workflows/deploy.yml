@@ -1,17 +1,18 @@
-# Builds the static bundle and publishes it to GitHub Pages.
+# Publishes the site to GitHub Pages.
 #
-# This workflow is MANUAL by default, so a repository with Pages switched off
-# does not collect a failed run on every push. To go live:
+# Triggered by CI completing successfully on main, so a commit that fails
+# lint, typecheck, audit or build never reaches production. Can also be run
+# by hand from the Actions tab.
 #
-#   1. Settings -> Pages -> Source: GitHub Actions
-#   2. Either run this workflow once from the Actions tab, or uncomment the
-#      `push` trigger below to deploy automatically on every push to main.
+# Requires Pages to be enabled once: Settings -> Pages -> Source: GitHub Actions.
 name: Deploy to GitHub Pages
 
 on:
+  workflow_run:
+    workflows: ['CI']
+    branches: [main]
+    types: [completed]
   workflow_dispatch:
-  # push:
-  #   branches: [main]
 
 permissions:
   contents: read
@@ -24,9 +25,17 @@ concurrency:
 
 jobs:
   build:
+    # Skip when CI failed. workflow_dispatch has no upstream run, so allow it
+    # through explicitly rather than reading a conclusion that is not there.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Build the exact commit CI validated, not whatever main is now.
+          ref: ${{ github.event.workflow_run.head_sha || github.ref }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22

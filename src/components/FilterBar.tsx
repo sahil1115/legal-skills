@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import type { CategoryId, FilterState, JurisdictionId } from '../types/skill';
+import type { CategoryId, FilterState, IndustryId, JurisdictionId } from '../types/skill';
 import { jurisdictions } from '../data/jurisdictions';
 import { categories } from '../data/categories';
-import { countsByCategory, countsByJurisdiction } from '../data/skills';
+import { industries } from '../data/industries';
+import { countsByCategory, countsByIndustry, countsByJurisdiction } from '../data/skills';
 import { ChevronDownIcon, CloseIcon, SearchIcon } from './Icons';
 
 /** How many tag chips to show before the "show all" toggle. */
@@ -15,6 +16,7 @@ interface FilterBarProps {
   onQueryChange: (q: string) => void;
   onJurisdictionChange: (j: JurisdictionId | 'all') => void;
   onCategoryChange: (c: CategoryId | 'all') => void;
+  onIndustryChange: (i: IndustryId | 'all') => void;
   onTagToggle: (tag: string) => void;
   onClear: () => void;
 }
@@ -26,6 +28,7 @@ export function FilterBar({
   onQueryChange,
   onJurisdictionChange,
   onCategoryChange,
+  onIndustryChange,
   onTagToggle,
   onClear,
 }: FilterBarProps) {
@@ -116,6 +119,24 @@ export function FilterBar({
               .map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name} ({countsByCategory[c.id]})
+                </option>
+              ))}
+          </select>
+          <ChevronDownIcon className="select__chevron" />
+        </div>
+
+        <div className="select">
+          <select
+            value={filters.industry}
+            onChange={(e) => onIndustryChange(e.target.value as IndustryId | 'all')}
+            aria-label="Filter by industry"
+          >
+            <option value="all">All industries</option>
+            {industries
+              .filter((i) => (countsByIndustry[i.id] ?? 0) > 0)
+              .map((i) => (
+                <option key={i.id} value={i.id}>
+                  {i.name} ({countsByIndustry[i.id]})
                 </option>
               ))}
           </select>

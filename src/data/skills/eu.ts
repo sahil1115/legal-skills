@@ -11,6 +11,14 @@ export const euSkills: Skill[] = [
     jurisdiction: 'eu',
     category: 'regulatory',
     tags: ['regulatory-change', 'assessment', 'ai-act', 'ai-governance', 'risk-classification', 'compliance', 'eu-regulation'],
+    sources: [
+      { citation: 'Regulation (EU) 2024/1689 (Artificial Intelligence Act)', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'Obligations phase in on staggered dates and implementing guidance continues to issue. Confirm the applicable date.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['technology'],
+    relatedSkills: ['global-horizon-scanner', 'eu-dpia-ropa-builder'],
     whatItDoes:
       'Works through the AI Act analysis in the order that actually matters: first whether the system is in scope at all, then what role you play (provider, deployer, importer, distributor) — because the obligations differ enormously by role — then the risk tier, and only then the obligation set. It handles the general-purpose AI model questions separately, since those follow their own track, and flags the transparency duties that bite even for systems that are otherwise low-risk.',
     whenToUse:
@@ -75,6 +83,14 @@ Seven sections matching the tasks above, opening with a one-paragraph bottom lin
     jurisdiction: 'eu',
     category: 'privacy',
     tags: ['data-protection', 'drafting', 'gdpr', 'dpia', 'ropa', 'privacy', 'documentation'],
+    sources: [
+      { citation: 'Regulation (EU) 2016/679 (General Data Protection Regulation)', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu' },
+      { citation: 'European Data Protection Board guidelines and recommendations', authority: 'guidance', publisher: 'European Data Protection Board', jurisdiction: 'eu', url: 'https://www.edpb.europa.eu', note: 'Persuasive, not binding. Identify where it exceeds the strict legal requirement.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['eu-transfer-impact-assessor', 'global-data-rights-request-handler'],
     whatItDoes:
       'Takes a description of a processing activity and produces both of the documents the GDPR expects to see: the Article 30 record of processing, and — where the activity clears the threshold — a full impact assessment. It first tests whether a DPIA is actually required rather than assuming one is, then works through necessity and proportionality, risks to individuals, and mitigations, ending with an honest view on whether the residual risk would require consultation with the supervisory authority.',
     whenToUse:
@@ -139,6 +155,16 @@ Five sections matching the tasks above.`,
     jurisdiction: 'eu',
     category: 'privacy',
     tags: ['data-protection', 'assessment', 'gdpr', 'international-transfers', 'sccs', 'tia', 'chapter-v'],
+    sources: [
+      { citation: 'Regulation (EU) 2016/679 (General Data Protection Regulation)', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu' },
+      { citation: 'European Data Protection Board guidelines and recommendations', authority: 'guidance', publisher: 'European Data Protection Board', jurisdiction: 'eu', url: 'https://www.edpb.europa.eu', note: 'Persuasive, not binding. Identify where it exceeds the strict legal requirement.' },
+      { citation: 'Court of Justice of the European Union judgment in Case C-311/18 (Schrems II)', authority: 'primary', publisher: 'Court of Justice of the European Union', jurisdiction: 'eu', url: 'https://curia.europa.eu' },
+      { citation: 'European Commission adequacy decisions and standard contractual clauses', authority: 'regulator', publisher: 'European Commission', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'Adequacy decisions are added, amended and annulled. Confirm current status.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['cross-transfer-mechanism-picker', 'eu-dpia-ropa-builder'],
     whatItDoes:
       'Works through the Chapter V analysis for a specific transfer: whether an adequacy decision covers it, and if not which transfer tool applies, followed by the assessment of whether the destination country\'s law actually undermines that tool in practice. It focuses on the part teams usually skip — the concrete assessment of government access powers and available redress in the destination, and the supplementary measures that would genuinely address the gap rather than a generic list appended to the file.',
     whenToUse:
@@ -210,6 +236,14 @@ Six sections matching the tasks above.`,
     jurisdiction: 'eu',
     category: 'regulatory',
     tags: ['regulatory-change', 'assessment', 'nis2', 'cybersecurity', 'incident-reporting', 'critical-infrastructure', 'compliance'],
+    sources: [
+      { citation: 'Directive (EU) 2022/2555 (NIS2 Directive)', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'A directive: the binding rules are in each member state\'s implementing law, and transposition differs.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['energy-infrastructure', 'technology'],
+    relatedSkills: ['au-soci-obligations-mapper', 'eu-dora-third-party-reviewer'],
     whatItDoes:
       'Determines whether an organisation is in scope of the NIS2 Directive — by sector, by size, and by the special cases that pull entities in regardless of size — and whether it is essential or important, which changes the supervisory regime. It then maps the risk-management measures required, the multi-stage incident reporting timeline that catches teams out, and the management-body accountability that makes this a board issue rather than an IT one. Because NIS2 is a directive, it flags throughout that the binding detail lives in each member state\'s implementing law.',
     whenToUse:
@@ -275,6 +309,15 @@ Eight sections matching the tasks above, opening with a bottom-line scope answer
     jurisdiction: 'eu',
     category: 'regulatory',
     tags: ['financial-services', 'review', 'dora', 'third-party-risk', 'ict', 'outsourcing'],
+    sources: [
+      { citation: 'Regulation (EU) 2022/2554 (Digital Operational Resilience Act)', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu' },
+      { citation: 'Regulatory technical standards made under DORA', authority: 'regulator', jurisdiction: 'eu', note: 'The technical standards continue to develop. Confirm the current text.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['financial-services'],
+    relatedSkills: ['eu-nis2-scope-tester', 'global-smart-redline'],
     whatItDoes:
       'Assesses an ICT third-party arrangement the way a financial entity must under DORA: first deciding whether the service supports a critical or important function, since that determines how demanding the contract must be, then testing the agreement clause by clause against the required contractual provisions, and finally addressing the register of information, exit strategy and concentration risk that examiners look for. It produces the missing clause language rather than a list of gaps.',
     whenToUse:
@@ -346,6 +389,13 @@ Seven sections matching the tasks above, opening with the criticality determinat
     jurisdiction: 'eu',
     category: 'regulatory',
     tags: ['regulatory-change', 'research', 'member-state', 'implementation', 'gold-plating', 'divergence', 'multi-country'],
+    sources: [
+      { citation: 'EU regulations and directives, and national implementing measures', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'National implementation detail is exactly where confident answers go wrong. This skill targets local verification rather than replacing it.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['cross-four-regime-gap-analyzer', 'global-horizon-scanner'],
     whatItDoes:
       'Addresses the problem that reading an EU directive tells you what is roughly required, not what any particular country actually demands. It maps where an instrument leaves room for national choice — derogations, opening clauses, minimum-harmonisation headroom, and the areas where gold-plating is common — and builds a structured comparison across the member states you operate in, so you can see whether a single group-wide approach is possible or whether specific countries need their own treatment.',
     whenToUse:

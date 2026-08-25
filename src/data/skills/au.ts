@@ -11,6 +11,15 @@ export const auSkills: Skill[] = [
     jurisdiction: 'au',
     category: 'contracts',
     tags: ['contract-lifecycle', 'review', 'australian-consumer-law', 'unfair-terms', 'standard-form', 'consumer', 'small-business'],
+    sources: [
+      { citation: 'Competition and Consumer Act 2010 (Cth), Schedule 2 (Australian Consumer Law)', authority: 'primary', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au' },
+      { citation: 'ACCC guidance on unfair contract terms', authority: 'guidance', publisher: 'Australian Competition and Consumer Commission', jurisdiction: 'au', url: 'https://www.accc.gov.au' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer'],
+    relatedSkills: ['global-smart-redline', 'cross-contract-localizer'],
     whatItDoes:
       'Tests whether a contract is caught by the unfair contract terms regime at all — which turns on whether it is standard form and whether the counterparty is a consumer or a small business — and then screens each term against the statutory test: significant imbalance, not reasonably necessary to protect legitimate interests, and detriment if relied on. Since the regime moved to a civil penalty model, the analysis treats a problematic term as an exposure to be fixed rather than merely a clause that might be unenforceable, and proposes replacement wording for each.',
     whenToUse:
@@ -77,6 +86,15 @@ Six sections matching the tasks above, opening with the applicability conclusion
     jurisdiction: 'au',
     category: 'employment',
     tags: ['workforce', 'assessment', 'modern-award', 'fair-work', 'classification', 'employment', 'coverage'],
+    sources: [
+      { citation: 'Fair Work Act 2009 (Cth)', authority: 'primary', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au' },
+      { citation: 'Modern awards made by the Fair Work Commission', authority: 'regulator', publisher: 'Fair Work Commission', jurisdiction: 'au', url: 'https://www.fwc.gov.au', note: 'Award text and rates are varied at least annually. Always use the current published award.' },
+      { citation: 'Fair Work Ombudsman guidance and pay guides', authority: 'guidance', publisher: 'Fair Work Ombudsman', jurisdiction: 'au', url: 'https://www.fairwork.gov.au' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['au-award-compliance-checker', 'us-worker-classification'],
     whatItDoes:
       'Answers the question Australian employers most often get wrong: whether an employee is covered by a modern award, which one, and at what classification level. It works through industry coverage and occupational coverage separately, tests the award-free arguments properly rather than assuming a salaried professional is automatically exempt, and lands on a classification level by matching the actual duties against the level descriptors — which is where the real money is, since a level error compounds across every entitlement.',
     whenToUse:
@@ -138,6 +156,15 @@ Six sections matching the tasks above, opening with the coverage bottom line.`,
     jurisdiction: 'au',
     category: 'employment',
     tags: ['workforce', 'assessment', 'wage-compliance', 'underpayment', 'audit', 'fair-work', 'payroll'],
+    sources: [
+      { citation: 'Fair Work Act 2009 (Cth)', authority: 'primary', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au' },
+      { citation: 'Modern awards made by the Fair Work Commission', authority: 'regulator', publisher: 'Fair Work Commission', jurisdiction: 'au', url: 'https://www.fwc.gov.au', note: 'Award text and rates are varied at least annually. Always use the current published award.' },
+      { citation: 'Fair Work Ombudsman guidance and pay guides', authority: 'guidance', publisher: 'Fair Work Ombudsman', jurisdiction: 'au', url: 'https://www.fairwork.gov.au', note: 'Rates change at least annually. Never rely on a remembered rate.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['au-modern-award-matcher'],
     whatItDoes:
       'Takes actual pay and roster data and reconstructs what the award required for the same period, entitlement by entitlement, so any shortfall can be quantified rather than estimated. It builds the methodology in the form Fair Work expects — per pay period, per entitlement, no netting of overpayments against underpayments unless properly available — and covers the parts most often missed: superannuation on the corrected figure, interest, record-keeping deficiencies, and the reconciliation duties attached to annualised wage arrangements.',
     whenToUse:
@@ -212,6 +239,14 @@ Seven sections matching the tasks above, opening with the methodology statement.
     jurisdiction: 'au',
     category: 'privacy',
     tags: ['data-protection', 'incident-response', 'privacy-act', 'notifiable-data-breaches', 'breach-response', 'oaic', 'incident'],
+    sources: [
+      { citation: 'Privacy Act 1988 (Cth) and the Australian Privacy Principles', authority: 'primary', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au' },
+      { citation: 'OAIC guidance on the Privacy Act and the Notifiable Data Breaches scheme', authority: 'guidance', publisher: 'Office of the Australian Information Commissioner', jurisdiction: 'au', url: 'https://www.oaic.gov.au' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['sg-pdpc-breach-notifier', 'cross-four-regime-gap-analyzer'],
     whatItDoes:
       'Runs the eligible-data-breach analysis under the Notifiable Data Breaches scheme: whether the entity is covered by the Privacy Act at all, whether there has been unauthorised access, disclosure or loss, whether serious harm is likely, and whether remedial action taken has removed that likelihood. It manages the assessment clock, drafts both the regulator notification and the individual notification, and separates the Australian Privacy Principles that the incident may also have breached from the notification question itself.',
     whenToUse:
@@ -275,6 +310,16 @@ Eight sections matching the tasks above, opening with a bottom line and the key 
     jurisdiction: 'au',
     category: 'regulatory',
     tags: ['regulatory-change', 'programme-design', 'soci', 'critical-infrastructure', 'security', 'cirmp', 'incident-reporting'],
+    sources: [
+      { citation: 'Security of Critical Infrastructure Act 2018 (Cth)', authority: 'primary', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au' },
+      { citation: 'Rules made under the Security of Critical Infrastructure Act', authority: 'regulator', jurisdiction: 'au', note: 'Obligations are switched on for particular asset classes by rules rather than applying uniformly. Confirm which are active for the asset class.' },
+      { citation: 'Australian Cyber Security Centre and Department of Home Affairs guidance', authority: 'guidance', jurisdiction: 'au', url: 'https://www.cyber.gov.au' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['energy-infrastructure', 'technology'],
+    relatedSkills: ['eu-nis2-scope-tester'],
     whatItDoes:
       'Determines whether an asset is a critical infrastructure asset under the Security of Critical Infrastructure regime, which sector rules apply to it, and which of the layered obligations have actually been switched on for that sector — since the regime applies obligations selectively by sector rather than uniformly. It then maps the register, risk management programme, incident reporting and enhanced obligations to the asset, with a reporting runbook built around the 12 and 72-hour clocks.',
     whenToUse:
@@ -350,6 +395,15 @@ Eight sections matching the tasks above, opening with the asset determination.`,
     jurisdiction: 'au',
     category: 'regulatory',
     tags: ['financial-services', 'drafting', 'ddo', 'tmd', 'financial-products', 'asic', 'distribution'],
+    sources: [
+      { citation: 'Corporations Act 2001 (Cth), design and distribution obligations', authority: 'primary', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au' },
+      { citation: 'ASIC regulatory guidance on design and distribution obligations', authority: 'guidance', publisher: 'Australian Securities and Investments Commission', jurisdiction: 'au', url: 'https://www.asic.gov.au' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['financial-services'],
+    relatedSkills: ['sg-mas-notice-checker'],
     whatItDoes:
       'Produces a target market determination for a financial product that describes the class of consumers the product is likely to be consistent with, in enough detail to actually constrain distribution, plus the distribution conditions, review triggers and reporting arrangements the regime requires. It is written to avoid the failure mode regulators have criticised most: a target market drawn so broadly that it excludes nobody and therefore does no work.',
     whenToUse:

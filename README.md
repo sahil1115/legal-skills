@@ -2,35 +2,80 @@
 
 **A free, open-source catalogue of reusable legal AI skills — browse by jurisdiction, copy the prompt, run it in whatever model you already use.**
 
-Legal Skills is a static web app. There is no backend, no account, no API key and no tracking. Every skill is a structured, provider-neutral prompt that you copy into Claude, ChatGPT, Gemini, Cursor, a local model, or your own tooling.
+Legal Skills is a static web app. No backend, no account, no API key, no telemetry, and **zero outbound network requests** from the published page. Every skill is a structured, provider-neutral prompt carrying its own sources, review date and legal-safety rules.
 
-> **Not legal advice.** Every skill here produces AI-assisted legal research and drafting support. It is not legal advice, it does not create a lawyer–client relationship, and it may be incomplete or out of date. Verify every citation, deadline and conclusion against primary sources, and have a qualified lawyer in the relevant jurisdiction review the output before you rely on it. See [DISCLAIMER.md](DISCLAIMER.md).
+> **Not legal advice.** Every skill produces AI-assisted legal research and drafting support. It is not legal advice, it does not create a lawyer–client relationship, and it may be incomplete or out of date. Verify every citation, deadline and conclusion against primary sources, and have a qualified lawyer in the relevant jurisdiction review the output before you rely on it. See [DISCLAIMER.md](DISCLAIMER.md).
+
+---
+
+## Live demo
+
+**<https://sahil1115.github.io/legal-skills/>**
+
+Deep links work per skill — for example [`#eu-ai-act-classifier`](https://sahil1115.github.io/legal-skills/#eu-ai-act-classifier). Nothing you type is transmitted; search runs entirely in your browser.
+
+> Pages must be enabled once on a fork: **Settings → Pages → Source: GitHub Actions**. After that, every push to `main` that passes CI deploys automatically.
 
 ---
 
 ## What's in it
 
-**38 skills** across **6 jurisdictions** and **7 practice areas.**
+**38 skills** across **6 jurisdictions**, **7 practice areas** and an optional **industry** dimension.
 
 | Jurisdiction | Skills | Examples |
 | --- | --- | --- |
-| Global | 10 | Playbook Maker, Smart Redline, Contract Obligation Extraction, DSAR Request Handler |
+| Global | 10 | Playbook Maker, Smart Redline, Contract Obligation Extraction, Data Rights Request Handler |
 | United States | 6 | 50-State Survey Builder, Worker Classification Tester, Privilege Log Builder |
 | European Union | 6 | AI Act Classifier, DPIA & ROPA Builder, NIS2 Scope Tester, DORA Third-Party Reviewer |
 | Australia | 6 | ACL Unfair Terms Screener, Modern Award Matcher, Privacy Act / NDB Assessor |
 | Singapore | 6 | PDPA Obligation Mapper, MAS Notice Checker, SIAC Clause Builder |
 | Cross-jurisdiction | 4 | Contract Localizer, Four-Regime Gap Analyzer, Strictest-Rule Resolver |
 
-Each skill carries a description, what it does, when to use it, its inputs and expected outputs, a full prompt, a worked example, and a disclaimer.
+Each skill carries what it does, when to use it, inputs, expected outputs, a full prompt, a worked example, **its legal sources with authority tiers**, a **last-reviewed date**, a **review status**, a **version**, and related skills.
 
-## Features
+### Features
 
-- **Instant client-side search** across names, tags, descriptions and prompt bodies
-- **Filter** by jurisdiction, practice area and tag, with live counts
-- **Detail view** for every skill, with a one-click **Copy Prompt** button
-- **Deep links** — every skill has its own URL fragment (`/#eu-ai-act-classifier`)
-- **Light and dark themes**, responsive from 320px up
-- **Zero data collection** — nothing you type leaves the browser
+- Instant client-side search across names, tags, descriptions and prompt bodies
+- Filter by jurisdiction, practice area, industry and tag, with live counts
+- Per-skill detail view with **Copy Prompt**, **Download SKILL.md** and **Download JSON**
+- Deep links with working Back/Forward, and permanent redirects for renamed skills
+- Light and dark themes, responsive from 320px
+- Zero data collection, zero outbound requests
+
+---
+
+## Legal verification philosophy
+
+This is the part that matters most, and it drives the whole design.
+
+**Language models state legal propositions confidently and wrongly, and they fabricate citations that do not exist.** A legal skills catalogue that ignores this is worse than useless, because a well-structured wrong answer reads as authoritative. Three mechanisms address it.
+
+### 1. Every prompt carries standing safety rules
+
+[`src/data/safety.ts`](src/data/safety.ts) defines one shared block, composed onto every skill by `composePrompt()` — never pasted into individual skills, so it cannot drift and cannot be forgotten. It requires the model to:
+
+- **Never invent** statutes, cases, section numbers, deadlines, thresholds, figures or quotations
+- **Label every proposition** `[CONFIRMED]` / `[INFERRED]` / `[UNKNOWN]` / `[VERIFY]`, and treat `[UNKNOWN]` as a valid, preferable answer
+- **Prefer primary authority**, and say which tier it is relying on
+- **Distinguish binding law from guidance**, and flag where a regulator's expectation exceeds the legal requirement
+- **Fix jurisdiction and effective date** before answering, rather than assuming one
+- **Never silently fill a missing fact** — name it or bracket it visibly
+- **Flag conflicts** between sources or regimes rather than smoothing them over
+- End with a **verification checklist**
+
+The block is appended *after* the skill body deliberately: trailing instructions are less likely to be crowded out of a long task description.
+
+### 2. Every skill declares its sources, with authority tiers
+
+Each source is tagged `primary` (the law itself), `regulator` (binding instruments), `guidance` (persuasive, not binding) or `secondary` (commentary). That distinction is load-bearing: a jurisdiction-specific skill resting only on commentary is telling you something about its own reliability, and `npm run audit` warns when one does.
+
+**Sources deliberately link to landing pages, never pinpoint deep links.** A fabricated or rotted deep link is worse than no link. Section numbers and pinpoint citations are absent from the metadata by design — they belong in verified content, not machine-generated provenance. The audit **fails the build** if any source URL contains a path.
+
+### 3. Every skill states how far it has actually been checked
+
+`reviewStatus` is one of `unverified`, `community-reviewed`, `practitioner-reviewed`, shown prominently above any legal content in the detail view.
+
+**Every skill in this repository is currently `unverified`.** That is an honest statement, not a placeholder: the content was drafted against the named sources but has not been signed off by a practitioner in the relevant jurisdiction. Raising a skill's status is a human act and must never happen in a bulk edit — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
@@ -47,168 +92,192 @@ npm run dev
 
 Open <http://localhost:5173>.
 
-### Other commands
-
 | Command | What it does |
 | --- | --- |
-| `npm run dev` | Start the dev server with hot reload |
-| `npm run build` | Type-check and build a production bundle into `dist/` |
-| `npm run preview` | Serve the production build locally to check it |
-| `npm run lint` | Run oxlint over the source |
-| `npm run audit` | Check the skill registry for thin content, malformed ids and orphan tags |
-
-`npm run build` runs `tsc -b` first, so a type error fails the build rather than shipping.
+| `npm run dev` | Dev server with hot reload |
+| `npm run build` | Typecheck and build a production bundle into `dist/` |
+| `npm run preview` | Serve the production build locally |
+| `npm run lint` | Run oxlint |
+| `npm run typecheck` | Run `tsc -b --force` |
+| `npm run audit` | Validate the skill registry (see below) |
+| `npm run packs` | Generate distributable skill packs into `dist-packs/` |
 
 ---
 
-## Deploying
+## Downloads and Agent Skills
 
-The build output in `dist/` is a plain static bundle — any static host will serve it. `vite.config.ts` sets `base: './'`, so the bundle works from a subdirectory without further configuration.
+Every skill exports in two formats from its detail view, and in bulk via `npm run packs`.
 
-### GitHub Pages
+### SKILL.md — Agent Skills-compatible
 
-The workflow ships in the repo at [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), set to **manual** so a repo with Pages switched off doesn't collect a failed run on every push. To go live:
+YAML frontmatter with `name` and `description` (the keys reusable Agent Skills conventions expect), followed by Markdown instructions. Additional keys — `version`, `jurisdiction`, `legal_area`, `last_reviewed`, `review_status`, `related_skills`, `industries` — are additive: a consumer that only understands `name` and `description` ignores them, so the file stays compatible while carrying the provenance a legal skill needs.
 
-1. **Settings → Pages → Source: GitHub Actions**
-2. Run **Deploy to GitHub Pages** once from the Actions tab — or uncomment the `push` trigger in the workflow to deploy automatically on every push to `main`.
-
-There is no base path to configure: the build is already relative, so it works at `<user>.github.io/<repo>/` as-is.
-
-[`ci.yml`](.github/workflows/ci.yml) lints and builds every push and pull request, and runs unconditionally.
-
-### Netlify, Vercel, Cloudflare Pages
-
-Build command `npm run build`, publish directory `dist`. No environment variables are required.
-
-### Anywhere else
-
-```bash
-npm run build
-# then serve dist/ with any static file server
-npx serve dist
+```yaml
+---
+name: "eu-ai-act-classifier"
+description: "Classifies an AI system under the EU AI Act risk tiers and maps the resulting obligations."
+version: "1.0.0"
+license: "MIT"
+jurisdiction: "European Union"
+last_reviewed: "2026-08-26"
+review_status: "unverified"
+---
 ```
 
+The body is the **composed** prompt, so an exported file carries its legal-safety rules with it and cannot be separated from them by accident.
+
+### JSON — machine-readable
+
+Full structured export. `prompt` is the composed prompt including safety rules; `promptBody` is the skill-specific half, so a consumer that wants to recompose with its own preamble can, without losing either piece.
+
+### Bulk generation
+
+```bash
+npm run packs
+# dist-packs/skills/<id>/SKILL.md
+# dist-packs/skills/<id>/skill.json
+# dist-packs/index.json        catalogue manifest
+# dist-packs/LEGAL-SAFETY.md   the shared rules, for auditing in one place
+```
+
+`scripts/build-skill-packs.mjs` calls the same pure transforms in [`src/lib/export.ts`](src/lib/export.ts) that the browser uses — one registry, one set of transforms, no drift. **The project remains provider-neutral: no format targets a specific vendor's runtime.**
+
 ---
 
-## Project structure
+## Architecture
 
 ```
 src/
 ├── types/skill.ts          # The data model — start here
 ├── data/
-│   ├── skills/             # The skill registry, one file per jurisdiction
-│   │   ├── index.ts        # Combines them, plus dev-time validation
-│   │   ├── global.ts
-│   │   ├── us.ts
-│   │   ├── eu.ts
-│   │   ├── au.ts
-│   │   ├── sg.ts
-│   │   └── cross.ts
+│   ├── skills/             # The registry, one file per jurisdiction
+│   │   ├── index.ts        # Combines them, id aliases, dev-time checks
+│   │   └── global|us|eu|au|sg|cross.ts
+│   ├── safety.ts           # Shared legal-safety block + composePrompt()
 │   ├── jurisdictions.ts    # Jurisdiction registry
 │   ├── categories.ts       # Practice-area registry
+│   ├── industries.ts       # Optional industry dimension
 │   ├── tags.ts             # Shared tag vocabulary
-│   └── disclaimer.ts       # The default disclaimer
-├── lib/search.ts           # Scored client-side search
+│   └── disclaimer.ts
+├── lib/
+│   ├── search.ts           # Scored client-side search, no index library
+│   └── export.ts           # SKILL.md / JSON transforms + download
 ├── hooks/
-│   ├── useSkillFilters.ts  # All filter state, in one place
+│   ├── useSkillFilters.ts  # All filter state in one place
+│   ├── useSkillRoute.ts    # Hash routing, Back/Forward correctness
 │   └── useCopyToClipboard.ts
-├── components/             # Presentational components
+├── components/
 ├── index.css               # Design tokens and all styles
-└── App.tsx                 # Layout, tabs, routing
+└── App.tsx
 
-scripts/audit-skills.mjs    # `npm run audit` — registry quality checks
+scripts/
+├── audit-skills.mjs        # npm run audit
+└── build-skill-packs.mjs   # npm run packs
 ```
 
-**The app is data-driven.** No component knows about any specific skill. Adding a skill means adding one object to a data file — the cards, filters, counts, tag chips, search index and detail view all derive from the registry.
+**Stack:** Vite + React 19 + TypeScript (strict). React is the only runtime dependency — no CSS framework, no icon library, no search library, no state library.
 
-### The skill model
+**Data-driven:** no component references a specific skill. Adding one means appending an object to a data file; cards, filters, counts, tag chips, the search index, the detail view and both export formats all derive from the registry.
 
-```ts
-interface Skill {
-  id: string;               // `<jurisdiction>-<slug>`, unique, used as the deep link
-  name: string;
-  description: string;      // one line, shown on the card
-  jurisdiction: JurisdictionId;
-  category: CategoryId;
-  tags: string[];
-  whatItDoes: string;       // 2-4 sentences of substance
-  whenToUse: string;        // the trigger situation
-  inputs: SkillInput[];     // { name, description, required? }
-  outputs: SkillOutput[];   // { name, description }
-  prompt: string;           // the provider-neutral prompt users copy
-  example: SkillExample;    // { scenario, result }
-  disclaimer?: string;      // overrides the shared default
+**Type-safe by construction:** `JurisdictionId`, `CategoryId` and `IndustryId` are string unions, so a typo fails the build rather than silently breaking a filter.
 
-  // Reserved for planned features — safe to ignore today
-  version?: string;
-  authors?: string[];
-  rating?: number;
-  connectors?: string[];
-  relatedSkills?: string[];
-}
-```
+### Notable design decisions
 
-See [`src/types/skill.ts`](src/types/skill.ts) for the annotated source.
+- **Safety rules are composed, not copied.** One block in `safety.ts`, appended by `composePrompt()`. Updating it updates all 38 skills at once, and the audit fails if a skill inlines its own copy.
+- **The URL owns modal state.** `useSkillRoute` derives React state from the hash and marks its own history entries in `history.state`, so Back/Forward stay synchronised. Closing pops our entry rather than pushing a new one. (A ref would desync on same-document fragment navigation, which does not remount React.)
+- **Renamed skills keep working.** `ID_ALIASES` maps retired ids to current ones; `getSkill()` resolves both and the URL is rewritten to the live id. **Never delete an alias** — an id is a published deep link.
+- **Industry is additive.** A skill with no `industries` is industry-agnostic and matches every industry filter, so the dimension works over a registry where most skills declare nothing.
 
 ---
 
-## Adding a skill
+## Skill metadata requirements
 
-1. Open the file for the jurisdiction in `src/data/skills/`.
+Every skill must declare all of these. `npm run audit` enforces them.
+
+| Field | Requirement |
+| --- | --- |
+| `id` | Unique, `<jurisdiction>-<slug>`. **Permanent once merged** — rename via `ID_ALIASES`. |
+| `name` / `description` | Unique name; description a sentence, roughly ≤ 130 chars |
+| `jurisdiction` / `category` | Must exist in their registries (enforced by TypeScript) |
+| `tags` | ≥ 4, at least one from [`src/data/tags.ts`](src/data/tags.ts) |
+| `whatItDoes` / `whenToUse` | Substantive, not a restatement of the description |
+| `inputs` / `outputs` | ≥ 3 each, every one described, at least one input required |
+| `prompt` | ≥ 900 chars, opens with a role, has `INPUTS` / `TASK` / `RULES` / `OUTPUT FORMAT`, names no LLM vendor, does **not** inline the safety block |
+| `example` | Concrete scenario and result |
+| **`sources`** | ≥ 1, each with `citation` and `authority`; URLs HTTPS **landing pages only** |
+| **`lastReviewed`** | ISO `YYYY-MM-DD`, not in the future; warns after 365 days |
+| **`reviewStatus`** | `unverified` / `community-reviewed` / `practitioner-reviewed` |
+| **`version`** | Semver |
+| `industries` | Optional; omit rather than passing an empty array |
+| `relatedSkills` | Optional; every id must resolve, no self-references, no duplicates |
+
+---
+
+## How to add a skill
+
+1. Open the file for the jurisdiction in [`src/data/skills/`](src/data/skills/).
 2. Copy an existing entry and edit it. Keep `id` unique and in `<jurisdiction>-<slug>` form.
-3. Give it at least one tag from the shared vocabulary in [`src/data/tags.ts`](src/data/tags.ts) — a tag no other skill uses is a name, not a filter.
-4. Run `npm run audit`. It checks for thin content, missing prompt sections, malformed ids, orphan tags and provider names leaking into prompts.
-5. Run `npm run dev`, find your skill, open it and copy the prompt.
-6. Open a pull request.
+3. Fill in `sources`, `lastReviewed`, `reviewStatus` (`unverified` unless you are a qualified practitioner reviewing it) and `version: '1.0.0'`.
+4. Add at least one tag from the shared vocabulary. Add `relatedSkills` where a genuine pairing exists.
+5. **Do not paste the safety block into your prompt** — it is composed on automatically.
+6. Run the checks:
 
-TypeScript catches an invalid `jurisdiction` or `category` at build time.
+```bash
+npm run audit && npm run lint && npm run build
+```
 
-Full guidance, including what makes a good prompt, is in [CONTRIBUTING.md](CONTRIBUTING.md).
+7. Run `npm run dev`, open your skill, and check Copy Prompt and both downloads.
+8. Open a pull request.
 
-## Adding a jurisdiction
+Adding a **jurisdiction** takes three edits: add the id to `JurisdictionId`, add an entry to `jurisdictions.ts`, create `src/data/skills/<id>.ts` and register it in the index. Nothing in the UI changes.
 
-1. Add its id to `JurisdictionId` in `src/types/skill.ts`.
-2. Add an entry to `src/data/jurisdictions.ts` (name, short label, blurb, colour).
-3. Create `src/data/skills/<id>.ts` and register it in `src/data/skills/index.ts`.
+### What `npm run audit` validates
 
-Nothing in the UI needs to change — the filters, counts and tabs pick it up.
+Source metadata (presence, authority tiers, HTTPS, **no deep links**, no duplicates) · review dates (ISO format, not future, staleness warning) · semver · the legal-safety block's own integrity · required prompt sections · provider-neutrality · inlined-safety-block detection · thin content · malformed or duplicate ids, names, tags and sources · unknown jurisdictions, categories and industries · **broken, duplicate and self-referencing related-skill ids** · dangling `ID_ALIASES` · that both export formats round-trip and retain their safety block.
+
+Errors exit non-zero and fail CI. Warnings report without blocking.
+
+---
+
+## Contributor workflow
+
+1. **Fork and branch.** One skill or one focused change per PR.
+2. **Check locally:** `npm run audit`, `npm run lint`, `npm run typecheck`, `npm run build`.
+3. **Open a PR** describing what changed. For a legal change, say what the correct position is and why the previous one was wrong.
+4. **CI runs** lint, typecheck, audit, build and pack generation on every push and PR.
+5. **Merge to `main`** triggers deployment — but only after CI passes: the deploy workflow is gated on CI success and builds the exact commit CI validated.
+
+Corrections from practising lawyers are the highest-value contribution this project can receive. If you spot an inaccuracy, open an issue naming the skill, the line and the correct position. Full guidance, including what makes a good prompt, is in [CONTRIBUTING.md](CONTRIBUTING.md).
+
+---
+
+## Deploying
+
+`dist/` is a plain static bundle; `vite.config.ts` sets `base: './'`, so it works from any subdirectory with no configuration.
+
+- **GitHub Pages** — enable **Settings → Pages → Source: GitHub Actions** once. [`deploy.yml`](.github/workflows/deploy.yml) then runs on CI success on `main`, or on demand from the Actions tab.
+- **Netlify / Vercel / Cloudflare Pages** — build `npm run build`, publish `dist`. No environment variables required.
+- **Anywhere else** — `npm run build`, then serve `dist/` with any static file server.
 
 ---
 
 ## Privacy and safety
 
-This is a deliberate design constraint, not an accident of the current version:
+A deliberate constraint, not an accident of the current version:
 
-- **No backend.** The app is a static bundle.
-- **No accounts, no login, no cookies, no analytics, no telemetry.**
+- **No backend, no accounts, no login, no cookies, no analytics, no telemetry.**
 - **No API keys.** The project does not call any LLM provider.
-- **Nothing you type is transmitted.** Search runs in your browser against a bundled JSON-shaped registry. There is no input field that sends a document anywhere.
-- **No LLM lock-in.** Prompts are plain text designed to work in any capable model.
+- **No LLM vendor dependency.** Prompts are plain text for any capable model.
+- **Nothing you type is transmitted.** Search runs in your browser against a bundled registry. No input field sends a document anywhere.
+- **Zero outbound requests.** The Google Fonts dependency was removed in favour of a system font stack; the published page requests nothing beyond its own assets. This is verified by an automated test.
 
-The only stored value is your light/dark theme preference in `localStorage`. The only outbound request the page makes is to Google Fonts for the Inter typeface; self-host it or drop the `<link>` in `index.html` if you would rather it made none.
-
-### On using the output
-
-Every prompt in this catalogue is written to be honest about its limits — marking uncertainty, flagging citations for verification, and refusing to assert thresholds or deadlines it cannot confirm. That is a design goal, not a guarantee. **Legal answers are jurisdiction-specific, time-sensitive and fact-dependent, and language models get them confidently wrong.** Treat every output as a first draft prepared by a capable but unsupervised junior: useful for structuring the work, never for concluding it.
+The only stored value is your light/dark theme preference in `localStorage`.
 
 ---
 
 ## Roadmap
 
-The **Agents** and **Connectors** tabs are placeholders. The data model already reserves the fields they need (`connectors`, `relatedSkills`, `version`, `authors`, `rating`), so they can be added without a breaking migration. Planned, in rough order:
-
-- More jurisdictions (UK, Canada, India, UAE) and industry-specific skill packs
-- Skill versioning and changelogs
-- Downloadable skill packs (JSON export, agent-tool formats)
-- Agents that chain skills into end-to-end workflows
-- Optional, opt-in connectors for document sources
-- Community ratings and usage notes
-
-Nothing on this list will change the privacy posture above without being clearly opt-in.
-
-## Contributing
-
-New skills, corrections to existing ones, and jurisdiction expertise are all welcome — especially from practising lawyers who can tell us where a prompt is wrong. See [CONTRIBUTING.md](CONTRIBUTING.md).
+The **Agents** and **Connectors** tabs are placeholders. The model already reserves `connectors`, `authors` and `rating`, so they can land without a breaking migration. Planned: more jurisdictions, industry-specific packs, skill changelogs, agents that chain skills, opt-in connectors, and community ratings. Nothing on that list will change the privacy posture above without being clearly opt-in.
 
 ## Licence
 

@@ -11,6 +11,14 @@ export const usSkills: Skill[] = [
     jurisdiction: 'us',
     category: 'research',
     tags: ['research', 'assessment', 'multi-state', 'survey', 'state-law', 'comparison'],
+    sources: [
+      { citation: 'Legal research and drafting methodology', authority: 'secondary', note: 'A method, not a statement of law. All substantive output requires verification against primary sources.' },
+      { citation: 'State statutes and regulations across the fifty states', authority: 'primary', jurisdiction: 'us', note: 'Positions vary by state and change frequently. This skill scaffolds the survey and targets verification; it is not a substitute for checking each state.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['global-legal-research', 'us-worker-classification'],
     whatItDoes:
       'Takes a legal question that varies by state and builds the survey scaffold: a normalised set of comparison dimensions, a per-state row for each, and — most usefully — a grouping of states into rule families so a 50-row table becomes four or five patterns plus a handful of outliers. Because state-by-state detail is exactly where an AI is most likely to be confidently wrong, every cell carries a confidence marker and the output ends with a verification plan ranked by how much a wrong answer would cost you.',
     whenToUse:
@@ -71,6 +79,15 @@ Six sections matching the tasks above.`,
     jurisdiction: 'us',
     category: 'employment',
     tags: ['workforce', 'assessment', 'worker-classification', 'independent-contractor', 'abc-test', 'employment', 'misclassification'],
+    sources: [
+      { citation: 'Fair Labor Standards Act', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us' },
+      { citation: 'IRS common-law control test for worker status', authority: 'regulator', publisher: 'Internal Revenue Service', jurisdiction: 'us', url: 'https://www.irs.gov' },
+      { citation: 'State independent-contractor statutes, including ABC-style tests', authority: 'primary', jurisdiction: 'us', note: 'The governing test differs by state and by purpose (wage, tax, benefits). Confirm the test for the worker\'s state.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-fifty-state-survey', 'au-modern-award-matcher'],
     whatItDoes:
       'Runs a described working arrangement through the classification tests that actually apply to it — the federal economic-reality analysis, the IRS common-law factors, and whichever state test governs where the worker sits, including the stricter ABC-style tests. It reports each test separately, because an arrangement can pass one and fail another, and identifies the specific facts that drive the risk so they can be changed rather than merely worried about.',
     whenToUse:
@@ -128,6 +145,14 @@ Six sections matching the tasks above, opening with a one-paragraph bottom line.
     jurisdiction: 'us',
     category: 'privacy',
     tags: ['data-protection', 'assessment', 'state-privacy', 'ccpa', 'consumer-rights', 'privacy-ops', 'routing'],
+    sources: [
+      { citation: 'California Consumer Privacy Act, as amended by the California Privacy Rights Act', authority: 'primary', publisher: 'State of California', jurisdiction: 'us' },
+      { citation: 'State comprehensive consumer privacy statutes', authority: 'primary', jurisdiction: 'us', note: 'Scope, thresholds and deadlines differ by state and change each legislative session. Confirm the current text for the specific state before relying on it.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['global-data-rights-request-handler', 'cross-four-regime-gap-analyzer'],
     whatItDoes:
       'Works out which of the growing set of US state consumer privacy laws applies to a given request, whether your business meets that state\'s applicability thresholds at all, and what the request actually obliges you to do. Because the state laws differ on deadlines, appeal rights, authorised-agent rules and sensitive-data handling, it produces a per-state answer and then a single operational plan built to the strictest applicable requirement.',
     whenToUse:
@@ -186,6 +211,16 @@ Seven sections matching the tasks above.`,
     jurisdiction: 'us',
     category: 'compliance',
     tags: ['screening', 'assessment', 'sanctions', 'ofac', 'export-control', 'trade-compliance'],
+    sources: [
+      { citation: 'US sanctions programs administered by OFAC', authority: 'regulator', publisher: 'Office of Foreign Assets Control, US Department of the Treasury', jurisdiction: 'us', url: 'https://ofac.treasury.gov', note: 'Designations change constantly and must be checked at source on the day of the transaction.' },
+      { citation: 'Export Administration Regulations', authority: 'primary', publisher: 'Bureau of Industry and Security, US Department of Commerce', jurisdiction: 'us' },
+      { citation: 'International Traffic in Arms Regulations', authority: 'primary', publisher: 'Directorate of Defense Trade Controls, US Department of State', jurisdiction: 'us' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['technology', 'energy-infrastructure'],
+    relatedSkills: ['global-contract-triage'],
     whatItDoes:
       'Builds the screening analysis for a proposed transaction: who the real parties are once ownership is traced, which sanctions or export-control touchpoints the deal has, what the item or technology being transferred might be classified as, and which red flags in the fact pattern deserve escalation. It is explicitly a structuring tool — it tells you what to check and where the risk sits, and it never substitutes for running the actual government lists, which must be checked at source every time.',
     whenToUse:
@@ -246,6 +281,16 @@ Seven sections matching the tasks above, opening with the currency warning.`,
     jurisdiction: 'us',
     category: 'litigation',
     tags: ['disputes', 'drafting', 'privilege', 'discovery', 'litigation', 'work-product', 'privilege-log'],
+    sources: [
+      { citation: 'Federal Rules of Civil Procedure', authority: 'primary', publisher: 'United States Courts', jurisdiction: 'us', url: 'https://www.uscourts.gov' },
+      { citation: 'Federal Rules of Evidence', authority: 'primary', publisher: 'United States Courts', jurisdiction: 'us', url: 'https://www.uscourts.gov' },
+      { citation: 'State privilege law and forum-specific practice', authority: 'primary', jurisdiction: 'us', note: 'Privilege doctrine differs between state and federal forums. Confirm which law governs.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['professional-services'],
+    relatedSkills: ['us-local-rules-formatter'],
     whatItDoes:
       'Converts document metadata and descriptions into privilege log entries that state a basis specific enough to survive a challenge, without disclosing the privileged content itself. It applies the distinction between attorney-client privilege and work product deliberately, flags the classic weak spots — documents copied to non-lawyers, business advice dressed as legal advice, communications that may have waived privilege — and refuses to assert a basis the supplied facts do not support.',
     whenToUse:
@@ -307,6 +352,15 @@ Log table, then the five analysis sections.`,
     jurisdiction: 'us',
     category: 'litigation',
     tags: ['disputes', 'review', 'local-rules', 'court-filing', 'formatting', 'litigation', 'compliance'],
+    sources: [
+      { citation: 'Federal Rules of Civil Procedure', authority: 'primary', publisher: 'United States Courts', jurisdiction: 'us', url: 'https://www.uscourts.gov' },
+      { citation: 'District local rules and individual judges\' standing orders', authority: 'regulator', jurisdiction: 'us', note: 'Hyper-local and amended without notice. The court\'s own website governs; the standing order is the layer most often missed.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['professional-services'],
+    relatedSkills: ['us-privilege-log-builder'],
     whatItDoes:
       'Produces the pre-filing checklist for a specific court: the formatting, length, certificate, exhibit and service requirements that a filing must satisfy, drawn from the layers of rules that actually govern it — the national rules, the district or state-wide rules, the local rules, and the individual judge\'s standing order, which is the layer most often missed. It then reviews your draft against that checklist and flags what is wrong. Because these rules are hyper-local and change without much notice, every item is presented as something to verify against the court\'s own site, not as settled fact.',
     whenToUse:

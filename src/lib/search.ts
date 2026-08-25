@@ -90,6 +90,16 @@ export function searchSkills(index: IndexedSkill[], filters: FilterState): Searc
 
     if (filters.jurisdiction !== 'all' && skill.jurisdiction !== filters.jurisdiction) continue;
     if (filters.category !== 'all' && skill.category !== filters.category) continue;
+    // A skill with no declared industries is industry-agnostic and matches
+    // every industry filter, so the dimension is additive over old skills.
+    if (
+      filters.industry !== 'all' &&
+      skill.industries !== undefined &&
+      skill.industries.length > 0 &&
+      !skill.industries.includes(filters.industry)
+    ) {
+      continue;
+    }
     if (filters.tags.length > 0 && !filters.tags.every((t) => skill.tags.includes(t))) continue;
 
     if (queryTerms.length === 0) {

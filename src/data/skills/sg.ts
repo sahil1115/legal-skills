@@ -11,6 +11,14 @@ export const sgSkills: Skill[] = [
     jurisdiction: 'sg',
     category: 'privacy',
     tags: ['data-protection', 'assessment', 'pdpa', 'singapore', 'consent', 'legitimate-interests'],
+    sources: [
+      { citation: 'Personal Data Protection Act 2012 (Singapore)', authority: 'primary', publisher: 'Singapore Statutes Online', jurisdiction: 'sg', url: 'https://sso.agc.gov.sg' },
+      { citation: 'PDPC Advisory Guidelines', authority: 'guidance', publisher: 'Personal Data Protection Commission', jurisdiction: 'sg', url: 'https://www.pdpc.gov.sg' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['sg-pdpc-breach-notifier', 'global-data-rights-request-handler'],
     whatItDoes:
       'Walks a processing activity through the PDPA obligation set and lands on the question that matters most in practice: what the lawful basis is. Singapore\'s framework is not consent-only — deemed consent by notification and the legitimate interests and business improvement exceptions each carry their own conditions and assessment requirements — so the analysis picks a basis, tests its conditions, and documents the assessment the regime expects you to have on file. It also covers the Do Not Call obligations, which sit in the same Act and are frequently overlooked.',
     whenToUse:
@@ -90,6 +98,15 @@ Eight sections matching the tasks above, opening with the lawful basis conclusio
     jurisdiction: 'sg',
     category: 'privacy',
     tags: ['data-protection', 'incident-response', 'pdpa', 'data-breach', 'pdpc', 'notification'],
+    sources: [
+      { citation: 'Personal Data Protection Act 2012 (Singapore)', authority: 'primary', publisher: 'Singapore Statutes Online', jurisdiction: 'sg', url: 'https://sso.agc.gov.sg' },
+      { citation: 'Subsidiary legislation on data breach notification made under the PDPA', authority: 'primary', jurisdiction: 'sg', url: 'https://sso.agc.gov.sg', note: 'Prescribed thresholds and periods must be confirmed against the current instrument.' },
+      { citation: 'PDPC Advisory Guidelines', authority: 'guidance', publisher: 'Personal Data Protection Commission', jurisdiction: 'sg', url: 'https://www.pdpc.gov.sg' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['sg-pdpa-obligation-mapper', 'au-privacy-ndb-assessor'],
     whatItDoes:
       'Runs the notifiable data breach analysis under the PDPA: whether the incident is a data breach, whether it meets either notification threshold — significant harm to affected individuals, or significant scale — and what the assessment and notification clocks require. It manages the tight timelines the regime imposes, drafts both the regulator and the individual notifications, and handles the data intermediary\'s separate duty to notify the organisation it processes for, which is often missed in a vendor incident.',
     whenToUse:
@@ -158,6 +175,14 @@ Nine sections matching the tasks above, opening with a dated timeline.`,
     jurisdiction: 'sg',
     category: 'employment',
     tags: ['workforce', 'assessment', 'work-pass', 'employment-pass', 'immigration', 'singapore', 'hiring'],
+    sources: [
+      { citation: 'Employment of Foreign Manpower Act 1990 (Singapore)', authority: 'primary', publisher: 'Singapore Statutes Online', jurisdiction: 'sg', url: 'https://sso.agc.gov.sg' },
+      { citation: 'Ministry of Manpower work pass criteria and published thresholds', authority: 'regulator', publisher: 'Ministry of Manpower', jurisdiction: 'sg', url: 'https://www.mom.gov.sg', note: 'Qualifying salaries, levies and quotas change on announced cycles. Always check the current published figures.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['sg-workplace-fairness-reviewer'],
     whatItDoes:
       'Works out which work pass route fits a proposed hire, tests the candidate against the criteria that actually gate approval — qualifying salary by age and sector, the points-based assessment, and the quota and levy position for the passes that carry them — and then sets out the employer-side conditions that follow, including advertising requirements and the workforce ratios that constrain future hiring. It treats every threshold as a figure to verify, since these change on announced cycles.',
     whenToUse:
@@ -225,6 +250,16 @@ Seven sections matching the tasks above, opening with a recommended route and a 
     jurisdiction: 'sg',
     category: 'regulatory',
     tags: ['financial-services', 'assessment', 'mas', 'singapore', 'regulatory', 'licensing'],
+    sources: [
+      { citation: 'Securities and Futures Act 2001, Financial Advisers Act 2001 and Payment Services Act 2019 (Singapore)', authority: 'primary', publisher: 'Singapore Statutes Online', jurisdiction: 'sg', url: 'https://sso.agc.gov.sg' },
+      { citation: 'MAS notices', authority: 'regulator', publisher: 'Monetary Authority of Singapore', jurisdiction: 'sg', url: 'https://www.mas.gov.sg', note: 'Binding on the entities they address.' },
+      { citation: 'MAS guidelines', authority: 'guidance', publisher: 'Monetary Authority of Singapore', jurisdiction: 'sg', url: 'https://www.mas.gov.sg', note: 'Not law, but departure must be justified and documented. Do not conflate with notices.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['financial-services'],
+    relatedSkills: ['eu-dora-third-party-reviewer', 'au-ddo-tmd-builder'],
     whatItDoes:
       'Determines which regulatory perimeter a proposed financial activity falls inside, what licence or exemption is required, and which of the Monetary Authority of Singapore\'s notices and guidelines then apply to the licence held. It distinguishes carefully between notices, which are binding, and guidelines, which set out supervisory expectations — a distinction that changes how you must respond to each — and builds an obligation map with the recurring reporting and governance duties that follow.',
     whenToUse:
@@ -285,6 +320,14 @@ Eight sections matching the tasks above, opening with the perimeter conclusion.`
     jurisdiction: 'sg',
     category: 'employment',
     tags: ['workforce', 'review', 'workplace-fairness', 'discrimination', 'hiring', 'tafep', 'singapore'],
+    sources: [
+      { citation: 'Tripartite Guidelines on Fair Employment Practices', authority: 'guidance', publisher: 'Tripartite Alliance for Fair and Progressive Employment Practices', jurisdiction: 'sg' },
+      { citation: 'Singapore workplace fairness legislation', authority: 'primary', jurisdiction: 'sg', url: 'https://sso.agc.gov.sg', note: 'This framework has been undergoing legislative change. Confirm the current text, commencement date and covered characteristics before relying on the analysis.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['sg-work-pass-planner'],
     whatItDoes:
       'Audits recruitment materials, selection processes and employment decisions against Singapore\'s fair employment framework and the protected characteristics the workplace fairness legislation addresses. It reviews job advertisements and criteria for language that signals a protected characteristic, tests whether selection criteria are genuinely job-related, checks the grievance-handling process the framework expects employers to maintain, and rewrites problematic material rather than only flagging it.',
     whenToUse:
@@ -346,6 +389,15 @@ Eight sections matching the tasks above, with rewritten materials in an annex.`,
     jurisdiction: 'sg',
     category: 'litigation',
     tags: ['disputes', 'drafting', 'arbitration', 'siac', 'dispute-resolution', 'enforcement'],
+    sources: [
+      { citation: 'International Arbitration Act 1994 (Singapore)', authority: 'primary', publisher: 'Singapore Statutes Online', jurisdiction: 'sg', url: 'https://sso.agc.gov.sg' },
+      { citation: 'SIAC Arbitration Rules', authority: 'regulator', publisher: 'Singapore International Arbitration Centre', jurisdiction: 'sg', url: 'https://www.siac.org.sg', note: 'Rules are revised periodically; the applicable edition matters.' },
+      { citation: 'Convention on the Recognition and Enforcement of Foreign Arbitral Awards (New York, 1958)', authority: 'primary', publisher: 'United Nations', url: 'https://uncitral.un.org' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['cross-contract-localizer'],
     whatItDoes:
       'Builds a dispute resolution clause for a Singapore-seated arbitration with every parameter chosen deliberately — seat, governing law of the contract and of the arbitration agreement, number of arbitrators, language, confidentiality, and whether an escalation tier or emergency relief is wanted — and then stress-tests the result against the ways arbitration clauses actually fail: internal contradiction, optional wording, unclear scope, and mismatch with where enforcement will have to happen.',
     whenToUse:

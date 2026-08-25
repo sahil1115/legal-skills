@@ -1,4 +1,5 @@
-# Type-checks, lints and builds every push and pull request.
+# Type-checks, lints, audits and builds every push and pull request.
+# Deployment is gated on this workflow succeeding — see deploy.yml.
 name: CI
 
 on:
@@ -16,5 +17,20 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run lint
-      - run: npm run build
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      # Validates source metadata, review dates, versions, the legal-safety
+      # block, required prompt sections and related-skill references.
+      - name: Audit skill registry
+        run: npm run audit
+
+      - name: Build
+        run: npm run build
+
+      - name: Build skill packs
+        run: npm run packs

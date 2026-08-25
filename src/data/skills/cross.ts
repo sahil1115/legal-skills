@@ -11,6 +11,14 @@ export const crossSkills: Skill[] = [
     jurisdiction: 'cross',
     category: 'contracts',
     tags: ['contract-lifecycle', 'drafting', 'localisation', 'multi-jurisdiction', 'contract-adaptation', 'expansion'],
+    sources: [
+      { citation: 'General commercial contracting and legal operations practice', authority: 'secondary', note: 'A workflow skill: no single binding instrument governs it. The output must still be checked against the law of the governing jurisdiction.' },
+      { citation: 'Mandatory local rules and consumer protection regimes of the target jurisdiction', authority: 'primary', note: 'Which mandatory rules survive a foreign choice of law is jurisdiction specific and must be confirmed with local counsel.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['au-acl-unfair-terms', 'global-draft-builder'],
     whatItDoes:
       'Takes a contract written for one legal system and identifies what breaks when you use it in another: terms that are void or unenforceable in the target jurisdiction, mandatory local requirements the draft omits, concepts that have no local equivalent, and language whose meaning shifts. It separates changes that are legally required from those that are merely advisable, and rewrites the affected clauses rather than listing concerns.',
     whenToUse:
@@ -83,6 +91,13 @@ Seven sections matching the tasks above.`,
     jurisdiction: 'cross',
     category: 'compliance',
     tags: ['regulatory-change', 'assessment', 'multi-jurisdiction', 'gap-analysis', 'comparison', 'programme-design', 'compliance'],
+    sources: [
+      { citation: 'The regimes being compared, as supplied by the user', authority: 'secondary', note: 'This skill provides the comparison framework. It does not supply the current text of any regime and every cell it produces requires verification.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['cross-strictest-rule-resolver', 'global-horizon-scanner'],
     whatItDoes:
       'Takes one compliance topic — breach notification, data subject rights, consent, record-keeping — and compares how four regimes handle it along the dimensions that actually matter operationally: what triggers the obligation, what the deadline is, who must be told, what must be in the notice, and what the exceptions are. The point is the gap analysis: where a single global process quietly fails one regime, and whether the fix is to run the strictest rule everywhere or to branch.',
     whenToUse:
@@ -153,6 +168,16 @@ Seven sections matching the tasks above.`,
     jurisdiction: 'cross',
     category: 'privacy',
     tags: ['data-protection', 'assessment', 'data-transfers', 'multi-jurisdiction', 'sccs', 'privacy', 'mechanism-selection'],
+    sources: [
+      { citation: 'Regulation (EU) 2016/679 (General Data Protection Regulation)', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu' },
+      { citation: 'Personal Data Protection Act 2012 (Singapore)', authority: 'primary', publisher: 'Singapore Statutes Online', jurisdiction: 'sg', url: 'https://sso.agc.gov.sg' },
+      { citation: 'Privacy Act 1988 (Cth) and the Australian Privacy Principles', authority: 'primary', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au' },
+      { citation: 'Cross-border transfer rules of each exporting jurisdiction', authority: 'primary', note: 'Regimes differ in kind, not only in detail: some prescribe permitted mechanisms, others impose an outcome obligation on the exporter that no standard form fully discharges.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['eu-transfer-impact-assessor', 'sg-pdpa-obligation-mapper'],
     whatItDoes:
       'Handles the case where personal data moves out of several jurisdictions at once — an EU parent, an Australian subsidiary and a Singapore entity all sending data to one processor — and each source regime has its own transfer rules. It works out what each source requires, identifies whether one instrument can carry several regimes or whether separate paperwork is needed, and produces the document set with the assessment obligations each mechanism brings.',
     whenToUse:
@@ -219,6 +244,13 @@ Eight sections matching the tasks above.`,
     jurisdiction: 'cross',
     category: 'compliance',
     tags: ['regulatory-change', 'programme-design', 'conflict-of-laws', 'multi-jurisdiction', 'standards', 'policy-design', 'compliance'],
+    sources: [
+      { citation: 'Conflict-of-laws and multi-jurisdiction compliance practice', authority: 'secondary', note: 'A decision framework. Whether two requirements genuinely conflict is a legal question for qualified counsel in each jurisdiction.' },
+    ],
+    lastReviewed: '2026-08-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['cross-four-regime-gap-analyzer', 'global-horizon-scanner'],
     whatItDoes:
       'Takes a set of requirements from different jurisdictions that point in different directions and produces a single operating standard, dimension by dimension. It handles the case people assume away — where requirements genuinely conflict rather than merely differ, so that complying with one means breaching another — and forces an explicit, documented decision with its reasoning, instead of a policy that silently picks one and hopes.',
     whenToUse:

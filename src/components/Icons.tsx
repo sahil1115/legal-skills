@@ -147,3 +147,19 @@ export function FilterOffIcon({ size = 20, className }: IconProps) {
     </svg>
   );
 }
+
+export function DownloadIcon({ size = 15, className }: IconProps) {
+  return (
+    <svg {...base(size)} className={className}>
+      <path d="M12 3v12M7.5 10.5 12 15l4.5-4.5M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+    </svg>
+  );
+}
+
+export function ShieldIcon({ size = 14, className }: IconProps) {
+  return (
+    <svg {...base(size)} className={className}>
+      <path d="M12 3 5 6v6c0 4.2 3 6.9 7 8 4-1.1 7-3.8 7-8V6l-7-3z" />
+    </svg>
+  );
+}
