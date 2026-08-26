@@ -2,7 +2,7 @@
 
 **A free, open-source catalogue of reusable legal AI skills — browse by jurisdiction, copy the prompt, run it in whatever model you already use.**
 
-Legal Skills is a static web app. No backend, no account, no API key, no telemetry, and **zero outbound network requests** from the published page. Every skill is a structured, provider-neutral prompt carrying its own sources, review date and legal-safety rules.
+Legal Skills is a static web app. No backend, no account, no API key, and **zero third-party requests out of the box**. Optional privacy-friendly analytics can be switched on by a maintainer; it is off by default and never sees what you type. Every skill is a structured, provider-neutral prompt carrying its own sources, review date and legal-safety rules.
 
 > **Not legal advice.** Every skill produces AI-assisted legal research and drafting support. It is not legal advice, it does not create a lawyer–client relationship, and it may be incomplete or out of date. Verify every citation, deadline and conclusion against primary sources, and have a qualified lawyer in the relevant jurisdiction review the output before you rely on it. See [DISCLAIMER.md](DISCLAIMER.md).
 
@@ -12,7 +12,7 @@ Legal Skills is a static web app. No backend, no account, no API key, no telemet
 
 **<https://sahil1115.github.io/legal-skills/>**
 
-Deep links work per skill — for example [`#eu-ai-act-classifier`](https://sahil1115.github.io/legal-skills/#eu-ai-act-classifier). Nothing you type is transmitted; search runs entirely in your browser.
+Deep links work per skill — for example [`#eu-ai-act-classifier`](https://sahil1115.github.io/legal-skills/#eu-ai-act-classifier). Nothing you type is ever transmitted; search runs entirely in your browser.
 
 > Pages must be enabled once on a fork: **Settings → Pages → Source: GitHub Actions**. After that, every push to `main` that passes CI deploys automatically.
 
@@ -40,7 +40,7 @@ Each skill carries what it does, when to use it, inputs, expected outputs, a ful
 - Per-skill detail view with **Copy Prompt**, **Download SKILL.md** and **Download JSON**
 - Deep links with working Back/Forward, and permanent redirects for renamed skills
 - Light and dark themes, responsive from 320px
-- Zero data collection, zero outbound requests
+- No accounts, no cookies, no user-content collection; optional [privacy-friendly analytics](#analytics), off by default
 
 ---
 
@@ -161,7 +161,8 @@ src/
 │   └── disclaimer.ts
 ├── lib/
 │   ├── search.ts           # Scored client-side search, no index library
-│   └── export.ts           # SKILL.md / JSON transforms + download
+│   ├── export.ts           # SKILL.md / JSON transforms + download
+│   └── analytics.ts        # Optional Plausible events; no-ops when unconfigured
 ├── hooks/
 │   ├── useSkillFilters.ts  # All filter state in one place
 │   ├── useSkillRoute.ts    # Hash routing, Back/Forward correctness
@@ -187,6 +188,7 @@ scripts/
 - **The URL owns modal state.** `useSkillRoute` derives React state from the hash and marks its own history entries in `history.state`, so Back/Forward stay synchronised. Closing pops our entry rather than pushing a new one. (A ref would desync on same-document fragment navigation, which does not remount React.)
 - **Renamed skills keep working.** `ID_ALIASES` maps retired ids to current ones; `getSkill()` resolves both and the URL is rewritten to the live id. **Never delete an alias** — an id is a published deep link.
 - **Industry is additive.** A skill with no `industries` is industry-agnostic and matches every industry filter, so the dimension works over a registry where most skills declare nothing.
+- **Analytics is opt-in and typed.** `analytics.ts` injects the Plausible script itself (no dependency added) and exposes helpers that accept `Skill` objects and closed label unions — a caller cannot casually pass free text into an event. Pageviews are sent manually so the query string is always stripped.
 
 ---
 
@@ -261,15 +263,49 @@ Corrections from practising lawyers are the highest-value contribution this proj
 
 ---
 
+## Analytics
+
+The project can report **anonymous, aggregate** usage statistics through
+[Plausible Analytics](https://plausible.io) — cookieless, no personal data, no
+cross-site tracking. **It is optional and off by default:** a fresh clone loads
+no analytics script and makes no analytics request.
+
+Enable it by setting `VITE_PLAUSIBLE_DOMAIN` to the domain registered in your
+Plausible dashboard (for a Pages project site that includes the path, e.g.
+`yourname.github.io/legal-skills`). Unset, every tracking call is a no-op and
+the app is otherwise identical. There is still no backend, no account and no API
+key — the value is public build configuration, not a secret.
+
+**What is measured:** visitors and pageviews, which skills are opened
+(`Skill Viewed`), which prompts are copied (`Prompt Copied`), which skills are
+downloaded and in which format (`Skill Downloaded`), and clicks to the
+repository and cited-source links (`Outbound Link Click`). Skill events carry
+`skill_id`, `skill_name`, `jurisdiction` and `category`, taken from the registry
+— so "which jurisdictions and practice areas do people care about" is a
+breakdown of those properties.
+
+**What is never sent:** search text or anything else you type, prompt content,
+legal document content, query strings, names, email addresses, IP addresses,
+cookies set by this app (it sets none), or any user, session or device
+identifier. There is no fingerprinting and no `localStorage` tracking identity.
+Pageview URLs are built from origin + path + hash with the query string stripped
+unconditionally.
+
+Full setup, event reference, verification and how to turn it off:
+**[docs/analytics.md](docs/analytics.md)**.
+
+---
+
 ## Privacy and safety
 
 A deliberate constraint, not an accident of the current version:
 
-- **No backend, no accounts, no login, no cookies, no analytics, no telemetry.**
+- **No backend, no accounts, no login, no cookies set by this app.**
+- **No analytics by default.** Optional, self-configured Plausible only — off unless a maintainer sets `VITE_PLAUSIBLE_DOMAIN`, and never collecting user-entered content. See [Analytics](#analytics).
 - **No API keys.** The project does not call any LLM provider.
 - **No LLM vendor dependency.** Prompts are plain text for any capable model.
 - **Nothing you type is transmitted.** Search runs in your browser against a bundled registry. No input field sends a document anywhere.
-- **Zero outbound requests.** The Google Fonts dependency was removed in favour of a system font stack; the published page requests nothing beyond its own assets. This is verified by an automated test.
+- **Zero third-party requests with analytics disabled.** The Google Fonts dependency was removed in favour of a system font stack; with analytics off the page requests nothing beyond its own assets, verified by an automated test. With analytics on, the only third-party request is the Plausible script and its event endpoint.
 
 The only stored value is your light/dark theme preference in `localStorage`.
 

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { RoadmapItem } from '../data/roadmap';
 import { REPO_URL } from '../config';
+import { trackOutboundLink } from '../lib/analytics';
 
 interface RoadmapPanelProps {
   icon: ReactNode;
@@ -38,7 +39,12 @@ export function RoadmapPanel({ icon, title, body, items }: RoadmapPanelProps) {
       <p className="roadmap__note">
         Nothing here is built yet. The skill model in <code>src/types/skill.ts</code> already reserves
         the fields these surfaces need, so they can be added without a breaking change.{' '}
-        <a href={REPO_URL} target="_blank" rel="noreferrer noopener">
+        <a
+          href={REPO_URL}
+          target="_blank"
+          rel="noreferrer noopener"
+          onClick={() => trackOutboundLink('github-repo')}
+        >
           Contributions welcome
         </a>
         .

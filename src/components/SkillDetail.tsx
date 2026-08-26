@@ -9,6 +9,12 @@ import { getSkill } from '../data/skills';
 import { downloadSkillJson, downloadSkillMarkdown } from '../lib/export';
 import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
 import {
+  hostOf,
+  trackOutboundLink,
+  trackPromptCopied,
+  trackSkillDownloaded,
+} from '../lib/analytics';
+import {
   CheckIcon,
   CloseIcon,
   CopyIcon,
@@ -127,9 +133,23 @@ export function SkillDetail({ skill, onClose, onTagSelect, onOpenSkill }: SkillD
     bodyRef.current?.scrollTo({ top: 0 });
   }, [skill.id]);
 
+  // Reported only when the clipboard write actually succeeded — a blocked or
+  // failed copy is not a copy. Note we send the skill's identity, never the
+  // prompt text itself.
   const handleCopy = useCallback(() => {
-    void copy(fullPrompt);
-  }, [copy, fullPrompt]);
+    void copy(fullPrompt).then((ok) => {
+      if (ok) trackPromptCopied(skill);
+    });
+  }, [copy, fullPrompt, skill]);
+
+  // Reported only once the browser has actually been handed the file.
+  const handleDownloadMarkdown = useCallback(() => {
+    if (downloadSkillMarkdown(skill)) trackSkillDownloaded(skill, 'skill-md');
+  }, [skill]);
+
+  const handleDownloadJson = useCallback(() => {
+    if (downloadSkillJson(skill)) trackSkillDownloaded(skill, 'json');
+  }, [skill]);
 
   const copyLabel =
     status === 'copied' ? 'Prompt copied' : status === 'error' ? 'Copy failed' : 'Copy prompt';
@@ -303,6 +323,7 @@ export function SkillDetail({ skill, onClose, onTagSelect, onOpenSkill }: SkillD
                       href={source.url}
                       target="_blank"
                       rel="noreferrer noopener"
+                      onClick={() => trackOutboundLink('legal-source', hostOf(source.url!))}
                     >
                       {source.url.replace(/^https?:\/\//, '')}
                     </a>
@@ -401,7 +422,7 @@ export function SkillDetail({ skill, onClose, onTagSelect, onOpenSkill }: SkillD
           <button
             type="button"
             className="btn btn--secondary"
-            onClick={() => downloadSkillMarkdown(skill)}
+            onClick={handleDownloadMarkdown}
             title="Agent Skills-compatible Markdown package"
           >
             <DownloadIcon />
@@ -410,7 +431,7 @@ export function SkillDetail({ skill, onClose, onTagSelect, onOpenSkill }: SkillD
           <button
             type="button"
             className="btn btn--secondary"
-            onClick={() => downloadSkillJson(skill)}
+            onClick={handleDownloadJson}
             title="Machine-readable JSON export"
           >
             <DownloadIcon />

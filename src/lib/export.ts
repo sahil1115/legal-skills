@@ -156,25 +156,35 @@ export function toSkillJson(skill: Skill): string {
 /**
  * Triggers a client-side file download. Uses an object URL and a synthetic
  * click — no network, no backend, nothing leaves the browser.
+ *
+ * Returns whether the download was actually initiated, so callers can report
+ * a completed action rather than an attempted one.
  */
-export function downloadFile(filename: string, contents: string, mime: string): void {
-  const blob = new Blob([contents], { type: `${mime};charset=utf-8` });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.rel = 'noopener';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  // Revoked on the next tick so the download has started before the URL dies.
-  setTimeout(() => URL.revokeObjectURL(url), 0);
+export function downloadFile(filename: string, contents: string, mime: string): boolean {
+  try {
+    const blob = new Blob([contents], { type: `${mime};charset=utf-8` });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    // Revoked on the next tick so the download has started before the URL dies.
+    setTimeout(() => URL.revokeObjectURL(url), 0);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
-export function downloadSkillMarkdown(skill: Skill): void {
-  downloadFile(`${skill.id}.SKILL.md`, toSkillMarkdown(skill), 'text/markdown');
+/** @returns whether the download started. */
+export function downloadSkillMarkdown(skill: Skill): boolean {
+  return downloadFile(`${skill.id}.SKILL.md`, toSkillMarkdown(skill), 'text/markdown');
 }
 
-export function downloadSkillJson(skill: Skill): void {
-  downloadFile(`${skill.id}.json`, toSkillJson(skill), 'application/json');
+/** @returns whether the download started. */
+export function downloadSkillJson(skill: Skill): boolean {
+  return downloadFile(`${skill.id}.json`, toSkillJson(skill), 'application/json');
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { TabId } from './types/skill';
 import { skills } from './data/skills';
 import { jurisdictions } from './data/jurisdictions';
@@ -21,6 +21,12 @@ import {
   SunIcon,
 } from './components/Icons';
 import { REPO_URL } from './config';
+import {
+  initAnalytics,
+  trackOutboundLink,
+  trackPageView,
+  trackSkillViewed,
+} from './lib/analytics';
 
 const TABS: { id: TabId; label: string; count: number | null }[] = [
   { id: 'agents', label: 'Agents', count: null },
@@ -60,6 +66,34 @@ export default function App() {
     }
   }, [theme]);
 
+  // Analytics: no-ops entirely unless VITE_PLAUSIBLE_DOMAIN is configured.
+  // `initAnalytics` is idempotent, so StrictMode's double-invoked effect in
+  // development cannot load the script or register pageviews twice.
+  useEffect(() => {
+    initAnalytics();
+  }, []);
+
+  // One pageview per navigation. The skill route is the only thing that changes
+  // the URL, so opening a skill, moving between skills and returning to the
+  // catalogue each register — rather than the whole app counting as one page.
+  const lastPageKey = useRef<string | null>(null);
+  const lastViewedSkill = useRef<string | null>(null);
+  useEffect(() => {
+    const key = openSkill?.id ?? '';
+    if (lastPageKey.current === key) return;
+    lastPageKey.current = key;
+    trackPageView();
+
+    // Fires once per actual opening, not once per render: the ref survives
+    // re-renders and StrictMode's remount, and the guard above means a
+    // re-render with an unchanged skill never reaches this point.
+    if (openSkill && lastViewedSkill.current !== openSkill.id) {
+      lastViewedSkill.current = openSkill.id;
+      trackSkillViewed(openSkill);
+    }
+    if (!openSkill) lastViewedSkill.current = null;
+  }, [openSkill]);
+
   const handleTagSelect = useCallback(
     (tag: string) => {
       if (!filters.tags.includes(tag)) toggleTag(tag);
@@ -94,6 +128,7 @@ export default function App() {
               target="_blank"
               rel="noreferrer noopener"
               style={{ textDecoration: 'none' }}
+              onClick={() => trackOutboundLink('github-repo')}
             >
               <GithubIcon />
               <span className="ghost-btn__label">GitHub</span>
@@ -250,19 +285,44 @@ export default function App() {
             anywhere.
           </p>
           <nav className="footer__links">
-            <a href={REPO_URL} target="_blank" rel="noreferrer noopener">
+            <a
+              href={REPO_URL}
+              target="_blank"
+              rel="noreferrer noopener"
+              onClick={() => trackOutboundLink('github-repo')}
+            >
               GitHub
             </a>
-            <a href={`${REPO_URL}/blob/main/CONTRIBUTING.md`} target="_blank" rel="noreferrer noopener">
+            <a
+              href={`${REPO_URL}/blob/main/CONTRIBUTING.md`}
+              target="_blank"
+              rel="noreferrer noopener"
+              onClick={() => trackOutboundLink('github-contributing')}
+            >
               Contribute a skill
             </a>
-            <a href={`${REPO_URL}/issues`} target="_blank" rel="noreferrer noopener">
+            <a
+              href={`${REPO_URL}/issues`}
+              target="_blank"
+              rel="noreferrer noopener"
+              onClick={() => trackOutboundLink('github-issues')}
+            >
               Report an issue
             </a>
-            <a href={`${REPO_URL}/blob/main/LICENSE`} target="_blank" rel="noreferrer noopener">
+            <a
+              href={`${REPO_URL}/blob/main/LICENSE`}
+              target="_blank"
+              rel="noreferrer noopener"
+              onClick={() => trackOutboundLink('github-license')}
+            >
               MIT License
             </a>
-            <a href={`${REPO_URL}/blob/main/DISCLAIMER.md`} target="_blank" rel="noreferrer noopener">
+            <a
+              href={`${REPO_URL}/blob/main/DISCLAIMER.md`}
+              target="_blank"
+              rel="noreferrer noopener"
+              onClick={() => trackOutboundLink('github-disclaimer')}
+            >
               Disclaimer
             </a>
           </nav>
