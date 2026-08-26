@@ -66,7 +66,7 @@ export default function App() {
     }
   }, [theme]);
 
-  // Analytics: no-ops entirely unless VITE_PLAUSIBLE_DOMAIN is configured.
+  // Analytics: no-ops entirely unless VITE_GOATCOUNTER_CODE is configured.
   // `initAnalytics` is idempotent, so StrictMode's double-invoked effect in
   // development cannot load the script or register pageviews twice.
   useEffect(() => {
@@ -76,22 +76,17 @@ export default function App() {
   // One pageview per navigation. The skill route is the only thing that changes
   // the URL, so opening a skill, moving between skills and returning to the
   // catalogue each register — rather than the whole app counting as one page.
+  //
+  // Each skill has its own hash URL, so its pageview *is* the "skill viewed"
+  // record and shows up as a distinct path in the dashboard. The ref guard
+  // means this fires once per actual navigation, never once per render.
   const lastPageKey = useRef<string | null>(null);
-  const lastViewedSkill = useRef<string | null>(null);
   useEffect(() => {
     const key = openSkill?.id ?? '';
     if (lastPageKey.current === key) return;
     lastPageKey.current = key;
-    trackPageView();
-
-    // Fires once per actual opening, not once per render: the ref survives
-    // re-renders and StrictMode's remount, and the guard above means a
-    // re-render with an unchanged skill never reaches this point.
-    if (openSkill && lastViewedSkill.current !== openSkill.id) {
-      lastViewedSkill.current = openSkill.id;
-      trackSkillViewed(openSkill);
-    }
-    if (!openSkill) lastViewedSkill.current = null;
+    if (openSkill) trackSkillViewed(openSkill);
+    else trackPageView();
   }, [openSkill]);
 
   const handleTagSelect = useCallback(

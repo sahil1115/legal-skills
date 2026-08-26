@@ -2,7 +2,7 @@
 
 **A free, open-source catalogue of reusable legal AI skills — browse by jurisdiction, copy the prompt, run it in whatever model you already use.**
 
-Legal Skills is a static web app. No backend, no account, no API key, and **zero third-party requests out of the box**. Optional privacy-friendly analytics can be switched on by a maintainer; it is off by default and never sees what you type. Every skill is a structured, provider-neutral prompt carrying its own sources, review date and legal-safety rules.
+Legal Skills is a static web app. No backend, no account, no API key, and **zero third-party requests out of the box**. Optional free, privacy-friendly analytics can be switched on by a maintainer; it is off by default and never sees what you type. Every skill is a structured, provider-neutral prompt carrying its own sources, review date and legal-safety rules.
 
 > **Not legal advice.** Every skill produces AI-assisted legal research and drafting support. It is not legal advice, it does not create a lawyer–client relationship, and it may be incomplete or out of date. Verify every citation, deadline and conclusion against primary sources, and have a qualified lawyer in the relevant jurisdiction review the output before you rely on it. See [DISCLAIMER.md](DISCLAIMER.md).
 
@@ -162,7 +162,7 @@ src/
 ├── lib/
 │   ├── search.ts           # Scored client-side search, no index library
 │   ├── export.ts           # SKILL.md / JSON transforms + download
-│   └── analytics.ts        # Optional Plausible events; no-ops when unconfigured
+│   └── analytics.ts        # Optional GoatCounter hits; no-ops when unconfigured
 ├── hooks/
 │   ├── useSkillFilters.ts  # All filter state in one place
 │   ├── useSkillRoute.ts    # Hash routing, Back/Forward correctness
@@ -188,7 +188,7 @@ scripts/
 - **The URL owns modal state.** `useSkillRoute` derives React state from the hash and marks its own history entries in `history.state`, so Back/Forward stay synchronised. Closing pops our entry rather than pushing a new one. (A ref would desync on same-document fragment navigation, which does not remount React.)
 - **Renamed skills keep working.** `ID_ALIASES` maps retired ids to current ones; `getSkill()` resolves both and the URL is rewritten to the live id. **Never delete an alias** — an id is a published deep link.
 - **Industry is additive.** A skill with no `industries` is industry-agnostic and matches every industry filter, so the dimension works over a registry where most skills declare nothing.
-- **Analytics is opt-in and typed.** `analytics.ts` injects the Plausible script itself (no dependency added) and exposes helpers that accept `Skill` objects and closed label unions — a caller cannot casually pass free text into an event. Pageviews are sent manually so the query string is always stripped.
+- **Analytics is opt-in, typed and provider-isolated.** `analytics.ts` injects the GoatCounter script itself (no dependency added) and exposes helpers that accept `Skill` objects and closed label unions — a caller cannot casually pass free text into a hit. Pageviews are sent manually so the query string is always stripped. Every call site goes through the helpers, which is why changing provider touched exactly one file.
 
 ---
 
@@ -266,32 +266,35 @@ Corrections from practising lawyers are the highest-value contribution this proj
 ## Analytics
 
 The project can report **anonymous, aggregate** usage statistics through
-[Plausible Analytics](https://plausible.io) — cookieless, no personal data, no
-cross-site tracking. **It is optional and off by default:** a fresh clone loads
-no analytics script and makes no analytics request.
+[GoatCounter](https://www.goatcounter.com) — open source, cookieless, no
+personal data, no IP storage, and **free on its hosted service for
+non-commercial and open-source projects** (it can also be self-hosted).
+**It is optional and off by default:** a fresh clone loads no analytics script
+and makes no analytics request.
 
-Enable it by setting `VITE_PLAUSIBLE_DOMAIN` to the domain registered in your
-Plausible dashboard (for a Pages project site that includes the path, e.g.
-`yourname.github.io/legal-skills`). Unset, every tracking call is a no-op and
-the app is otherwise identical. There is still no backend, no account and no API
-key — the value is public build configuration, not a secret.
+Enable it by setting `VITE_GOATCOUNTER_CODE` to your GoatCounter site code — the
+subdomain of your dashboard, so `legal-skills` for
+`https://legal-skills.goatcounter.com`. Unset, every tracking call is a no-op
+and the app is otherwise identical. There is still no backend, no account needed
+to run the site and no API key — the value is public build configuration, not a
+secret.
 
-**What is measured:** visitors and pageviews, which skills are opened
-(`Skill Viewed`), which prompts are copied (`Prompt Copied`), which skills are
-downloaded and in which format (`Skill Downloaded`), and clicks to the
-repository and cited-source links (`Outbound Link Click`). Skill events carry
-`skill_id`, `skill_name`, `jurisdiction` and `category`, taken from the registry
-— so "which jurisdictions and practice areas do people care about" is a
-breakdown of those properties.
+**What is measured:** visitors and pageviews; which skills are opened (each
+skill has its own URL, so it appears as its own path); which prompts are copied
+(`copy/<skill-id>`); which skills are downloaded and in which format
+(`download-skill-md/…`, `download-json/…`); and clicks to the repository and
+cited-source links (`outbound/…`). Hit titles carry the skill's jurisdiction and
+category — `AI Act Classifier (eu / regulatory)` — so "which jurisdictions and
+practice areas do people care about" is readable straight from the dashboard.
 
 **What is never sent:** search text or anything else you type, prompt content,
 legal document content, query strings, names, email addresses, IP addresses,
 cookies set by this app (it sets none), or any user, session or device
 identifier. There is no fingerprinting and no `localStorage` tracking identity.
-Pageview URLs are built from origin + path + hash with the query string stripped
+Pageview paths are built from pathname + hash with the query string stripped
 unconditionally.
 
-Full setup, event reference, verification and how to turn it off:
+Full setup, hit reference, verification and how to turn it off:
 **[docs/analytics.md](docs/analytics.md)**.
 
 ---
@@ -301,11 +304,11 @@ Full setup, event reference, verification and how to turn it off:
 A deliberate constraint, not an accident of the current version:
 
 - **No backend, no accounts, no login, no cookies set by this app.**
-- **No analytics by default.** Optional, self-configured Plausible only — off unless a maintainer sets `VITE_PLAUSIBLE_DOMAIN`, and never collecting user-entered content. See [Analytics](#analytics).
+- **No analytics by default.** Optional, self-configured GoatCounter only — off unless a maintainer sets `VITE_GOATCOUNTER_CODE`, and never collecting user-entered content. See [Analytics](#analytics).
 - **No API keys.** The project does not call any LLM provider.
 - **No LLM vendor dependency.** Prompts are plain text for any capable model.
 - **Nothing you type is transmitted.** Search runs in your browser against a bundled registry. No input field sends a document anywhere.
-- **Zero third-party requests with analytics disabled.** The Google Fonts dependency was removed in favour of a system font stack; with analytics off the page requests nothing beyond its own assets, verified by an automated test. With analytics on, the only third-party request is the Plausible script and its event endpoint.
+- **Zero third-party requests with analytics disabled.** The Google Fonts dependency was removed in favour of a system font stack; with analytics off the page requests nothing beyond its own assets, verified by an automated test. With analytics on, the only third-party request is the GoatCounter script and its count endpoint.
 
 The only stored value is your light/dark theme preference in `localStorage`.
 

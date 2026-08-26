@@ -47,8 +47,8 @@ jobs:
           # *variable* (Settings -> Secrets and variables -> Actions ->
           # Variables), not a secret: it is baked into the client bundle and
           # visible to anyone. Leave it unset to ship with analytics disabled.
-          VITE_PLAUSIBLE_DOMAIN: ${{ vars.VITE_PLAUSIBLE_DOMAIN }}
-          VITE_PLAUSIBLE_HOST: ${{ vars.VITE_PLAUSIBLE_HOST }}
+          VITE_GOATCOUNTER_CODE: ${{ vars.VITE_GOATCOUNTER_CODE }}
+          VITE_GOATCOUNTER_ENDPOINT: ${{ vars.VITE_GOATCOUNTER_ENDPOINT }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

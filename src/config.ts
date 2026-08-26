@@ -5,7 +5,7 @@
  * and baked in at build time. See .env.example.
  *
  * Analytics configuration lives in `src/lib/analytics.ts`, which reads
- * VITE_PLAUSIBLE_DOMAIN and disables itself entirely when it is unset.
+ * VITE_GOATCOUNTER_CODE and disables itself entirely when it is unset.
  */
 export const REPO_URL =
   import.meta.env.VITE_REPO_URL ?? 'https://github.com/sahil1115/legal-skills';

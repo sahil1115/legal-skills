@@ -1,64 +1,100 @@
 import type { Skill } from '../types/skill';
 
 /**
- * Privacy-friendly analytics via Plausible.
+ * Privacy-friendly analytics via GoatCounter.
+ *
+ * GoatCounter is open source, cookieless, stores no IP addresses and is free
+ * to use on its hosted service for non-commercial and open-source projects.
+ * It can also be self-hosted — see `VITE_GOATCOUNTER_ENDPOINT`.
  *
  * Design constraints, all deliberate:
  *
- * - **Optional.** With `VITE_PLAUSIBLE_DOMAIN` unset, `init()` does nothing,
- *   no script is loaded, no request is made, and every `track*` helper is a
- *   no-op. The app is fully functional with analytics disabled, which is the
- *   default for a fresh clone.
- * - **No identity.** Plausible is cookieless and stores no cross-site
- *   identifier. We add nothing of our own: no localStorage id, no
- *   fingerprint, no user id, no session id.
- * - **Manual pageviews.** We deliberately do NOT use Plausible's automatic
- *   script. The automatic and hash variants report `location.href`, which
- *   would include any query string that happened to be on the URL. We build
- *   the reported URL ourselves from origin + pathname + hash, so a query
- *   string can never be transmitted even if one appears.
- * - **No free text, ever.** Nothing derived from user input is sent. Search
- *   text, filter state, prompt content and document content are never passed
- *   to these helpers, and the helpers accept only `Skill` objects and fixed
- *   label unions so a caller cannot casually pass something sensitive.
+ * - **Optional.** With `VITE_GOATCOUNTER_CODE` unset, `initAnalytics()` does
+ *   nothing, no script is loaded, no request is made, and every `track*`
+ *   helper is a no-op. That is the default for a fresh clone.
+ * - **No identity.** No cookie, no localStorage id, no fingerprint, no user
+ *   or session id. GoatCounter counts uniques with a salted daily hash it
+ *   discards; we add nothing of our own.
+ * - **Manual pageviews.** GoatCounter's default records `location.pathname +
+ *   location.search` — which would transmit any query string, and would miss
+ *   the hash this app routes on. We set `no_onload` and send the path
+ *   ourselves: pathname + hash, with the query string always stripped.
+ * - **No free text, ever.** Nothing derived from user input is sent. The
+ *   helpers accept `Skill` objects and closed label unions, so a caller
+ *   cannot casually pass search text, prompt content or document content.
  * - **Build-safe.** Every entry point guards on `typeof window`, so importing
  *   this module in Node (the audit and pack scripts SSR-load the registry)
  *   is inert.
  */
 
-/** Plausible's queue stub signature. */
-type PlausibleFn = {
-  (event: string, options?: { props?: Record<string, string>; u?: string; callback?: () => void }): void;
-  q?: unknown[];
-};
+/** One hit. `event: true` records an event rather than a pageview. */
+interface GoatCounterHit {
+  path: string;
+  title?: string;
+  event?: boolean;
+}
+
+interface GoatCounterApi {
+  /** Set before the script loads to suppress its automatic pageview. */
+  no_onload?: boolean;
+  count?: (hit: GoatCounterHit) => void;
+}
 
 declare global {
   interface Window {
-    plausible?: PlausibleFn;
+    goatcounter?: GoatCounterApi;
   }
 }
 
 /**
- * The site's domain as registered in Plausible, e.g.
- * `sahil1115.github.io/legal-skills`. Empty or absent disables analytics.
+ * The GoatCounter site code — the subdomain of your dashboard. For
+ * `https://legal-skills.goatcounter.com` the code is `legal-skills`.
+ * Empty or absent disables analytics.
  */
-const DOMAIN = (import.meta.env.VITE_PLAUSIBLE_DOMAIN ?? '').trim();
+const CODE = (import.meta.env.VITE_GOATCOUNTER_CODE ?? '').trim();
 
 /**
- * Where the Plausible script and API live. Defaults to Plausible's hosted
- * service; override for a self-hosted instance. Not required.
+ * Full count endpoint. Defaults to the hosted service derived from `CODE`;
+ * override for a self-hosted instance. Not required.
  */
-const HOST = (import.meta.env.VITE_PLAUSIBLE_HOST ?? 'https://plausible.io').trim().replace(/\/$/, '');
+const ENDPOINT =
+  (import.meta.env.VITE_GOATCOUNTER_ENDPOINT ?? '').trim() ||
+  (CODE ? `https://${CODE}.goatcounter.com/count` : '');
 
-const SCRIPT_ID = 'plausible-analytics';
+/** GoatCounter's CDN-hosted counter script (~3KB). */
+const SCRIPT_SRC = 'https://gc.zgo.at/count.js';
+const SCRIPT_ID = 'goatcounter-analytics';
 
 /** True when analytics is configured and we are running in a browser. */
-export const analyticsEnabled = (): boolean => DOMAIN !== '' && typeof window !== 'undefined';
+export const analyticsEnabled = (): boolean => ENDPOINT !== '' && typeof window !== 'undefined';
 
 let initialised = false;
 
 /**
- * Loads the Plausible script once.
+ * Hits requested before the script finished loading.
+ *
+ * GoatCounter does not ship a queue stub the way some vendors do, so we keep
+ * our own tiny one. Without it the first pageview — which is fired immediately
+ * on mount — would be dropped on a cold load.
+ */
+let pending: GoatCounterHit[] = [];
+let scriptReady = false;
+
+function flush(): void {
+  if (!scriptReady || !window.goatcounter?.count) return;
+  const queued = pending;
+  pending = [];
+  for (const hit of queued) {
+    try {
+      window.goatcounter.count(hit);
+    } catch {
+      // A hit is never worth an exception.
+    }
+  }
+}
+
+/**
+ * Loads the GoatCounter script once.
  *
  * Idempotent on two levels — a module-scope flag and a check for the script
  * element — so React StrictMode's double-invoked effects, or a stray second
@@ -72,80 +108,91 @@ export function initAnalytics(): void {
   }
   initialised = true;
 
-  // Standard Plausible queue stub: calls made before the script finishes
-  // loading are buffered rather than lost.
-  if (!window.plausible) {
-    const stub: PlausibleFn = function (...args: unknown[]) {
-      (stub.q = stub.q ?? []).push(args);
-    } as PlausibleFn;
-    window.plausible = stub;
-  }
+  // Must be set before the script evaluates, or it sends its own pageview
+  // using the unsanitised URL.
+  window.goatcounter = { ...(window.goatcounter ?? {}), no_onload: true };
 
   const script = document.createElement('script');
   script.id = SCRIPT_ID;
-  script.defer = true;
-  script.dataset.domain = DOMAIN;
-  // `script.manual.js` disables automatic pageview tracking so we control the
-  // URL that is reported. See the note on query strings above.
-  script.src = `${HOST}/js/script.manual.js`;
+  script.async = true;
+  script.src = SCRIPT_SRC;
+  script.dataset.goatcounter = ENDPOINT;
+  script.addEventListener('load', () => {
+    scriptReady = true;
+    flush();
+  });
+  // A blocked or failed script leaves the queue unflushed, which is correct:
+  // the hits are simply discarded and nothing breaks.
+  script.addEventListener('error', () => {
+    pending = [];
+  });
   document.head.appendChild(script);
 }
 
 /**
- * The current URL, stripped to origin + pathname + hash.
+ * The current path, as pathname + hash with the query string dropped.
  *
- * The query string is dropped unconditionally. This app never puts user input
- * in the URL, but stripping it here means that stays true even if a future
- * change adds a query parameter, and it protects against a shared link that
- * arrives with tracking or campaign junk attached.
+ * This app never puts user input in the URL, but stripping the query
+ * unconditionally means that stays true if a future change adds a parameter,
+ * and it protects against a shared link arriving with campaign junk attached.
  */
-function safeUrl(): string {
-  const { origin, pathname, hash } = window.location;
-  return `${origin}${pathname}${hash}`;
+function safePath(): string {
+  const { pathname, hash } = window.location;
+  return `${pathname}${hash}`;
 }
 
-function send(event: string, props?: Record<string, string>): void {
+function send(hit: GoatCounterHit): void {
   if (!analyticsEnabled()) return;
   try {
-    window.plausible?.(event, { u: safeUrl(), ...(props ? { props } : {}) });
+    if (scriptReady && window.goatcounter?.count) {
+      window.goatcounter.count(hit);
+    } else {
+      // Bound the queue so a permanently blocked script cannot grow it.
+      if (pending.length < 25) pending.push(hit);
+    }
   } catch {
-    // Analytics must never break the app. A blocked script, an ad blocker or
-    // an offline browser all land here and are correctly ignored.
+    // Analytics must never break the app. A blocked script, a content blocker
+    // or an offline browser all land here and are correctly ignored.
   }
 }
 
 /**
- * The four properties every skill event carries, derived from the registry
- * rather than hardcoded at call sites.
+ * A readable label carrying the skill's jurisdiction and category.
+ *
+ * GoatCounter records a path and a title rather than structured properties, so
+ * the machine-readable id goes in the path and this human-readable summary in
+ * the title. That makes the dashboard answer "which jurisdictions and practice
+ * areas do people care about" without joining anything back to the registry.
  */
-function skillProps(skill: Skill): Record<string, string> {
-  return {
-    skill_id: skill.id,
-    skill_name: skill.name,
-    jurisdiction: skill.jurisdiction,
-    category: skill.category,
-  };
+function skillLabel(skill: Skill): string {
+  return `${skill.name} (${skill.jurisdiction} / ${skill.category})`;
 }
 
 /**
- * Reports a pageview for the current URL.
+ * Reports a pageview for the current path.
  *
- * Called on first load and whenever the skill route changes, so opening a
- * skill, moving between skills and returning to the catalogue each register
- * as navigation rather than the whole app counting as a single page.
+ * Called on first load and whenever the skill route changes. Because each
+ * skill has its own hash URL, this is also what answers "which skills do
+ * people open": they appear as distinct paths in GoatCounter's dashboard.
+ * There is deliberately no separate skill-view event — it would be a second
+ * hit recording exactly the same thing.
  */
-export function trackPageView(): void {
-  send('pageview');
+export function trackPageView(title?: string): void {
+  send({ path: safePath(), ...(title ? { title } : {}) });
 }
 
-/** Fires when a skill detail view is opened. Once per opening, not per render. */
+/** Pageview for an opened skill, titled so the dashboard is readable. */
 export function trackSkillViewed(skill: Skill): void {
-  send('Skill Viewed', skillProps(skill));
+  trackPageView(skillLabel(skill));
 }
 
 /** Fires only after the clipboard write actually succeeded. */
 export function trackPromptCopied(skill: Skill): void {
-  send('Prompt Copied', skillProps(skill));
+  send({
+    path: `copy/${skill.id}`,
+    title: `Copy: ${skillLabel(skill)}`,
+    event: true,
+  });
 }
 
 /** The export formats offered in the detail view. */
@@ -153,15 +200,19 @@ export type DownloadFormat = 'skill-md' | 'json';
 
 /** Fires only once a download has actually been initiated. */
 export function trackSkillDownloaded(skill: Skill, format: DownloadFormat): void {
-  send('Skill Downloaded', { ...skillProps(skill), format });
+  send({
+    path: `download-${format}/${skill.id}`,
+    title: `Download ${format}: ${skillLabel(skill)}`,
+    event: true,
+  });
 }
 
 /**
  * Outbound destinations we care about.
  *
- * A closed union rather than a free string: it keeps the Plausible property
- * to a handful of known values, and makes it impossible to accidentally send
- * a URL with a query string or user data in it.
+ * A closed union rather than a free string: it keeps the recorded values to a
+ * handful of known labels, and makes it impossible to accidentally send a URL
+ * with a query string or user data in it.
  */
 export type OutboundDestination =
   | 'github-repo'
@@ -180,9 +231,10 @@ export type OutboundDestination =
  * constrains to landing pages, so no user data can reach this.
  */
 export function trackOutboundLink(destination: OutboundDestination, host?: string): void {
-  send('Outbound Link Click', {
-    destination,
-    ...(host ? { host } : {}),
+  send({
+    path: host ? `outbound/${destination}/${host}` : `outbound/${destination}`,
+    title: `Outbound: ${host ?? destination}`,
+    event: true,
   });
 }
 
