@@ -91,7 +91,7 @@ You do not need to be a developer to contribute a skill. If you can edit a text 
 
 ### The legal-safety block
 
-`src/data/safety.ts` holds one shared block, composed onto every prompt by `composePrompt()`. **Do not paste it into your skill's `prompt`** — the audit fails if you do. If you think a rule is missing from it, open an issue: changing it changes all 38 skills at once, which is exactly why it lives in one place.
+`src/data/safety.ts` holds one shared block, composed onto every prompt by `composePrompt()`. **Do not paste it into your skill's `prompt`** — the audit fails if you do. If you think a rule is missing from it, open an issue: changing it changes all 55 skills at once, which is exactly why it lives in one place.
 
 ### 3. Rules that the build enforces
 

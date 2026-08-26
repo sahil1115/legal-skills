@@ -30,6 +30,7 @@ export const DOMAIN_TAGS = [
   'financial-services',
   'disputes',
   'regulatory-change',
+  'corporate-transactions',
 ] as const;
 
 export const SHARED_TAGS: readonly string[] = [...WORKFLOW_TAGS, ...DOMAIN_TAGS];

@@ -70,7 +70,7 @@ await writeFile(join(OUT, 'LEGAL-SAFETY.md'), `# Shared legal-safety rules
 
 Every skill package in this directory has these rules composed into its
 instructions. They are reproduced here so the guarantee is auditable in one
-place rather than only inside 38 files.
+place rather than only inside every skill file.
 
 ${LEGAL_SAFETY_BLOCK}
 `, 'utf8');

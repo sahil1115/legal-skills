@@ -58,7 +58,7 @@ export interface Category {
  * Optional industry dimension. A skill with no `industries` is treated as
  * industry-agnostic and matches every industry filter, so adding this field
  * to a skill is backward compatible and adding the filter did not require
- * touching the 38 skills that predate it.
+ * touching the skills that predate it.
  */
 export type IndustryId =
   | 'financial-services'
@@ -174,7 +174,7 @@ export interface Skill {
    * This is NOT the whole prompt the user copies. The shared legal-safety
    * rules in `src/data/safety.ts` are composed onto it by `composePrompt()`
    * at copy and export time, so the rules live in exactly one place and
-   * updating them updates all 38 skills at once.
+   * updating them updates every skill at once.
    */
   prompt: string;
   example: SkillExample;

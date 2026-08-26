@@ -20,12 +20,12 @@ Deep links work per skill — for example [`#eu-ai-act-classifier`](https://sahi
 
 ## What's in it
 
-**38 skills** across **6 jurisdictions**, **7 practice areas** and an optional **industry** dimension.
+**55 skills** across **6 jurisdictions**, **8 practice areas** and an optional **industry** dimension.
 
 | Jurisdiction | Skills | Examples |
 | --- | --- | --- |
 | Global | 10 | Playbook Maker, Smart Redline, Contract Obligation Extraction, Data Rights Request Handler |
-| United States | 6 | 50-State Survey Builder, Worker Classification Tester, Privilege Log Builder |
+| United States | 23 | Litigation Hold Builder, 50-State Survey Builder, HSR Threshold Tester, WARN Act Trigger Spotter, FAR/DFARS Flowdown Checker |
 | European Union | 6 | AI Act Classifier, DPIA & ROPA Builder, NIS2 Scope Tester, DORA Third-Party Reviewer |
 | Australia | 6 | ACL Unfair Terms Screener, Modern Award Matcher, Privacy Act / NDB Assessor |
 | Singapore | 6 | PDPA Obligation Mapper, MAS Notice Checker, SIAC Clause Builder |
@@ -152,7 +152,8 @@ src/
 ├── data/
 │   ├── skills/             # The registry, one file per jurisdiction
 │   │   ├── index.ts        # Combines them, id aliases, dev-time checks
-│   │   └── global|us|eu|au|sg|cross.ts
+│   │   ├── global|eu|au|sg|cross.ts
+│   │   └── us/             # The largest pack, split by practice area
 │   ├── safety.ts           # Shared legal-safety block + composePrompt()
 │   ├── jurisdictions.ts    # Jurisdiction registry
 │   ├── categories.ts       # Practice-area registry
@@ -184,7 +185,7 @@ scripts/
 
 ### Notable design decisions
 
-- **Safety rules are composed, not copied.** One block in `safety.ts`, appended by `composePrompt()`. Updating it updates all 38 skills at once, and the audit fails if a skill inlines its own copy.
+- **Safety rules are composed, not copied.** One block in `safety.ts`, appended by `composePrompt()`. Updating it updates all 55 skills at once, and the audit fails if a skill inlines its own copy.
 - **The URL owns modal state.** `useSkillRoute` derives React state from the hash and marks its own history entries in `history.state`, so Back/Forward stay synchronised. Closing pops our entry rather than pushing a new one. (A ref would desync on same-document fragment navigation, which does not remount React.)
 - **Renamed skills keep working.** `ID_ALIASES` maps retired ids to current ones; `getSkill()` resolves both and the URL is rewritten to the live id. **Never delete an alias** — an id is a published deep link.
 - **Industry is additive.** A skill with no `industries` is industry-agnostic and matches every industry filter, so the dimension works over a registry where most skills declare nothing.
@@ -232,6 +233,8 @@ npm run audit && npm run lint && npm run build
 8. Open a pull request.
 
 Adding a **jurisdiction** takes three edits: add the id to `JurisdictionId`, add an entry to `jurisdictions.ts`, create `src/data/skills/<id>.ts` and register it in the index. Nothing in the UI changes.
+
+A jurisdiction that outgrows one file becomes a directory with an `index.ts` re-exporting its parts — see [`src/data/skills/us/`](src/data/skills/us/). The registry import does not change.
 
 ### What `npm run audit` validates
 
