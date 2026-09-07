@@ -376,4 +376,83 @@ Eight sections matching the tasks above, opening with a bottom line naming the l
         'A material-change analysis identifying the new location and the hours change as separate triggers that generally require action before the move, a wage section requiring a fresh determination for the new area of employment rather than reuse of the existing figure, a notice and public-access-file checklist for the new site, and a counsel referral flagging that the move should not proceed on the current timeline without an immigration lawyer confirming the filing position.',
     },
   },
+  {
+    id: 'us-separation-agreement-reviewer',
+    name: 'Separation & Release Reviewer',
+    description: 'Tests a US separation and release agreement against the federal and state rules that decide whether a waiver holds.',
+    jurisdiction: 'us',
+    category: 'employment',
+    tags: ['workforce', 'review', 'separation-agreement', 'release', 'severance', 'waiver', 'reduction-in-force'],
+    sources: [
+      { citation: 'Age Discrimination in Employment Act (29 U.S.C. ch. 14), as amended by the Older Workers Benefit Protection Act', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.congress.gov', note: 'Sets the conditions a waiver of age claims must satisfy to be knowing and voluntary, including the consideration, review and revocation periods and the group disclosure schedule.' },
+      { citation: 'National Labor Relations Act (29 U.S.C. ch. 7)', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.congress.gov', note: 'Relied on for the limits protected concerted activity places on confidentiality and non-disparagement terms, including for non-union workforces.' },
+      { citation: 'Speak Out Act (Pub. L. 117-224)', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.congress.gov' },
+      { citation: 'Ending Forced Arbitration of Sexual Assault and Sexual Harassment Act of 2021 (Pub. L. 117-90)', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.congress.gov' },
+      { citation: 'Fair Labor Standards Act (29 U.S.C. ch. 8)', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.congress.gov', note: 'Relied on for the limits on private release of wage claims.' },
+      { citation: 'EEOC guidance on waivers of discrimination claims in employee severance agreements', authority: 'guidance', publisher: 'Equal Employment Opportunity Commission', jurisdiction: 'us', url: 'https://www.eeoc.gov' },
+      { citation: 'State severance, settlement and non-disclosure statutes', authority: 'primary', publisher: 'State legislatures', jurisdiction: 'us', note: 'Several states impose their own review periods, mandatory disclaimers and limits on non-disclosure of harassment or discrimination allegations. These are additional to the federal requirements, not alternatives to them.' },
+    ],
+    lastReviewed: '2026-09-08',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-warn-act-trigger-spotter', 'us-non-compete-mapper', 'us-employment-policy-checker'],
+    whatItDoes:
+      'Runs a separation agreement against the conditions that actually determine whether the release is enforceable: whether the age-claim waiver requirements are met including the group disclosure schedule where the exit is part of a programme, which claims cannot be released by private agreement at all, whether the confidentiality and non-disparagement terms reach protected activity, and whether the state where the employee worked adds requirements of its own. It also checks that the consideration is genuinely additional, that the payment mechanics are workable, and that the operative dates are internally consistent.',
+    whenToUse:
+      'Before a separation agreement is presented to any departing employee, when building a template for a reduction in force, and when an employee returns a marked-up agreement or asks for more time to consider it.',
+    inputs: [
+      { name: 'Agreement text', description: 'The separation and release agreement as it would be presented.', required: true },
+      { name: 'Employee details', description: 'Age, role, work location or locations, length of service, and whether they are exempt or non-exempt.', required: true },
+      { name: 'Circumstances of separation', description: 'Reason for the exit, whether it is individual or part of a programme, and how many others are affected.', required: true },
+      { name: 'Known claims and complaints', description: 'Any internal complaint, agency charge, accommodation request, leave, or open dispute involving this employee.' },
+      { name: 'Consideration offered', description: 'Severance amount, benefits continuation, equity treatment, and what the employee would receive without signing.' },
+      { name: 'Other agreements', description: 'Existing confidentiality, invention assignment, arbitration, non-compete or non-solicit agreements that will survive.' },
+    ],
+    outputs: [
+      { name: 'Enforceability verdict', description: 'Whether the release as drafted is likely to hold, and what specifically puts it at risk.' },
+      { name: 'Waiver requirements checklist', description: 'Each age-waiver condition marked met, not met or not applicable, including the group disclosure schedule where relevant.' },
+      { name: 'Non-releasable claims', description: 'Claims the agreement purports to release that cannot be released by private agreement, and how to carve them out.' },
+      { name: 'Protected activity review', description: 'Confidentiality, non-disparagement, cooperation and arbitration terms tested against protected reporting and concerted activity.' },
+      { name: 'State overlay', description: 'Requirements added by the state or states where the employee worked.' },
+      { name: 'Revised language', description: 'Replacement wording for every term that fails, with the required carve-outs and notices.' },
+      { name: 'Timeline and mechanics', description: 'The dates that must hold, the order of signature, revocation and payment, and what invalidates the release if done out of order.' },
+    ],
+    prompt: `You are a US employment lawyer reviewing a separation and release agreement before it is presented to a departing employee.
+
+INPUTS
+- Agreement text: <paste in full>
+- Employee: <age, role, state or states worked in, length of service, exempt or non-exempt>
+- Separation: <reason; individual exit or part of a group programme; if a programme, how many people and what the decisional unit is>
+- Known issues: <any internal complaint, agency charge, accommodation request, protected leave, safety report or open dispute>
+- Consideration: <severance, benefits continuation, equity treatment — and what the employee gets if they do not sign>
+- Surviving agreements: <confidentiality, invention assignment, arbitration, non-compete, non-solicit>
+
+TASK
+1. CONSIDERATION. Confirm the employee is receiving something they are not already entitled to. A release supported only by amounts already owed — earned wages, accrued vacation where state law requires payout, a contractual severance already promised — is not supported by consideration. State plainly whether the consideration is genuinely additional.
+2. AGE CLAIM WAIVER. If the employee is 40 or older, work through each condition for a knowing and voluntary waiver: that the agreement is written so it can be understood; that it specifically refers to age discrimination rights; that it does not waive claims arising after signature; that consideration is additional; that the employee is advised in writing to consult an attorney; that the statutory consideration period is given; and that a revocation period follows signature with payment not made until it expires. Mark the current periods [VERIFY] and note that the consideration period is longer where the exit is part of a group programme.
+3. GROUP PROGRAMME DISCLOSURE. If this is an exit incentive or other employment termination programme offered to a group, the age waiver also requires a written disclosure identifying the decisional unit, the eligibility factors, the time limits, and the job titles and ages of everyone selected and everyone in the same unit not selected. Check whether that schedule exists, whether the decisional unit is defined defensibly, and whether ages are given individually rather than in bands. A missing or wrongly scoped schedule is one of the most common reasons these releases fail.
+4. NON-RELEASABLE CLAIMS. Identify what the release purports to cover but cannot reach by private agreement, and specify the carve-outs required. Address at least: the right to file a charge with or participate in an investigation by a government agency, even where recovery of individual relief can be waived; unemployment and workers compensation claims; vested benefits; claims arising after the effective date; wage claims to the extent state or federal law restricts private release; indemnification and insurance rights; and whistleblower awards, which cannot be conditioned or waived.
+5. CONFIDENTIALITY AND NON-DISPARAGEMENT. Test these against protected concerted activity and protected reporting. A confidentiality or non-disparagement term drawn broadly enough to discourage employees from discussing terms and conditions of employment with each other, or from reporting to an agency, is a problem in a non-union workplace as much as a union one. Check whether the terms are mutual, whether they carve out truthful statements to agencies and in legal proceedings, and whether they are narrowed to what a legitimate interest supports.
+6. HARASSMENT AND ASSAULT TERMS. Check for any non-disclosure or non-disparagement provision that would cover a sexual harassment or sexual assault dispute, and any pre-dispute arbitration or class waiver that would apply to one. Federal law limits both. Distinguish pre-dispute from post-dispute terms, and state which this agreement contains.
+7. STATE OVERLAY. For each state the employee worked in, identify additional requirements: independent review periods, mandatory disclaimer language preserving the right to report or testify, restrictions on non-disclosure of harassment or discrimination allegations, limits on non-compete and non-solicit terms, timing rules for final pay, and any requirement that the agreement be provided in a particular language. Mark each [VERIFY]. Where the employee worked remotely across states, say which law is likely to apply and do not assume one.
+8. THE REMAINING TERMS. Cover: the scope of the release and whether it is mutual; a covenant not to sue and its interaction with the agency carve-out; no-rehire terms and where they are restricted; return of property; cooperation clauses and whether they are paid; references; equity treatment and whether the agreement matches the plan documents; restrictive covenants being reaffirmed or newly imposed; tax treatment, allocation of the payment, and whether deferred compensation timing rules are engaged; no-admission language; and severability with a carve-back preserving the release if another term fails.
+9. TIMELINE AND MECHANICS. Lay out the dates that must hold: presentation, the consideration period, signature, the revocation window, the effective date, and payment after the revocation window closes. Flag any date in the draft that is internally inconsistent, any effective date that precedes the end of the revocation period, and any payment scheduled before the release becomes effective. Note that a material change to the offer can restart the consideration period, and that the employee may sign early but cannot be pressured to.
+10. REVISED LANGUAGE. Give replacement wording for every term that fails, including the carve-out paragraph, the advice-of-counsel and consideration-period recitals, and the narrowed confidentiality and non-disparagement terms.
+
+RULES
+- Treat a defect in the waiver conditions as fatal to that part of the release, not as a drafting preference. Say which claims survive if the defect is not fixed.
+- Do not state the consideration, revocation or disclosure requirements as fixed numbers from memory. Give the structure, mark the figures [VERIFY], and say where to confirm them.
+- Where the employee has raised a complaint, requested an accommodation, taken protected leave, or reported a safety or legal concern, treat the timing as a live retaliation issue and address it separately from the release.
+- Remote and multi-state employment is common and the state overlay is where these agreements most often fail. Never default to a single state without saying why.
+- Do not advise the employee. This is a review for the employer, and the agreement itself must advise the employee to obtain their own counsel.
+
+OUTPUT FORMAT
+Open with a verdict — present as drafted, present with changes, or do not present — and the single biggest risk. Then a waiver requirements checklist table, the sections above in order, the revised language, and a dated timeline.`,
+    example: {
+      scenario:
+        'A company preparing a fifteen-person reduction in force across three states asks for its standard separation agreement to be checked before rollout.',
+      result:
+        'Release found unenforceable as to age claims for the eleven employees over 40 because no group disclosure schedule was prepared and the decisional unit had never been defined, a confidentiality clause narrowed after it was found to reach discussion of severance terms among employees, wage claims and agency participation carved out of an otherwise general release, and one state identified as requiring disclaimer language the template omitted.',
+    },
+  },
 ];
