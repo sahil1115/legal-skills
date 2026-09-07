@@ -13,7 +13,9 @@
 export type JurisdictionId =
   | 'global'
   | 'us'
+  | 'uk'
   | 'eu'
+  | 'ca'
   | 'au'
   | 'sg'
   | 'cross';

@@ -2,7 +2,9 @@ import type { CategoryId, IndustryId, JurisdictionId, Skill } from '../../types/
 import { SHARED_TAGS } from '../tags';
 import { globalSkills } from './global';
 import { usSkills } from './us';
+import { ukSkills } from './uk';
 import { euSkills } from './eu';
+import { caSkills } from './ca';
 import { auSkills } from './au';
 import { sgSkills } from './sg';
 import { crossSkills } from './cross';
@@ -17,7 +19,9 @@ import { crossSkills } from './cross';
 export const skills: Skill[] = [
   ...globalSkills,
   ...usSkills,
+  ...ukSkills,
   ...euSkills,
+  ...caSkills,
   ...auSkills,
   ...sgSkills,
   ...crossSkills,
