@@ -242,4 +242,175 @@ Eight sections matching the tasks above. Section 2 must be a table with columns:
         'A categorised table separating mandatory from conditional flowdowns with the value threshold applied, a defence-supplement section pulling out the safeguarding and cyber incident reporting clauses as applying despite the commercial nature of the purchase, four clauses flagged for party substitution, an operational list showing which obligations the vendor must actually implement rather than merely accept, three template clauses identified as commercially imposed rather than required, and an export-control referral triggered by the foreign national engineers.',
     },
   },
+  {
+    id: 'us-nda-reviewer',
+    name: 'NDA Reviewer',
+    description: 'Reviews a US confidentiality agreement clause by clause and redlines it against a standard position.',
+    jurisdiction: 'us',
+    category: 'contracts',
+    tags: ['contract-lifecycle', 'review', 'nda', 'confidentiality', 'trade-secrets', 'redline', 'intake'],
+    sources: [
+      { citation: 'Defend Trade Secrets Act of 2016 (18 U.S.C. ch. 90)', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.congress.gov', note: 'Relied on for the immunity notice an employer must include to preserve exemplary damages and fees against an employee or contractor.' },
+      { citation: 'Uniform Trade Secrets Act, as enacted by the States', authority: 'primary', publisher: 'Uniform Law Commission', jurisdiction: 'us', url: 'https://www.uniformlaws.org', note: 'Enacted with variations in nearly every state. The definition of a trade secret and the reasonable-measures requirement are state law.' },
+      { citation: 'Securities Exchange Act Rule 21F-17', authority: 'regulator', publisher: 'Securities and Exchange Commission', jurisdiction: 'us', url: 'https://www.sec.gov', note: 'Relied on for the limit on confidentiality terms that impede reporting possible violations of law to a regulator.' },
+      { citation: 'Export Administration Regulations and International Traffic in Arms Regulations', authority: 'regulator', publisher: 'Bureau of Industry and Security; Directorate of Defense Trade Controls', jurisdiction: 'us', url: 'https://www.bis.gov', note: 'Relevant only where the information to be disclosed is itself controlled technology.' },
+    ],
+    lastReviewed: '2026-09-08',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['global-smart-redline', 'global-contract-triage', 'global-playbook-maker'],
+    whatItDoes:
+      'Works through a confidentiality agreement in the order the risk actually sits: which direction information flows, how confidential information is defined and marked, what the standard exclusions leave out, how long the obligation runs and whether trade secrets are carved out of that clock, what residuals and feedback clauses quietly license, and whether the remedies and forum match. It separates terms that are genuinely negotiable from those not worth a round trip, drafts replacement language for each issue rather than describing the concern, and flags the statutory notices and carve-outs a US confidentiality agreement is expected to carry.',
+    whenToUse:
+      'On every inbound NDA before signature, when standardising a mutual template, when a counterparty rejects your form, and when an existing NDA is being reused for a purpose it was not drafted for.',
+    inputs: [
+      { name: 'Agreement text', description: 'The confidentiality agreement to review, in full.', required: true },
+      { name: 'Direction of disclosure', description: 'Whether you are disclosing, receiving, or genuinely both, and in roughly what proportion.', required: true },
+      { name: 'Purpose', description: 'The transaction or evaluation the information is being shared for.', required: true },
+      { name: 'What will actually be shared', description: 'Categories of information, and whether any is source code, personal data, controlled technology or third-party confidential information.' },
+      { name: 'Standard positions', description: 'Your playbook positions on term, residuals, injunctive relief, governing law and forum, if you have them.' },
+      { name: 'Relationship context', description: 'Whether an employment, engagement or existing commercial agreement already governs the same information.' },
+    ],
+    outputs: [
+      { name: 'Posture check', description: 'Whether the paper matches the real direction of disclosure, and what changes if it does not.' },
+      { name: 'Clause-by-clause table', description: 'Each material term rated acceptable, negotiate or reject, with the reason.' },
+      { name: 'Redline', description: 'Replacement wording for every issue rated negotiate or reject.' },
+      { name: 'Missing terms', description: 'Protections and statutory notices the draft omits entirely.' },
+      { name: 'Fallback positions', description: 'A second and third position for each point likely to draw pushback.' },
+      { name: 'Signature checklist', description: 'What must be true before this is signed, including approvals outside legal.' },
+    ],
+    prompt: `You are a US commercial lawyer reviewing a confidentiality agreement and producing a redline in the reviewing side's interest.
+
+INPUTS
+- Agreement text: <paste in full>
+- Direction: <are we the disclosing party, the receiving party, or both? in what proportion?>
+- Purpose: <the transaction or evaluation this supports>
+- What we will actually share: <categories; flag source code, personal data, health data, export-controlled technology, third-party confidential information>
+- Our standard positions: <term, residuals, injunctive relief, governing law, forum — or "none">
+- Existing relationship: <employment, engagement, master agreement or prior NDA covering the same information>
+
+TASK
+1. POSTURE CHECK. Establish who is really disclosing. A mutual NDA used where disclosure runs one way gives the light discloser the benefit of every receiving-party protection it conceded. State whether the paper matches the facts, and if it does not, say which side's protections to strengthen. Note where an existing agreement already covers this information and this NDA would create a second, inconsistent regime over it.
+2. DEFINITION AND MARKING. Assess how confidential information is defined. Check whether disclosure must be marked or designated in writing to be protected, whether oral disclosure is covered and on what conditions, and whether a written-confirmation requirement is one the disclosing side will realistically honour. A marking requirement nobody follows is a trap for the party relying on it.
+3. EXCLUSIONS. Test the standard exclusions — already public, already known without duty, independently developed, rightfully received from a third party. Check whether independent development requires documentary proof, whether "already known" is limited to information not received under a duty of confidence, and which party bears the burden of establishing an exclusion.
+4. COMPELLED DISCLOSURE. Check for a carve-out permitting disclosure required by law, subpoena or regulator, and whether it requires notice to the disclosing party where legally permitted, cooperation in seeking a protective order, and disclosure limited to the part legally required.
+5. PERMITTED RECIPIENTS. Who may receive the information — affiliates, employees, contractors, professional advisors, potential financing sources? Is need-to-know required, are recipients bound by equivalent terms, and does the receiving party remain liable for their breach? Flag an unbounded affiliate definition.
+6. TERM AND SURVIVAL. Separate the term of the agreement from the duration of the confidentiality obligation. They are different clocks and are routinely conflated. Assess whether the obligation period fits the information's actual half-life, and check whether trade secrets are carved out of any fixed expiry: an obligation that simply expires converts a trade secret into ordinary information and can undercut the reasonable-measures element of a later trade secret claim.
+7. RESIDUALS AND FEEDBACK. Identify any residuals clause permitting use of information retained in unaided memory, and any feedback or suggestions clause granting a licence. Both are licences written to look like housekeeping. Quantify what each gives away on these facts, and recommend deletion or narrowing.
+8. RETURN AND DESTRUCTION. Check the obligation on termination, whether certification is required, and whether the carve-out for backup and archival copies keeps those copies subject to the confidentiality obligation for as long as they are retained.
+9. THE REMAINING TERMS. Cover: no-licence and no-warranty language; any non-solicit, non-compete, standstill or exclusivity riding inside the NDA; injunctive relief and whether it concedes irreparable harm; fee shifting; assignment and change of control; governing law and forum, and whether the chosen forum will actually grant the interim relief the agreement contemplates; notice mechanics; counterparts and electronic signature.
+10. MISSING TERMS AND REQUIRED NOTICES. List what is absent, including:
+   - The trade secret immunity notice a US employer is expected to include in agreements with employees and contractors that govern the use of trade secrets. Omitting it does not void the agreement, but it forfeits exemplary damages and attorney fees in an action against that individual. Mark the current statutory wording [VERIFY].
+   - A carve-out preserving the right to report possible violations of law to a government agency without notice to or approval from the other party. Confidentiality terms that impede protected reporting have drawn regulatory enforcement independently of any dispute between the parties.
+   - Where personal data will be shared, a note that an NDA is not a data processing agreement and does not supply the contractual terms a privacy regime requires.
+   - Where controlled technology will be shared, a note that a confidentiality obligation does not authorise a deemed export to a foreign person.
+11. REDLINE. For every issue rated negotiate or reject, give replacement wording rather than a description of the concern. Then give a fallback and a walk-away position for each point the counterparty is likely to resist.
+
+RULES
+- Rate each term from the perspective established in step 1. Do not review a one-way disclosure as though it were mutual.
+- Do not flag every deviation from a standard form. Separate what changes the risk from what merely changes the words, and say which is which.
+- Where a term is unusual or unenforceable under the governing law chosen, say so rather than negotiating a term that will not hold. State-law variation on trade secret definitions and on injunctive relief is material — mark it [VERIFY] rather than asserting a uniform national rule.
+- Never state that an NDA protects information the disclosing party has not otherwise taken reasonable measures to protect. Say what those measures need to be.
+
+OUTPUT FORMAT
+Open with a one-line recommendation: sign, sign with changes, or do not sign. Then a clause-by-clause table with columns Clause, Term, Rating, Risk and Proposed change. Then the redline, the missing terms, the fallback positions, and a signature checklist.`,
+    example: {
+      scenario:
+        'A software company receives a customer NDA before a procurement evaluation, on customer paper, described as mutual.',
+      result:
+        'Flagged that disclosure runs almost entirely one way toward the customer while the agreement grants the customer every receiving-party protection, identified a residuals clause and a feedback licence that would cover the product roadmap being shown, redlined a three-year blanket expiry to carve out trade secrets, and added the protected-reporting carve-out the draft omitted.',
+    },
+  },
+  {
+    id: 'us-commercial-lease-reviewer',
+    name: 'Commercial Lease Reviewer',
+    description: 'Reviews a US commercial lease and surfaces the occupancy cost, exit and restoration terms that drive the deal.',
+    jurisdiction: 'us',
+    category: 'contracts',
+    tags: ['contract-lifecycle', 'review', 'commercial-lease', 'real-estate', 'operating-expenses', 'landlord-tenant'],
+    sources: [
+      { citation: 'State real property, landlord and tenant statutes', authority: 'primary', publisher: 'State legislatures', jurisdiction: 'us', note: 'Commercial leasing is state law and varies materially on notice, remedies, mitigation, security deposits and guaranties. The state where the premises sit governs much of this whatever the lease says about choice of law.' },
+      { citation: 'Americans with Disabilities Act (42 U.S.C. ch. 126) and the accessibility standards issued under it', authority: 'primary', publisher: 'United States Congress; Department of Justice', jurisdiction: 'us', url: 'https://www.ada.gov', note: 'Relied on for allocation of accessibility compliance between landlord and tenant, which the statute itself does not resolve.' },
+      { citation: 'Uniform Commercial Code Article 9', authority: 'primary', publisher: 'Uniform Law Commission', jurisdiction: 'us', url: 'https://www.uniformlaws.org', note: 'Relevant where the lease grants a security interest in tenant property or contemplates a fixture filing.' },
+      { citation: 'Institutional commercial leasing practice', authority: 'secondary', note: 'Market positions vary by asset class and submarket and are not law. Every market position in the output is a negotiating benchmark, not a legal requirement.' },
+    ],
+    lastReviewed: '2026-09-08',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer', 'professional-services'],
+    relatedSkills: ['us-auto-renewal-auditor', 'us-contract-obligation-tracker', 'au-retail-lease-reviewer'],
+    whatItDoes:
+      'Reads a commercial lease the way the cost model reads it rather than the way the document is ordered: what the rent actually becomes across the term once escalations and expense pass-throughs apply, what the tenant can be charged beyond rent, what happens if the space has to be given up early, and what restoration will cost at the end. It builds a total occupancy cost view from the terms as drafted, identifies the clauses that convert a capped obligation into an open-ended one, and reconciles the lease against the letter of intent it was supposed to document.',
+    whenToUse:
+      'Before signing a new lease or a renewal, when a landlord issues its form after heads of terms are agreed, when an operating expense reconciliation looks wrong, and when planning an exit, sublease or assignment.',
+    inputs: [
+      { name: 'Lease document', description: 'The lease with every rider, exhibit, work letter and amendment. The exhibits carry most of the money terms.', required: true },
+      { name: 'Letter of intent or term sheet', description: 'The agreed commercial terms, so the lease can be tested against what was actually negotiated.', required: true },
+      { name: 'Premises and use', description: 'Location and state, rentable area, and what the tenant will actually do in the space.', required: true },
+      { name: 'Tenant profile', description: 'Signing entity, credit, whether a guaranty or letter of credit is expected, and headcount plans over the term.' },
+      { name: 'Build-out plans', description: 'Improvements contemplated, who performs them, and the allowance offered.' },
+      { name: 'Exit expectations', description: 'Likelihood of growth, contraction, sublease or early termination during the term.' },
+    ],
+    outputs: [
+      { name: 'Occupancy cost model', description: 'Year-by-year rent plus estimated pass-throughs as the lease is drafted, with every assumption named.' },
+      { name: 'Term sheet reconciliation', description: 'Every place the lease departs from the letter of intent.' },
+      { name: 'Open-ended cost clauses', description: 'Terms that turn a capped obligation into an uncapped one, ranked by exposure.' },
+      { name: 'Exit and flexibility analysis', description: 'Assignment, sublease, change of control, termination options and holdover, assessed together.' },
+      { name: 'End-of-term liability', description: 'Surrender, restoration and removal obligations, and what should be documented now rather than at surrender.' },
+      { name: 'Redline priorities', description: 'Proposed changes ranked by value, separating must-have from nice-to-have.' },
+      { name: 'Closing checklist', description: 'SNDA, estoppel, insurance certificates, approvals and deliveries required before or at signing.' },
+    ],
+    prompt: `You are a US commercial real estate lawyer reviewing a lease on behalf of the tenant.
+
+INPUTS
+- Lease and all exhibits: <paste, including the work letter, rules and regulations, and any rider>
+- Letter of intent or term sheet: <the agreed commercial terms>
+- Premises: <address, state, rentable square feet, floor, single or multi-tenant building>
+- Use: <what the tenant will actually do in the space>
+- Tenant: <signing entity, credit profile, guaranty or letter of credit expected, headcount plans>
+- Build-out: <improvements, who performs them, allowance offered>
+- Exit expectations: <growth, contraction, sublease or early exit likelihood>
+
+TASK
+1. TERM SHEET RECONCILIATION. Compare the lease against the letter of intent line by line and list every departure. Landlord forms routinely drop or narrow agreed concessions. Do this first: it is the highest-yield step and the easiest to win.
+2. OCCUPANCY COST MODEL. Build the cost as drafted, year by year:
+   - Base rent and every escalation, compounding or not, exactly as the clause reads.
+   - Rent commencement against term commencement against delivery, and what happens if delivery is late.
+   - Free rent: gross or net of pass-throughs, and whether it is subject to recapture on default.
+   - Measurement: how rentable area is defined, whether a load factor applies, and whether remeasurement can raise rent mid-term.
+   Mark every figure derived from an estimate as an estimate.
+3. OPERATING EXPENSES AND PASS-THROUGHS. This is where the negotiation is won or lost. Assess:
+   - The structure: gross, base year, expense stop or triple net. Identify what it actually is, whatever it is called.
+   - The inclusion and exclusion lists. Note the exclusions commonly absent: capital expenditures, landlord financing and ground lease costs, leasing commissions and improvement costs for other tenants, marketing, costs reimbursed by insurance or by other tenants, landlord entity overhead, and costs arising from landlord negligence or from a defect the landlord is already obliged to fix.
+   - Gross-up: whether expenses are grossed up to a stated occupancy, and why the absence of a gross-up provision harms a base-year tenant in a partly vacant building.
+   - Capital expenditure treatment: excluded, amortised over useful life at a stated rate, or passed through in the year incurred.
+   - Caps: controllable against uncontrollable expenses, cumulative against non-cumulative, and what sits outside any cap.
+   - Audit rights: the window, who may audit, whether contingency-fee auditors are barred, and who pays when an overcharge is found.
+   - Taxes: reassessment on a sale of the building, special assessments, and whether the tenant funds a contest it cannot control.
+4. USE, EXCLUSIVITY AND OPERATING COVENANTS. Whether the permitted use is broad enough for the business as it will evolve, whether any exclusive is granted to this tenant or any other tenant's exclusive constrains it, and whether there is a continuous operation or co-tenancy provision.
+5. CONDITION, MAINTENANCE AND COMPLIANCE. Who repairs and replaces structure, roof, foundation and building systems; whether the tenant can be charged for a replacement in the final years of the term; who bears compliance with laws generally and accessibility requirements specifically, and whether the tenant picks up alterations-triggered compliance for areas beyond its premises. Check for a delivery condition and a systems warranty period.
+6. ASSIGNMENT, SUBLEASE AND CHANGE OF CONTROL. Consent standard and whether it is expressly reasonable; recapture rights; profit sharing on a sublease; whether an internal reorganisation, a financing or an equity sale is deemed an assignment; whether the original tenant stays liable after a permitted transfer; and whether transfers to affiliates or successors are permitted without consent.
+7. EXIT AND FLEXIBILITY. Termination options and their fees; contraction and expansion rights; rights of first offer or refusal; renewal options and how renewal rent is set, including whether a fair market value mechanism has a workable determination backstop; and holdover — the multiplier, whether it applies to base rent alone or to gross rent, and whether consequential damages are recoverable. Holdover exposure is often the largest single number in the lease.
+8. SECURITY AND GUARANTY. Deposit or letter of credit amount, burn-down schedule, draw conditions, and treatment on a sale of the building. Any parent or personal guaranty: its cap, its termination triggers, and whether it survives an assignment.
+9. CASUALTY, CONDEMNATION AND SUBORDINATION. Termination thresholds and whose right they are, rent abatement, the landlord's restoration obligation, and whether the tenant may terminate if restoration runs long. Subordination: whether a subordination, non-disturbance and attornment agreement is required and from whom, and what happens on a foreclosure without one.
+10. INSURANCE AND RISK ALLOCATION. Required coverages and limits against what the tenant carries today, additional insured requirements, waiver of subrogation, and the indemnity — whether it is mutual and whether it reaches the landlord's own negligence.
+11. END OF TERM. Surrender condition, removal of alterations and cabling, whether the landlord must designate at approval time which improvements must come out, and restoration of any specialty installation. Recommend obtaining that designation in writing when each alteration is approved: deferring it to the end of the term is what makes restoration expensive.
+12. DEFAULT AND REMEDIES. Notice and cure periods for monetary and non-monetary default, whether the tenant has any notice and cure right for landlord default, acceleration, mitigation obligations under the law of the state where the premises sit, late fees and default interest, and any waiver of jury trial or of the right to counterclaim.
+13. REDLINE PRIORITIES. Rank the proposed changes by value, separating must-have from nice-to-have, and give replacement wording for the must-haves.
+
+RULES
+- Real property is governed by the law of the state where the premises are located. Where an issue turns on state law — notice, remedies, mitigation, deposit treatment, guaranty enforceability — say so and mark it [VERIFY] rather than stating a national rule.
+- Market positions are benchmarks, not law, and vary by asset class and submarket. Label them as market commentary and never as legal requirements.
+- Read the exhibits. The work letter, the rules and regulations and the expense exhibit carry terms that contradict the body of the lease. Where they conflict, say which controls under the order-of-precedence clause, or note that the lease has none.
+- Do not present the occupancy cost model as a forecast. It is the lease applied to stated assumptions; name every assumption.
+
+OUTPUT FORMAT
+Open with the five terms that most need to change and why. Then the sections above in order, with tables for the cost model, the term sheet reconciliation and the redline priorities, closing with the closing checklist.`,
+    example: {
+      scenario:
+        'A growing services firm receives the landlord form for a seven-year office lease after agreeing heads of terms.',
+      result:
+        'Four concessions from the letter of intent found to be missing or narrowed in the lease, a base-year structure identified as having no gross-up provision and no cap on controllable expenses, holdover priced at double gross rent plus consequential damages flagged as the largest single exposure, and a recommendation to fix restoration scope in writing at each alteration approval rather than at surrender.',
+    },
+  },
 ];

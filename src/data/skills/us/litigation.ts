@@ -378,4 +378,87 @@ Six sections matching the tasks above, opening with the verification warning.`,
         'A rule-layer map putting the judge’s standing order at the top of the verification list, a formatting checklist that catches the draft’s missing certificate of compliance and over-length argument section, and a filing-mechanics section flagging the courtesy-copy question to confirm before the deadline.',
     },
   },
+  {
+    id: 'us-demand-letter-responder',
+    name: 'Demand Letter Response Planner',
+    description: 'Triages an inbound demand letter into a preservation, insurance and response plan with a drafted reply.',
+    jurisdiction: 'us',
+    category: 'litigation',
+    tags: ['disputes', 'assessment', 'demand-letter', 'pre-litigation', 'cease-and-desist', 'settlement', 'insurance'],
+    sources: [
+      { citation: 'Federal Rules of Civil Procedure', authority: 'primary', publisher: 'Administrative Office of the United States Courts', jurisdiction: 'us', url: 'https://www.uscourts.gov', note: 'Relied on for the preservation duty that attaches once litigation is reasonably anticipated, and for the sanctions exposure when it is not met.' },
+      { citation: 'Federal Rules of Evidence', authority: 'primary', publisher: 'Administrative Office of the United States Courts', jurisdiction: 'us', url: 'https://www.uscourts.gov', note: 'Relied on for the treatment of compromise offers and negotiations, and for the limits of that protection.' },
+      { citation: 'State statutes of limitations and pre-suit notice requirements', authority: 'primary', publisher: 'State legislatures', jurisdiction: 'us', note: 'Limitation periods, tolling rules, and pre-suit notice or demand requirements vary by state and by claim, and some fee-shifting statutes turn on how a demand is answered.' },
+      { citation: 'State rules of professional conduct', authority: 'regulator', publisher: 'State bar regulators', jurisdiction: 'us', note: 'Relevant to communications with a represented party and to threats made in correspondence.' },
+    ],
+    lastReviewed: '2026-09-08',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-litigation-hold-builder', 'us-claim-deadline-calculator', 'us-subpoena-triage'],
+    whatItDoes:
+      'Takes an inbound demand letter or cease-and-desist and separates the three things that have to happen on different clocks: what must be preserved and notified immediately, what has to be answered by a stated deadline, and what the claim is actually worth once the elements are tested against the facts. It identifies the claims being asserted and those merely implied, finds the statutory or contractual deadlines that carry consequences for silence, checks whether the matter is covered by insurance or shiftable to a contractual indemnitor, and drafts a reply pitched to the strategy chosen rather than to the tone of the demand.',
+    whenToUse:
+      'On the day a demand letter, cease-and-desist, or pre-suit notice arrives, and again before any substantive response goes out or any settlement number is put in writing.',
+    inputs: [
+      { name: 'Demand letter', description: 'The letter as received, with its envelope or transmission date and any enclosures.', required: true },
+      { name: 'Underlying facts', description: 'What actually happened, including the parts that are unhelpful.', required: true },
+      { name: 'Relationship and documents', description: 'Any contract, order form, terms of service or policy governing the relationship with the sender.', required: true },
+      { name: 'Insurance', description: 'Policies that might respond, their notice provisions, and whether any notice has been given.' },
+      { name: 'Third parties', description: 'Vendors, contractors or partners who may owe indemnity or contribution, and their contract terms.' },
+      { name: 'Commercial context', description: 'Whether the sender is a customer, employee, competitor or stranger, and what the ongoing relationship is worth.' },
+    ],
+    outputs: [
+      { name: 'Immediate actions', description: 'What must happen within 24 to 72 hours regardless of the eventual strategy.' },
+      { name: 'Claim breakdown', description: 'Each claim asserted or implied, its elements, and how the known facts map onto them.' },
+      { name: 'Deadline map', description: 'Every date that matters, including the ones the letter does not mention.' },
+      { name: 'Exposure assessment', description: 'A realistic range with the drivers named, including fee shifting and statutory multipliers where they apply.' },
+      { name: 'Coverage and shift analysis', description: 'Insurance notice obligations and contractual indemnity or defence rights against third parties.' },
+      { name: 'Strategy options', description: 'Two or three responses compared on cost, risk and effect on the relationship.' },
+      { name: 'Draft response', description: 'A reply written to the chosen strategy, with the protective legends the situation calls for.' },
+    ],
+    prompt: `You are a US litigation counsel triaging an inbound demand letter and producing a response plan for the recipient.
+
+INPUTS
+- Demand letter: <paste; give the date it was sent and the date received>
+- What actually happened: <the facts, including the unhelpful ones>
+- Governing documents: <contract, order form, terms of service, policy, or "none — the relationship is not documented">
+- Insurance: <policies that might respond, their notice provisions, whether notice has been given>
+- Third parties: <vendors, contractors or partners who may owe indemnity or contribution, and the relevant contract terms>
+- Context: <who the sender is, and what the ongoing relationship is worth>
+
+TASK
+1. IMMEDIATE ACTIONS. List what must happen in the first 24 to 72 hours, independently of the eventual strategy:
+   - Whether litigation is now reasonably anticipated, which triggers the preservation duty. If it is, say so plainly, identify the custodians and systems in scope, and flag any automatic deletion that must be suspended today. Failure to preserve is one of the few pre-suit errors that cannot be undone later.
+   - Insurance notice. Identify every policy that might respond and the notice provision in each. Note that late notice can forfeit coverage independently of the merits, and that a demand letter is often itself a claim under a claims-made policy.
+   - Notice or tender to any third party owing indemnity or defence, on the terms that contract requires.
+   - Whether the sender is represented by counsel, which governs who may communicate with whom.
+   - Whether privilege is being properly established over the internal investigation that is about to start.
+2. WHAT IS ACTUALLY BEING CLAIMED. Parse the letter into discrete claims. Separate what is expressly asserted from what is implied or held in reserve, and note where the letter is deliberately vague. For each claim, set out its elements and map the known facts onto each element, marking elements as supported, contested or unknown on the current record. Identify the facts you do not yet have that would change the assessment.
+3. DEADLINE MAP. Build the full set of dates, not just the one the letter states:
+   - The deadline the letter imposes, and whether it carries any legal consequence or is merely rhetorical.
+   - Any statutory or contractual pre-suit notice or cure period, and whether responding or failing to respond affects rights — some regimes shift fees or bar claims based on how a demand is answered, and some cure periods run whether or not you engage.
+   - The limitation period for each claim, when it began to run, and whether anything tolls it. Mark every period [VERIFY]: limitation periods vary by state and by claim and are not safely recalled.
+   - Contractual notice, escalation, mediation or arbitration steps that must precede suit, and whether they bind the sender.
+4. EXPOSURE. Give a realistic range rather than a single number, and name the drivers: compensatory measure and how it is calculated, statutory damages or multipliers, fee shifting and which way it runs, injunctive exposure, and the cost of defending even a weak claim through to disposition. Say which of these dominate. Separate the exposure on the claim from the cost of the fight, because they drive different decisions.
+5. THE SENDER'S POSITION. Assess how strong the demand actually is: whether the letter shows real knowledge of the facts or is a form, whether it cites authority accurately, whether the demand is proportionate, whether counsel is experienced in this area, and what the sender appears to want that is not stated. A demand that asks for an apology and a policy change is a different problem from one that asks for money.
+6. COVERAGE AND SHIFT. Set out whether an insurer is likely to defend, indemnify, both or neither, and any coverage defence to expect. Separately assess contractual indemnity, additional insured status and contribution against third parties, and what the tender letter has to say to preserve those rights.
+7. STRATEGY OPTIONS. Present two or three genuinely different responses — for example: no response; a short holding acknowledgement; a substantive rejection; an early settlement approach; or a pre-emptive filing. Compare them on likely cost, likely outcome, effect on the relationship, and what each concedes. Recommend one and say what would change the recommendation.
+8. DRAFT RESPONSE. Write the reply to the recommended strategy. Apply the correct protective legends: mark genuine settlement communications appropriately while noting that a label does not by itself make a communication protected, and that the protection has limits and does not shield facts from discovery. Do not admit facts that have not been verified, do not adopt the sender's characterisation of events, do not make threats that could not be carried out, and do not offer a number before the exposure analysis supports one. Where a deadline needs extending, ask for it explicitly rather than letting it pass.
+
+RULES
+- Deal with preservation and insurance notice before analysing the merits. Both are time-critical and both are independent of whether the claim has any value.
+- Limitation periods, pre-suit notice requirements and fee-shifting rules are state and claim specific. State the structure, mark the figures [VERIFY], and never supply a period from memory as though it were settled.
+- Do not tell the recipient the claim is meritless on facts you have not seen. Where the assessment depends on a document or a witness account not yet reviewed, say so and treat it as an open question.
+- Never draft a response that threatens criminal or regulatory action to gain advantage in a civil dispute.
+- Where the sender is represented, address the response to counsel and flag the restriction on contacting the sender directly.
+
+OUTPUT FORMAT
+Open with the immediate actions as a dated checklist. Then the claim breakdown table, the deadline map, exposure, coverage and shift, the strategy comparison, and the draft response as a separate final section.`,
+    example: {
+      scenario:
+        'A company receives a lawyer letter from a former customer alleging breach of contract and misrepresentation, demanding payment within ten days.',
+      result:
+        'Preservation triggered the same day with three custodians and a messaging retention policy suspended, notice given under a claims-made policy that would have been forfeited by delay, the misrepresentation claim found to be pleaded without the reliance element and the contract claim narrowed by a limitation-of-liability clause the letter ignored, and a holding response drafted seeking an extension while the underlying records were reviewed.',
+    },
+  },
 ];
