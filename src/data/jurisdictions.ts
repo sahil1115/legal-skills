@@ -21,11 +21,25 @@ export const jurisdictions: Jurisdiction[] = [
     color: '#3d6fb4',
   },
   {
+    id: 'uk',
+    name: 'United Kingdom',
+    short: 'UK',
+    blurb: 'UK GDPR, employment tribunal practice, TUPE, consumer and bribery law.',
+    color: '#9c4f7c',
+  },
+  {
     id: 'eu',
     name: 'European Union',
     short: 'EU',
     blurb: 'EU regulations and directives, plus member-state implementation.',
     color: '#4a5bb8',
+  },
+  {
+    id: 'ca',
+    name: 'Canada',
+    short: 'CA',
+    blurb: 'Federal and provincial law: privacy, CASL, employment and Quebec.',
+    color: '#b35a3a',
   },
   {
     id: 'au',

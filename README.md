@@ -20,13 +20,15 @@ Deep links work per skill — for example [`#eu-ai-act-classifier`](https://sahi
 
 ## What's in it
 
-**63 skills** across **6 jurisdictions**, **8 practice areas** and an optional **industry** dimension.
+**73 skills** across **8 jurisdictions**, **8 practice areas** and an optional **industry** dimension.
 
 | Jurisdiction | Skills | Examples |
 | --- | --- | --- |
 | Global | 10 | Playbook Maker, Smart Redline, Contract Obligation Extraction, Data Rights Request Handler |
 | United States | 27 | NDA Reviewer, Separation & Release Reviewer, Demand Letter Response Planner, Commercial Lease Reviewer, Litigation Hold Builder, HSR Threshold Tester |
+| United Kingdom | 5 | Employment Tribunal Risk Assessor, TUPE Transfer Assessor, UK GDPR Breach & ICO Notification Assessor, Consumer Rights Act Terms Checker, Bribery Act Adequate Procedures Reviewer |
 | European Union | 6 | AI Act Classifier, DPIA & ROPA Builder, NIS2 Scope Tester, DORA Third-Party Reviewer |
+| Canada | 5 | Termination Entitlements Assessor, Privacy Breach & Reporting Assessor, CASL Compliance Checker, Quebec Law 25 & Language Compliance Checker, Advertising & Claims Reviewer |
 | Australia | 10 | Unfair Dismissal Risk Assessor, Consumer Guarantees & Warranty Checker, Director Duties & Insolvent Trading Checker, Retail & Commercial Lease Reviewer, ACL Unfair Terms Screener |
 | Singapore | 6 | PDPA Obligation Mapper, MAS Notice Checker, SIAC Clause Builder |
 | Cross-jurisdiction | 4 | Contract Localizer, Four-Regime Gap Analyzer, Strictest-Rule Resolver |
@@ -152,7 +154,7 @@ src/
 ├── data/
 │   ├── skills/             # The registry, one file per jurisdiction
 │   │   ├── index.ts        # Combines them, id aliases, dev-time checks
-│   │   ├── global|eu|au|sg|cross.ts
+│   │   ├── global|uk|eu|ca|au|sg|cross.ts
 │   │   └── us/             # The largest pack, split by practice area
 │   ├── safety.ts           # Shared legal-safety block + composePrompt()
 │   ├── jurisdictions.ts    # Jurisdiction registry
@@ -185,7 +187,7 @@ scripts/
 
 ### Notable design decisions
 
-- **Safety rules are composed, not copied.** One block in `safety.ts`, appended by `composePrompt()`. Updating it updates all 63 skills at once, and the audit fails if a skill inlines its own copy.
+- **Safety rules are composed, not copied.** One block in `safety.ts`, appended by `composePrompt()`. Updating it updates all 73 skills at once, and the audit fails if a skill inlines its own copy.
 - **The URL owns modal state.** `useSkillRoute` derives React state from the hash and marks its own history entries in `history.state`, so Back/Forward stay synchronised. Closing pops our entry rather than pushing a new one. (A ref would desync on same-document fragment navigation, which does not remount React.)
 - **Renamed skills keep working.** `ID_ALIASES` maps retired ids to current ones; `getSkill()` resolves both and the URL is rewritten to the live id. **Never delete an alias** — an id is a published deep link.
 - **Industry is additive.** A skill with no `industries` is industry-agnostic and matches every industry filter, so the dimension works over a registry where most skills declare nothing.
