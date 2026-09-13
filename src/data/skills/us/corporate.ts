@@ -328,4 +328,84 @@ Eight sections matching the tasks above, opening with the escalation decision in
         'A relationship check establishing the members as competitors for labour even where they do not compete for customers, an amber categorisation for the general session with the compensation round-table placed in the red category, the round-table identified as the specific concern with criminal exposure noted, a DO NOT PROCEED PENDING ADVICE decision for that element, an alternative using an independently administered aggregated survey, and a short briefing telling attendees to object audibly and leave if the topic arises.',
     },
   },
+  {
+    id: 'us-delaware-corporate-approval-planner',
+    name: 'Delaware Corporate Approval & Fiduciary Process Planner',
+    description: 'Maps corporate approvals, conflicts and fiduciary process for a proposed Delaware corporation action.',
+    jurisdiction: 'us',
+    category: 'corporate',
+    tags: ['corporate-transactions', 'assessment', 'delaware', 'corporate-governance', 'board-approval', 'fiduciary-duties', 'conflicts', 'mergers-acquisitions'],
+    sources: [
+      { citation: 'Delaware General Corporation Law, Title 8, Chapter 1', authority: 'primary', publisher: 'Delaware General Assembly', jurisdiction: 'us', url: 'https://delcode.delaware.gov', note: 'Controls corporate authority, board and stockholder action, stock issuances, conflicted transactions, ratification, mergers, asset sales and other fundamental actions. The current text and effective dates must be checked because the statute is amended regularly.' },
+      { citation: 'Delaware Supreme Court and Court of Chancery decisions on fiduciary duties and standards of review', authority: 'primary', publisher: 'Delaware Courts', jurisdiction: 'us', url: 'https://courts.delaware.gov', note: 'The statute does not supply the complete fiduciary analysis. Current decisions determine duties, standards of review, independence, disclosure and the effect of approval processes.' },
+      { citation: 'Delaware Division of Corporations filing guidance', authority: 'guidance', publisher: 'Delaware Department of State', jurisdiction: 'us', url: 'https://corp.delaware.gov', note: 'Used for filing mechanics, forms and processing options. It is administrative guidance rather than a substitute for the statute or governing documents.' },
+    ],
+    lastReviewed: '2026-09-13',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['financial-services', 'technology', 'professional-services'],
+    relatedSkills: ['us-hsr-threshold-tester', 'us-private-offering-exemption', 'us-sec-disclosure-trigger'],
+    whatItDoes:
+      'Builds the approval and fiduciary process for a proposed action by a Delaware corporation, starting from the certificate, bylaws, stockholder agreements and capitalization rather than assuming the statute supplies the whole answer. It identifies which body has authority, the votes and consents required, conflicts or controller involvement, the process needed to create an informed record, statutory filings and any defect that needs ratification. It expressly stops and reroutes the analysis when the entity is not a Delaware corporation.',
+    whenToUse:
+      'Before a financing, acquisition, merger, major asset sale, equity issuance, dividend, related-party arrangement, executive transaction, charter amendment or other action that will be presented to a Delaware corporation board or its stockholders.',
+    inputs: [
+      { name: 'Entity and governing law', description: 'Entity type, state of incorporation, certificate of incorporation, bylaws and every relevant amendment.', required: true },
+      { name: 'Proposed action', description: 'The transaction or decision, its structure, value, parties, timetable and the documents expected to be approved.', required: true },
+      { name: 'Capitalization and holders', description: 'Current cap table, classes and series, voting rights, options, warrants, convertibles and record-holder information.', required: true },
+      { name: 'Private ordering', description: 'Stockholder, investor-rights, voting, support, nomination and other agreements that may add consent or process requirements.' },
+      { name: 'Board and conflicts', description: 'Directors, committee composition, relationships, interests, controller involvement and disclosures made to date.' },
+      { name: 'Existing record', description: 'Draft minutes, consents, board materials, valuations, fairness work, advice and any action already taken.' },
+    ],
+    outputs: [
+      { name: 'Scope and authority determination', description: 'The governing regime, decision-maker and any reason the matter must be analysed under another State or entity statute.' },
+      { name: 'Approval matrix', description: 'Board, committee, stockholder and class approvals, with quorum, vote, consent and sequencing requirements.' },
+      { name: 'Conflict and review analysis', description: 'Interests, controller status, independence concerns, available approval processes and the standard-of-review questions for counsel.' },
+      { name: 'Process plan', description: 'Information, deliberation, expert input, recusals, committee steps and disclosures needed before approval.' },
+      { name: 'Document and filing list', description: 'Resolutions, consents, notices, certificates, agreements, minutes, stock records and State filings required.' },
+      { name: 'Defect and ratification screen', description: 'Any potentially defective act, missing approval or incorrect sequence, with the available statutory or judicial route to verify.' },
+      { name: 'Closing conditions', description: 'Approvals and filings that must occur before signing, effectiveness or closing, separated by timing.' },
+    ],
+    prompt: `You are a US corporate lawyer planning the approvals and fiduciary process for a proposed action involving a Delaware corporation. State corporation law is not national: confirm the entity type and state of incorporation before using Delaware law, and stop with a jurisdiction mismatch if the entity is an LLC, partnership or corporation formed elsewhere.
+
+INPUTS
+- Entity: <exact legal name, entity type, state of incorporation, public or private status>
+- Governing documents: <certificate of incorporation, bylaws and amendments>
+- Private ordering: <stockholder, voting, investor-rights, nomination, support or similar agreements>
+- Capitalization: <classes and series, issued and outstanding shares, voting rights, record holders, options, warrants and convertibles>
+- Proposed action: <transaction or decision, parties, structure, value, timing and documents to approve>
+- Decision-makers: <directors, committees, officers and stockholders involved>
+- Interests and relationships: <financial interests, affiliations, controller involvement and prior participation>
+- Existing record: <draft materials, minutes, consents, valuations, advice and any step already taken>
+
+TASK
+1. SCOPE GATE. Confirm that the entity is a Delaware corporation and identify the version and effective date of the Delaware General Corporation Law being used. If it is another entity type or jurisdiction, do not adapt Delaware corporate provisions by analogy. Identify the correct governing regime and stop the Delaware conclusion. For a Delaware corporation, list every governing document and agreement that must be read alongside the statute and identify anything missing.
+2. CHARACTERISE THE ACTION. Break the proposal into each legal act: entry into an agreement, issuance or transfer of stock, creation of a class or series, amendment, merger or conversion, sale of assets, dividend or distribution, delegation to officers, filing and closing. Identify the statutory provision governing each act [VERIFY] and whether the document must be in final or substantially final form when approved. Do not assume one omnibus board resolution supplies every approval.
+3. AUTHORITY AND RESERVED POWERS. Determine whether the board, a committee, officers, stockholders or a separate class or series has authority over each act. Read the certificate and bylaws for reserved powers, committee limits, director-number provisions and special voting rules. Read the private agreements separately: distinguish a statutory approval from a contractual consent, and explain the consequence of missing each.
+4. APPROVAL MATRIX. Produce a matrix for every act showing the approving body, notice, quorum, vote, written-consent availability, class or series vote, interested shares or directors excluded from a vote, sequence, effective time and evidence of approval. Mark every voting rule [VERIFY]. Test record dates and holder status rather than using the economic cap table as the voting list. Where the action is a merger, asset sale or other fundamental transaction, test the specific statutory route and any exceptions rather than applying a generic majority rule.
+5. CONFLICTS AND CONTROLLER INVOLVEMENT. Identify every director, officer or stockholder interest and whether a controlling stockholder or control group may be involved. Analyse the current statutory treatment of conflicted and controller transactions and the current Delaware case law on independence, disclosure, approval and standards of review [VERIFY]. Do not say a vote merely makes a conflict disappear. State what facts must be disclosed, who must be disinterested and independent, when a special committee or disinterested stockholder approval is available, and which protections must be established from the outset rather than added after negotiations are advanced.
+6. FIDUCIARY PROCESS. Design a process proportionate to the decision: materials and financial information, alternatives, valuation work, expert advice, negotiating authority, committee mandate, recusals, meeting cadence, deliberation and disclosure. Separate the duty question, the standard of review and potential exculpation or indemnification; they are not interchangeable. Identify any claim that cannot be addressed by an approval process alone and route contested or controller-sensitive matters to Delaware counsel.
+7. DOCUMENTATION. Specify the resolutions, consents, notices, board and committee materials, officer certificates, stockholder communications, minutes and closing evidence required. For the minutes, identify the facts, alternatives, questions, advice, disclosures, recusals and reasons that should be recorded without turning the minute into advocacy written after the event. Flag any inconsistency between the approval record and the transaction documents.
+8. FILINGS AND EFFECTIVENESS. List every Delaware filing and internal corporate-record update, who signs it, prerequisites to filing, requested effective time and ordering against signing and closing. Verify the current filing form, fee, expedited option and processing practice with the Division of Corporations. Do not treat administrative acceptance of a filing as proof that every corporate approval was valid.
+9. DEFECTS AND RATIFICATION. Identify any act already taken without the required authority, incorrect vote, missing record, over-issuance or other potential defect. Explain the available statutory ratification or judicial validation pathways structurally, including who must approve, what notice and filing may be required, and what uncertainty remains [VERIFY]. Do not advise quietly replacing, backdating or reconstructing an approval.
+10. EXECUTION PLAN. Give a chronological checklist divided into before board circulation, board or committee action, stockholder action, signing, filing, closing and post-closing. For each step name the owner, dependency and evidence of completion. Put unresolved authority, conflict, disclosure or validity issues on a separate counsel-escalation list.
+
+RULES
+- Never treat Delaware law as the law of every US entity. Confirm state and entity type first.
+- Governing documents and private agreements can change the statutory default. Do not conclude without them where they are material.
+- Use the current statute and current decisions. Delaware corporate law changes frequently; mark statutory sections, voting rules, standards of review and effective dates [VERIFY].
+- Do not state that an approval cleanses a conflict or guarantees a deferential standard. Identify the conditions and unresolved facts.
+- Do not infer independence from a title or absence of a direct payment. Examine relationships, incentives, appointment power and conduct.
+- Never recommend backdating, silent reconstruction or destruction of a defective record.
+- Distinguish corporate power, fiduciary compliance, contractual consent, securities law, antitrust clearance and filing mechanics. Satisfying one does not satisfy the others.
+
+OUTPUT FORMAT
+Open with the governing-law conclusion, the approving bodies and the most serious process risk. Then provide the ten sections above, with tables for the approval matrix and execution plan and a final list of matters requiring Delaware counsel verification.`,
+    example: {
+      scenario:
+        'A Delaware venture-backed corporation proposes a preferred-stock financing led by a fund affiliated with one director, followed by a sale process in which that investor receives a different payout from common holders.',
+      result:
+        'A governing-document gate identifying separate preferred consent rights, an act-by-act approval matrix for the financing and sale, the affiliated director and differential consideration flagged for conflict and controller analysis, a special-committee and disclosure process mapped without promising cleansing, stockholder and filing steps sequenced to closing, and a ratification screen for an earlier option grant approved with an incorrect board count.',
+    },
+  },
 ];

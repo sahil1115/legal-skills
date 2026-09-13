@@ -1,7 +1,8 @@
 import type { Skill } from '../../types/skill';
 
 /**
- * Australia skills — Commonwealth law: ACL, Fair Work, Privacy Act, SOCI, DDO.
+ * Australia skills — Commonwealth law: ACL, Fair Work, Privacy, SOCI, DDO,
+ * corporations, merger control and foreign investment.
  */
 export const auSkills: Skill[] = [
   {
@@ -793,6 +794,169 @@ Open with the coverage determination and the five terms that most need to change
         'A hospitality operator is handed the landlord form for a shopping centre tenancy with a disclosure statement provided two days before signing.',
       result:
         'Applicable State Act identified and coverage confirmed, the disclosure statement found to have been given later than the applicable Act requires, with the remedy explained, a ratchet clause on the market review identified as void in that jurisdiction, land tax recovery flagged as prohibited there despite appearing in the outgoings schedule, and make good found to require removal of a fit-out the landlord had contributed to, with wording proposed to limit it.',
+    },
+  },
+  {
+    id: 'au-accc-merger-notification-planner',
+    name: 'ACCC Merger Notification & Waiver Planner',
+    description: 'Tests an Australian acquisition under the mandatory merger regime and plans the clearance route.',
+    jurisdiction: 'au',
+    category: 'corporate',
+    tags: ['corporate-transactions', 'assessment', 'merger-control', 'accc', 'mandatory-notification', 'notification-waiver', 'mergers-acquisitions', 'competition'],
+    sources: [
+      { citation: 'Competition and Consumer Act 2010 (Cth), including Part IVA and section 50', authority: 'primary', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'Creates the mandatory notification and substantive competition framework. Use the current compilation and transitional provisions.' },
+      { citation: 'Treasury Laws Amendment (Mergers and Acquisitions Reform) Act 2024', authority: 'primary', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'Introduced the mandatory administrative merger-control regime and its application rules.' },
+      { citation: 'Competition and Consumer (Notification of Acquisitions) Determination and amending instruments', authority: 'regulator', publisher: 'Australian Government', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'Sets notification thresholds, targeted requirements and exemptions. Figures and commencement dates can change by instrument and must be read from the current version.' },
+      { citation: 'ACCC merger process, notification, waiver and substantive assessment guidance', authority: 'guidance', publisher: 'Australian Competition and Consumer Commission', jurisdiction: 'au', url: 'https://www.accc.gov.au', note: 'Used for forms, process, evidence expectations and administrative practice. It does not replace the Act or legislative instruments.' },
+    ],
+    lastReviewed: '2026-09-13',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['financial-services', 'technology', 'retail-consumer', 'energy-infrastructure'],
+    relatedSkills: ['au-firb-foreign-investment-planner', 'au-director-duties-checker', 'us-hsr-threshold-tester'],
+    whatItDoes:
+      'Tests whether an acquisition must be notified under Australia’s mandatory merger-control regime, including ordinary, cumulative, voting-power, asset and targeted requirements. It defines the relevant parties and revenues, examines exemptions and notification waivers, and selects the appropriate notification form while keeping the filing test separate from substantive competition risk. It then builds the evidence pack, standstill controls and timetable needed to take the transaction through ACCC review.',
+    whenToUse:
+      'As soon as an acquisition of shares, assets, land, a business or control with an Australian connection is contemplated, including minority investments, serial acquisitions and internal steps that may affect voting power or control.',
+    inputs: [
+      { name: 'Acquisition structure', description: 'Shares, assets, land or rights acquired; transaction steps; consideration; control and voting changes; signing and completion.', required: true },
+      { name: 'Party groups', description: 'Acquirer, target, connected entities, ultimate controllers and pre-existing interests.', required: true },
+      { name: 'Revenue and value data', description: 'Australian revenue by relevant entity, group calculations, global transaction value and valuation support.', required: true },
+      { name: 'Prior acquisitions', description: 'Relevant acquisitions during the current statutory look-back period, including products, services, revenue and notification status.' },
+      { name: 'Competition facts', description: 'Overlaps, vertical relationships, market shares, competitors, customers, suppliers, entry and internal deal rationale.' },
+      { name: 'Regulatory timetable', description: 'Proposed dates, other approvals, financing, long-stop date and any engagement with the ACCC or another regulator.' },
+    ],
+    outputs: [
+      { name: 'Acquisition and party map', description: 'Transaction steps, relevant acquirer and target groups, voting and control changes and Australian connection.' },
+      { name: 'Notification analysis', description: 'Each current threshold or targeted requirement applied with calculations and source dates.' },
+      { name: 'Exemption analysis', description: 'Potential statutory and instrument exemptions, required evidence and unresolved interpretation.' },
+      { name: 'Clearance route recommendation', description: 'Waiver, short notification, long notification or documented no-filing position for counsel confirmation.' },
+      { name: 'Substantive risk screen', description: 'Horizontal, vertical, conglomerate and serial-acquisition issues independent of the filing result.' },
+      { name: 'Evidence pack', description: 'Revenue workpapers, transaction materials, market data, contacts and declarations required for the selected route.' },
+      { name: 'Standstill and timetable plan', description: 'Permitted pre-clearance conduct, filing and review stages, dependencies and long-stop implications.' },
+    ],
+    prompt: `You are an Australian competition lawyer assessing an acquisition under the current mandatory merger-control regime. Treat notification and substantive competition risk as separate questions. Read every threshold, exemption, fee and procedural period from the current Act, legislative instruments and ACCC materials rather than recalling a figure.
+
+INPUTS
+- Acquisition: <shares, assets, land, rights or business; steps; consideration; contract and completion dates>
+- Parties: <acquirer, target, sellers, connected entities, ultimate controllers and existing holdings>
+- Rights before and after: <voting power, board rights, vetoes, ownership and control>
+- Financial data: <Australian revenue by entity and group, global transaction value and valuation basis>
+- Prior acquisitions: <all potentially relevant acquisitions during the statutory look-back period, with dates, products, services, revenue and filing status>
+- Competition facts: <overlaps, vertical or adjacent relationships, shares, competitors, customers, suppliers, entry and internal analyses>
+- Timetable: <signing, completion, financing, long-stop and other regulatory approvals>
+
+TASK
+1. REGIME AND EFFECTIVE DATE. Confirm that the current mandatory regime applies at the proposed acquisition date and identify the current Act compilation, notification determination and amending instruments. Address transitional rules for agreements, steps or notifications spanning a commencement date. Mark the effective date [VERIFY].
+2. MAP THE ACQUISITION. Characterise each acquisition of shares, assets, land or other property and identify the acquisition date the regime uses. Map the acquirer, target, connected entities and ultimate control before and after. Address staged acquisitions, options, conversions, joint ventures, partnerships, internal reorganisations and multiple interdependent steps separately before considering aggregation.
+3. SCOPE AND AUSTRALIAN CONNECTION. Determine whether the transaction is an acquisition within the current statutory scope and whether the target or assets have the required Australian connection. Analyse carrying on business, local revenue, land, intellectual property and offshore acquisitions with Australian subsidiaries or operations. Do not assume an offshore agreement or foreign target falls outside the regime.
+4. THRESHOLD CALCULATIONS. Apply every current general notification threshold using the definitions of Australian revenue, merger parties, acquirer group, target and global transaction value in force on the acquisition date. Show the calculation and entity perimeter for each input. Do not state any threshold from memory: quote it only after checking the current instrument, label it [CONFIRMED] with source and effective date, and otherwise leave it [VERIFY].
+5. CUMULATIVE AND TARGETED REQUIREMENTS. Test prior acquisitions under every current serial or cumulative rule, including the statutory look-back period, substitutable or similar goods and services, exclusions and treatment of previously notified acquisitions [VERIFY]. Then test voting-power, asset, land, sector-specific and named-acquirer requirements currently in force. Explain when control is relevant and when a notification rule may apply despite the absence of a conventional control change.
+6. EXEMPTIONS. Work through each plausible statutory or instrument exemption, including ordinary-course asset or land transactions, financial-market arrangements, financing and security interests, fundraising, buy-backs, internal reorganisations and acquisitions by operation of law where relevant. For each, state the elements, evidence and uncertainty. Do not conclude an exemption applies on incomplete facts.
+7. ROUTE SELECTION. Compare a notification waiver, short-form notification and long-form notification against the transaction's complexity and competition risk. Explain that a waiver is a distinct route and not merely a preliminary step to every notification. Recommend a route for external counsel confirmation, identify the current form, declaration and fee [VERIFY], and state what would cause the route to change.
+8. SUBSTANTIVE COMPETITION SCREEN. Independently assess whether the acquisition may substantially lessen competition. Cover horizontal unilateral and coordinated effects, vertical foreclosure, access to data or inputs, conglomerate effects, elimination of potential competition, barriers to entry, countervailing power and serial-acquisition strategy. Identify the relevant evidence and internal documents. Do not use a notification waiver or below-threshold status as substantive clearance.
+9. EVIDENCE AND ENGAGEMENT. Build the filing workplan: revenue calculations and source records, transaction documents, board papers and internal analyses, prior-acquisition schedule, market definition, shares, competitors, customers, suppliers, entry evidence, efficiencies and public benefits if relevant. Identify third-party contacts and confidentiality issues. State when confidential pre-notification engagement is useful and who controls communications.
+10. STANDSTILL AND DEAL PROTECTION. State whether the acquisition must wait for approval or a waiver and identify the consequence of implementing prematurely under current law [VERIFY]. Review conditions precedent, interim operating covenants, information exchange, clean-team controls, long-stop, cooperation, remedies and termination. Prevent contractual rights or operational integration from transferring control or implementing the transaction before clearance.
+11. PROCESS AND TIMETABLE. Build a dated timetable covering waiver or notification preparation, acceptance, public register and consultation, each assessment phase, information requests, possible remedies, review rights and completion. Mark every statutory or indicative period [VERIFY] and show suspensions and dependencies. Coordinate separately with FIRB, sector approvals and foreign merger filings.
+
+RULES
+- Never recall or estimate a threshold, fee, statutory period or penalty. Read the current official source and record its effective date.
+- Notification obligation, availability of an exemption or waiver, and substantive competition risk are separate conclusions.
+- Define the relevant entities and revenue perimeter before calculating anything.
+- Test serial acquisitions and current targeted requirements even where the immediate target is small.
+- Do not treat ACCC guidance as legislation or an expected processing time as a statutory deadline.
+- If a potentially notifiable acquisition may already have been implemented, say so first and recommend urgent Australian competition advice.
+- Do not recommend closing, integration or transfer of control on an unverified filing conclusion.
+
+OUTPUT FORMAT
+Open with the provisional notification route, the standstill position and the single calculation most likely to change the result. Then provide the eleven sections above, with tables for thresholds, prior acquisitions, exemptions and the regulatory timetable.`,
+    example: {
+      scenario:
+        'A large Australian services group proposes its fourth acquisition of a regional software provider in three years, using a share purchase followed by an asset transfer into an existing subsidiary.',
+      result:
+        'The share and asset steps mapped separately, acquirer-group and target Australian revenue calculated from source records, the current cumulative-acquisition rules applied across the earlier software deals, general and asset requirements tested without recalled figures, waiver and notification routes compared, potential-competition and serial-strategy risks identified, and a standstill and ACCC timetable integrated into the sale agreement.',
+    },
+  },
+  {
+    id: 'au-firb-foreign-investment-planner',
+    name: 'FATA / FIRB Foreign Investment Approval Planner',
+    description: 'Tests an Australian investment under the foreign-investment framework and plans approval and compliance.',
+    jurisdiction: 'au',
+    category: 'corporate',
+    tags: ['corporate-transactions', 'screening', 'foreign-investment', 'firb', 'national-security', 'transaction-clearance', 'mergers-acquisitions', 'regulatory-approval'],
+    sources: [
+      { citation: 'Foreign Acquisitions and Takeovers Act 1975 (Cth)', authority: 'primary', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'Creates the action classifications, notification, decision, enforcement and compliance framework. Use the current compilation.' },
+      { citation: 'Foreign Acquisitions and Takeovers Regulation 2015 and fee legislation', authority: 'regulator', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'Provides definitions, thresholds, exemptions and fee mechanics. Monetary figures are updated and must be checked against current instruments.' },
+      { citation: 'Australia’s Foreign Investment Policy and official guidance notes', authority: 'guidance', publisher: 'Australian Treasury', jurisdiction: 'au', url: 'https://foreigninvestment.gov.au', note: 'Used for current policy, applications, conditions, compliance and administrative practice. FIRB is advisory; statutory decisions are made under the Treasurer’s powers.' },
+      { citation: 'Register of Foreign Ownership of Australian Assets guidance', authority: 'guidance', publisher: 'Australian Taxation Office', jurisdiction: 'au', url: 'https://www.ato.gov.au', note: 'Used to identify current registration and post-acquisition reporting mechanics where the transaction creates a registrable interest.' },
+    ],
+    lastReviewed: '2026-09-13',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['financial-services', 'technology', 'energy-infrastructure', 'public-sector'],
+    relatedSkills: ['au-accc-merger-notification-planner', 'au-director-duties-checker', 'uk-nsi-transaction-screener'],
+    whatItDoes:
+      'Determines whether a proposed investment must or should be submitted under Australia’s foreign-investment framework and builds the application, transaction-protection and post-approval compliance plan. It traces foreign status and associates through funds and government ownership, classifies each action, applies current monetary and ownership thresholds, and separately assesses national-interest and national-security exposure. It preserves the legal distinction between the Treasurer’s statutory decision-making power and FIRB’s advisory role.',
+    whenToUse:
+      'Before a foreign-linked acquisition, financing, internal reorganisation, fund investment, business start-up, land transaction or interest increase involving an Australian entity, business, asset, tenement or national-security activity.',
+    inputs: [
+      { name: 'Investor structure', description: 'All direct and indirect investors, ownership, control, fund arrangements, government interests and associates.', required: true },
+      { name: 'Proposed actions', description: 'Securities, assets, business, land or rights acquired; percentage and control changes; steps and consideration.', required: true },
+      { name: 'Australian target', description: 'Entity, business, assets, land, tenements, activities, value, revenue and national-security connections.', required: true },
+      { name: 'Jurisdictions and treaty status', description: 'Investor home jurisdictions and facts relevant to any current agreement-country threshold.' },
+      { name: 'Transaction documents', description: 'Draft agreement, conditions precedent, financing, governance rights, long-stop date and implementation sequence.' },
+      { name: 'Regulatory and compliance history', description: 'Prior approvals, exemption certificates, conditions, registrations and engagement with Treasury, ATO or other regulators.' },
+    ],
+    outputs: [
+      { name: 'Foreign-person and associate map', description: 'Investor status, government-investor analysis, aggregation and unresolved ownership or control facts.' },
+      { name: 'Action classification', description: 'Significant, notifiable, national-security and reviewable actions identified for each transaction step.' },
+      { name: 'Threshold and exemption analysis', description: 'Current percentage, monetary, sector and land tests with treaty treatment and exemptions.' },
+      { name: 'Submission recommendation', description: 'Mandatory notice, voluntary submission, exemption certificate, retrospective notice or documented no-filing route for counsel confirmation.' },
+      { name: 'Application pack', description: 'Ownership, transaction, funding, national-interest, tax, competition and security information needed.' },
+      { name: 'Deal protection plan', description: 'Approval condition, interim covenants, long-stop, information rights and allocation of condition risk.' },
+      { name: 'Conditions and reporting register', description: 'Approval conditions, action notification, foreign-ownership registration and continuing compliance obligations.' },
+    ],
+    prompt: `You are an Australian foreign-investment lawyer assessing a proposed action under the current Foreign Acquisitions and Takeovers Act framework. Analyse the statutory position rather than using "FIRB approval" as a substitute for the legal tests: FIRB advises, while the Treasurer or delegate exercises the relevant statutory powers.
+
+INPUTS
+- Investors: <each direct and indirect holder, ownership, voting, control, fund and government links>
+- Associates: <agreements, acting-together arrangements, general partners, managers, trustees and related entities>
+- Proposed action: <shares, units, assets, business, land, tenements, rights, stages, percentage and control changes>
+- Australian target: <activities, assets, land, revenue, value, sector, customers and national-security connections>
+- Investor jurisdictions: <home jurisdictions and facts relevant to agreement-country treatment>
+- Deal documents: <draft agreement, conditions, interim rights, funding, governance, long-stop and implementation>
+- History: <prior investments, approvals, exemption certificates, conditions, registrations and compliance issues>
+
+TASK
+1. CURRENT FRAMEWORK. Identify the current Act compilation, regulations, monetary-threshold instrument, fee rules, policy and guidance at the proposed action date. Note any announced reform that is not yet commenced separately and do not apply it as law. Mark every commencement date [VERIFY].
+2. INVESTOR AND ASSOCIATE MAP. Determine whether each participant is a foreign person and whether any entity is a foreign government investor under the current definitions. Trace ownership, voting power, potential voting power, control and government interests through every tier, including funds, trusts and limited partnerships. Apply the associate rules and show all aggregation. Do not infer independence merely from separate legal personality.
+3. ACTION-BY-ACTION CLASSIFICATION. Characterise every step as a potential significant action, notifiable action, notifiable national-security action or reviewable national-security action under the current legislation. Address acquisitions of securities, assets, Australian businesses, land entities, agricultural interests, mining or exploration tenements, media, national-security businesses, starting a business, offshore acquisitions and passive percentage increases where relevant. A step may fall into more than one category; show each route.
+4. INTEREST AND CONTROL TESTS. Calculate direct, substantial and aggregate substantial interests, control changes and any special test for a foreign government investor, land entity, agribusiness, media or national-security business. Include options, convertible interests, vetoes, board rights and interests held by associates. Quote percentages only after verifying the current provision and label them with source and effective date.
+5. MONETARY AND TREATY THRESHOLDS. Identify the correct current threshold for each action based on investor type, investor jurisdiction, target type, sector, land category and value. Show the valuation method and currency conversion date. Do not state or estimate a figure from memory. Record the official source, effective date and whether agreement-country treatment has actually been established.
+6. NATIONAL SECURITY. Determine whether the target carries on or will start a national-security business, whether land is national-security land, and whether data, defence, critical infrastructure, government supply or sensitive-site facts raise national-security risk. Then consider reviewable actions and the call-in exposure that may exist below monetary thresholds. Keep this analysis separate from the broader national-interest test.
+7. EXEMPTIONS AND CERTIFICATES. Apply each plausible statutory or regulatory exemption, including moneylending, underwriting, custodian, internal reorganisation, passive investment or other transaction-specific routes where relevant [VERIFY]. Check any existing exemption certificate for holder, activity, value, duration, conditions and reporting. Do not conclude an exemption applies without facts satisfying every element.
+8. SUBMISSION ROUTE. Recommend for specialist confirmation one of: mandatory pre-action notice, voluntary submission, exemption-certificate application, retrospective notice, no filing with a documented rationale, or urgent advice. Identify the legal action being notified, correct applicant, current portal, fee [VERIFY] and whether separate applications are needed. State prominently when the transaction must not be taken before a no-objection notification or exemption is obtained.
+9. APPLICATION EVIDENCE. Build the information pack: ownership and control charts, government-interest analysis, transaction and implementation diagram, source and flow of funds, valuation, business and land description, national-interest submission, national-security analysis, tax position, competition overlaps, regulator engagement and post-acquisition plans. Identify inconsistencies or missing evidence likely to delay acceptance or decision.
+10. CONTRACT AND TIMETABLE. Review the condition precedent, no-action-before-approval covenant, interim operating restrictions, access to information, cooperation and control of the application, conditions and remedies, long-stop, termination and allocation of fees and compliance costs. Ensure interim rights do not themselves amount to taking the action. Build the statutory and practical timetable with every period and extension power [VERIFY].
+11. CONDITIONS AND POST-COMPLETION COMPLIANCE. Convert proposed or imposed conditions into a register with obligation, owner, evidence, due date, recurrence and escalation. Identify action-taken notification, Register of Foreign Ownership of Australian Assets requirements, tax conditions, recordkeeping, annual reporting, independent audit and disposal obligations as applicable. Do not assume approval ends the work.
+12. PARALLEL REGIMES. Identify separate ACCC merger notification, sector licensing, critical-infrastructure, export-control, sanctions, tax and State or Territory land approvals. Coordinate their timing but do not treat a decision under one regime as satisfying another.
+
+RULES
+- Never state a monetary threshold, fee, ownership percentage, time period or penalty from memory. Verify it against the current official source and effective date.
+- Distinguish the statutory role of the Treasurer or delegate from FIRB's advisory role.
+- Foreign-person, foreign-government-investor and associate analysis must be completed before thresholds are selected.
+- Analyse each transaction step and each action category; do not rely on the parties' label for the deal.
+- Absence of a mandatory notice can coexist with call-in or voluntary-submission risk.
+- Do not conclude an exemption or treaty-country threshold applies without evidence for every condition.
+- If an action may already have been taken without a required approval, say so first and recommend urgent Australian foreign-investment advice.
+
+OUTPUT FORMAT
+Open with the provisional submission route, whether the action may be taken before approval and the ownership fact most likely to change the result. Then provide the twelve sections above, with tables for investor status, action classification, thresholds, conditions and the transaction timetable.`,
+    example: {
+      scenario:
+        'A Cayman fund managed in Singapore, with several sovereign investors and an offshore portfolio company, proposes to acquire an Australian data-centre operator and adjacent land through two staged entities.',
+      result:
+        'The fund, manager, sovereign holdings and associates traced before investor status was decided; the share, business and land steps classified separately; current national-security and land tests applied without recalled thresholds; offshore and agreement-country assumptions challenged; a pre-action submission and evidence pack mapped; and approval conditions, ACCC clearance and foreign-ownership registration sequenced into the deal timetable.',
     },
   },
 ];

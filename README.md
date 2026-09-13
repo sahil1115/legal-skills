@@ -20,16 +20,16 @@ Deep links work per skill — for example [`#eu-ai-act-classifier`](https://sahi
 
 ## What's in it
 
-**73 skills** across **8 jurisdictions**, **8 practice areas** and an optional **industry** dimension.
+**78 skills** across **8 jurisdictions**, **8 practice areas** and an optional **industry** dimension.
 
 | Jurisdiction | Skills | Examples |
 | --- | --- | --- |
 | Global | 10 | Playbook Maker, Smart Redline, Contract Obligation Extraction, Data Rights Request Handler |
-| United States | 27 | NDA Reviewer, Separation & Release Reviewer, Demand Letter Response Planner, Commercial Lease Reviewer, Litigation Hold Builder, HSR Threshold Tester |
-| United Kingdom | 5 | Employment Tribunal Risk Assessor, TUPE Transfer Assessor, UK GDPR Breach & ICO Notification Assessor, Consumer Rights Act Terms Checker, Bribery Act Adequate Procedures Reviewer |
+| United States | 28 | NDA Reviewer, Separation & Release Reviewer, Commercial Lease Reviewer, HSR Threshold Tester, Delaware Corporate Approval Planner |
+| United Kingdom | 7 | Employment Tribunal Risk Assessor, TUPE Transfer Assessor, UK GDPR Breach Assessor, Companies Act Corporate Actions Planner, NSI Act Transaction Screener |
 | European Union | 6 | AI Act Classifier, DPIA & ROPA Builder, NIS2 Scope Tester, DORA Third-Party Reviewer |
 | Canada | 5 | Termination Entitlements Assessor, Privacy Breach & Reporting Assessor, CASL Compliance Checker, Quebec Law 25 & Language Compliance Checker, Advertising & Claims Reviewer |
-| Australia | 10 | Unfair Dismissal Risk Assessor, Consumer Guarantees & Warranty Checker, Director Duties & Insolvent Trading Checker, Retail & Commercial Lease Reviewer, ACL Unfair Terms Screener |
+| Australia | 12 | Unfair Dismissal Risk Assessor, Director Duties Checker, Retail Lease Reviewer, ACCC Merger Notification Planner, FATA / FIRB Approval Planner |
 | Singapore | 6 | PDPA Obligation Mapper, MAS Notice Checker, SIAC Clause Builder |
 | Cross-jurisdiction | 4 | Contract Localizer, Four-Regime Gap Analyzer, Strictest-Rule Resolver |
 
