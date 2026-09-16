@@ -20,7 +20,7 @@ export const usLitigationSkills: Skill[] = [
     lastReviewed: '2026-08-26',
     reviewStatus: 'unverified',
     version: '1.0.0',
-    relatedSkills: ['us-privilege-log-builder', 'global-obligation-extraction', 'us-subpoena-triage'],
+    relatedSkills: ['us-privilege-log-builder', 'global-obligation-extraction', 'us-subpoena-triage', 'us-esi-protocol-rule-26f-builder'],
     whatItDoes:
       'Turns "we think something is coming" into a defensible preservation position. It works out when the duty to preserve plausibly attached and on what facts, maps the custodians and the systems their data actually lives in — including the messaging apps, personal devices and auto-deleting channels that hold notices routinely miss — and drafts a notice in language a custodian will act on rather than skim. It also handles the half of the lifecycle that gets forgotten: reminders, new-custodian onboarding, departing-employee capture, and the release decision at the end.',
     whenToUse:
@@ -391,12 +391,12 @@ Six sections matching the tasks above, opening with the verification warning.`,
       { citation: 'State statutes of limitations and pre-suit notice requirements', authority: 'primary', publisher: 'State legislatures', jurisdiction: 'us', note: 'Limitation periods, tolling rules, and pre-suit notice or demand requirements vary by state and by claim, and some fee-shifting statutes turn on how a demand is answered.' },
       { citation: 'State rules of professional conduct', authority: 'regulator', publisher: 'State bar regulators', jurisdiction: 'us', note: 'Relevant to communications with a represented party and to threats made in correspondence.' },
     ],
-    lastReviewed: '2026-09-08',
+    lastReviewed: '2026-09-16',
     reviewStatus: 'unverified',
-    version: '1.0.0',
+    version: '1.1.0',
     relatedSkills: ['us-litigation-hold-builder', 'us-claim-deadline-calculator', 'us-subpoena-triage'],
     whatItDoes:
-      'Takes an inbound demand letter or cease-and-desist and separates the three things that have to happen on different clocks: what must be preserved and notified immediately, what has to be answered by a stated deadline, and what the claim is actually worth once the elements are tested against the facts. It identifies the claims being asserted and those merely implied, finds the statutory or contractual deadlines that carry consequences for silence, checks whether the matter is covered by insurance or shiftable to a contractual indemnitor, and drafts a reply pitched to the strategy chosen rather than to the tone of the demand.',
+      'Takes an inbound demand letter or cease-and-desist and separates the three things that have to happen on different clocks: what must be preserved and notified immediately, what has to be answered by a stated deadline, and what exposure the claim actually presents once the elements are tested against the facts. It identifies the claims being asserted and those merely implied, finds the statutory or contractual deadlines that carry consequences for silence, checks whether the matter is covered by insurance or shiftable to a contractual indemnitor, and drafts a reply pitched to the strategy chosen rather than to the tone of the demand.',
     whenToUse:
       'On the day a demand letter, cease-and-desist, or pre-suit notice arrives, and again before any substantive response goes out or any settlement number is put in writing.',
     inputs: [
@@ -411,7 +411,7 @@ Six sections matching the tasks above, opening with the verification warning.`,
       { name: 'Immediate actions', description: 'What must happen within 24 to 72 hours regardless of the eventual strategy.' },
       { name: 'Claim breakdown', description: 'Each claim asserted or implied, its elements, and how the known facts map onto them.' },
       { name: 'Deadline map', description: 'Every date that matters, including the ones the letter does not mention.' },
-      { name: 'Exposure assessment', description: 'A realistic range with the drivers named, including fee shifting and statutory multipliers where they apply.' },
+      { name: 'Exposure issues matrix', description: 'Heads of recovery claimed, statutory multipliers, fee shifting, jurisdictional factors and evidence gaps, with the items counsel must evaluate. Deliberately contains no settlement value or numeric range.' },
       { name: 'Coverage and shift analysis', description: 'Insurance notice obligations and contractual indemnity or defence rights against third parties.' },
       { name: 'Strategy options', description: 'Two or three responses compared on cost, risk and effect on the relationship.' },
       { name: 'Draft response', description: 'A reply written to the chosen strategy, with the protective legends the situation calls for.' },
@@ -439,11 +439,11 @@ TASK
    - Any statutory or contractual pre-suit notice or cure period, and whether responding or failing to respond affects rights — some regimes shift fees or bar claims based on how a demand is answered, and some cure periods run whether or not you engage.
    - The limitation period for each claim, when it began to run, and whether anything tolls it. Mark every period [VERIFY]: limitation periods vary by state and by claim and are not safely recalled.
    - Contractual notice, escalation, mediation or arbitration steps that must precede suit, and whether they bind the sender.
-4. EXPOSURE. Give a realistic range rather than a single number, and name the drivers: compensatory measure and how it is calculated, statutory damages or multipliers, fee shifting and which way it runs, injunctive exposure, and the cost of defending even a weak claim through to disposition. Say which of these dominate. Separate the exposure on the claim from the cost of the fight, because they drive different decisions.
+4. EXPOSURE ISSUES MATRIX. Do not produce a settlement value, a numeric range or a probability of success; valuation is a judgment for counsel. Instead build a matrix identifying, for each claim: the heads of recovery claimed and how each would be measured; any statutory damages, multipliers or penalties potentially available; fee shifting and which way it could run; injunctive or non-monetary exposure; jurisdictional factors that affect exposure, such as caps, forum and applicable law; defences and contractual limits that bear on each head, such as a limitation-of-liability clause; the evidence gaps that most affect the analysis; and the items counsel must evaluate before any figure is discussed. Separate exposure on the claim from the cost of defending it, because they drive different decisions, but describe defence cost drivers rather than estimating a figure.
 5. THE SENDER'S POSITION. Assess how strong the demand actually is: whether the letter shows real knowledge of the facts or is a form, whether it cites authority accurately, whether the demand is proportionate, whether counsel is experienced in this area, and what the sender appears to want that is not stated. A demand that asks for an apology and a policy change is a different problem from one that asks for money.
 6. COVERAGE AND SHIFT. Set out whether an insurer is likely to defend, indemnify, both or neither, and any coverage defence to expect. Separately assess contractual indemnity, additional insured status and contribution against third parties, and what the tender letter has to say to preserve those rights.
 7. STRATEGY OPTIONS. Present two or three genuinely different responses — for example: no response; a short holding acknowledgement; a substantive rejection; an early settlement approach; or a pre-emptive filing. Compare them on likely cost, likely outcome, effect on the relationship, and what each concedes. Recommend one and say what would change the recommendation.
-8. DRAFT RESPONSE. Write the reply to the recommended strategy. Apply the correct protective legends: mark genuine settlement communications appropriately while noting that a label does not by itself make a communication protected, and that the protection has limits and does not shield facts from discovery. Do not admit facts that have not been verified, do not adopt the sender's characterisation of events, do not make threats that could not be carried out, and do not offer a number before the exposure analysis supports one. Where a deadline needs extending, ask for it explicitly rather than letting it pass.
+8. DRAFT RESPONSE. Write the reply to the recommended strategy. Apply the correct protective legends: mark genuine settlement communications appropriately while noting that a label does not by itself make a communication protected, and that the protection has limits and does not shield facts from discovery. Do not admit facts that have not been verified, do not adopt the sender's characterisation of events, do not make threats that could not be carried out, and do not propose or offer any settlement figure in the draft; whether to put a number in writing, and what it should be, is for counsel. Where a deadline needs extending, ask for it explicitly rather than letting it pass.
 
 RULES
 - Deal with preservation and insurance notice before analysing the merits. Both are time-critical and both are independent of whether the claim has any value.
@@ -459,6 +459,168 @@ Open with the immediate actions as a dated checklist. Then the claim breakdown t
         'A company receives a lawyer letter from a former customer alleging breach of contract and misrepresentation, demanding payment within ten days.',
       result:
         'Preservation triggered the same day with three custodians and a messaging retention policy suspended, notice given under a claims-made policy that would have been forfeited by delay, the misrepresentation claim found to be pleaded without the reliance element and the contract claim narrowed by a limitation-of-liability clause the letter ignored, and a holding response drafted seeking an extension while the underlying records were reviewed.',
+    },
+  },
+  {
+    id: 'us-esi-protocol-rule-26f-builder',
+    name: 'Rule 26(f) & ESI Protocol Builder',
+    description: 'Builds case-specific Rule 26(f) discovery plan and ESI protocol materials for a federal civil case.',
+    jurisdiction: 'us',
+    category: 'litigation',
+    tags: ['disputes', 'drafting', 'ediscovery', 'custodians', 'privilege', 'discovery', 'clawback'],
+    sources: [
+      { citation: 'Federal Rules of Civil Procedure, including Rules 16, 26, 34 and 37', authority: 'primary', publisher: 'Administrative Office of the United States Courts', jurisdiction: 'us', url: 'https://www.uscourts.gov', note: 'Amendments to Rules 16 and 26 effective 1 December 2025 require the parties to address, at the Rule 26(f) conference, how they will comply with the obligation to describe materials withheld as privileged or as trial-preparation material. Confirmed against the federal judiciary as at 2026-09-16.' },
+      { citation: 'Federal Rules of Evidence, Rule 502', authority: 'primary', publisher: 'Administrative Office of the United States Courts', jurisdiction: 'us', url: 'https://www.uscourts.gov', note: 'Relied on for court orders protecting against waiver by disclosure. The protection of an order differs from the protection available without one.' },
+      { citation: 'Local rules, standing orders and model ESI orders of the assigned court', authority: 'regulator', publisher: 'United States district courts', jurisdiction: 'us', note: 'Many districts and individual judges publish model ESI orders, checklists or default protocols. These control where they apply and vary widely.' },
+      { citation: 'The Sedona Conference commentary on electronic discovery', authority: 'secondary', note: 'Widely cited best-practice commentary on proportionality, cooperation and search methodology. Not binding.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-litigation-hold-builder', 'us-privilege-log-builder', 'us-local-rules-formatter'],
+    whatItDoes:
+      'Turns the pleadings, the preservation work already done and the parties’ actual data landscape into the materials needed for the Rule 26(f) conference: an issue-driven discovery plan, a proposed ESI protocol covering sources, custodians, formats, metadata and search methodology, a proportionality analysis, the privilege-logging method the amended rules now require the parties to address, and a proposed Rule 502(d) order. It builds on the litigation hold rather than repeating it, and it separates what the rules require, what the assigned court requires, and what is negotiable best practice.',
+    whenToUse:
+      'Before a Rule 26(f) conference in federal civil litigation, when a court orders the parties to submit a joint discovery plan or ESI protocol, and when an opponent proposes a protocol that needs a response. Not for: deciding what must be preserved (use the litigation hold skill), logging withheld documents (use the privilege log skill), or state-court discovery without adapting to that court’s rules.',
+    inputs: [
+      { name: 'Pleadings and claims', description: 'The complaint, answer and any counterclaims, or a summary of the claims, defences and relief sought.', required: true },
+      { name: 'Court and judge', description: 'District, assigned judge and any standing order, model ESI order or scheduling order already entered.', required: true },
+      { name: 'Preservation record', description: 'The litigation hold notice, custodian list and data-source map, if one exists.', required: true },
+      { name: 'Data landscape', description: 'Systems, collaboration and messaging platforms, mobile devices, structured data, retention settings and known volumes.' },
+      { name: 'Opposing proposal', description: 'Any draft protocol, discovery plan or correspondence from the other side.' },
+      { name: 'Constraints', description: 'Budget, timing, cross-border data, privacy restrictions and any sensitive or regulated data categories.' },
+    ],
+    outputs: [
+      { name: 'Scope and rules check', description: 'Governing rules, court-specific requirements and anything that changes the default approach.' },
+      { name: 'Issue-to-source map', description: 'Each claim and defence mapped to the custodians and sources likely to hold relevant information.' },
+      { name: 'Proportionality analysis', description: 'The rule factors applied to each disputed source, with the evidence each side would need.' },
+      { name: 'Draft ESI protocol', description: 'Sources, custodians, date ranges, search methodology, production formats, metadata fields, de-duplication and threading.' },
+      { name: 'Privilege-logging method', description: 'The proposed approach to describing withheld material, as the amended rules require the parties to discuss.' },
+      { name: 'Proposed Rule 502(d) order', description: 'Draft non-waiver order language for the court.' },
+      { name: 'Conference agenda and open issues', description: 'What to agree, what to propose, what to resist, and items requiring lawyer decision.' },
+    ],
+    prompt: `You are a US federal litigator preparing Rule 26(f) conference materials and a case-specific ESI protocol.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+In force:
+- Amended Federal Rules of Civil Procedure 16 and 26, effective 1 December 2025, requiring the parties to address at the Rule 26(f) conference how they will comply with the obligation to describe materials withheld as privileged or as trial-preparation material [CONFIRMED 2026-09-16, federal judiciary].
+- Federal Rule of Evidence 502 [CONFIRMED].
+- Local rules, standing orders and model ESI orders of the assigned court [VERIFY — these change and vary by judge].
+Not law:
+- Commentary and industry protocols, which are persuasive best practice only.
+
+INPUTS
+- Pleadings: <claims, defences, relief sought, key dates>
+- Court: <district, assigned judge, standing orders, model ESI order, any scheduling order>
+- Preservation record: <hold notice, custodian list, data-source map — or "none yet">
+- Data landscape: <email, collaboration and messaging tools, ephemeral messaging, mobile devices, shared drives, structured databases, cloud applications, retention and auto-deletion settings, estimated volumes>
+- Opposing proposal: <paste, or "none">
+- Constraints: <budget, schedule, cross-border data, privacy and regulated data, trade secrets>
+
+TASK
+1. SCOPE GATE. Confirm the case is civil litigation in a US federal district court. If it is in state court, arbitration or a regulatory proceeding, stop and state which rules govern instead; do not apply the federal rules by analogy. Identify the assigned court's own requirements — standing orders, model ESI orders, checklists, page limits for joint submissions — and treat them as controlling where they apply.
+2. MISSING INFORMATION. List every fact needed to build the protocol that has not been supplied. Proceed with a clearly stated assumption for low-risk gaps such as estimated volumes. Stop and ask for high-risk gaps: whether a preservation duty has been scoped, whether any data may already have been lost, and whether any data is subject to foreign or sector privacy restrictions.
+3. BUILD ON THE HOLD, DO NOT REPEAT IT. Take the custodian list and data-source map from the preservation record as the starting point. Do not re-derive custodians from scratch. Identify any source the hold missed — ephemeral messaging, collaboration channels, personal devices used for work, structured data — and flag it as a preservation gap for immediate lawyer attention, since a gap discovered at the conference is a spoliation risk.
+4. ISSUE-TO-SOURCE MAP. Map each claim and defence to the custodians, systems and date ranges likely to hold relevant, non-privileged information. This is what makes the protocol defensible: every source and custodian should trace to an issue.
+5. PROPORTIONALITY. For each source or custodian likely to be contested, apply the proportionality factors the rules set out — the importance of the issues at stake, the amount in controversy, the parties' relative access to relevant information, the parties' resources, the importance of the discovery in resolving the issues, and whether the burden or expense outweighs its likely benefit. Do not assert that a source is disproportionate; identify the evidence of burden that would have to be shown, such as cost estimates or declarations. Treat not reasonably accessible sources separately and note the burden-shifting that applies to them.
+6. SEARCH METHODOLOGY. Propose the method: search terms with validation and iterative testing, technology-assisted review, or a combination. Address transparency — what will be disclosed about the method, how recall will be validated, and how disputes will be resolved. Label any specific validation metric as a negotiated term rather than a legal requirement.
+7. PRODUCTION SPECIFICATIONS. Specify production formats by data type: email and documents, spreadsheets and presentations in native form where appropriate, structured data, audio and video, and modern messaging with conversation threading and context. List the metadata fields to be produced. Address de-duplication across custodians, email threading, family relationships, redaction format, load file format, and handling of hyperlinked documents. Note the rule that requested forms govern and the default where no form is specified.
+8. PRIVILEGE LOGGING. The amended rules require the parties to address this at the conference. Propose a method suited to the case: categorical logging, metadata logs, exclusions for communications with litigation counsel after a set date, and a procedure for challenges. Record the agreed timing relative to productions. Route the actual log to the privilege log skill.
+9. RULE 502(d) ORDER. Draft a proposed non-waiver order. Explain the difference between the protection an order provides and the narrower protection available without one, and why an order is generally sought regardless of the parties' care.
+10. DEADLINES. Build the timetable from the rules and any scheduling order: the Rule 26(f) conference relative to the scheduling conference or order, the report to the court, initial disclosures relative to the conference, and any production or privilege-log milestones. Show each calculation and its trigger event, and mark each period [VERIFY] against the rules in force and the assigned court's orders, which can alter them.
+11. CONFERENCE PLAN. Produce an agenda of what to agree, what to propose, what to resist and what to trade. Compare against any opposing proposal clause by clause.
+12. LAWYER REVIEW TRIGGERS. Escalate before the conference: any preservation gap or possible data loss; any proposal to exclude a source on burden grounds without evidence; cross-border or regulated data; any request touching trade secrets; any concession on privilege logging or waiver; and any disagreement likely to require motion practice.
+
+RULES
+- Label every requirement as LAW (rule or statute), COURT ORDER (the assigned court's standing order or local rule), or BEST PRACTICE (commentary and negotiated terms). Do not present a negotiated term as a legal requirement.
+- Build on the preservation record. Never quietly narrow what was preserved through the protocol.
+- Do not state that a source is disproportionate or inaccessible without identifying the evidence that would establish it.
+- Do not estimate discovery costs as figures unless the user supplied them. Identify what estimates are needed.
+- Mark rule periods, court-specific requirements and any rule amendment [VERIFY] unless confirmed above.
+
+OUTPUT FORMAT
+Open with the scope conclusion and the three issues most likely to be contested. Then the sections above, with tables for the issue-to-source map, proportionality and metadata fields. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A defendant in a federal commercial dispute prepares for a Rule 26(f) conference after the plaintiff proposes a protocol demanding production from every employee’s phone and all chat channels.',
+      result:
+        'Scope confirmed with the judge’s model ESI order identified as controlling, the existing hold used as the custodian baseline with a preservation gap flagged for one ephemeral messaging tool, each disputed source tested against the proportionality factors with the burden evidence that would be needed, a counter-protocol limiting mobile collection to issue-linked custodians, a categorical privilege-logging method proposed as the amended rules require, and a draft Rule 502(d) order.',
+    },
+  },
+  {
+    id: 'us-insurance-tender-tracker',
+    name: 'Insurance Notice & Tender Tracker',
+    description: 'Maps claims against policies and indemnities, drafts notice and tender letters and tracks carrier responses.',
+    jurisdiction: 'us',
+    category: 'litigation',
+    tags: ['disputes', 'drafting', 'insurance', 'notice', 'indemnity', 'claims-management'],
+    sources: [
+      { citation: 'State insurance law, including notice, cooperation, duty to defend and bad-faith doctrines', authority: 'primary', publisher: 'State legislatures and courts', jurisdiction: 'us', note: 'Coverage is governed by the policy language and the law of the state that applies to the policy. Late-notice consequences, the duty to defend standard and choice of law vary materially by state.' },
+      { citation: 'State insurance regulator rules on claims handling', authority: 'regulator', publisher: 'State insurance departments', jurisdiction: 'us', url: 'https://content.naic.org', note: 'Unfair claims settlement practices rules set carrier response expectations in many states. The NAIC publishes model acts; each state’s enacted version controls.' },
+      { citation: 'The policies, endorsements and contracts under review', authority: 'primary', note: 'The operative documents. Notice conditions, claims-made reporting periods, retroactive dates and contractual indemnity or additional-insured terms are read from these, not assumed.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-demand-letter-responder', 'global-obligation-extraction', 'us-contract-obligation-tracker'],
+    whatItDoes:
+      'Takes a set of claims, demands, suits or potential circumstances and maps each against the insurance programme and the contractual indemnities that might respond, so notice is given where it may be required and tenders are made to every party that might owe defence or indemnity. It reads notice conditions, claims-made reporting windows and additional-insured terms from the actual documents, drafts notice and tender letters, and maintains a tracker of carrier and indemnitor responses including reservations of rights and denials. It deliberately does not decide whether coverage exists or value any claim.',
+    whenToUse:
+      'Whenever a demand letter, lawsuit, regulatory inquiry, subpoena or potential claim arrives; at policy renewal when circumstances should be reported; and when running a periodic review of open matters against the insurance programme. Not for: deciding coverage, valuing a claim or settlement, or responding to the merits of the claim itself (use the demand letter skill).',
+    inputs: [
+      { name: 'Claims and circumstances', description: 'Each demand, suit, inquiry or potential claim with the date received and the allegations.', required: true },
+      { name: 'Insurance programme', description: 'Policies, declarations, endorsements and schedules for every line that might respond, including prior policy periods.', required: true },
+      { name: 'Contracts', description: 'Customer, vendor, lease and other agreements containing indemnity, defence or additional-insured provisions.' },
+      { name: 'Prior notices', description: 'Any notice or tender already sent, and any response received.' },
+      { name: 'Broker details', description: 'Broker contact and any notice procedure the broker or policy prescribes.' },
+    ],
+    outputs: [
+      { name: 'Claim-to-policy map', description: 'Each matter mapped to every policy and policy period that might respond, with the reason.' },
+      { name: 'Notice obligations table', description: 'Notice conditions, reporting windows and methods read from each policy, with the dates that follow.' },
+      { name: 'Tender map', description: 'Contractual indemnitors and additional-insured rights for each matter.' },
+      { name: 'Draft notice and tender letters', description: 'Letters to carriers and indemnitors preserving rights without admitting liability or characterising coverage.' },
+      { name: 'Response tracker', description: 'Status of each notice and tender, reservations of rights, denials and follow-up dates.' },
+      { name: 'Lawyer review list', description: 'Coverage positions, disputes and choice-of-law questions requiring coverage counsel.' },
+    ],
+    prompt: `You are a US litigation and insurance recovery specialist managing notice and tender for a set of claims.
+
+CURRENT-LAW STATUS (verified 2026-09-16)
+- There is no single national rule. Notice, cooperation, duty-to-defend, late-notice prejudice and bad-faith doctrines are state law and vary materially [VERIFY per applicable state].
+- Policy language controls within those doctrines. Read every condition from the documents supplied; do not assume standard wording.
+
+INPUTS
+- Claims: <for each: date received, who from, type (demand, suit, subpoena, regulatory inquiry, circumstance), allegations, relief sought>
+- Policies: <every potentially relevant line — CGL, D&O, E&O/professional, cyber, EPLI, property, crime, umbrella/excess — with declarations, endorsements and policy periods, including prior periods>
+- Contracts: <agreements with indemnity, defence or additional-insured terms>
+- Prior notices and responses: <paste or list>
+- Broker and notice procedure: <contact and prescribed method>
+
+TASK
+1. SCOPE GATE. Confirm the task is notice and tender management. If the user asks whether coverage exists, what a claim is worth or what to settle for, state that those are determinations for coverage counsel and do not provide them.
+2. MISSING INFORMATION. List missing documents and facts. Treat a missing policy, endorsement or prior-period policy as a reason to give protective notice rather than a reason to wait.
+3. CHARACTERISE EACH MATTER. For each matter, identify whether it is likely a claim, a suit, or a circumstance under the definitions in each policy, since reporting duties and deadlines differ between them. Note where definitions differ between policies.
+4. CLAIM-TO-POLICY MAP. Map each matter to every policy that might respond, including prior policy periods for claims-made coverage and excess or umbrella layers. Give the reason each is included. When in doubt, include the policy and give notice; say plainly that over-inclusion carries far less risk than a missed notice.
+5. NOTICE OBLIGATIONS. For each policy, read and quote the notice condition: timing language ("as soon as practicable", fixed periods, reporting windows), the required content and method, the address, and any claims-made reporting deadline, extended reporting period or circumstance-notice provision. Calculate the dates that follow and show each calculation. Where the policy uses indefinite timing language, do not convert it to a fixed number of days; state that the governing state law determines whether late notice defeats coverage and mark it [VERIFY].
+6. TENDER MAP. For each matter, identify every party that may owe defence or indemnity under a contract, and every policy under which the organisation may be an additional insured. Read the triggering language, notice requirements and any conditions precedent from the contracts. Separate a contractual indemnity from additional-insured status, since the procedures and the responding party differ.
+7. DRAFT LETTERS. Draft a notice letter per carrier and a tender letter per indemnitor or additional-insured carrier. Each should identify the policy or contract, describe the matter factually without admissions, enclose the claim documents, request defence and indemnity where applicable, reserve all rights, ask for written acknowledgement and a coverage position, and preserve the organisation's choice regarding counsel where it may have one. Do not characterise whether coverage applies.
+8. RESPONSE TRACKER. Build a tracker with a row per notice or tender: date sent, method and proof of delivery, acknowledgement, coverage position (accepted, reservation of rights, denied, no response), the grounds stated, follow-up date and owner. For any reservation of rights, record each reserved ground and flag the issues it raises for counsel, including potential conflicts affecting control of the defence.
+9. RENEWAL AND CIRCUMSTANCE REPORTING. Identify matters that should be reported as circumstances before a claims-made policy expires or is renewed, and the date by which that must occur.
+10. LAWYER REVIEW TRIGGERS. Escalate: any denial or reservation of rights; any matter where notice may already be late; choice-of-law questions; potential conflicts between insured and carrier; settlement demands within or near limits; any request by a carrier for information that could waive privilege; and disputes between an indemnitor and a carrier over who defends.
+
+RULES
+- Never state that coverage exists or does not exist. Identify the provisions that bear on it and route the determination to coverage counsel.
+- Never value a claim or propose a settlement figure.
+- Quote notice conditions from the documents. Do not substitute a standard period.
+- Label each item as POLICY TERM, CONTRACT TERM, LAW (state doctrine) or BEST PRACTICE.
+- Treat doubt about whether notice is required as a reason to give notice.
+
+OUTPUT FORMAT
+Open with any notice that is due now or may already be late. Then the sections above, with tables for the claim-to-policy map, notice obligations, tender map and response tracker. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A company receives a customer lawsuit alleging a data incident caused losses, while its cyber policy is due to renew in three weeks and its hosting vendor contract contains an indemnity.',
+      result:
+        'The suit mapped to the cyber, technology E&O and umbrella policies with a prior-period policy included protectively, notice conditions quoted and dates calculated with the renewal deadline flagged as the controlling date, a tender map separating the vendor’s contractual indemnity from additional-insured status, drafted notice and tender letters that reserve rights without characterising coverage, and a response tracker ready for reservations of rights.',
     },
   },
 ];

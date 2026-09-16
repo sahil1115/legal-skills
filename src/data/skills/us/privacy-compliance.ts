@@ -96,10 +96,10 @@ Seven sections matching the tasks above. Present the matrix as a table with the 
       { citation: 'State comprehensive consumer privacy statutes', authority: 'primary', jurisdiction: 'us', note: 'Scope, thresholds and deadlines differ by state and change each legislative session. Confirm the current text for the specific state before relying on it.' },
       { citation: 'State attorney general and privacy agency rules and guidance', authority: 'regulator', jurisdiction: 'us', note: 'Some states have issued implementing regulations; others have only guidance, which is persuasive rather than binding. Distinguish the two before relying on either.' },
     ],
-    lastReviewed: '2026-08-26',
+    lastReviewed: '2026-09-16',
     reviewStatus: 'unverified',
-    version: '1.1.0',
-    relatedSkills: ['global-data-rights-request-handler', 'cross-four-regime-gap-analyzer', 'us-fifty-state-survey'],
+    version: '1.2.0',
+    relatedSkills: ['global-data-rights-request-handler', 'cross-four-regime-gap-analyzer', 'us-fifty-state-survey', 'us-cppa-risk-admt-cyber-compliance'],
     whatItDoes:
       'Works out which of the growing set of US state consumer privacy laws applies to a given request, whether your business meets that state’s applicability thresholds at all, what role you occupy in respect of the data, and what the request actually obliges you to do. Because the state laws differ on deadlines, appeal rights, authorised-agent rules and sensitive-data handling, it produces a per-state answer and then a single operational plan built to the strictest applicable requirement.',
     whenToUse:
@@ -118,6 +118,7 @@ Seven sections matching the tasks above. Present the matrix as a table with the 
       { name: 'Rights analysis', description: 'What the consumer is entitled to in that state, and what they are not.' },
       { name: 'Deadline and appeal path', description: 'Response window, extension conditions, and whether an appeal right exists.' },
       { name: 'Verification requirements', description: 'What identity proof the regime permits you to require.' },
+      { name: 'Response record', description: 'The record to keep evidencing how the request was verified, decided and answered, with retention flagged for verification per state.' },
       { name: 'Operational plan', description: 'A single workflow satisfying the strictest applicable requirement.' },
     ],
     prompt: `You are a US privacy operations specialist routing a consumer privacy request.
@@ -139,6 +140,7 @@ TASK
 6. VERIFICATION AND AGENTS: what identity verification the regime permits, and what an authorised agent must provide.
 7. APPEAL RIGHTS: whether the state requires an internal appeal mechanism, and what it must look like.
 8. OPERATIONAL PLAN: one workflow that satisfies the strictest applicable requirement, plus the response template.
+9. RESPONSE RECORD: specify the record to create for this request so the handling can be evidenced to a regulator — date received, the identity of the requester and any agent, the verification steps taken and their outcome, the rights exercised, the state law applied and why, each deadline and any extension with the notice given, the response sent and its date, any denial and its stated ground, and any appeal and its outcome. State that several states and the California regulations impose recordkeeping and retention requirements for consumer requests, and mark the applicable retention period and content requirements [VERIFY] for each state in issue. Record data only as needed to evidence handling; do not retain more personal information in the record than the request itself required.
 
 RULES
 - The US state privacy landscape changes every legislative session. Mark every threshold, deadline and effective date [VERIFY] and name the source to check.
@@ -148,7 +150,7 @@ RULES
 - If the data is employee or B2B data, resolve the exemption question first — it may dispose of the request.
 
 OUTPUT FORMAT
-Eight sections matching the tasks above.`,
+Nine sections matching the tasks above.`,
     example: {
       scenario:
         'A consumer emails asking the company to "stop selling my data and tell me everything you have", and their billing address is in a state with a comprehensive privacy law.',
@@ -329,6 +331,171 @@ Eight sections matching the tasks above, opening with the applicability determin
         'A SaaS analytics vendor serving hospital clients discovers that a misconfigured storage bucket exposed a dataset, and is unsure whether its customer contract is a valid business associate agreement.',
       result:
         'An applicability determination placing the vendor as a business associate for two of its four data flows and outside HIPAA for the rest, an agreement review finding the subcontractor flow-down and the security-incident reporting terms missing, a use-for-product-improvement clause flagged as an impermissible use, a breach assessment returned as CANNOT DETERMINE pending access-log evidence, and a workflow noting the vendor reports to its hospital customers rather than notifying individuals itself, with three state statutes to check separately.',
+    },
+  },
+  {
+    id: 'us-cppa-risk-admt-cyber-compliance',
+    name: 'CPPA Risk Assessment, ADMT & Audit Planner',
+    description: 'Maps California risk assessment, automated decisionmaking and cybersecurity audit duties to a business and its dates.',
+    jurisdiction: 'us',
+    category: 'privacy',
+    tags: ['data-protection', 'assessment', 'ccpa', 'state-privacy', 'automated-decisionmaking', 'cybersecurity', 'ai-governance'],
+    sources: [
+      { citation: 'California Consumer Privacy Act, as amended', authority: 'primary', publisher: 'California Legislature', jurisdiction: 'us', url: 'https://cppa.ca.gov', note: 'The statute that authorises the regulations and sets applicability thresholds.' },
+      { citation: 'CCPA regulations on cybersecurity audits, risk assessments and automated decisionmaking technology (California Code of Regulations, Title 11)', authority: 'regulator', publisher: 'California Privacy Protection Agency', jurisdiction: 'us', url: 'https://cppa.ca.gov', note: 'Approved by the Office of Administrative Law on 22 September 2025 and effective 1 January 2026, with later compliance dates for some requirements. Confirmed against CPPA materials as at 2026-09-16; phased audit and submission dates must be read from the regulation text.' },
+      { citation: 'CPPA guidance, FAQs and enforcement advisories', authority: 'guidance', publisher: 'California Privacy Protection Agency', jurisdiction: 'us', url: 'https://cppa.ca.gov' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['technology', 'financial-services', 'retail-consumer', 'healthcare'],
+    relatedSkills: ['us-privacy-request-router', 'us-nyc-aedt-bias-audit-compliance', 'eu-dpia-ropa-builder'],
+    whatItDoes:
+      'Works out which of California’s newer regulatory obligations apply to a business and when: the risk assessments required before certain processing, the notice, opt-out and access rights attached to automated decisionmaking technology used for significant decisions, and the annual cybersecurity audit with its phased certification dates. It separates obligations already in force from those with a later compliance date, maps each processing activity to the requirement it triggers, and produces a compliance calendar and gap list rather than a restatement of the rules.',
+    whenToUse:
+      'When a business subject to the CCPA sells or shares personal information, processes sensitive personal information, uses automated technology to make significant decisions about consumers, or meets the thresholds for cybersecurity audits; and when planning the compliance calendar for the phased dates. Not for: handling an individual consumer request (use the privacy request router) or state privacy laws outside California.',
+    inputs: [
+      { name: 'Business profile', description: 'Annual gross revenue, volume of consumers’ personal information processed, and revenue share from selling or sharing.', required: true },
+      { name: 'Processing inventory', description: 'Activities involving selling or sharing, sensitive personal information, profiling, and automated technology, with purposes.', required: true },
+      { name: 'Automated decision uses', description: 'Any use of technology to make or substantially make decisions about employment, housing, credit, education, healthcare or similar access.' },
+      { name: 'Existing assessments', description: 'Any privacy impact assessments, security audits or certifications already completed.' },
+      { name: 'Security programme', description: 'Current security controls, frameworks followed and audit history.' },
+    ],
+    outputs: [
+      { name: 'Applicability analysis', description: 'Whether the business is subject to each set of obligations, with the thresholds applied.' },
+      { name: 'Activity-to-obligation map', description: 'Each processing activity mapped to the risk assessment, ADMT or audit requirement it triggers.' },
+      { name: 'Compliance calendar', description: 'In-force obligations and later compliance dates, each labelled confirmed or to verify.' },
+      { name: 'Risk assessment outline', description: 'The required contents structured for each triggering activity.' },
+      { name: 'ADMT readiness plan', description: 'Pre-use notice, opt-out, access and appeal mechanics for significant decisions.' },
+      { name: 'Cybersecurity audit scope', description: 'Audit scope, auditor independence and certification path.' },
+      { name: 'Gap list', description: 'What is missing, with owner and priority.' },
+    ],
+    prompt: `You are a California privacy lawyer planning compliance with the CPPA regulations on risk assessments, automated decisionmaking technology and cybersecurity audits.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+In force:
+- Regulations approved 22 September 2025 and effective 1 January 2026 [CONFIRMED, cppa.ca.gov].
+- From 1 January 2026, a business must conduct a risk assessment before starting covered activities such as selling or sharing personal information, processing sensitive personal information, and using or training certain automated technologies (Article 10) [CONFIRMED, CPPA published guidance].
+Scheduled:
+- ADMT requirements for significant decisions apply from 1 January 2027 [CONFIRMED via CPPA announcement; VERIFY against the regulation text].
+- Treatment of processing that began before 2026, risk-assessment submission and attestation dates, and the phased cybersecurity audit certification dates by revenue tier [VERIFY — reported as phased from 2028 by revenue tier; read the exact dates and tiers from the regulation text before stating them].
+
+INPUTS
+- Business profile: <annual gross revenue, number of consumers or households whose personal information is processed, share of revenue from selling or sharing>
+- Processing inventory: <each activity: data, purpose, whether it involves selling or sharing, sensitive personal information, profiling, automated technology, training of models>
+- Automated decision uses: <each use, the decision it makes, whether a human meaningfully reviews it>
+- Existing assessments: <privacy impact assessments, security audits, certifications>
+- Security programme: <frameworks, controls, audit history>
+
+TASK
+1. SCOPE GATE. Confirm the business is subject to the CCPA by applying the statutory thresholds to the facts. If not, stop. Then determine separately whether the business is subject to each of the three obligation sets, because the triggers differ: risk assessments by activity, ADMT by use for significant decisions, cybersecurity audits by the risk-based thresholds in the regulations [VERIFY thresholds].
+2. MISSING INFORMATION. List missing inventory detail. A business cannot map obligations without knowing which activities involve selling or sharing, sensitive personal information or automated decisions; request that before concluding.
+3. ACTIVITY-TO-OBLIGATION MAP. For each activity, state which requirement it triggers and why, and whether the obligation is already in force or has a later compliance date. Produce a table with columns Activity, Trigger, Obligation, In force or scheduled, Date, Confirmed or [VERIFY].
+4. RISK ASSESSMENTS. For each triggering activity, outline the required contents: purpose, categories of personal information, operational elements, benefits, negative impacts to consumers, safeguards, and whether the business will proceed. Note the requirement that the assessment be conducted before the activity begins, the review and update cycle, retention, and the separate obligation to submit information or attestations to the CPPA on the scheduled dates [VERIFY]. Where the business already has a privacy impact assessment under another regime, identify what must be added rather than repeating it.
+5. AUTOMATED DECISIONMAKING. For each use that makes or substantially makes a significant decision, map the obligations: a pre-use notice, the right to opt out and its exceptions, the right to access information about the logic and outcome, and any appeal route. Assess whether human involvement is meaningful enough to take the use outside scope, and treat nominal review as insufficient. Mark every element [VERIFY] against the final text.
+6. CYBERSECURITY AUDITS. Determine whether the thresholds are met. Outline the audit: scope across the security programme components the regulations list, independence of the auditor, documentation, and the annual certification to the CPPA on the phased date that applies to the business's revenue tier [VERIFY]. Do not state which date applies until the tier and date have been confirmed from the regulation text.
+7. COMPLIANCE CALENDAR. Build a dated calendar separating in-force obligations from scheduled ones. Every scheduled date not confirmed above must carry [VERIFY].
+8. GAP LIST. List gaps with owner, priority and the date by which each must be closed.
+9. LAWYER REVIEW TRIGGERS. Escalate: any conclusion that an activity or automated use is outside scope; ADMT used in employment, credit, housing, healthcare or education; any decision to rely on an exception to the opt-out; and any conflict between these obligations and federal or other state requirements.
+
+RULES
+- Separate in-force obligations from scheduled ones in every section.
+- Never state a phased compliance date, threshold or attestation requirement as settled unless it is confirmed above or verified from the regulation text.
+- Label each item REGULATION, STATUTE, CPPA GUIDANCE or BEST PRACTICE.
+- Do not treat a human in the loop as removing a use from scope without assessing whether that human's involvement is meaningful.
+
+OUTPUT FORMAT
+Open with the applicability conclusion for each obligation set and the next compliance date. Then the sections above, with the activity map and compliance calendar as tables. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A consumer lending platform with revenue above the audit threshold uses an automated model to approve credit applications and shares data with advertising partners.',
+      result:
+        'CCPA applicability confirmed, advertising sharing mapped to a risk assessment required before continuing, the credit model identified as a significant-decision use subject to ADMT duties from 1 January 2027 with the underwriter review assessed as not meaningful enough to take it out of scope, the cybersecurity audit obligation mapped with its certification date left for verification against the revenue-tier table, and a compliance calendar separating in-force from scheduled duties.',
+    },
+  },
+  {
+    id: 'us-uflpa-supply-chain-traceability',
+    name: 'UFLPA Supply Chain Traceability',
+    description: 'Screens a supply chain against the UFLPA presumption and prepares traceability evidence and detention responses.',
+    jurisdiction: 'us',
+    category: 'compliance',
+    tags: ['programme-design', 'screening', 'trade-compliance', 'third-party-risk', 'forced-labor', 'supply-chain', 'customs'],
+    sources: [
+      { citation: 'Uyghur Forced Labor Prevention Act (Pub. L. 117-78)', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.congress.gov', note: 'Creates a rebuttable presumption that goods mined, produced or manufactured wholly or in part in the Xinjiang Uyghur Autonomous Region, or by an entity on the UFLPA Entity List, are made with forced labor and barred from entry.' },
+      { citation: 'Tariff Act of 1930, section 307', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.congress.gov', note: 'The underlying prohibition on importing goods made with forced labor.' },
+      { citation: 'UFLPA Strategy and UFLPA Entity List', authority: 'regulator', publisher: 'Forced Labor Enforcement Task Force, Department of Homeland Security', jurisdiction: 'us', url: 'https://www.dhs.gov', note: 'The Entity List is updated by Federal Register notice; the presumption applies to a listed entity from the date of publication.' },
+      { citation: 'CBP forced labor enforcement operational guidance for importers', authority: 'guidance', publisher: 'U.S. Customs and Border Protection', jurisdiction: 'us', url: 'https://www.cbp.gov', note: 'Updated guidance was published in June 2026. It sets out what CBP expects in applicability reviews and exception requests. Confirmed as at 2026-09-16.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer', 'energy-infrastructure', 'technology'],
+    relatedSkills: ['us-ofac-export-screener', 'global-obligation-extraction', 'us-contract-obligation-tracker'],
+    whatItDoes:
+      'Runs the two workflows an importer needs under the UFLPA: proactive traceability, which maps a product’s bill of materials and supplier tiers down to raw inputs and screens every node against the Xinjiang region and the Entity List; and detention readiness, which assembles the evidence package CBP expects when a shipment is detained. It identifies where traceability breaks down, separates evidence that the presumption does not apply from evidence supporting an exception, and generates supplier questionnaires that ask for documents rather than assurances.',
+    whenToUse:
+      'When onboarding suppliers for goods in higher-risk sectors, when the Entity List is updated, before shipping goods containing inputs such as cotton, polysilicon, aluminium, PVC, tomatoes or other materials CBP has identified as priorities, and immediately on receipt of a detention notice. Not for: sanctions or export-control screening (use the OFAC and export screener) or modern slavery reporting outside the US.',
+    inputs: [
+      { name: 'Product and bill of materials', description: 'The imported product, its components and raw material inputs with quantities.', required: true },
+      { name: 'Supplier map', description: 'Each supplier by tier with names, addresses and the inputs they provide.', required: true },
+      { name: 'Traceability documents', description: 'Purchase orders, invoices, production records, shipping documents, mill certificates and chain-of-custody records held.' },
+      { name: 'Detention notice', description: 'Any CBP detention notice, with its date and the information requested.' },
+      { name: 'Existing diligence', description: 'Audits, certifications, supplier codes and prior screening results.' },
+    ],
+    outputs: [
+      { name: 'Traceability map', description: 'The supply chain from finished good to raw input, with each node’s evidence status.' },
+      { name: 'Screening results', description: 'Each node screened against the Xinjiang region and the current Entity List, with the date checked.' },
+      { name: 'Evidence gap analysis', description: 'Where the documentary chain breaks, and what would close each gap.' },
+      { name: 'Supplier questionnaire', description: 'A document-request questionnaire for suppliers at each tier.' },
+      { name: 'Detention response package', description: 'The applicability-review or exception evidence structure and the response timeline.' },
+      { name: 'Lawyer review list', description: 'Decisions requiring customs counsel, including whether to seek an exception.' },
+    ],
+    prompt: `You are a US customs and trade compliance lawyer assessing a supply chain under the Uyghur Forced Labor Prevention Act.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+In force:
+- UFLPA rebuttable presumption covering goods made wholly or in part in the Xinjiang Uyghur Autonomous Region or by an entity on the UFLPA Entity List [CONFIRMED, dhs.gov and cbp.gov].
+- An importer seeking an exception must fully comply with the UFLPA Strategy guidance, respond completely to CBP requests, and show by clear and convincing evidence that the goods were not made with forced labor [CONFIRMED].
+- On detention, an initial 30-day period, with up to two extensions not exceeding 90 calendar days in total from the detention notice [CONFIRMED per CBP FAQ; VERIFY against the notice received].
+Guidance:
+- CBP forced labor enforcement operational guidance for importers, updated June 2026 [CONFIRMED that it was published; VERIFY its specific evidence expectations before relying on them].
+- The Entity List changes by Federal Register notice. Always screen against the current version and record the date checked.
+
+INPUTS
+- Product and bill of materials: <finished good, components, raw inputs, quantities>
+- Supplier map: <each supplier by tier: legal name, address, inputs supplied>
+- Traceability documents: <what is held for each node>
+- Detention notice: <date, entry number, information requested — or "none">
+- Existing diligence: <audits, certifications, codes, prior screening>
+
+TASK
+1. SCOPE GATE. Confirm the goods are imported or intended for import into the United States. If the question is sanctions or export control, stop and redirect. If a detention notice has been received, move the detention workflow to the front and calculate its dates first.
+2. MISSING INFORMATION. Identify missing tiers, missing supplier identities and missing documents. Treat an unknown upstream supplier for a higher-risk input as an open risk, not as a clean result.
+3. TRACEABILITY MAP. Map the chain from the finished good down to raw inputs, one node per supplier and input. For each node, record the documentary evidence held: purchase orders, invoices, production and inventory records, transport documents, and chain-of-custody records showing that the specific input used came from the stated source. Distinguish documents that trace the specific goods from general supplier declarations.
+4. SCREENING. Screen every node against the Xinjiang region and the current Entity List. Record the date and version of the list checked. Flag related entities and parent or subsidiary relationships that the list may capture. Flag inputs CBP has identified as enforcement priorities [VERIFY the current priority sectors].
+5. EVIDENCE GAP ANALYSIS. Identify where the chain breaks — commingled inputs, missing mill-level records, traders or intermediaries who will not disclose sources, or a supplier's declaration unsupported by documents. For each gap, state what would close it and how realistic that is.
+6. SUPPLIER QUESTIONNAIRE. Generate a questionnaire per tier that requests documents — source of each input, production records, transport records, and disclosure of sub-suppliers — rather than attestations of compliance. Note that an attestation alone does not meet the evidentiary standard.
+7. DETENTION RESPONSE. If a shipment is detained:
+   a. Calculate the response dates from the notice and record any extension requests.
+   b. Decide which route the evidence supports. An applicability review argues that the goods are not subject to the presumption at all because they have no nexus to the region or to a listed entity. An exception request accepts that the presumption applies and seeks to rebut it by clear and convincing evidence that forced labor was not used. State that these are different arguments requiring different evidence, and that an exception also requires full compliance with the Strategy guidance and complete responses to CBP.
+   c. Structure the evidence package in the order CBP expects [VERIFY against current operational guidance]: supply chain tracing, supplier information, due diligence system, and evidence addressing forced labor indicators.
+8. DUE DILIGENCE SYSTEM. Assess whether the importer's system would support an exception: risk assessment, supplier mapping, training, monitoring, remediation and recordkeeping. Identify what is missing.
+9. LAWYER REVIEW TRIGGERS. Escalate: any detention; any node with a nexus to the region or a listed entity; any decision between an applicability review and an exception request; any plan to re-export or abandon detained goods; and any supplier refusing to disclose sources.
+
+RULES
+- Never treat a supplier attestation as sufficient evidence.
+- Record the date and version of every Entity List check.
+- Label each item STATUTE, AGENCY LIST, CBP GUIDANCE or BEST PRACTICE.
+- Do not describe a chain as clean where any tier for a higher-risk input is unknown.
+- Keep the applicability review and exception routes distinct.
+
+OUTPUT FORMAT
+Open with any detention deadline, then the overall traceability conclusion and the highest-risk node. Then the sections above, with the traceability map and screening results as tables. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'An apparel importer receives a detention notice for cotton garments sourced through a trading company that cannot name the spinning mill.',
+      result:
+        'Detention dates calculated with the extension limit noted, the chain mapped to the trading company with the spinning and ginning tiers unknown and flagged as an open risk rather than a clean result, the supplier declarations assessed as attestations insufficient for the evidentiary standard, the applicability-review route found unsupported without mill records, an exception request structured with the evidence gaps it would need to close, and document-request questionnaires generated for each missing tier.',
     },
   },
 ];

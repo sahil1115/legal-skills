@@ -536,4 +536,318 @@ Open with every statute triggered and the single most urgent step with its date.
         'Request identified as triggering the accommodation duty despite no legal terminology being used and the mention going to a manager rather than HR, leave eligibility failing the hours test while the accommodation duty continued regardless, punctuality assessed as a marginal rather than essential function for this role on the evidence, the scope of permitted medical inquiry narrowed after an overbroad records request had already gone out, a trial flexible-start arrangement structured with a review date, and the scheduled review flagged as a retaliation risk requiring documented independent grounds.',
     },
   },
+  {
+    id: 'us-pay-transparency-multistate-checker',
+    name: 'Pay Transparency Multistate Checker',
+    description: 'Checks job postings and recruiting steps against a maintained state and local pay-transparency rule matrix.',
+    jurisdiction: 'us',
+    category: 'employment',
+    tags: ['workforce', 'review', 'multi-state', 'pay-transparency', 'recruiting', 'wage-and-hour'],
+    sources: [
+      { citation: 'State and local pay-transparency and salary-history statutes and ordinances', authority: 'primary', publisher: 'State legislatures and local councils', jurisdiction: 'us', note: 'There is no general federal pay-transparency statute for private employers. The rules are state and local, change frequently, and differ on coverage thresholds, remote roles, content, timing and recordkeeping.' },
+      { citation: 'State labor agency guidance and FAQs on pay transparency', authority: 'guidance', publisher: 'State labor agencies', jurisdiction: 'us', note: 'Agency guidance often settles questions the statutes leave open, such as remote roles and third-party postings.' },
+      { citation: 'Equal Pay Act and Title VII', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.eeoc.gov', note: 'The federal equal-pay framework that pay-transparency laws operate alongside.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-fifty-state-survey', 'us-employment-policy-checker', 'us-fcra-adverse-action-manager'],
+    whatItDoes:
+      'Checks job advertisements and the recruiting process against a pay-transparency rule matrix that the organisation maintains, rather than against rules hard-coded into the prompt that would go stale. It validates each matrix row against current official sources and flags rows that are missing, outdated or unverified, then tests each posting for the jurisdictions it reaches — including remote roles — against pay range content, benefits disclosure, timing, applicant and employee request rights, salary-history restrictions and recordkeeping. It outputs posting-level fixes and an updated matrix.',
+    whenToUse:
+      'Before publishing job postings, when adding a new hiring location or opening a remote role, when a recruiting platform or agency posts on your behalf, and on a periodic refresh of the rule matrix. Not for: pay equity analysis or EU pay-transparency obligations (use the EU pay transparency skill).',
+    inputs: [
+      { name: 'Job postings', description: 'The postings to review, including location, remote eligibility and where each will be published.', required: true },
+      { name: 'Rule matrix', description: 'The maintained matrix of jurisdictions, triggers, required content, timing, recordkeeping and source — or "none" to start one.', required: true },
+      { name: 'Employer profile', description: 'Headcount by state and locality, and whether a third party posts on the employer’s behalf.', required: true },
+      { name: 'Recruiting workflow', description: 'Application forms, interview scripts and offer processes, especially any salary-history questions.' },
+      { name: 'Pay data', description: 'The pay range actually budgeted for each role and how it was set.' },
+    ],
+    outputs: [
+      { name: 'Matrix validation', description: 'Each rule row marked current, outdated, missing or unverified against official sources.' },
+      { name: 'Updated rule matrix', description: 'The corrected matrix in the same columns, ready to maintain.' },
+      { name: 'Jurisdiction reach analysis', description: 'Which jurisdictions each posting reaches, including remote roles.' },
+      { name: 'Posting review', description: 'Each posting checked field by field, with specific fixes.' },
+      { name: 'Process findings', description: 'Salary-history questions, request-response procedures and recordkeeping gaps.' },
+      { name: 'Lawyer review list', description: 'Unsettled coverage questions and conflicting rules.' },
+    ],
+    prompt: `You are a US employment lawyer checking recruiting practices against state and local pay-transparency laws using a maintained rule matrix.
+
+CURRENT-LAW STATUS (as at 2026-09-16)
+- There is no general federal pay-transparency statute for private employers.
+- State and local laws change frequently. This skill does not carry a built-in list of jurisdictions or rules, because a list in a prompt goes stale. Every rule applied must come from the matrix supplied and be verified against the official source for that jurisdiction before use [VERIFY each row].
+
+INPUTS
+- Job postings: <each posting: title, location, remote eligibility, publication channels>
+- Rule matrix: <table with columns: Jurisdiction | Coverage trigger (employer size, location) | Remote-role treatment | Required posting content | Timing (posting, on request, offer) | Current-employee rights | Salary-history restrictions | Recordkeeping | Official source | Last verified — or "none">
+- Employer profile: <headcount by state and locality; third-party posters>
+- Recruiting workflow: <application forms, interview scripts, offer steps>
+- Pay data: <budgeted range per role and how it was set>
+
+TASK
+1. SCOPE GATE. Confirm the review concerns US job postings and recruiting. If the roles are outside the United States, stop and redirect.
+2. MISSING INFORMATION. If no matrix is supplied, build a draft matrix structure and populate only rows whose rules you can verify against official sources; mark every other jurisdiction the employer hires in as [VERIFY — rule not yet sourced]. Never fill a row from memory.
+3. MATRIX VALIDATION. For each row, check the rule against the jurisdiction's official statute, ordinance or agency guidance. Mark it CURRENT, OUTDATED (with the change), MISSING (jurisdiction reached but no row), or UNVERIFIED. Record the date checked and the source. Flag rules that have passed but are not yet effective.
+4. JURISDICTION REACH. For each posting, determine which jurisdictions it reaches: the physical work location, remote eligibility, and any jurisdiction whose law applies to roles that could be performed there or that report to a location there. Where coverage of remote roles is unsettled, say so and apply the more protective reading pending lawyer review.
+5. POSTING REVIEW. For each posting and each jurisdiction reached, check the required elements from the validated matrix: whether a range is required and what counts as a good-faith range, benefits or other compensation description, and any required statements. Test whether the posted range reflects the range actually budgeted, since an artificially wide range may fail a good-faith standard. Give specific wording fixes.
+6. PROCESS FINDINGS. Review application forms, interview guides and offer steps for salary-history inquiries prohibited in any jurisdiction reached, for procedures to respond to applicant or employee pay-range requests within any required timing, and for records of postings and ranges that must be retained.
+7. THIRD-PARTY POSTINGS. Where agencies or job boards post on the employer's behalf, identify whether the obligation extends to those postings and what controls are needed.
+8. UPDATED MATRIX. Output the corrected matrix in the same columns with the verification date for each row.
+9. LAWYER REVIEW TRIGGERS. Escalate: unsettled remote-role coverage; conflicts between jurisdictions; any posting that has already run non-compliantly; pay ranges that may not reflect a good-faith estimate; and any pay-equity concern surfaced by the ranges.
+
+RULES
+- Apply only rules drawn from the validated matrix. Never state a jurisdiction's rule from memory.
+- Label each requirement LAW, AGENCY GUIDANCE or BEST PRACTICE.
+- Where coverage is uncertain, apply the more protective reading and flag it.
+- Keep posting-level fixes specific: quote the posting text and give replacement wording.
+
+OUTPUT FORMAT
+Open with postings that must be corrected before publication. Then the sections above, with the matrix validation, posting review and updated matrix as tables. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A software company preparing remote-eligible engineering postings supplies a rule matrix last updated eighteen months ago.',
+      result:
+        'Four matrix rows marked outdated and two jurisdictions the postings reach marked missing and left unverified rather than filled from memory, remote coverage flagged as unsettled in one jurisdiction with the more protective reading applied, one posting’s range found far wider than the budgeted range and flagged against the good-faith standard, a salary-history question removed from the application form, and an updated matrix with verification dates.',
+    },
+  },
+  {
+    id: 'us-i9-audit-noi-response',
+    name: 'Form I-9 Audit & Inspection Response',
+    description: 'Audits Forms I-9 for errors and lawful corrections and runs the response to an ICE Notice of Inspection.',
+    jurisdiction: 'us',
+    category: 'employment',
+    tags: ['workforce', 'review', 'recordkeeping', 'employment-verification', 'immigration', 'audit-response'],
+    sources: [
+      { citation: 'Immigration and Nationality Act section 274A', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.congress.gov', note: 'The employment verification and recordkeeping obligations, penalties, and the good-faith compliance provisions for certain technical and procedural failures.' },
+      { citation: 'Employment verification regulations (8 CFR 274a)', authority: 'regulator', publisher: 'Department of Homeland Security', jurisdiction: 'us', url: 'https://www.ecfr.gov' },
+      { citation: 'Form I-9 and the Handbook for Employers (M-274)', authority: 'guidance', publisher: 'U.S. Citizenship and Immigration Services', jurisdiction: 'us', url: 'https://www.uscis.gov', note: 'The current Form I-9 edition is dated 01/20/25 as at 2026-09-16. Retention: three years after hire or one year after employment ends, whichever is later. Confirmed.' },
+      { citation: 'ICE Form I-9 inspection process', authority: 'regulator', publisher: 'U.S. Immigration and Customs Enforcement', jurisdiction: 'us', url: 'https://www.ice.gov', note: 'Inspections begin with a Notice of Inspection, with at least three business days’ notice to produce the forms. Confirmed.' },
+      { citation: 'Immigration-related unfair employment practices provisions', authority: 'primary', publisher: 'United States Congress; Department of Justice', jurisdiction: 'us', url: 'https://www.justice.gov', note: 'Over-documentation and selective or unnecessary reverification can themselves be unlawful discrimination.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-work-visa-lca-checker', 'us-employment-policy-checker', 'us-regulatory-investigation-response'],
+    whatItDoes:
+      'Audits a population of Forms I-9 the way an inspection would, classifying each problem as a technical or procedural error or a substantive one, and applying the lawful correction method for each so the audit does not create new violations through backdating or over-documentation. It builds the retention purge list, the reverification calendar, and — when a Notice of Inspection arrives — the three-business-day production workflow, the privilege and scope decisions, and the response to any notice of technical or procedural failures.',
+    whenToUse:
+      'For a periodic internal I-9 audit, after a merger or acquisition that brings in a new workforce, when changing HR systems or E-Verify practice, and immediately on receipt of a Notice of Inspection. Not for: sponsored visa filings (use the work visa skill) or deciding whether a specific document is genuine.',
+    inputs: [
+      { name: 'Forms I-9', description: 'The forms to review or a sample, with supporting document copies if the employer retains them.', required: true },
+      { name: 'Workforce data', description: 'Hire dates, termination dates, and current employment status for each employee.', required: true },
+      { name: 'Practices', description: 'Whether copies of documents are retained, E-Verify use, remote examination method, and who completes Section 2.' },
+      { name: 'Notice of Inspection', description: 'Any NOI or subpoena received, with its date and what is requested.' },
+      { name: 'Prior audits and corrections', description: 'Previous audit findings and any corrections already made.' },
+    ],
+    outputs: [
+      { name: 'Error classification', description: 'Each form’s errors classified as technical or procedural versus substantive.' },
+      { name: 'Correction instructions', description: 'The lawful correction method for each error, and errors that cannot be corrected.' },
+      { name: 'Retention and purge list', description: 'Forms that must be kept and forms eligible for lawful disposal, with the date calculated.' },
+      { name: 'Reverification calendar', description: 'Employees requiring reverification and those who must not be reverified.' },
+      { name: 'NOI response plan', description: 'The production timeline, scope, privilege and representation decisions.' },
+      { name: 'Audit memorandum', description: 'Methodology and findings suitable for counsel to hold under privilege.' },
+      { name: 'Lawyer review list', description: 'Substantive failures, knowledge issues and discrimination risks.' },
+    ],
+    prompt: `You are a US immigration compliance lawyer auditing Forms I-9 and managing an ICE inspection.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+- Current Form I-9 edition dated 01/20/25 [CONFIRMED, uscis.gov]. Confirm no newer edition before advising which form to use.
+- Retention: three years after the date of hire or one year after employment ends, whichever is later [CONFIRMED].
+- An inspection begins with a Notice of Inspection giving at least three business days to produce the forms [CONFIRMED, ice.gov].
+- Remote document examination alternative procedure and its eligibility conditions [VERIFY current conditions].
+- Civil penalty amounts are adjusted periodically [VERIFY; do not state figures].
+
+INPUTS
+- Forms: <the forms or a sample, and supporting document copies if retained>
+- Workforce data: <hire date, termination date, status per employee>
+- Practices: <copies retained or not, E-Verify use, remote examination, who completes Section 2>
+- Notice of Inspection: <date served, scope, deadline — or "none">
+- Prior audits: <findings and corrections>
+
+TASK
+1. SCOPE GATE. Confirm the population is employees hired for work in the United States by this employer. If a Notice of Inspection has been received, calculate the production deadline first and move the inspection workflow to the front.
+2. MISSING INFORMATION. Identify missing forms, missing hire or termination dates, and employees without any form. A missing form is itself a finding and cannot be cured by backdating.
+3. AUDIT METHOD. Decide whether to audit all forms or a sample, and record the reason. Recommend that the audit be conducted at counsel's direction to support privilege, and that the methodology apply consistently across the workforce to avoid selective treatment.
+4. ERROR CLASSIFICATION. For each form, classify each error as technical or procedural, or substantive. Substantive errors typically include failing to complete or timely complete Section 1 or Section 2, failing to review documents, failing to reverify when required, and missing forms. Technical or procedural errors include certain missing information that can be corrected. Note that the good-faith compliance provisions apply only to technical and procedural failures and are lost for failures not corrected after notice [VERIFY]. Produce a table with columns Employee, Section, Error, Classification, Correctable and Method.
+5. LAWFUL CORRECTIONS. For each correctable error, give the method: draw a line through the incorrect information, enter the correct information, initial and date the correction with the current date; or, for pervasive errors, complete a new form and attach it to the old one with a signed and dated explanation. State plainly: never backdate, never obscure original entries, never re-examine documents selectively, and never have the employee complete a section the employer should have completed. Identify errors that cannot be corrected and must instead be documented.
+6. RETENTION AND PURGE. For each former employee, calculate the retention end date as the later of three years after hire and one year after termination, and list forms eligible for disposal. Recommend completing lawful disposal before any inspection notice arrives, and never after one has been received.
+7. REVERIFICATION. Identify employees whose employment authorisation or, where applicable, documentation is expiring, and build a calendar. State the categories that must not be reverified — including US citizens and noncitizen nationals, and lawful permanent residents presenting certain documents — because unnecessary reverification can be an unfair documentary practice [VERIFY current rules].
+8. DISCRIMINATION RISK. Flag over-documentation, requests for specific documents, treating employees differently by perceived citizenship or national origin, and retaining document copies for some employees but not others.
+9. NOTICE OF INSPECTION. If an NOI has been received: record the service date and calculate the production deadline of at least three business days; consider whether to request an extension and document the request; decide what must be produced (forms, and often payroll, employee lists, articles of incorporation and business licences) and produce only what is requested; produce copies rather than originals where permitted; engage counsel before any interview; and prepare for the possible outcomes — a notice of technical or procedural failures with a period to correct, a notice of suspect documents, a warning notice, or a notice of intent to fine [VERIFY periods and procedures].
+10. LAWYER REVIEW TRIGGERS. Escalate: any inspection; any indication the employer knew or should have known an employee lacked authorisation; suspect documents; missing forms for current employees; patterns suggesting discriminatory practice; and any proposal to terminate employees as a result of the audit.
+
+RULES
+- Never recommend backdating or recreating a form to appear timely.
+- Never recommend reverifying employees who must not be reverified, or requesting specific documents.
+- Label each item STATUTE, REGULATION, AGENCY GUIDANCE or BEST PRACTICE.
+- Do not state civil penalty amounts; they are adjusted and must be verified.
+- Do not assess whether a specific document is genuine; route that question to counsel.
+
+OUTPUT FORMAT
+Open with any inspection deadline, then the counts of substantive and technical errors. Then the sections above, with the error classification, purge list and reverification calendar as tables. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A 400-employee manufacturer receives a Notice of Inspection while an internal audit is half complete and several former employees’ forms are past retention.',
+      result:
+        'Production deadline calculated from service with an extension request documented, disposal of past-retention forms halted because an inspection is now pending, audited forms classified with late Section 2 completions identified as substantive and missing Section 1 fields as technical, lawful correction methods given with backdating expressly excluded, several employees removed from a reverification list because they must not be reverified, and counsel engaged before any employee interviews.',
+    },
+  },
+  {
+    id: 'us-fcra-adverse-action-manager',
+    name: 'FCRA Adverse Action Manager',
+    description: 'Runs the pre-adverse and adverse action workflow for employment decisions based on background reports.',
+    jurisdiction: 'us',
+    category: 'employment',
+    tags: ['workforce', 'drafting', 'background-screening', 'notice', 'fair-chance', 'recordkeeping'],
+    sources: [
+      { citation: 'Fair Credit Reporting Act (15 U.S.C. 1681 et seq.), including sections 604(b) and 615', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.congress.gov', note: 'Requires a standalone disclosure and authorisation before procuring a report, a pre-adverse action notice with a copy of the report and the summary of rights, and an adverse action notice with specified content.' },
+      { citation: 'FTC business guidance on using consumer reports for employment', authority: 'guidance', publisher: 'Federal Trade Commission', jurisdiction: 'us', url: 'https://www.ftc.gov', note: 'States that the time an employer should wait between the pre-adverse and adverse action notices varies with the circumstances. There is no fixed statutory waiting period. Confirmed as at 2026-09-16.' },
+      { citation: 'A Summary of Your Rights Under the Fair Credit Reporting Act', authority: 'regulator', publisher: 'Consumer Financial Protection Bureau', jurisdiction: 'us', url: 'https://www.consumerfinance.gov', note: 'The prescribed form that must accompany the pre-adverse action notice. Use the current version.' },
+      { citation: 'State and local fair chance, ban-the-box and background check laws', authority: 'primary', publisher: 'State legislatures and local councils', jurisdiction: 'us', note: 'Many add individualised assessment, specific notice forms, longer response periods and restrictions on the timing of criminal history inquiries. These stack with the federal steps.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-employment-policy-checker', 'us-pay-transparency-multistate-checker', 'us-worker-classification'],
+    whatItDoes:
+      'Runs the per-decision workflow when an employer is considering an adverse employment decision based in whole or part on a consumer report: confirming the disclosure and authorisation were valid before the report was obtained, preparing the pre-adverse action notice with the report and summary of rights, managing the period for the individual to respond or dispute, layering any state or local fair chance steps, and preparing the final adverse action notice with every required element. It keeps the file that shows each step happened in order.',
+    whenToUse:
+      'Each time a background check, criminal history report, driving record or other consumer report may lead to not hiring, rescinding an offer, not promoting, reassigning or terminating someone. Not for: reviewing a handbook policy on background checks (use the employment policy checker) or decisions based on information not obtained from a consumer reporting agency.',
+    inputs: [
+      { name: 'The decision', description: 'The role, the decision being considered, and the information in the report driving it.', required: true },
+      { name: 'Report and vendor', description: 'The consumer report and the consumer reporting agency’s name, address and telephone number.', required: true },
+      { name: 'Consent documents', description: 'The disclosure and authorisation the individual signed, with dates.', required: true },
+      { name: 'Work location', description: 'Where the role is performed and where the individual lives, since state and local laws depend on it.' },
+      { name: 'Individual’s response', description: 'Any explanation, dispute or evidence of rehabilitation provided.' },
+    ],
+    outputs: [
+      { name: 'Pre-report compliance check', description: 'Whether the disclosure and authorisation were valid before the report was obtained.' },
+      { name: 'Overlay map', description: 'State and local steps that apply in addition to the federal process.' },
+      { name: 'Pre-adverse action notice', description: 'Draft notice with the enclosures that must accompany it.' },
+      { name: 'Response period plan', description: 'The waiting period chosen, its basis, and how responses and disputes will be handled.' },
+      { name: 'Individualised assessment record', description: 'Where required or advisable, the documented assessment of relevance.' },
+      { name: 'Adverse action notice', description: 'Draft final notice containing every required element.' },
+      { name: 'Decision file checklist', description: 'The dated record showing each step occurred in order.' },
+    ],
+    prompt: `You are a US employment lawyer managing an adverse employment decision based on a consumer report under the Fair Credit Reporting Act and applicable state and local law.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+- Federal steps under the FCRA: standalone disclosure and written authorisation before procuring a report; a pre-adverse action notice with a copy of the report and "A Summary of Your Rights Under the Fair Credit Reporting Act" before taking adverse action; and an adverse action notice afterwards [CONFIRMED, ftc.gov].
+- There is no fixed federal waiting period between the notices. FTC guidance says the appropriate time varies with the circumstances [CONFIRMED]. Any specific number of days is a policy choice or a state or local requirement, never a federal rule.
+- State and local fair chance and background check laws vary and change [VERIFY each jurisdiction].
+
+INPUTS
+- Decision: <role, decision being considered, report information driving it>
+- Report and vendor: <report; agency name, address, telephone>
+- Consent documents: <disclosure and authorisation, with dates>
+- Location: <work location, residence of the individual>
+- Response: <explanation, dispute, rehabilitation evidence — or "none yet">
+
+TASK
+1. SCOPE GATE. Confirm the information came from a consumer reporting agency and the decision is an employment decision. If the information came from the employer's own inquiries, the FCRA notice process may not apply, but other laws may; say so and redirect.
+2. MISSING INFORMATION. Identify missing consent documents, missing agency details and an unclear work location. A missing or defective disclosure cannot be repaired after the report was obtained; flag it immediately.
+3. PRE-REPORT CHECK. Test the disclosure: a clear and conspicuous disclosure in a document consisting solely of the disclosure, and written authorisation. Flag extraneous content such as liability waivers or state notices combined into the same document. Confirm the report was obtained after authorisation.
+4. OVERLAY MAP. For the work location and residence, identify state and local steps that add to the federal process: limits on when criminal history may be considered in the hiring sequence, required individualised assessments, prescribed notice forms, minimum response periods, and required content. Mark each [VERIFY] with its official source. Where laws conflict, apply the most protective.
+5. INDIVIDUALISED ASSESSMENT. Where required, or advisable for criminal history, document the assessment: the nature and gravity of the offence, the time elapsed, the nature of the job, and any evidence of rehabilitation provided. Assess relevance to the specific duties rather than a blanket exclusion.
+6. PRE-ADVERSE ACTION NOTICE. Draft the notice, enclosing a copy of the report and the current summary of rights, plus any state or local form required. Explain that the individual may respond or dispute, how, and by when.
+7. RESPONSE PERIOD. Set the waiting period. State that federal law sets no fixed number of days and that the period must give a real opportunity to respond; apply any longer state or local minimum. Record the chosen period and its basis. If the individual disputes the report's accuracy with the agency, pause and reassess before finalising.
+8. ADVERSE ACTION NOTICE. Draft the final notice containing the required elements: that adverse action was taken based in whole or part on the report; the agency's name, address and telephone number; a statement that the agency did not make the decision and cannot explain why it was made; the right to obtain a free copy of the report from the agency upon request within 60 days; and the right to dispute the accuracy or completeness of information with the agency. Add any state or local content.
+9. DECISION FILE. Build a dated checklist proving the order of events: authorisation, report received, pre-adverse notice sent with enclosures, response period, response considered, assessment, and final notice.
+10. LAWYER REVIEW TRIGGERS. Escalate: any defective disclosure; any decision based on arrest records not leading to conviction; any blanket exclusion policy; decisions affecting a protected group disproportionately; disputes of accuracy; jurisdictions with conflicting rules; and any rescinded offer where the person has already started work.
+
+RULES
+- Never state a fixed federal waiting period. Label any period as POLICY or as a state or local requirement.
+- Never skip or reorder the pre-adverse step.
+- Label each requirement FEDERAL LAW, STATE OR LOCAL LAW, AGENCY GUIDANCE or BEST PRACTICE.
+- Do not make the relevance judgment for the employer in a criminal history case; structure the assessment and route borderline cases to counsel.
+
+OUTPUT FORMAT
+Open with any defect that must be fixed before proceeding, and the next step with its date. Then the sections above, with the overlay map and decision file as tables, and the two notices as usable text. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A logistics employer wants to rescind a conditional driver offer after a background report shows an eight-year-old conviction, for a role in a city with a fair chance ordinance.',
+      result:
+        'Disclosure found to combine a liability waiver in the same document and flagged as a defect for counsel, the city and state overlays mapped with a prescribed notice form and minimum response period applied, an individualised assessment structured around the conviction’s age and relevance to driving duties, a pre-adverse notice drafted with the report and current summary of rights, the waiting period recorded as a policy choice rather than a federal rule, and a final adverse action notice containing each required element.',
+    },
+  },
+  {
+    id: 'us-nyc-aedt-bias-audit-compliance',
+    name: 'NYC AEDT Bias Audit Compliance',
+    description: 'Tests New York City automated hiring tools for coverage and manages bias audits, publication and notices.',
+    jurisdiction: 'us',
+    category: 'employment',
+    tags: ['workforce', 'assessment', 'ai-governance', 'automated-decisionmaking', 'bias-audit', 'recruiting'],
+    sources: [
+      { citation: 'New York City Local Law 144 of 2021 (automated employment decision tools)', authority: 'primary', publisher: 'New York City Council', jurisdiction: 'us', url: 'https://www.nyc.gov', note: 'Prohibits use of an automated employment decision tool unless it has had a bias audit within one year of use, a summary of results is publicly available, and required notices are given. Confirmed as at 2026-09-16.' },
+      { citation: 'Department of Consumer and Worker Protection rules and FAQs on automated employment decision tools', authority: 'regulator', publisher: 'NYC Department of Consumer and Worker Protection', jurisdiction: 'us', url: 'https://www.nyc.gov', note: 'Define covered tools, audit calculations, independence and notice requirements. Enforcement began 5 July 2023.' },
+      { citation: 'Federal and state anti-discrimination law, including Title VII and the New York City Human Rights Law', authority: 'primary', publisher: 'United States Congress; New York City Council', jurisdiction: 'us', url: 'https://www.eeoc.gov', note: 'A compliant bias audit does not establish that a tool is lawful under discrimination law.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['technology', 'financial-services', 'professional-services'],
+    relatedSkills: ['us-cppa-risk-admt-cyber-compliance', 'eu-ai-act-classifier', 'us-employment-policy-checker'],
+    whatItDoes:
+      'Determines whether a hiring or promotion tool is an automated employment decision tool under New York City’s law, and if it is, manages the recurring compliance cycle: an independent bias audit within the year before use, public posting of the audit summary, the advance notices to candidates and employees, and the review dates that keep all three current. It keeps the local-law question separate from the broader discrimination-law question, because passing the audit does not make the tool lawful.',
+    whenToUse:
+      'Before using any automated or algorithmic tool to screen, score, rank or recommend candidates or employees for roles connected to New York City, when a vendor updates a tool, and annually as each audit approaches expiry. Not for: California automated decision duties (use the CPPA skill) or EU AI Act classification.',
+    inputs: [
+      { name: 'Tool description', description: 'What the tool does, what it outputs, and how that output is used in decisions.', required: true },
+      { name: 'Use context', description: 'Roles, locations, and whether candidates or employees are in New York City.', required: true },
+      { name: 'Vendor materials', description: 'Vendor documentation, any existing bias audit, and the auditor’s identity.' },
+      { name: 'Data available', description: 'Historical or test data available for an audit, and demographic data categories collected.' },
+      { name: 'Current notices', description: 'Existing job posting language, website disclosures and candidate communications.' },
+    ],
+    outputs: [
+      { name: 'Coverage determination', description: 'Whether the tool is a covered tool and the use is in scope, with reasoning.' },
+      { name: 'Audit status', description: 'Whether a valid audit exists, its date, independence and expiry.' },
+      { name: 'Audit requirements checklist', description: 'The calculations, data and independence the audit must meet.' },
+      { name: 'Publication checklist', description: 'What must be posted and where.' },
+      { name: 'Notice drafts', description: 'Candidate and employee notices with timing.' },
+      { name: 'Compliance calendar', description: 'Audit expiry, notice timing and review dates.' },
+      { name: 'Discrimination risk flags', description: 'Issues the audit does not resolve, for counsel.' },
+    ],
+    prompt: `You are a New York employment lawyer assessing an automated hiring or promotion tool under New York City Local Law 144.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+In force:
+- Local Law 144 of 2021 and the DCWP rules. An automated employment decision tool may be used only if it has had a bias audit within one year of use, a summary of the most recent audit is publicly available, and required notices are given [CONFIRMED, nyc.gov].
+- Notice to candidates and employees at least 10 business days before use [CONFIRMED per DCWP; VERIFY delivery methods].
+- DCWP enforcement since 5 July 2023 [CONFIRMED].
+- Penalty amounts [VERIFY; do not state figures].
+
+INPUTS
+- Tool: <what it does, outputs, and how outputs are used>
+- Use context: <roles, locations, NYC nexus of candidates and employees>
+- Vendor materials: <documentation, existing audit, auditor identity>
+- Data: <historical or test data; demographic categories collected>
+- Current notices: <postings, website disclosures, candidate communications>
+
+TASK
+1. SCOPE GATE. Determine whether the use has a New York City nexus under the law and DCWP guidance, including remote roles associated with a New York City office [VERIFY current DCWP position]. If there is no nexus, stop and note that other jurisdictions' automated decision rules may still apply.
+2. MISSING INFORMATION. Request how the tool's output is used in the decision. Coverage turns on it, and it cannot be assumed.
+3. COVERAGE. Apply the definition: a computational process derived from machine learning, statistical modelling, data analytics or artificial intelligence that issues simplified output such as a score, classification or recommendation, and is used to substantially assist or replace discretionary decision-making for employment decisions. Work through how the output is weighted in practice — whether it is relied on alone, weighted more than other criteria, or used to overrule human decisions — as DCWP rules define substantial assistance [VERIFY]. Conclude COVERED, NOT COVERED or UNCERTAIN.
+4. AUDIT STATUS. If a bias audit exists, check its date against intended use, whether it was conducted by an independent auditor, whether it covers this tool as deployed, and whether it used historical data from this employer or permissibly used other data [VERIFY]. State its expiry.
+5. AUDIT REQUIREMENTS. Set out what the audit must calculate — selection or scoring rates and impact ratios by the required demographic categories, including intersectional categories — and the treatment of categories with small samples [VERIFY]. Identify the data needed and gaps.
+6. PUBLICATION. List what must be publicly available: the date of the most recent audit, a summary of results, the distribution date of the tool, and where it must be posted [VERIFY].
+7. NOTICES. Draft the notices: that an automated tool will be used, the job qualifications and characteristics it assesses, information about data sources and retention or how to request it, and the ability to request an alternative selection process or accommodation where available [VERIFY required content]. Set timing at least 10 business days before use and specify delivery channels.
+8. COMPLIANCE CALENDAR. Build dates for audit expiry, re-audit start, notice timing for each requisition cycle, and vendor update review.
+9. DISCRIMINATION RISK. Separately flag risks the local law does not resolve: disparate impact under federal, state and city discrimination law, accommodation for disability, and validity of the criteria the tool assesses.
+10. LAWYER REVIEW TRIGGERS. Escalate: uncertain coverage; any audit showing adverse impact; a vendor unwilling to support an independent audit; use of the tool before an audit or notices; and any accommodation request relating to the tool.
+
+RULES
+- A compliant audit does not make a tool lawful. Keep the two questions separate.
+- Label each requirement LOCAL LAW, DCWP RULE, AGENCY GUIDANCE or BEST PRACTICE.
+- Do not state penalty figures.
+- Do not treat human review as removing coverage without testing how the output is actually used.
+
+OUTPUT FORMAT
+Open with the coverage conclusion and whether the tool can lawfully be used today. Then the sections above, with audit status and the compliance calendar as tables, and the notices as usable text. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'An employer uses a vendor’s resume-ranking tool for roles at its New York City office, and the vendor supplies a bias audit dated fourteen months ago.',
+      result:
+        'Tool found covered because recruiters only review candidates the tool ranks in the top tier, the vendor audit found expired and not specific to the employer’s deployment, re-audit data requirements identified including intersectional categories, a publication checklist and notices drafted with the 10-business-day lead time, use paused pending a current audit, and adverse-impact risk under discrimination law flagged separately for counsel.',
+    },
+  },
 ];

@@ -185,7 +185,7 @@ Eight sections matching the tasks above. Section 2 must be a comparison table wi
     lastReviewed: '2026-08-26',
     reviewStatus: 'unverified',
     version: '1.0.0',
-    relatedSkills: ['us-private-offering-exemption', 'us-hsr-threshold-tester', 'global-obligation-extraction'],
+    relatedSkills: ['us-private-offering-exemption', 'us-hsr-threshold-tester', 'global-obligation-extraction', 'us-sec-cyber-8k-materiality-triage'],
     whatItDoes:
       'Takes a corporate event and works out where it might land in the disclosure system: an item requiring a current report, something for the next periodic report, a material contract to be filed, a risk factor or other disclosure that has become inaccurate, or nothing at all. It handles the two questions that actually decide the answer — whether the event is material, and when the clock started — as questions rather than assumptions, and it deliberately stops short of a filing conclusion where the facts are incomplete, because the cost of a wrong "no" and a wrong "yes" are both high.',
     whenToUse:
@@ -406,6 +406,90 @@ Open with the governing-law conclusion, the approving bodies and the most seriou
         'A Delaware venture-backed corporation proposes a preferred-stock financing led by a fund affiliated with one director, followed by a sale process in which that investor receives a different payout from common holders.',
       result:
         'A governing-document gate identifying separate preferred consent rights, an act-by-act approval matrix for the financing and sale, the affiliated director and differential consideration flagged for conflict and controller analysis, a special-committee and disclosure process mapped without promising cleansing, stockholder and filing steps sequenced to closing, and a ratification screen for an earlier option grant approved with an incorrect board count.',
+    },
+  },
+  {
+    id: 'us-sec-cyber-8k-materiality-triage',
+    name: 'Cyber Incident 8-K Materiality Record',
+    description: 'Structures the materiality record, escalation timeline and potential Item 1.05 Form 8-K workflow for a cyber incident.',
+    jurisdiction: 'us',
+    category: 'corporate',
+    tags: ['corporate-transactions', 'incident-response', 'disclosure', 'materiality', 'public-company', 'cybersecurity'],
+    sources: [
+      { citation: 'SEC rules on Cybersecurity Risk Management, Strategy, Governance, and Incident Disclosure, including Form 8-K Item 1.05 and Regulation S-K Item 106', authority: 'regulator', publisher: 'Securities and Exchange Commission', jurisdiction: 'us', url: 'https://www.sec.gov', note: 'In force as at 2026-09-16. A petition for rulemaking to rescind Item 1.05 was filed in May 2025; check its status before relying on the current requirement.' },
+      { citation: 'SEC staff statements and Compliance and Disclosure Interpretations on cybersecurity incident disclosure', authority: 'guidance', publisher: 'Securities and Exchange Commission', jurisdiction: 'us', url: 'https://www.sec.gov', note: 'Includes staff views on using Item 8.01 for incidents not yet determined to be material. Staff views are not rules.' },
+      { citation: 'Federal securities law on materiality as developed by the courts', authority: 'primary', publisher: 'United States courts', jurisdiction: 'us', note: 'Materiality is judged by whether there is a substantial likelihood that a reasonable investor would consider the information important, viewed in the total mix of information. It is a judgment for the company and its counsel.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['technology', 'financial-services', 'healthcare'],
+    relatedSkills: ['us-sec-disclosure-trigger', 'us-hipaa-baa-breach-assessor', 'us-regulatory-investigation-response'],
+    whatItDoes:
+      'Gives a public company’s incident, legal and disclosure teams a structured record for the securities-law question that runs alongside incident response: whether and when a cybersecurity incident has been determined to be material. It builds the escalation timeline from discovery, organises the quantitative and qualitative factors into a decision record for the people authorised to decide, maps the Item 1.05 content and the four-business-day clock that runs from a materiality determination, and addresses amendments, the national-security delay route and consistency with other disclosures. It supports the decision; it does not make it.',
+    whenToUse:
+      'From the moment a cybersecurity incident is escalated at a company with SEC reporting obligations, at each materiality review meeting, and when preparing or amending an Item 1.05 or Item 8.01 filing. Not for: non-reporting private companies, breach notification to individuals or state regulators (use the relevant privacy skills), or technical incident response.',
+    inputs: [
+      { name: 'Incident facts', description: 'What happened, when it began, when it was discovered, systems and data affected, containment status and threat actor if known.', required: true },
+      { name: 'Company profile', description: 'Filer status, existing risk factor and Item 106 disclosures, and relevant business lines.', required: true },
+      { name: 'Escalation record', description: 'Who was told what and when, and who is authorised to make the materiality determination under the disclosure controls.', required: true },
+      { name: 'Impact information', description: 'Known and reasonably likely impacts: operations, customers, financial results, litigation, regulatory, reputational.' },
+      { name: 'Other obligations', description: 'Sector regulator, privacy, contractual and insurance notifications made or due.' },
+      { name: 'Law enforcement contact', description: 'Any engagement with federal law enforcement and any national-security or public-safety concern raised.' },
+    ],
+    outputs: [
+      { name: 'Scope check', description: 'Whether the company is subject to the rule and which form applies.' },
+      { name: 'Escalation timeline', description: 'Dated chronology from discovery through each review, highlighting any unexplained delay.' },
+      { name: 'Materiality decision record', description: 'Quantitative and qualitative factors, information gaps, and the decision owner — without a conclusion drafted for them.' },
+      { name: 'Filing clock', description: 'The four-business-day calculation from the date of any materiality determination.' },
+      { name: 'Draft disclosure outline', description: 'Item 1.05 content structure, or an Item 8.01 outline if the company elects to disclose voluntarily.' },
+      { name: 'Consistency review', description: 'Alignment with risk factors, Item 106, press statements and other notifications.' },
+      { name: 'Lawyer review list', description: 'The judgments reserved to securities counsel and the board or disclosure committee.' },
+    ],
+    prompt: `You are a US securities lawyer supporting a public company's disclosure committee through a cybersecurity incident.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+In force:
+- Form 8-K Item 1.05 and Regulation S-K Item 106 [CONFIRMED 2026-09-16, sec.gov].
+Pending:
+- A petition for rulemaking filed in May 2025 asks the SEC to rescind Item 1.05 [CONFIRMED that it was filed]. Its current status is [VERIFY]. Treat Item 1.05 as in force unless the SEC has acted.
+Guidance, not rules:
+- SEC staff statements, including the staff view that incidents not yet determined to be material may be disclosed under Item 8.01 rather than Item 1.05 [VERIFY current staff position].
+
+INPUTS
+- Incident: <what happened, start date, discovery date, systems and data affected, containment status, threat actor>
+- Company: <filer status, foreign private issuer or not, current risk factors and Item 106 disclosure, business lines affected>
+- Escalation record: <who was told what and when; who under the disclosure controls is authorised to determine materiality>
+- Impact information: <operations, customers, revenue, costs, litigation, regulatory, reputational — known and reasonably likely>
+- Other obligations: <regulators, privacy notifications, contracts, insurers>
+- Law enforcement: <any contact, and whether a national-security or public-safety concern has been raised>
+
+TASK
+1. SCOPE GATE. Confirm the company files reports with the SEC and whether it is a domestic filer or a foreign private issuer, since the form differs. If the company has no SEC reporting obligation, stop and redirect to the relevant privacy and contractual notification analysis.
+2. MISSING INFORMATION. List the facts not yet known that bear on materiality. State clearly that uncertainty about impact does not by itself justify postponing the materiality determination, while the absence of basic facts may legitimately mean a determination cannot yet be made. Record which of these applies and why.
+3. ESCALATION TIMELINE. Build a dated chronology: discovery, each escalation, each assessment meeting, and the information available at each point. The rule requires the materiality determination to be made without unreasonable delay after discovery [VERIFY exact wording]. Flag any gap in the chronology that the company would need to explain.
+4. MATERIALITY DECISION RECORD. Organise the factors for the decision-makers without deciding. Cover quantitative factors — costs of response and remediation, lost revenue, contractual and regulatory exposure, insurance position — and qualitative factors — harm to reputation and customer or vendor relationships, competitive harm, likelihood of litigation or regulatory investigation, the nature and sensitivity of data involved, operational disruption, and whether the incident is part of a series of related occurrences that may be material in the aggregate. For each factor, record what is known, what is unknown, and the source. Present considerations pointing each way. Leave the determination to the people authorised to make it under the disclosure controls, and record who they are.
+5. FILING CLOCK. If and when a materiality determination is made, calculate the Item 1.05 deadline of four business days from the determination, showing the date of determination, excluded days and the resulting deadline [VERIFY business-day computation]. State that the clock runs from the determination, not from discovery.
+6. DELAY ROUTE. Explain the limited delay available where the US Attorney General determines that disclosure poses a substantial risk to national security or public safety and notifies the SEC. State that the company cannot invoke this itself and must go through the Department of Justice process [VERIFY current procedure and permitted delay periods].
+7. DISCLOSURE CONTENT. Outline the Item 1.05 content: the material aspects of the nature, scope and timing of the incident, and the material impact or reasonably likely material impact, including on financial condition and results of operations. Note that detailed technical information that would impede response or remediation is not required. Identify information not yet available and the obligation to file an amendment within the prescribed period once it becomes available [VERIFY]. Where no materiality determination has been made but the company wishes to disclose, outline an Item 8.01 alternative and explain the distinction.
+8. CONSISTENCY REVIEW. Compare the draft against existing risk factors (which should not describe as hypothetical a risk that has materialised), Item 106 disclosure, press releases, customer notifications, regulator filings and insurer notices. Identify inconsistencies.
+9. OTHER DISCLOSURE AND TRADING CONTROLS. Flag the need to consider trading restrictions for insiders who know of the incident, Regulation FD in communications with analysts or investors, and periodic report disclosure.
+10. LAWYER REVIEW TRIGGERS. Escalate: the materiality determination itself; any decision not to file; any delay between discovery and determination; any request for a national-security delay; any disclosure that may be inconsistent with prior statements; and any trading by insiders during the incident.
+
+RULES
+- Do not determine materiality. Build the record and identify the considerations; the determination belongs to the authorised decision-makers advised by securities counsel.
+- Distinguish the discovery date from the determination date throughout.
+- Label each point RULE, STAFF GUIDANCE, CASE LAW or BEST PRACTICE.
+- Do not speculate about impacts in draft disclosure. Separate known facts from reasonably likely impacts and from unknowns.
+- Treat the pending rescission petition as pending, not as law.
+
+OUTPUT FORMAT
+Open with the scope conclusion, the current status of the materiality determination, and the next decision point with its date. Then the sections above, with the chronology and materiality factors as tables. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A listed software company discovers ransomware on a subset of production systems on a Friday; the incident team believes customer data may have been accessed but has not confirmed it.',
+      result:
+        'Scope confirmed for a domestic filer, a dated escalation timeline showing a four-day gap before the disclosure committee was convened and flagged for explanation, a materiality decision record separating confirmed operational impact from unconfirmed data access, the Item 1.05 clock explained as running only from a determination, an Item 8.01 outline prepared as an alternative, and a risk factor still describing ransomware as hypothetical flagged for update.',
     },
   },
 ];

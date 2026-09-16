@@ -172,4 +172,80 @@ Nine sections matching the tasks above. Section 2 is a table with the columns in
         'A normalised register splitting 140 extracted clauses into 210 trackable obligations, a notice-period schedule surfacing four auto-renewal windows closing within six weeks and one already missed, an ownership map assigning 180 obligations to named roles and surfacing 30 that cannot be assigned from the material supplied, dependency chains around two contracts whose service credits depend on a reporting obligation nobody owns, and a gap list of eleven obligations whose dates cannot be computed because the referenced schedules were not in the data room.',
     },
   },
+  {
+    id: 'us-cfpb-complaint-response-drafter',
+    name: 'CFPB Complaint Response Drafter',
+    description: 'Drafts a CFPB portal complaint response with deadline tracking, account review and remediation records.',
+    jurisdiction: 'us',
+    category: 'regulatory',
+    tags: ['financial-services', 'drafting', 'consumer-complaints', 'response-drafting', 'regulatory-notice', 'remediation'],
+    sources: [
+      { citation: 'Consumer Financial Protection Act of 2010, including the complaint-response provisions', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.congress.gov', note: 'Establishes the Bureau’s consumer complaint function and the expectation that covered companies respond.' },
+      { citation: 'CFPB company guidance on the consumer complaint process', authority: 'regulator', publisher: 'Consumer Financial Protection Bureau', jurisdiction: 'us', url: 'https://www.consumerfinance.gov', note: 'Companies are expected to respond within 15 calendar days and, where the response is not final, to give a final response within 60 calendar days. Complaints are published after the company responds or after 15 days, whichever is first. Confirmed as at 2026-09-16.' },
+      { citation: 'Federal consumer financial laws applicable to the product', authority: 'primary', publisher: 'United States Congress; Consumer Financial Protection Bureau', jurisdiction: 'us', url: 'https://www.ecfr.gov', note: 'Complaints often raise statutory error-resolution or dispute obligations with their own separate deadlines, such as those for credit reporting disputes or electronic fund transfer errors.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['financial-services'],
+    relatedSkills: ['us-regulatory-investigation-response', 'us-subpoena-triage', 'global-obligation-extraction'],
+    whatItDoes:
+      'Takes a consumer complaint forwarded through the CFPB portal and turns it into a complete, accurate, tailored response on time. It calculates the portal deadlines, identifies whether the complaint also triggers a separate statutory dispute or error-resolution duty with its own clock, builds the account and document checklist for the facts, drafts a factual response that addresses each issue raised, records any remediation, and flags complaints that signal a systemic problem or a matter for legal or compliance escalation.',
+    whenToUse:
+      'On receipt of each complaint through the CFPB company portal, when a response in progress needs to be finalised, and when reviewing complaint trends for systemic issues. Not for: responding to a CFPB civil investigative demand or supervisory request (use the regulatory investigation or subpoena skills), or complaints received directly from a state regulator.',
+    inputs: [
+      { name: 'Complaint', description: 'The complaint text, product and issue categories, and the date it was sent to the company.', required: true },
+      { name: 'Account records', description: 'Account history, communications, notes and transaction records relevant to the issues raised.', required: true },
+      { name: 'Product and law', description: 'The product involved and any statutory dispute or error-resolution process that may apply.' },
+      { name: 'Prior contacts', description: 'Earlier complaints, disputes or calls from the same consumer.' },
+      { name: 'Remediation authority', description: 'What the responding team is authorised to offer or correct.' },
+    ],
+    outputs: [
+      { name: 'Deadline tracker', description: 'The 15-day and 60-day portal dates and any separate statutory deadlines.' },
+      { name: 'Issue breakdown', description: 'Each issue the consumer raised, with the finding on each.' },
+      { name: 'Account and document checklist', description: 'What must be reviewed to answer each issue accurately.' },
+      { name: 'Draft response', description: 'A factual, plain-language response addressing every issue.' },
+      { name: 'Remediation record', description: 'Corrections, refunds or credits made, with dates and approvals.' },
+      { name: 'Escalation flags', description: 'Systemic, legal, fair-lending, UDAAP or regulatory issues requiring escalation.' },
+    ],
+    prompt: `You are a US consumer financial services compliance lawyer preparing a response to a consumer complaint received through the CFPB company portal.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+- The complaint process is operating. Companies are expected to respond within 15 calendar days and, where that response is not final, to give a final response within 60 calendar days [CONFIRMED, consumerfinance.gov].
+- A complaint is published in the public database after the company responds or after 15 calendar days, whichever comes first [CONFIRMED].
+- Separate statutory dispute and error-resolution deadlines may apply to the same facts [VERIFY per product].
+
+INPUTS
+- Complaint: <text, product, issue categories, date sent to the company>
+- Account records: <history, communications, notes, transactions>
+- Product and law: <product; any statutory dispute or error-resolution process that may apply>
+- Prior contacts: <earlier complaints, disputes, calls>
+- Remediation authority: <what the team can offer or correct>
+
+TASK
+1. SCOPE GATE. Confirm this is a complaint forwarded through the CFPB portal. If it is a civil investigative demand, a supervisory request, or a state regulator complaint, stop and redirect.
+2. DEADLINES FIRST. Calculate the 15-calendar-day and 60-calendar-day portal dates from the date the complaint was sent to the company, showing the calculation. Then determine whether the complaint also constitutes a dispute or error notice under a statute applicable to the product — for example a credit reporting dispute, an electronic fund transfer error, or a billing error — and, if so, calculate that separate deadline and treat the earlier of the two as controlling [VERIFY each statutory period].
+3. MISSING INFORMATION. List the records needed to answer each issue and any that are missing. Do not draft a response that asserts facts the records do not support.
+4. ISSUE BREAKDOWN. Separate every distinct issue the consumer raises, including implied ones. For each, record what the records show, what the company did, whether it followed its own procedures and applicable law, and the finding.
+5. ACCOUNT AND DOCUMENT CHECKLIST. For each issue, list the specific records to review and who holds them.
+6. DRAFT RESPONSE. Write a response that is complete, accurate and tailored. Address every issue in plain language; explain what the company found and why; state what it has done or will do; avoid boilerplate, legal jargon, and statements that blame the consumer; do not disclose information about third parties; and give contact details for follow-up. If the response is not final, say what remains and when a final response will follow.
+7. REMEDIATION RECORD. Where an error is found, record the correction, any refund or credit, the date, the approver, and whether the same error may have affected other consumers.
+8. SYSTEMIC REVIEW. Assess whether the complaint indicates a broader issue: the same error affecting others, a policy or system defect, a pattern in recent complaints, or a potential fair lending, UDAAP or regulatory concern.
+9. LAWYER AND COMPLIANCE REVIEW TRIGGERS. Escalate: any potential violation of law; potential harm to other consumers; allegations of discrimination, deception or unfair practices; threats of litigation; complaints involving servicemembers, older adults or other protected situations; and any response the consumer is likely to dispute publicly.
+
+RULES
+- Meet the earlier of the portal and statutory deadlines.
+- Never assert a fact the records do not support.
+- Label each point LAW, CFPB PROCESS EXPECTATION, INTERNAL POLICY or BEST PRACTICE.
+- Keep the response factual and respectful; the response and complaint may be published.
+
+OUTPUT FORMAT
+Open with the controlling deadline and any escalation flag. Then the sections above, with the issue breakdown and deadline tracker as tables, and the draft response as usable text. Close with: Assumptions made; [VERIFY] points; Lawyer and compliance review items.`,
+    example: {
+      scenario:
+        'A card issuer receives a portal complaint alleging an unauthorised charge was never investigated and that a late fee was imposed while the dispute was pending.',
+      result:
+        'Portal deadlines calculated, the complaint also identified as a billing error notice triggering a separate statutory timeline that was earlier and therefore controlling, account records showing the dispute was logged but not investigated, a draft response acknowledging the error with the fee reversed and the charge credited, a remediation record, and a systemic flag because the same queue backlog affected other disputes that month.',
+    },
+  },
 ];
