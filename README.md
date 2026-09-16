@@ -154,8 +154,8 @@ src/
 ├── data/
 │   ├── skills/             # The registry, one file per jurisdiction
 │   │   ├── index.ts        # Combines them, id aliases, dev-time checks
-│   │   ├── global|uk|eu|ca|au|sg|cross.ts
-│   │   └── us/             # The largest pack, split by practice area
+│   │   ├── global|ca|sg|cross.ts
+│   │   └── us/ uk/ eu/ au/ # Larger packs, split by practice area
 │   ├── safety.ts           # Shared legal-safety block + composePrompt()
 │   ├── jurisdictions.ts    # Jurisdiction registry
 │   ├── categories.ts       # Practice-area registry
