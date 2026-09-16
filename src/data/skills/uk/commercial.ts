@@ -21,7 +21,7 @@ export const ukCommercialSkills: Skill[] = [
     reviewStatus: 'unverified',
     version: '1.0.0',
     industries: ['retail-consumer', 'technology'],
-    relatedSkills: ['au-acl-unfair-terms', 'au-consumer-guarantees-checker', 'us-auto-renewal-auditor'],
+    relatedSkills: ['au-acl-unfair-terms', 'au-consumer-guarantees-checker', 'us-auto-renewal-auditor', 'uk-dmcca-subscription-readiness'],
     whatItDoes:
       'Screens consumer-facing terms against the two things that decide whether they hold: the statutory rights in goods, services and digital content that cannot be excluded at all, and the fairness test that applies to everything outside the core bargain. It works through the grey list of terms presumed suspect, applies the transparency requirement separately because an unclear term fails on that ground alone, checks the pre-contract information and cancellation rules that apply to distance selling, and rewrites the terms that fail so they keep their commercial purpose.',
     whenToUse:
@@ -83,6 +83,81 @@ Open with the terms that are void or highest risk and why. Then the sections abo
         'A subscription box retailer selling online reviews its terms, returns policy and renewal flow before a growth campaign.',
       result:
         'A fourteen-day returns window found to understate the statutory remedies and a no-refunds-on-sale-items clause identified as not binding, a unilateral price variation term matched to the grey list with no notice or exit right, the cancellation information found not to have been given in durable form so the cancellation period was extended, a pre-ticked insurance add-on flagged as an additional charge not expressly agreed, and redrafted terms supplied for each.',
+    },
+  },
+  {
+    id: 'uk-dmcca-subscription-readiness',
+    name: 'Subscription Contracts Readiness Tracker',
+    description: 'Tracks readiness for the UK subscription contracts regime, which is not yet in force, and its secondary legislation.',
+    jurisdiction: 'uk',
+    category: 'contracts',
+    tags: ['contract-lifecycle', 'programme-design', 'subscriptions', 'consumer-protection', 'renewals', 'cancellation'],
+    sources: [
+      { citation: 'Digital Markets, Competition and Consumers Act 2024, Part 4 Chapter 2 (subscription contracts)', authority: 'primary', publisher: 'The National Archives', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Sets the framework for subscription contracts. Not yet in force; secondary legislation is required to implement it. Confirmed as at 2026-09-16.' },
+      { citation: 'Government response to the consultation on implementing the subscription contracts regime', authority: 'guidance', publisher: 'Department for Business and Trade', jurisdiction: 'uk', url: 'https://www.gov.uk', note: 'Published April 2026. States the rules are expected to come into force in spring 2027. A policy statement, not law.' },
+      { citation: 'Consumer Contracts (Information, Cancellation and Additional Charges) Regulations 2013 and Consumer Rights Act 2015', authority: 'primary', publisher: 'The National Archives', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'The rules that apply to subscriptions today, until the new regime commences.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer', 'technology'],
+    relatedSkills: ['uk-consumer-rights-checker', 'us-auto-renewal-auditor', 'uk-fca-consumer-duty-outcome-assessment'],
+    whatItDoes:
+      'Tracks an organisation’s readiness for the UK subscription contracts regime as a readiness exercise, not a compliance audit, because the regime is not yet in force. It first confirms the current commencement status and the state of the secondary legislation, then maps the framework’s building blocks — pre-contract information, reminder and cooling-off notices, the end-of-contract and renewal notices, and straightforward exit — against the organisation’s current subscription journeys, and keeps each requirement labelled by status: enacted but not commenced, proposed in consultation, or confirmed in secondary legislation.',
+    whenToUse:
+      'When planning product, billing and engineering work for subscription journeys ahead of commencement, when secondary legislation or guidance is published, and when a subscription offer is being redesigned. Not for: auditing current compliance of subscription terms today (use the Consumer Rights Act checker) or US automatic renewal laws.',
+    inputs: [
+      { name: 'Subscription offers', description: 'Each subscription product, pricing, free or discounted trials, contract length and renewal pattern.', required: true },
+      { name: 'Journeys', description: 'Sign-up, reminders, renewal, price change and cancellation journeys, with screenshots or descriptions.', required: true },
+      { name: 'Current notices', description: 'Existing pre-contract information, renewal and cancellation communications.' },
+      { name: 'Systems constraints', description: 'Billing, CRM and messaging systems and their lead times for change.' },
+      { name: 'Latest official material', description: 'Any secondary legislation, draft regulations or guidance the organisation has seen.' },
+    ],
+    outputs: [
+      { name: 'Status check', description: 'Commencement status and the state of secondary legislation on the review date, with sources.' },
+      { name: 'Requirement register', description: 'Each requirement labelled enacted, proposed or confirmed, with its source.' },
+      { name: 'Journey gap map', description: 'Each journey against each requirement, with the change needed.' },
+      { name: 'Implementation checklist', description: 'Changes sequenced by system lead time and dependency.' },
+      { name: 'Current-law compliance note', description: 'Obligations that already apply today under existing consumer law.' },
+      { name: 'Monitoring triggers', description: 'Official publications that should prompt reassessment.' },
+    ],
+    prompt: `You are a UK consumer law specialist preparing an organisation for the subscription contracts regime under the Digital Markets, Competition and Consumers Act 2024.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+- NOT YET IN FORCE. The subscription contracts provisions are enacted but require secondary legislation, and are expected to come into force in spring 2027 according to the government's April 2026 consultation response [CONFIRMED, gov.uk]. That expected date is a policy statement, not law.
+- Until commencement, subscriptions are governed by existing consumer law, including the Consumer Contracts Regulations 2013, the Consumer Rights Act 2015 and the unfair commercial practices provisions now in the 2024 Act [VERIFY which provisions apply to the facts].
+- This skill is a readiness tool. Never describe a subscription regime obligation as currently enforceable unless re-verification shows commencement.
+
+INPUTS
+- Offers: <products, pricing, trials, contract length, renewal>
+- Journeys: <sign-up, reminders, renewal, price change, cancellation>
+- Current notices: <pre-contract information, renewal and cancellation communications>
+- Systems: <billing, CRM, messaging, lead times>
+- Latest official material: <regulations, drafts, guidance seen>
+
+TASK
+1. STATUS CHECK FIRST. Before anything else, check official sources for commencement regulations, made or draft secondary legislation, and guidance. Record the date checked and what was found. If the regime has commenced, say so prominently and treat this as a compliance audit, noting the commencement and transitional provisions.
+2. SCOPE. Identify which offers are likely to be subscription contracts under the Act's definition, including contracts with automatic renewal, free or discounted trials that roll into paid terms, and contracts that continue until cancelled, and any exclusions [VERIFY definitions and exclusions against the enacted text and regulations].
+3. MISSING INFORMATION. Identify journeys not described and systems constraints unknown. Lead times usually decide whether readiness is achievable.
+4. REQUIREMENT REGISTER. Build a register of the regime's building blocks: pre-contract information; reminder notices before renewal or trial end; cooling-off rights and notices, including on renewal; end-of-contract or renewal notices; and the requirement that consumers can exit straightforwardly without unnecessary hurdles. For each, label the status as ENACTED NOT COMMENCED, PROPOSED IN CONSULTATION, or CONFIRMED IN SECONDARY LEGISLATION, with its source. Do not supply detailed timings, content or formats that have not been confirmed; mark them [VERIFY — awaiting secondary legislation].
+5. JOURNEY GAP MAP. Map each journey against each requirement, describe the change needed and its dependency on unconfirmed detail.
+6. IMPLEMENTATION CHECKLIST. Sequence changes by lead time, separating no-regret changes that are sensible under current law from changes that should wait for final regulations.
+7. CURRENT-LAW COMPLIANCE NOTE. Separately, flag subscription practices that may already be problematic under current consumer law, such as hard-to-cancel journeys or unclear renewal terms.
+8. MONITORING TRIGGERS. List the official publications that should trigger reassessment: commencement regulations, final secondary legislation, and regulator guidance.
+9. LAWYER REVIEW TRIGGERS. Escalate: publication of secondary legislation; any practice that may already breach current law; uncertain scope for mixed or business-to-business offers; and cross-border offers.
+
+RULES
+- Label every obligation by status. Never present an uncommenced or proposed requirement as live law.
+- Label each item ENACTED NOT COMMENCED, PROPOSED, CONFIRMED IN REGULATIONS, CURRENT LAW or BEST PRACTICE.
+- Do not invent notice timings, content or penalties not yet confirmed.
+
+OUTPUT FORMAT
+Open with the status check result and the date checked. Then the sections above, with the requirement register and journey gap map as tables. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A streaming service with monthly plans and a seven-day free trial plans its 2027 engineering roadmap for subscription changes.',
+      result:
+        'Status check recording that the regime is not in force and secondary legislation is pending, the trial-to-paid and monthly plans identified as likely subscription contracts, a requirement register labelling reminder and cooling-off notices as enacted but not commenced with detailed timings awaiting regulations, a journey gap map showing cancellation requires a phone call, that change sequenced as a no-regret fix because hard-to-cancel journeys already carry risk under current law, and monitoring triggers set for the regulations.',
     },
   },
 ];

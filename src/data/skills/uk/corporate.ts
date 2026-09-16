@@ -21,7 +21,7 @@ export const ukCorporateSkills: Skill[] = [
     reviewStatus: 'unverified',
     version: '1.0.0',
     industries: ['financial-services', 'technology', 'professional-services'],
-    relatedSkills: ['uk-nsi-transaction-screener', 'uk-bribery-act-reviewer', 'global-draft-builder'],
+    relatedSkills: ['uk-nsi-transaction-screener', 'uk-bribery-act-reviewer', 'global-draft-builder', 'uk-companies-house-idv-psc-tracker'],
     whatItDoes:
       'Turns a proposed action by a UK company into a sequenced authority, approval, capital-maintenance, documentation and filing plan. It reads the articles and shareholder arrangements alongside the Companies Act, tests director conflicts and member approvals, and covers the statutory books, Companies House filings, people with significant control and identity-verification steps that make an otherwise valid transaction operationally complete. It distinguishes public and private company rules and does not assume that filing cures a defective approval.',
     whenToUse:
@@ -163,6 +163,84 @@ Open with the provisional route, completion restriction and most important missi
         'A foreign investor will acquire 30% of a UK artificial-intelligence company, appoint two of five directors and receive vetoes over its product roadmap and licensing of dual-use models.',
       result:
         'Each share, voting and governance trigger mapped; the target activity tested against the current technical definitions rather than its AI label; mandatory and wider call-in routes kept separate; the completion restriction and interim-control risk identified; a notification evidence pack prepared; and NSI conditions precedent, cooperation rights and long-stop assumptions added to the deal plan.',
+    },
+  },
+  {
+    id: 'uk-companies-house-idv-psc-tracker',
+    name: 'Companies House IDV & PSC Tracker',
+    description: 'Tracks identity verification status and deadlines for directors, PSCs and officers across a UK group.',
+    jurisdiction: 'uk',
+    category: 'corporate',
+    tags: ['corporate-transactions', 'extraction', 'companies-house', 'statutory-filings', 'identity-verification', 'corporate-governance'],
+    sources: [
+      { citation: 'Economic Crime and Corporate Transparency Act 2023 and its commencement regulations', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Introduces identity verification for directors, people with significant control and others. Provisions commence in stages; several categories are not yet live.' },
+      { citation: 'Companies Act 2006, as amended', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Relied on for the confirmation statement, registers and PSC regime into which verification is integrated.' },
+      { citation: 'Companies House guidance on verifying identity', authority: 'regulator', publisher: 'Companies House', jurisdiction: 'uk', url: 'https://www.gov.uk', note: 'Identity verification became a legal requirement from 18 November 2025, followed by a 12-month transition period for existing directors and PSCs. Corporate directors, corporate members of LLPs and officers of corporate PSCs are to follow later. Confirmed as at 2026-09-16.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['uk-companies-act-corporate-actions', 'uk-nsi-transaction-screener', 'global-obligation-extraction'],
+    whatItDoes:
+      'Builds and maintains a group-wide register of every individual who must verify their identity with Companies House — directors, PSCs, LLP members and presenters — against each entity they are connected to, and calculates when each person’s verification is due. It separates obligations already live from categories scheduled to commence later, ties director deadlines to each company’s confirmation statement date and PSC deadlines to the rules for their appointed day, and flags people who are overdue, people connected to many entities, and appointments that cannot proceed without a verified identity.',
+    whenToUse:
+      'When mapping a group’s verification position for the first time, before each confirmation statement, when appointing directors or registering PSCs, after an acquisition brings in new entities, and when later commencement stages switch on new categories. Not for: planning the approvals and filings for a corporate transaction (use the corporate actions planner) or verifying anyone’s identity.',
+    inputs: [
+      { name: 'Entity list', description: 'Each company and LLP in the group with registered number and confirmation statement date.', required: true },
+      { name: 'People list', description: 'Directors, PSCs, LLP members and regular presenters for each entity, with dates of birth month where relevant.', required: true },
+      { name: 'Verification status', description: 'Who has verified and holds a personal code, and who has not.' },
+      { name: 'Corporate officers', description: 'Corporate directors, corporate LLP members and corporate PSCs with their relevant officers.' },
+      { name: 'Planned changes', description: 'Upcoming appointments, resignations and PSC changes.' },
+    ],
+    outputs: [
+      { name: 'Obligation status map', description: 'Which verification obligations are live and which are scheduled, with sources checked.' },
+      { name: 'Person-entity register', description: 'Every individual against every entity and role, with verification status.' },
+      { name: 'Deadline calendar', description: 'Each person’s due date, how it was calculated, and the filing it is tied to.' },
+      { name: 'Exceptions report', description: 'Overdue, unknown and high-connection individuals, and blocked appointments.' },
+      { name: 'Communications plan', description: 'Messages to individuals explaining what they must do and by when.' },
+      { name: 'Data handling note', description: 'How personal codes and identity details must be protected.' },
+    ],
+    prompt: `You are a UK company secretarial specialist tracking identity verification obligations across a corporate group.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+Live:
+- Identity verification a legal requirement from 18 November 2025, followed by a 12-month transition period for existing directors and PSCs [CONFIRMED, gov.uk].
+- Existing directors confirm verification when filing the company's next confirmation statement during the transition [CONFIRMED].
+- PSCs have an appointed day followed by a 14-day period to verify. For PSCs who are also directors this is generally linked to the confirmation statement; for PSCs who are not directors the window starts from their birth month [CONFIRMED; VERIFY edge cases].
+Scheduled, not yet live:
+- Verification for corporate directors, corporate members of LLPs, officers of corporate PSCs and limited partnerships [CONFIRMED as later; VERIFY current commencement status].
+
+INPUTS
+- Entities: <each company or LLP, registered number, confirmation statement date>
+- People: <directors, PSCs, LLP members, presenters, per entity; birth month for non-director PSCs>
+- Verification status: <verified with personal code / not verified / unknown>
+- Corporate officers: <corporate directors, corporate LLP members, corporate PSCs and their officers>
+- Planned changes: <appointments, resignations, PSC changes>
+
+TASK
+1. SCOPE GATE. Confirm each entity is registered at Companies House and identify its type. Overseas entities and limited partnerships follow different or later rules; separate them.
+2. STATUS CHECK. Before calculating any date, confirm on official Companies House guidance which categories are live and which are scheduled on the date of the review. Record the date checked. Never apply a scheduled obligation as if it were live.
+3. MISSING INFORMATION. Identify missing confirmation statement dates, missing birth months for non-director PSCs, and unknown verification status. Treat unknown status as not verified for planning purposes.
+4. PERSON-ENTITY REGISTER. Build a register with a row per person per entity and role. Consolidate each individual across entities, since one verification serves all their roles but each role may carry its own deadline.
+5. DEADLINE CALENDAR. For each unverified person in a live category, calculate the due date and show the calculation: for existing directors, by reference to the entity's next confirmation statement within the transition period; for PSCs, from the appointed day plus the 14-day window under the applicable rule; for new appointments, whether verification is required before or at appointment [VERIFY current rules for new appointments]. Where a person has several roles, show the earliest deadline.
+6. EXCEPTIONS REPORT. Flag overdue individuals, unknown status, people connected to many entities, corporate officers awaiting later commencement, and planned appointments that will be blocked or filings that will be rejected without verification.
+7. COMMUNICATIONS PLAN. Draft short messages to individuals stating what they must do, by when, and how. Do not ask anyone to send identity documents or personal codes to the company by insecure means.
+8. DATA HANDLING. Treat personal codes and identity information as sensitive. Specify that personal codes must not be circulated in spreadsheets or email, and define who may hold them.
+9. LAWYER REVIEW TRIGGERS. Escalate: any individual refusing or unable to verify; overdue directors at entities with imminent filings; possible offences for acting without verification; PSC status disputes; and entities where the PSC position itself is uncertain.
+
+RULES
+- Separate live from scheduled obligations everywhere.
+- Label each item LAW, COMPANIES HOUSE GUIDANCE or BEST PRACTICE.
+- Never reproduce personal codes or identity documents in the output.
+- Do not state an offence or penalty consequence without verifying it.
+
+OUTPUT FORMAT
+Open with overdue individuals and the next three deadlines. Then the sections above, with the register, calendar and exceptions as tables. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A group company secretary maps verification for 40 UK subsidiaries with overlapping directors, several non-director PSCs, and two corporate directors.',
+      result:
+        'Live and scheduled categories separated with the corporate directors held on a watch list pending commencement, 23 individuals consolidated across 112 roles, each director’s deadline tied to the relevant confirmation statement with the earliest date shown for multi-entity directors, non-director PSC windows calculated from birth month, three overdue individuals flagged with a blocked appointment, and a communications plan that forbids circulating personal codes by email.',
     },
   },
 ];

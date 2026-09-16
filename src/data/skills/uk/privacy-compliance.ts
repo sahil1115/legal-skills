@@ -168,14 +168,14 @@ Open with the overall adequacy position and the three gaps that most weaken the 
     category: 'compliance',
     tags: ['programme-design', 'assessment', 'failure-to-prevent', 'fraud', 'adequate-procedures', 'anti-corruption', 'third-party-risk'],
     sources: [
-      { citation: 'Economic Crime and Corporate Transparency Act 2023', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Creates the failure to prevent fraud offence and its reasonable procedures defence, and reforms the identification doctrine for attributing criminal liability to bodies corporate. Commencement of individual provisions must be confirmed.' },
+      { citation: 'Economic Crime and Corporate Transparency Act 2023', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Creates the failure to prevent fraud offence and its reasonable procedures defence, and reforms the identification doctrine for attributing criminal liability to bodies corporate. The failure to prevent fraud offence came into force on 1 September 2025, confirmed as at 2026-09-16; other provisions commence separately.' },
       { citation: 'Home Office guidance on procedures to prevent fraud', authority: 'guidance', publisher: 'Home Office', jurisdiction: 'uk', url: 'https://www.gov.uk', note: 'The statutory guidance setting out the reasonable procedures principles. Persuasive rather than binding; reasonableness is ultimately decided by a court on the facts.' },
       { citation: 'Fraud Act 2006 and Theft Act 1968', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Relied on for the base fraud offences capable of triggering the corporate offence. The list of specified offences is closed and must be read from the current schedule.' },
       { citation: 'Deferred Prosecution Agreement Code of Practice', authority: 'regulator', publisher: 'Serious Fraud Office; Crown Prosecution Service', jurisdiction: 'uk', url: 'https://www.sfo.gov.uk', note: 'Relied on for the weight given to self-reporting, cooperation and the state of the compliance programme.' },
     ],
     lastReviewed: '2026-09-16',
     reviewStatus: 'unverified',
-    version: '1.0.0',
+    version: '1.1.0',
     industries: ['financial-services', 'professional-services', 'retail-consumer', 'technology'],
     relatedSkills: ['uk-bribery-act-reviewer', 'eu-whistleblowing-channel-checker', 'us-ofac-export-screener'],
     whatItDoes:
@@ -198,6 +198,10 @@ Open with the overall adequacy position and the three gaps that most weaken the 
       { name: 'Principle-by-principle grading', description: 'Each reasonable procedures principle rated against the evidence.' },
       { name: 'Identification doctrine exposure', description: 'Who counts as senior management, and the direct liability that carries no defence.' },
       { name: 'Gap register', description: 'Each gap with its exposure, the fix, an owner and a priority.' },
+      { name: 'Fraud risk register', description: 'Each scenario in which an associated person could commit a specified fraud for the organisation’s benefit, with its rating and controls.' },
+      { name: 'Remediation roadmap', description: 'Sequenced fixes with owners, dates and dependencies, ranked by contribution to the defence.' },
+      { name: 'Training and due-diligence requirements', description: 'Who must be trained on what, and the diligence each associated-person population requires.' },
+      { name: 'Governance evidence pack', description: 'The records that demonstrate reasonable procedures operated, organised for a prosecutor or court.' },
     ],
     prompt: `You are a UK corporate crime lawyer assessing an organisation against the failure to prevent fraud offence and the reformed identification doctrine.
 
@@ -227,6 +231,11 @@ TASK
 8. IDENTIFICATION DOCTRINE. Address the separate and broader reform. Attribution of criminal liability to a body corporate now extends to conduct by senior management, meaning those who play a significant role in decision-making about a substantial part of the organisation's activities or in the actual managing or organising of them. Explain that this is a functional test rather than a question of job title, and that it applies across a wide range of economic crime offences with no reasonable procedures defence available — so unlike the failure to prevent offence, there is nothing to rely on after the fact. Identify who is likely to fall within senior management here, including at divisional and subsidiary level, and assess the controls, delegated authorities and oversight around those individuals.
 9. DETECTION, INVESTIGATION AND SELF-REPORTING. Set out what happens on an allegation: escalation, preservation of evidence, how privilege is established over the investigation and how readily it is lost, and who decides. Then set out the self-reporting framework and the factors bearing on whether a deferred prosecution agreement is available, including the timing and genuineness of any report, the extent of cooperation, and the state of the programme both at the time of the conduct and now. Be clear that this decision requires specialist advice at the time and that the analysis here is a framework rather than a recommendation to report.
 10. GAP REGISTER. List each gap with the exposure it creates, the specific fix, an owner and a priority, ranked by contribution to the defence rather than by ease. Where an anti-bribery programme already exists, identify what can be extended and what genuinely cannot — the associated persons mapping and diligence usually transfer, while the risk assessment, the training content and the controls around representations to third parties generally do not.
+11. ARTEFACTS. Produce four working documents from the analysis above:
+   - FRAUD RISK REGISTER: one row per scenario in which an associated person could commit a specified fraud intended to benefit the organisation or its clients, with the base offence, function, associated-person population, inherent rating, controls mapped, residual rating and owner.
+   - REMEDIATION ROADMAP: the gap register sequenced into phases with owners, dates and dependencies, ranked by contribution to the reasonable procedures defence.
+   - TRAINING AND DUE-DILIGENCE REQUIREMENTS: for each role and associated-person population, the training content — which must address fraud committed for the organisation, not only against it — and the diligence required before appointment and on refresh.
+   - GOVERNANCE EVIDENCE PACK: the index of records that would demonstrate the procedures operated at the time — senior management decisions and challenge, risk assessment versions and dates, control testing, training completion, diligence files, incident handling and review outcomes — with the owner of each record.
 
 RULES
 - Keep the direction of the fraud straight throughout. This offence concerns fraud intended to benefit the organisation, not fraud against it. Most existing controls address the wrong direction.
@@ -234,15 +243,174 @@ RULES
 - Do not assume an existing anti-bribery programme covers this. Identify precisely what transfers and what does not.
 - Treat the identification doctrine as a separate exposure with no defence, and do not let the reasonable procedures analysis imply otherwise.
 - The guidance is persuasive, not binding, and reasonableness is decided by a court on the facts. Do not state that following the principles guarantees the defence.
-- Mark size thresholds, the schedule of specified offences, commencement and penalty levels [VERIFY].
+- Mark size thresholds, the schedule of specified offences and penalty levels [VERIFY]. The offence has been in force since 1 September 2025 [CONFIRMED 2026-09-16].
 
 OUTPUT FORMAT
-Open with whether the offence applies, the overall adequacy position and the three gaps that most weaken the defence. Then the sections above, with a grading table for the principles and the gap register as a prioritised table with owners.`,
+Open with whether the offence applies, the overall adequacy position and the three gaps that most weaken the defence. Then the sections above, with a grading table for the principles and the gap register as a prioritised table with owners, followed by the fraud risk register, remediation roadmap, training and due-diligence requirements, and governance evidence pack.`,
     example: {
       scenario:
         'A large software group with a commission-driven sales team and a network of resellers audits its fraud controls, having built its programme around preventing losses to the business.',
       result:
         'Size threshold met at group level with two subsidiaries in scope, the existing programme found to be oriented almost entirely at fraud against the organisation and therefore addressing the wrong exposure, resellers mapped as associated persons capable of making false performance representations to win deals, accelerator commissions identified as an unmitigated driver with no control linking incentive to the accuracy of statements made to customers, divisional heads assessed as likely senior management for the identification doctrine where no defence is available, and a gap register ranked by contribution to the defence.',
+    },
+  },
+  {
+    id: 'uk-sar-exemption-triage',
+    name: 'UK SAR Exemption & Response Triage',
+    description: 'Runs a UK subject access request from clock and search through exemptions, redaction and the response package.',
+    jurisdiction: 'uk',
+    category: 'privacy',
+    tags: ['data-protection', 'review', 'uk-gdpr', 'ico', 'subject-access', 'redaction', 'personal-data'],
+    sources: [
+      { citation: 'UK General Data Protection Regulation, Article 15 and related provisions', authority: 'primary', publisher: 'The National Archives', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'The domestic right of access, as amended. It is not the EU GDPR and diverges from it.' },
+      { citation: 'Data Protection Act 2018, including Schedules 2 to 4', authority: 'primary', publisher: 'The National Archives', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'The UK exemptions and restrictions that may apply to subject access.' },
+      { citation: 'Data (Use and Access) Act 2025', authority: 'primary', publisher: 'The National Archives', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Makes explicit that searches need only be reasonable and proportionate and provides a stop-the-clock rule while clarification is sought. All data protection provisions in force by 19 June 2026. Confirmed as at 2026-09-16.' },
+      { citation: 'ICO guidance on the right of access', authority: 'regulator', publisher: 'Information Commissioner’s Office', jurisdiction: 'uk', url: 'https://ico.org.uk' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['global-data-rights-request-handler', 'uk-gdpr-breach-assessor', 'uk-employment-tribunal-risk'],
+    whatItDoes:
+      'Works a UK subject access request end to end: confirming it is a valid request, fixing the clock including any stop-the-clock pause and extension, defining a reasonable and proportionate search, then working through the exemptions that are the hard part — legal professional privilege, management forecasts, negotiations, confidential references, crime and taxation, and the handling of third-party information. It produces a redaction log with a reason for every redaction and a response package that tells the requester what they are entitled to be told, including when information has been withheld.',
+    whenToUse:
+      'On receipt of any UK subject access request, especially one from a current or former employee, one connected to a dispute, or one that will require extensive searches or third-party redactions. Not for: requests under EU, US or other regimes (use the global rights handler) or erasure, rectification and objection requests.',
+    inputs: [
+      { name: 'The request', description: 'The request as received, the date received and any clarification exchanged.', required: true },
+      { name: 'Requester context', description: 'Who the requester is, their relationship to the organisation, and any dispute or litigation.', required: true },
+      { name: 'Identity position', description: 'What is known about identity and whether verification is reasonably needed.' },
+      { name: 'Data landscape', description: 'Systems, mailboxes, messaging tools and paper files likely to hold the requester’s data.' },
+      { name: 'Candidate documents', description: 'The documents or extracts found, with notes on privilege, third parties and sensitive content.' },
+    ],
+    outputs: [
+      { name: 'Validity and clock', description: 'Whether the request is valid, the due date, any pause and any extension with its justification.' },
+      { name: 'Search plan', description: 'The reasonable and proportionate search, with its scope and the reasons for its limits.' },
+      { name: 'Exemption analysis', description: 'Each exemption considered, its conditions, and whether it applies to specific material.' },
+      { name: 'Third-party information decisions', description: 'Consent, redaction or disclosure decisions with the balancing reasoning.' },
+      { name: 'Redaction log', description: 'Every redaction or withholding with its ground.' },
+      { name: 'Response package', description: 'The cover letter with the supplementary information required, and the disclosure set.' },
+      { name: 'Lawyer review list', description: 'Privilege, litigation-linked and contested decisions.' },
+    ],
+    prompt: `You are a UK data protection lawyer handling a subject access request under the UK GDPR and the Data Protection Act 2018, as amended by the Data (Use and Access) Act 2025.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+In force:
+- Right of access under the UK GDPR and exemptions in the Data Protection Act 2018 [CONFIRMED].
+- Data (Use and Access) Act 2025 data protection provisions, all in force by 19 June 2026, including the express requirement that searches be reasonable and proportionate and the stop-the-clock rule while clarification is reasonably required [CONFIRMED, gov.uk and ico.org.uk].
+- Response period of one month, extendable where requests are complex or numerous [VERIFY extension length and conditions against the amended text].
+
+INPUTS
+- Request: <text, date received, clarification exchanged>
+- Requester: <identity, relationship, any dispute or litigation>
+- Identity: <what is known; whether verification is reasonably needed>
+- Data landscape: <systems, mailboxes, messaging, paper files>
+- Candidate documents: <documents found, with privilege, third-party and sensitivity notes>
+
+TASK
+1. SCOPE GATE. Confirm the organisation is a controller subject to the UK GDPR for this data and that this is a request for the requester's own personal data. If the requester seeks other rights, or is outside UK scope, redirect. Note that a request does not need to use particular words or be made to a particular person, and that a request motivated by a dispute is still a valid request.
+2. MISSING INFORMATION. Identify whether identity verification is reasonably needed and whether clarification is reasonably required. Do not demand verification or clarification as a delaying tactic.
+3. CLOCK. Calculate the due date from receipt, or from receipt of identity information reasonably requested. Apply the stop-the-clock rule only where clarification is reasonably required, record the pause and restart dates, and show the calculation. If extending, record the justification and the notice to the requester within the first month [VERIFY].
+4. SEARCH PLAN. Define a reasonable and proportionate search: systems, custodians, date range and search terms, with the reasons for each limit recorded. State that proportionality justifies limiting the search, not refusing the request, and that the reasoning must be documented.
+5. EXEMPTIONS. For each category of material, consider the exemptions and restrictions in the Data Protection Act 2018 that may apply — including legal professional privilege, confidential references, management forecasting, negotiations with the requester, crime and taxation, and any other applicable ground — and test each condition against the specific material. Apply exemptions document by document or passage by passage, never as a blanket. Record the ground for each. Consider whether a request is manifestly unfounded or excessive and set out the high bar that applies [VERIFY].
+6. THIRD-PARTY INFORMATION. Where disclosure would reveal information about another individual, decide whether that person has consented, whether it is reasonable to disclose without consent having regard to the relevant factors, or whether redaction is required. Record the reasoning, especially for colleagues' names and opinions in employment requests.
+7. REDACTION LOG. Log every redaction or withholding with the document, the passage and the ground.
+8. RESPONSE PACKAGE. Draft the cover letter giving the supplementary information the requester is entitled to — purposes, categories, recipients, retention, rights, source and the existence of automated decision-making — and state whether information has been withheld and on what general basis where appropriate. Assemble the disclosure set in an intelligible form.
+9. LAWYER REVIEW TRIGGERS. Escalate: any privilege claim; requests linked to litigation or a tribunal claim; reliance on manifestly unfounded or excessive; withholding a large proportion of material; sensitive third-party information; and any complaint to the ICO.
+
+RULES
+- Apply exemptions to specific material, never to the whole request.
+- Record the reason for every search limit, redaction and withholding.
+- Label each item LAW, ICO GUIDANCE or BEST PRACTICE.
+- Do not treat the requester's motive as a ground for refusal.
+
+OUTPUT FORMAT
+Open with the due date and whether any pause or extension applies. Then the sections above, with the search plan and redaction log as tables and the cover letter as usable text. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A former employee who has issued a tribunal claim makes a subject access request for all emails mentioning them over five years.',
+      result:
+        'Request confirmed valid despite the litigation motive, the clock calculated with a documented stop-the-clock pause for a reasonable clarification of date range, a proportionate search across named custodians with each limit recorded, privileged exchanges with the employment lawyers withheld passage by passage, colleague opinions balanced for third-party redaction with reasons logged, and a cover letter explaining that some information was withheld under specific exemptions.',
+    },
+  },
+  {
+    id: 'uk-modern-slavery-statement-builder',
+    name: 'UK Modern Slavery Statement Builder',
+    description: 'Builds the annual UK modern slavery statement workflow with risk mapping, effectiveness measures and sign-off.',
+    jurisdiction: 'uk',
+    category: 'compliance',
+    tags: ['programme-design', 'drafting', 'modern-slavery', 'supply-chain', 'third-party-risk', 'annual-reporting'],
+    sources: [
+      { citation: 'Modern Slavery Act 2015, section 54', authority: 'primary', publisher: 'The National Archives', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Requires a slavery and human trafficking statement each financial year, approved by the board and signed by a director, and published with a link on the homepage. The six content areas are currently listed as matters a statement may include.' },
+      { citation: 'Modern Slavery Act 2015 (Transparency in Supply Chains) Regulations 2015', authority: 'primary', publisher: 'The National Archives', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Sets the £36 million total turnover threshold.' },
+      { citation: 'Home Office statutory guidance, Transparency in supply chains: a practical guide', authority: 'guidance', publisher: 'Home Office', jurisdiction: 'uk', url: 'https://www.gov.uk', note: 'Updated 1 December 2025. Recommends publication within six months of financial year end. The government has announced future changes to reporting requirements that are not yet in effect. Confirmed as at 2026-09-16.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer', 'energy-infrastructure', 'professional-services'],
+    relatedSkills: ['us-uflpa-supply-chain-traceability', 'uk-bribery-act-reviewer', 'cross-four-regime-gap-analyzer'],
+    whatItDoes:
+      'Runs the annual UK modern slavery statement cycle: confirming whether the organisation must publish, collecting the year’s evidence, mapping supply chain risk, recording the actions taken and how their effectiveness was measured, and producing a statement plus the board approval, director signature and homepage publication steps the Act requires. It keeps the statutory requirements distinct from the statutory guidance and from announced reforms that have not yet taken effect.',
+    whenToUse:
+      'At the start of each annual reporting cycle, when a group crosses the turnover threshold, when preparing a group statement covering several entities, and when reviewing last year’s statement for improvement. Not for: import detention under US forced labour law (use the UFLPA skill) or Australian modern slavery reporting.',
+    inputs: [
+      { name: 'Organisation profile', description: 'Total turnover, financial year end, group structure and entities carrying on business in the UK.', required: true },
+      { name: 'Supply chain data', description: 'Suppliers by category, country and spend, and any higher-risk sectors or services.', required: true },
+      { name: 'Actions and evidence', description: 'Policies, due diligence, audits, training, remediation and grievance activity during the year.' },
+      { name: 'Prior statement', description: 'Last year’s statement and any commitments made in it.' },
+      { name: 'Governance', description: 'Board or equivalent body, and who will approve and sign.' },
+    ],
+    outputs: [
+      { name: 'Obligation check', description: 'Whether the organisation must publish, and which entities the statement covers.' },
+      { name: 'Risk map', description: 'Operations and supply chain risks by sector, geography and relationship.' },
+      { name: 'Actions and effectiveness record', description: 'What was done and how effectiveness was measured against indicators.' },
+      { name: 'Prior commitments review', description: 'Last year’s commitments and progress against each.' },
+      { name: 'Draft statement', description: 'A statement addressing the recommended content areas with specifics.' },
+      { name: 'Approval and publication checklist', description: 'Board approval, director signature, homepage link and timing.' },
+    ],
+    prompt: `You are a UK business and human rights lawyer preparing an organisation's annual modern slavery statement.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+Law in force:
+- Section 54 of the Modern Slavery Act 2015: a commercial organisation carrying on business in the UK with total turnover of at least £36 million must publish a slavery and human trafficking statement for each financial year [CONFIRMED].
+- The statement must be approved by the board or equivalent, signed by a director or equivalent, and published on the website with a prominent link on the homepage [CONFIRMED].
+- The six content areas are currently matters a statement may include rather than must include [CONFIRMED].
+Statutory guidance (not law):
+- Home Office guidance updated 1 December 2025 recommends publication within six months of financial year end and encourages covering all six areas [CONFIRMED].
+Announced, not in effect:
+- Future changes to reporting requirements have been announced but have not come into effect. Report under current requirements [CONFIRMED; VERIFY status].
+
+INPUTS
+- Organisation: <total turnover, financial year end, group structure, UK business>
+- Supply chain: <suppliers by category, country, spend; higher-risk sectors>
+- Actions and evidence: <policies, due diligence, audits, training, remediation, grievances>
+- Prior statement: <paste or "none">
+- Governance: <approving body and signatory>
+
+TASK
+1. SCOPE GATE. Test whether the organisation is a commercial organisation carrying on a business or part of a business in the UK with total turnover at or above the threshold, calculating turnover on the basis the regulations prescribe, including subsidiaries where relevant [VERIFY method]. If below the threshold, state that there is no statutory obligation and treat any statement as voluntary. For groups, identify each entity obliged to publish and whether a group statement will cover them, naming each.
+2. MISSING INFORMATION. Identify gaps in supply chain data and evidence of actions. A statement cannot credibly describe effectiveness without evidence; do not fill the gap with generic language.
+3. RISK MAP. Map risks in operations and supply chains by sector, geography, business model and relationship type, including labour-intensive services, raw materials, recruitment through agencies, and outsourced operations. Rank by severity and likelihood, and explain the method.
+4. ACTIONS AND EFFECTIVENESS. Record the actions taken during the financial year and, for each, how effectiveness was measured — indicators, outcomes, remediation completed, grievances raised and resolved. Separate activity measures such as training completed from outcome measures such as issues found and remediated. State plainly where effectiveness was not measured.
+5. PRIOR COMMITMENTS. Compare last year's commitments with this year's progress, and explain any not met.
+6. DRAFT STATEMENT. Draft the statement covering the six areas: structure, business and supply chains; policies; due diligence; risk assessment and management; effectiveness against performance indicators; and training. Use specifics from the evidence. Avoid unevidenced claims, including any claim that the supply chain is free of modern slavery.
+7. APPROVAL AND PUBLICATION. Produce the checklist: board or equivalent approval with the date recorded, director signature, publication on the website with a prominent homepage link, the financial year end date stated, and target publication within the guidance timeframe. Note submission to the government registry where applicable or recommended [VERIFY current registry status].
+8. REFORM WATCH. List announced reforms separately, labelled as not yet in effect, with what the organisation should prepare for.
+9. LAWYER REVIEW TRIGGERS. Escalate: any identified instance of modern slavery or forced labour; risks connected to state-imposed forced labour regions; any claim that could be misleading; and group structures where the obligation is unclear.
+
+RULES
+- Distinguish LAW, STATUTORY GUIDANCE and ANNOUNCED REFORM throughout.
+- Never state that a supply chain is free of modern slavery.
+- Describe effectiveness only with evidence.
+- Do not present the six areas as mandatory unless the law has changed.
+
+OUTPUT FORMAT
+Open with the obligation conclusion and the publication target date. Then the sections above, with the risk map and effectiveness record as tables and the draft statement as usable text. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A UK retailer with a financial year ending in March prepares its fourth statement, having committed last year to audit its tier-two garment suppliers.',
+      result:
+        'Obligation confirmed above the turnover threshold, the risk map ranking garment and warehouse agency labour highest, the tier-two audit commitment found only half completed and explained, effectiveness separated into activity and outcome measures with two remediated cases recorded, a draft statement avoiding any claim the supply chain is free of slavery, and a publication checklist targeting the guidance timeframe with announced reforms listed separately as not yet in effect.',
     },
   },
 ];

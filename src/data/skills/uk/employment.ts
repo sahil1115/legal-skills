@@ -249,4 +249,81 @@ Open with who must determine status, who bears liability, and the conclusion wit
         'Client confirmed medium-sized so the determination and fee-payer obligations applied, the hypothetical contract constructed across the agency chain showing control over hours and priorities inconsistent with the written terms, the substitution right assessed as weak because client approval was unfettered in the contract but absolute in practice and no substitute had ever been proposed, the tool result discounted because two inputs contradicted the established practices, the conclusion reached as inside the rules with a reasoned determination statement drafted, and the same facts flagged as supporting a separate worker-status claim for holiday pay.',
     },
   },
+  {
+    id: 'uk-worker-protection-harassment-audit',
+    name: 'Sexual Harassment Prevention Duty Audit',
+    description: 'Audits an employer against the UK duty to prevent sexual harassment, including the strengthened standard.',
+    jurisdiction: 'uk',
+    category: 'employment',
+    tags: ['workforce', 'programme-design', 'sexual-harassment', 'equality-act', 'third-party-harassment', 'risk-assessment'],
+    sources: [
+      { citation: 'Equality Act 2010, section 40A as inserted by the Worker Protection (Amendment of Equality Act 2010) Act 2023', authority: 'primary', publisher: 'The National Archives', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'In force since 26 October 2024: a duty to take reasonable steps to prevent sexual harassment of employees, with an uplift of compensation where it is breached.' },
+      { citation: 'Employment Rights Act 2025, provisions on harassment', authority: 'primary', publisher: 'The National Archives', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Strengthens the duty to all reasonable steps and adds a duty not to permit third-party harassment, from 30 October 2026 as stated in government guidance. Confirm the commencement regulations.' },
+      { citation: 'EHRC technical guidance on sexual harassment and harassment at work', authority: 'regulator', publisher: 'Equality and Human Rights Commission', jurisdiction: 'uk', url: 'https://www.equalityhumanrights.com', note: 'The regulator’s guidance on what reasonable steps look like. The EHRC can take enforcement action on the preventative duty.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['uk-employment-tribunal-risk', 'uk-fca-conduct-breach-notification-triage', 'eu-whistleblowing-channel-checker'],
+    whatItDoes:
+      'Audits an employer’s systems against the preventative duty as it stands today and as it will stand once the strengthened standard applies, side by side, because the test changes from reasonable steps to all reasonable steps and adds third-party harassment. It works from a documented risk assessment of the workplace, then tests policy, training, reporting routes, handling, third-party controls, leadership and monitoring against the regulator’s guidance, and produces a gap list ranked by the difference each fix makes to the defensibility of the employer’s position.',
+    whenToUse:
+      'Now, ahead of the strengthened duty; at annual review of harassment prevention; after a complaint or incident; when employees deal with customers, clients or the public; and when preparing for a regulator or tribunal scrutiny of prevention measures. Not for: deciding an individual grievance or disciplinary outcome, or regulated-firm conduct rules notifications (use the FCA conduct skill).',
+    inputs: [
+      { name: 'Organisation profile', description: 'Size, sectors, workforce composition, working patterns and locations.', required: true },
+      { name: 'Risk factors', description: 'Customer-facing roles, lone or night working, alcohol at events, power imbalances and prior incidents.', required: true },
+      { name: 'Current measures', description: 'Policy, training, reporting routes, investigation process, third-party controls and monitoring data.', required: true },
+      { name: 'Incident data', description: 'Complaints, outcomes, exit interview themes and survey results.' },
+      { name: 'Leadership and governance', description: 'Who owns the duty and what reaches the board.' },
+    ],
+    outputs: [
+      { name: 'Standard map', description: 'The current standard and the strengthened standard with their dates, verified.' },
+      { name: 'Workplace risk assessment', description: 'Sexual harassment risks by role, setting and third-party exposure.' },
+      { name: 'Two-standard gap analysis', description: 'Each control assessed against reasonable steps and against all reasonable steps.' },
+      { name: 'Third-party harassment plan', description: 'Controls for customers, clients, contractors and the public.' },
+      { name: 'Remediation plan', description: 'Ranked actions with owners and dates before the strengthened duty applies.' },
+      { name: 'Evidence file', description: 'What to keep to demonstrate the steps taken.' },
+    ],
+    prompt: `You are a UK employment lawyer auditing an employer's compliance with the preventative duty on sexual harassment.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+In force:
+- A duty on employers to take reasonable steps to prevent sexual harassment of their employees, in force since 26 October 2024, with a compensation uplift in successful harassment claims where the duty is breached and EHRC enforcement powers [CONFIRMED].
+Scheduled:
+- Under the Employment Rights Act 2025, the duty becomes all reasonable steps, and employers must not permit third parties to harass employees where they failed to take all reasonable steps to prevent it, from 30 October 2026 per government guidance [CONFIRMED as stated; VERIFY commencement regulations].
+- Regulations may specify steps that are to be regarded as reasonable [VERIFY whether made and their content].
+
+INPUTS
+- Organisation: <size, sectors, workforce, working patterns, locations>
+- Risk factors: <customer-facing roles, lone or night working, alcohol, power imbalances, prior incidents>
+- Current measures: <policy, training, reporting, investigations, third-party controls, monitoring>
+- Incident data: <complaints, outcomes, exit themes, surveys>
+- Leadership: <owner and board reporting>
+
+TASK
+1. SCOPE GATE. Confirm the audit concerns employees of an employer in Great Britain under the Equality Act. For Northern Ireland, stop and apply its separate legislation.
+2. STANDARD MAP. Confirm on official sources which standard applies on the audit date and the date the strengthened standard applies. Assess against both where the audit date precedes the change.
+3. MISSING INFORMATION. Identify whether a risk assessment exists. Regulator guidance treats assessing risk as the starting point; a missing assessment is itself a gap.
+4. WORKPLACE RISK ASSESSMENT. Assess risks by role, setting and relationship: power imbalances, lone and night working, social events and alcohol, remote and online contact, and exposure to customers, clients, patients and members of the public.
+5. TWO-STANDARD GAP ANALYSIS. Test each area against the current reasonable steps standard and the all reasonable steps standard: policy content and communication; training suited to role and risk; accessible and confidential reporting routes including anonymous options; prompt and fair investigation; support for those reporting; protection against victimisation; leadership commitment and visible action; monitoring of data and trends; and review after incidents. Produce a table with columns Area, Current measure, Reasonable steps, All reasonable steps, Gap and Priority.
+6. THIRD-PARTY HARASSMENT. For roles exposed to third parties, set out controls: terms and conditions for customers and clients, signage, ability to refuse service, reporting and escalation, staffing and lone-working measures, and a clear process when harassment occurs.
+7. REMEDIATION PLAN. Rank actions by their contribution to demonstrating that all reasonable steps were taken, with owners and dates before the strengthened standard applies.
+8. EVIDENCE FILE. List the records to keep: the risk assessment, policy versions, training records, communications, reports and outcomes, monitoring reviews and board reporting.
+9. LAWYER REVIEW TRIGGERS. Escalate: open complaints; patterns in data; senior individuals involved; third-party harassment incidents; any EHRC contact; and settlement agreements with confidentiality terms affecting harassment disclosures.
+
+RULES
+- Assess against the standard in force on the audit date and, separately, the strengthened standard.
+- Label each item LAW, EHRC GUIDANCE or BEST PRACTICE.
+- A policy on paper is not a step taken; assess implementation and evidence.
+- Do not decide individual complaints.
+
+OUTPUT FORMAT
+Open with the standard in force today, the date of the change, and the three most significant gaps. Then the sections above, with the gap analysis as a table and a dated remediation plan. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A hospitality group with late-night venues and staff serving intoxicated customers audits its prevention measures before the strengthened duty applies.',
+      result:
+        'Current and strengthened standards mapped with the commencement date flagged for verification, no workplace risk assessment found and recorded as the first gap, customer harassment identified as the highest risk with no refuse-service or escalation process, training assessed as generic and not role-specific, a two-standard gap table, and a remediation plan ranked to demonstrate all reasonable steps before the change.',
+    },
+  },
 ];
