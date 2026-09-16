@@ -348,7 +348,7 @@ Open with the due date and whether any pause or extension applies. Then the sect
     reviewStatus: 'unverified',
     version: '1.0.0',
     industries: ['retail-consumer', 'energy-infrastructure', 'professional-services'],
-    relatedSkills: ['us-uflpa-supply-chain-traceability', 'uk-bribery-act-reviewer', 'cross-four-regime-gap-analyzer'],
+    relatedSkills: ['us-uflpa-supply-chain-traceability', 'au-modern-slavery-statement-builder', 'uk-bribery-act-reviewer'],
     whatItDoes:
       'Runs the annual UK modern slavery statement cycle: confirming whether the organisation must publish, collecting the year’s evidence, mapping supply chain risk, recording the actions taken and how their effectiveness was measured, and producing a statement plus the board approval, director signature and homepage publication steps the Act requires. It keeps the statutory requirements distinct from the statutory guidance and from announced reforms that have not yet taken effect.',
     whenToUse:

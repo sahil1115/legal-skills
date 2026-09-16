@@ -256,7 +256,7 @@ Open with the coverage determination and the five terms that most need to change
     ],
     lastReviewed: '2026-09-16',
     reviewStatus: 'unverified',
-    version: '1.0.0',
+    version: '1.1.0',
     industries: ['financial-services', 'retail-consumer', 'energy-infrastructure'],
     relatedSkills: ['us-ucc9-filing-checker', 'au-director-duties-checker', 'au-acl-unfair-terms'],
     whatItDoes:
@@ -270,6 +270,7 @@ Open with the coverage determination and the five terms that most need to change
       { name: 'Existing registration', description: 'The current financing statement details, including registration and end dates and whether PMSI is claimed.' },
       { name: 'Timing', description: 'When the agreement was made, when value was given, when possession passed and when registration occurred.' },
       { name: 'Competing interests', description: 'Other registrations against the grantor, any general security agreement, and any buyer or third party involved.' },
+      { name: 'Registration portfolio', description: 'For a portfolio audit: an export of all registrations held, with grantor details, collateral classes, end dates and PMSI flags.' },
     ],
     outputs: [
       { name: 'Characterisation', description: 'Whether the arrangement is a security interest in substance, and whether a deemed security interest applies.' },
@@ -279,6 +280,7 @@ Open with the coverage determination and the five terms that most need to change
       { name: 'Priority ranking', description: 'The order against each competing interest, with the rule that produces it.' },
       { name: 'Vesting risk', description: 'Whether the interest would vest in the grantor on insolvency, and what that costs.' },
       { name: 'Remediation plan', description: 'What can still be fixed, what cannot, and the order to do it in.' },
+      { name: 'Portfolio audit', description: 'Batch identifier reconciliation, an end-date calendar and re-registration priorities across all registrations held.' },
     ],
     prompt: `You are an Australian secured transactions lawyer testing a security interest under the Personal Property Securities Act.
 
@@ -289,6 +291,7 @@ INPUTS
 - Existing registration: <financing statement details, registration date, end date, collateral class selected, PMSI claimed or not, secured party details>
 - Timing: <date of agreement, date value given, date possession passed to the grantor, date of registration>
 - Competing interests: <other registrations against this grantor, any general security agreement, any buyer of the goods, any landlord or processor>
+- Portfolio mode (optional): <export of all registrations held — registration number, grantor name and identifier, collateral class and description, serial number where applicable, PMSI flag, start and end dates — plus the customer or contract each relates to>
 
 TASK
 1. CHARACTERISATION. Determine whether this is a security interest, working from substance rather than the label the parties used. It is an interest in personal property provided for by a transaction that in substance secures payment or performance of an obligation. Then check the deemed security interests separately, because these catch parties who do not think of themselves as secured at all: retention of title supply terms, commercial consignments, and a PPS lease of goods. For a PPS lease, apply the current duration and regularity tests and mark them [VERIFY], since the thresholds have been amended. State plainly that a supplier trading on retention of title terms without registering is an unsecured creditor in substance, whatever the terms say.
@@ -300,6 +303,13 @@ TASK
 7. PRIORITY. Rank this interest against each competing interest and name the rule producing each result: perfected beats unperfected; between perfected interests, priority runs by the earliest of registration, possession or control; control outranks other methods for the classes allowing it; a properly perfected PMSI takes super-priority over an earlier general security agreement. Then address the rules that defeat a perfected interest anyway: taking free by a buyer in the ordinary course of the seller's business, taking free of certain serial-numbered property where it was not registered by serial number, accessions, commingling and processing into a product, and proceeds. State whether proceeds are automatically perfected here or need their own registration.
 8. VESTING ON INSOLVENCY. This is the consequence that makes the rest urgent. Where a security interest is unperfected immediately before the grantor enters administration or liquidation, or where registration occurred within the vulnerable period before it, the interest vests in the grantor — the secured party loses the collateral outright and ranks as an unsecured creditor. Apply this to the facts, state the vulnerable period and mark it [VERIFY], and quantify what is at stake in terms of the goods or value at risk. Where insolvency is in prospect, say that registering now may not save the interest and that the timing must be checked immediately.
 9. REMEDIATION. Separate what can still be fixed from what cannot. Registering now fixes future priority but does not restore a lost priority date and does not cure the vulnerable-period exposure. Amending a defective registration may work for some defects and not for a wrong grantor identifier, which generally needs a fresh registration with a new priority date. Give the steps in order, with the deadline for each, and identify the portfolio-level fix — reconciling registrations against grantor identifiers at onboarding, diarising end dates, and registering before delivery rather than after.
+10. PORTFOLIO MODE. Where a registration export is supplied, run the checks across the whole book rather than one interest:
+   - IDENTIFIER RECONCILIATION: match each registration's grantor identifier against the correct identifier for the contracting entity from the customer file, including the trust ABN where the customer contracts as trustee, and list every mismatch as potentially ineffective.
+   - SERIAL NUMBER CHECK: list registrations over serial-numbered property registered without a serial number where one is required.
+   - PMSI CHECK: list registrations over supply-on-credit or retention of title arrangements where the PMSI flag is missing or the registration post-dates delivery.
+   - END-DATE CALENDAR: list registrations expiring within the next 12 months with the related contract status, and registrations still live for relationships that have ended, which should be considered for discharge.
+   - COVERAGE GAPS: list active customers or supply arrangements with no registration at all.
+   - PRIORITY RANKING: rank the fixes by value at risk and by exposure to a customer already showing signs of financial distress, and state for each whether an amendment is enough or a fresh registration with a new priority date is required.
 
 RULES
 - Substance governs. Never conclude there is no security interest because the document does not use the word, and always test the deemed categories.
@@ -310,7 +320,7 @@ RULES
 - A PPSR search result and a registration are evidence of what was registered, not proof that the interest is valid or that it has priority.
 
 OUTPUT FORMAT
-Open with whether the interest is perfected, where it ranks, and whether it would survive the grantor's insolvency. Then the sections above, with a defect table and a priority ranking table, closing with dated remediation steps.`,
+Open with whether the interest is perfected, where it ranks, and whether it would survive the grantor's insolvency. Then the sections above, with a defect table and a priority ranking table, closing with dated remediation steps. In portfolio mode, add tables for identifier mismatches, the end-date calendar and ranked fixes.`,
     example: {
       scenario:
         'An equipment supplier trading on retention of title terms discovers its customer has appointed administrators, and reviews its registrations across the customer group.',

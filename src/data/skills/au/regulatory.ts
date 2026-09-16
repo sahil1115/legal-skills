@@ -1,7 +1,7 @@
 import type { Skill } from '../../../types/skill';
 
 /**
- * Australian regulatory and compliance skills — privacy, critical infrastructure, product governance and safety.
+ * Australian regulatory and compliance skills — privacy, cyber, critical infrastructure, product governance, safety and corporate reporting.
  */
 export const auRegulatorySkills: Skill[] = [
   {
@@ -252,7 +252,7 @@ Nine sections matching the tasks above, with the draft TMD last.`,
     reviewStatus: 'unverified',
     version: '1.0.0',
     industries: ['energy-infrastructure', 'healthcare', 'retail-consumer', 'public-sector'],
-    relatedSkills: ['au-director-duties-checker', 'au-unfair-dismissal-assessor', 'au-soci-obligations-mapper'],
+    relatedSkills: ['au-director-duties-checker', 'au-unfair-dismissal-assessor', 'au-soci-obligations-mapper', 'au-whs-psychosocial-hazard-assessor'],
     whatItDoes:
       'Handles the two things that run on completely different clocks after a workplace incident: the immediate notification and site-preservation duties, which are criminal obligations measured in minutes, and the slower question of whether the duty holder and its officers can show they discharged their duties beforehand. It applies the notifiable incident definitions of the governing jurisdiction rather than a national rule, and treats psychosocial hazards as squarely within the duty rather than as an adjacent wellbeing matter.',
     whenToUse:
@@ -327,6 +327,393 @@ Open with the notifiability conclusion, the notification deadline as a time, and
         'A contractor receives an electric shock from unisolated plant at a shared site; the area was tidied before anyone considered the regulator, and a near-miss report on the same plant had been filed two months earlier.',
       result:
         'Governing State Act identified and the incident found notifiable as a dangerous incident regardless of injury severity, the site disturbance flagged as a probable separate offence with a contemporaneous record of who moved what directed immediately, concurrent duties mapped across the principal contractor and the contractor entity with the consultation duty unmet, the earlier near-miss report assessed as the most damaging fact against the reasonably practicable standard, officer due diligence failing on the verification element because incident reports reached officers but no verification process existed, and privilege structured over the investigation before it began.',
+    },
+  },
+  {
+    id: 'au-wgea-gender-pay-gap-reporting',
+    name: 'WGEA Gender Pay Gap Reporting',
+    description: 'Validates WGEA workforce data, calculations, targets and submission steps for the annual reporting cycle.',
+    jurisdiction: 'au',
+    category: 'compliance',
+    tags: ['workforce', 'review', 'gender-pay-gap', 'annual-reporting', 'equal-pay', 'reporting'],
+    sources: [
+      { citation: 'Workplace Gender Equality Act 2012 (Cth), as amended', authority: 'primary', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'Applies to relevant employers with 100 or more employees. Amendments require employers with 500 or more employees to select and progress gender equality targets, and redefine designated relevant employers as those directly employing 500 or more in Australia from 2026.' },
+      { citation: 'Workplace Gender Equality Agency reporting guide, dates and gender equality standards', authority: 'regulator', publisher: 'Workplace Gender Equality Agency', jurisdiction: 'au', url: 'https://www.wgea.gov.au', note: 'Private sector lodgement for the 2025-26 program opened 1 April 2026; targets are selected in that cycle. Employer gender pay gaps were published on 3 March 2026. Confirmed as at 2026-09-16; check lodgement deadlines and any extensions on the WGEA site.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['eu-pay-transparency-gap-analysis', 'au-positive-duty-sexual-harassment-assessment', 'us-pay-transparency-multistate-checker'],
+    whatItDoes:
+      'Prepares an employer’s annual Workplace Gender Equality Agency report so the data is right before it is lodged and later published: it confirms which reporting obligations apply by headcount, validates the workforce and remuneration data against the Agency’s definitions, reproduces the gender pay gap calculations so unexpected results are explained before publication, checks the questionnaire answers and the gender equality standards for larger employers, handles the target selection now required of employers with 500 or more staff, and plans the publication response.',
+    whenToUse:
+      'Before each annual lodgement window, when payroll or HR systems change, when the employer crosses the 100 or 500 employee thresholds, when selecting gender equality targets, and before the Agency publishes employer gender pay gaps. Not for: EU pay transparency obligations (use the EU skill) or equal pay claims by individuals.',
+    inputs: [
+      { name: 'Workforce data', description: 'Employee records for the snapshot date with gender, occupation, manager category, employment status and location.', required: true },
+      { name: 'Remuneration data', description: 'Base salary, allowances, overtime, bonuses and superannuation for the reporting period, annualised as required.', required: true },
+      { name: 'Employer structure', description: 'Entities, direct employee counts and any corporate group reporting.', required: true },
+      { name: 'Policies and actions', description: 'Policies and strategies relevant to the questionnaire and standards.' },
+      { name: 'Prior reports', description: 'Last year’s submission and published gaps.' },
+    ],
+    outputs: [
+      { name: 'Obligation map', description: 'Reporting obligations by entity and headcount band, including standards and targets.' },
+      { name: 'Data validation report', description: 'Records failing the Agency definitions or internal consistency checks.' },
+      { name: 'Pay gap reconciliation', description: 'Recalculated gaps with drivers of change from the prior year.' },
+      { name: 'Targets plan', description: 'Target options, baseline and selection rationale for 500+ employers.' },
+      { name: 'Submission checklist', description: 'Lodgement steps, sign-off and deadlines.' },
+      { name: 'Publication plan', description: 'Explanation of results and any employer statement.' },
+    ],
+    prompt: `You are an Australian workplace compliance specialist preparing an employer's annual Workplace Gender Equality Agency report.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+- Reporting applies to relevant employers with 100 or more employees [CONFIRMED].
+- From 2026, designated relevant employers are those directly employing 500 or more employees in Australia; they must meet the gender equality standards and select three gender equality targets, with private sector employers selecting targets in the 2025-26 reporting cycle [CONFIRMED, wgea.gov.au].
+- The Agency published employer gender pay gaps on 3 March 2026 [CONFIRMED].
+- Lodgement window and final deadline for the current cycle [VERIFY on the WGEA reporting dates page; the Agency has published both a 1 April to 31 May window and a later final lodgement date].
+
+INPUTS
+- Workforce data: <snapshot records: gender, occupation, manager category, status, location>
+- Remuneration: <components for the period, annualised>
+- Structure: <entities, direct employee counts, group reporting>
+- Policies and actions: <relevant to questionnaire and standards>
+- Prior reports: <last submission and published gaps>
+
+TASK
+1. SCOPE GATE. Determine which entities are relevant employers and which are designated relevant employers under the current definitions, counting direct employees as defined. Record the obligation set for each.
+2. MISSING INFORMATION. Identify missing gender, occupation or remuneration fields. Missing data distorts published gaps.
+3. DATA VALIDATION. Check records against the Agency's definitions: employment status categories, manager categories, occupation coding, annualisation of part-time and part-year remuneration, and inclusion of all remuneration components required. Flag outliers and inconsistencies.
+4. PAY GAP RECONCILIATION. Recalculate the headline measures the Agency uses, such as average and median gaps on base and total remuneration [VERIFY current measures], and explain year-on-year movement by driver: workforce composition, bonus timing, promotions and pay review outcomes.
+5. QUESTIONNAIRE AND STANDARDS. Check questionnaire answers are supported by evidence, and for designated relevant employers, test compliance with the gender equality standards.
+6. TARGETS. For employers with 500 or more direct employees, set out the menu of targets, establish baselines from the data, assess which three are meaningful and achievable, and record the rationale.
+7. SUBMISSION. Build the lodgement checklist, CEO or equivalent sign-off, and the requirement to share the report with employees and shareholders where applicable [VERIFY].
+8. PUBLICATION PLAN. Prepare an explanation of results and any employer statement the Agency allows alongside published gaps, grounded in the drivers analysis.
+9. LAWYER REVIEW TRIGGERS. Escalate: large unexplained gaps; potential equal pay issues; disputed employee counts at thresholds; and any non-compliance notice.
+
+RULES
+- Use the Agency's definitions, not internal HR categories.
+- Label each item LAW, WGEA INSTRUMENT OR GUIDANCE, or BEST PRACTICE.
+- Never adjust data to improve a published result; explain it instead.
+
+OUTPUT FORMAT
+Open with the obligation set, the lodgement deadline to verify, and any data issue that blocks lodgement. Then the sections above, with validation and reconciliation as tables. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A professional services group with 620 direct employees prepares its first report as a designated relevant employer, with a total remuneration gap that widened after a partner bonus round.',
+      result:
+        'Designated relevant employer status confirmed for the operating entity, partners excluded or included according to the Agency’s definitions, annualisation errors fixed for part-time staff, the widened gap explained by bonus timing and senior composition, three targets selected with baselines, the lodgement deadline flagged for verification, and a published-results explanation drafted.',
+    },
+  },
+  {
+    id: 'au-modern-slavery-statement-builder',
+    name: 'AU Modern Slavery Statement Builder',
+    description: 'Builds the annual Australian modern slavery statement against the mandatory criteria and approval rules.',
+    jurisdiction: 'au',
+    category: 'compliance',
+    tags: ['programme-design', 'drafting', 'modern-slavery', 'supply-chain', 'third-party-risk', 'annual-reporting'],
+    sources: [
+      { citation: 'Modern Slavery Act 2018 (Cth)', authority: 'primary', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'Applies to reporting entities with consolidated revenue of at least A$100 million. Sets the mandatory criteria and principal governing body approval and signing requirements. Confirmed as at 2026-09-16.' },
+      { citation: 'Commonwealth Modern Slavery Act guidance for reporting entities', authority: 'guidance', publisher: 'Attorney-General’s Department', jurisdiction: 'au', url: 'https://www.ag.gov.au' },
+      { citation: 'Australian Government response to the statutory review of the Modern Slavery Act 2018', authority: 'secondary', publisher: 'Attorney-General’s Department', jurisdiction: 'au', url: 'https://www.ag.gov.au', note: 'December 2024 response agreeing in full, part or principle to most recommendations, including a lower A$50 million threshold and penalties. These are proposals; no amending legislation was found in force as at 2026-09-16.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer', 'energy-infrastructure', 'financial-services'],
+    relatedSkills: ['uk-modern-slavery-statement-builder', 'us-uflpa-supply-chain-traceability', 'au-director-duties-checker'],
+    whatItDoes:
+      'Runs the annual Australian modern slavery statement cycle against the mandatory criteria in the Act: identifying the reporting entity and any entities it owns or controls, describing structure, operations and supply chains, identifying modern slavery risks, describing actions taken including due diligence and remediation, assessing effectiveness, describing consultation with owned or controlled entities, and obtaining principal governing body approval and signature. It keeps the Act’s current requirements separate from reforms the government has agreed to but not legislated.',
+    whenToUse:
+      'At the start of each reporting cycle, when a group crosses the revenue threshold, when preparing a joint statement for several entities, and when the reform bill is introduced or enacted. Not for: UK section 54 statements (use the UK builder) or import detention under US forced labour law (use the UFLPA skill).',
+    inputs: [
+      { name: 'Entity profile', description: 'Consolidated revenue, reporting period, group structure and entities owned or controlled.', required: true },
+      { name: 'Operations and supply chains', description: 'Operations, sectors, countries, supplier categories and spend.', required: true },
+      { name: 'Actions and evidence', description: 'Policies, due diligence, audits, training, grievance mechanisms and remediation during the period.' },
+      { name: 'Consultation record', description: 'How owned or controlled entities were consulted.' },
+      { name: 'Prior statement', description: 'Last year’s statement and commitments.' },
+    ],
+    outputs: [
+      { name: 'Reporting entity determination', description: 'Whether the entity must report, and whether a joint statement is used.' },
+      { name: 'Mandatory criteria map', description: 'Each criterion with the content and evidence addressing it.' },
+      { name: 'Risk identification', description: 'Operations and supply chain risks by sector, geography and relationship.' },
+      { name: 'Actions and effectiveness record', description: 'Actions taken and how effectiveness was assessed.' },
+      { name: 'Draft statement', description: 'Statement text addressing each mandatory criterion.' },
+      { name: 'Approval and lodgement checklist', description: 'Board approval, signature and registry submission steps.' },
+      { name: 'Reform watch', description: 'Agreed reforms not yet law, and what to prepare.' },
+    ],
+    prompt: `You are an Australian business and human rights lawyer preparing an annual modern slavery statement under the Modern Slavery Act 2018 (Cth).
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+Law in force:
+- Reporting entities: consolidated revenue of at least A$100 million for the reporting period [CONFIRMED].
+- The statement must address each mandatory criterion and be approved by the principal governing body and signed by a responsible member, then provided for the public register [CONFIRMED; VERIFY lodgement timing].
+Agreed but not legislated:
+- The December 2024 government response agreed, in whole, in part or in principle, to most statutory review recommendations, including a lower A$50 million threshold and penalties [CONFIRMED as policy]. No amending legislation found in force as at 2026-09-16 [VERIFY].
+
+INPUTS
+- Entity: <consolidated revenue, reporting period, group structure, owned or controlled entities>
+- Operations and supply chains: <operations, sectors, countries, supplier categories, spend>
+- Actions: <policies, due diligence, audits, training, grievance, remediation>
+- Consultation: <how entities were consulted>
+- Prior statement: <paste or "none">
+
+TASK
+1. SCOPE GATE. Test whether the entity is a reporting entity on consolidated revenue, and whether it is an Australian entity or carries on business in Australia [VERIFY test]. Identify whether a joint statement will cover several reporting entities. If below threshold, note voluntary reporting.
+2. MISSING INFORMATION. Identify gaps in supply chain data, actions and evidence. Do not substitute generic language for missing evidence.
+3. MANDATORY CRITERIA MAP. Address each: identify the reporting entity; describe its structure, operations and supply chains; describe the risks of modern slavery practices in its operations and supply chains and those of entities it owns or controls; describe actions taken to assess and address those risks, including due diligence and remediation; describe how it assesses the effectiveness of those actions; describe the process of consultation with entities it owns or controls; and include any other relevant information.
+4. RISK IDENTIFICATION. Map risks by sector, geography, product and business model, and distinguish causing, contributing to and being directly linked to harm.
+5. ACTIONS AND EFFECTIVENESS. Record actions and effectiveness measures, separating activity from outcome, and state plainly where effectiveness has not been measured.
+6. DRAFT STATEMENT. Draft the statement addressing each criterion with specifics.
+7. APPROVAL AND LODGEMENT. Checklist for principal governing body approval, signature by a responsible member, and submission to the register within the required period [VERIFY].
+8. REFORM WATCH. List agreed reforms separately, labelled as not yet law, with preparatory steps such as due diligence systems that proposed penalties would target.
+9. LAWYER REVIEW TRIGGERS. Escalate: identified cases of modern slavery; exposure to state-imposed forced labour; statements that could be misleading; joint statement governance; and enactment of reform legislation.
+
+RULES
+- Distinguish LAW, GOVERNMENT GUIDANCE and AGREED REFORM throughout.
+- Never state that operations or supply chains are free of modern slavery.
+- Address every mandatory criterion explicitly.
+
+OUTPUT FORMAT
+Open with the reporting entity conclusion and the lodgement date to verify. Then the sections above, with the criteria map and risk identification as tables and the draft statement as usable text. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'An Australian food manufacturer with A$180 million revenue and offshore packaging suppliers prepares its fifth statement, while the board asks what the proposed reforms would change.',
+      result:
+        'Reporting entity status confirmed, each mandatory criterion mapped with the consultation criterion found weak for two subsidiaries, packaging and seasonal labour hire identified as highest risk, effectiveness separated into activity and outcome measures, a draft statement avoiding any claim of a slavery-free supply chain, and a reform watch explaining the proposed lower threshold and penalties as not yet law.',
+    },
+  },
+  {
+    id: 'au-climate-disclosure-aasb-s2',
+    name: 'AASB S2 Climate Disclosure Readiness',
+    description: 'Determines the mandatory climate reporting group and assesses readiness against AASB S2 and assurance phasing.',
+    jurisdiction: 'au',
+    category: 'compliance',
+    tags: ['regulatory-change', 'assessment', 'climate-disclosure', 'sustainability-reporting', 'corporations-act', 'assurance'],
+    sources: [
+      { citation: 'Corporations Act 2001 (Cth), Chapter 2M sustainability reporting provisions', authority: 'primary', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'Requires entities meeting the size and other criteria to prepare a sustainability report with climate-related financial information, phased by group.' },
+      { citation: 'AASB S2 Climate-related Disclosures', authority: 'regulator', publisher: 'Australian Accounting Standards Board', jurisdiction: 'au', url: 'https://aasb.gov.au', note: 'Group 1 applies for annual reporting periods beginning on or after 1 January 2025, Group 2 on or after 1 July 2026, and Group 3 on or after 1 July 2027. Confirmed as at 2026-09-16.' },
+      { citation: 'ASIC Regulatory Guide 280 Sustainability reporting', authority: 'guidance', publisher: 'Australian Securities and Investments Commission', jurisdiction: 'au', url: 'https://asic.gov.au' },
+      { citation: 'AUASB sustainability assurance standards and phasing', authority: 'regulator', publisher: 'Auditing and Assurance Standards Board', jurisdiction: 'au', url: 'https://www.auasb.gov.au', note: 'Phases limited and reasonable assurance over sustainability report content across the groups.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['financial-services', 'energy-infrastructure', 'retail-consumer'],
+    relatedSkills: ['eu-csrd-double-materiality-assessor', 'au-director-duties-checker', 'global-horizon-scanner'],
+    whatItDoes:
+      'Works out which mandatory climate reporting group an entity falls into and when its first reporting period starts, then assesses readiness against AASB S2 across governance, strategy including scenario analysis, risk management, and metrics and targets including scope 1, 2 and 3 emissions. It maps the assurance that applies to each disclosure in each year, flags where the modified liability arrangements do and do not apply, and produces a gap analysis and implementation plan aligned to the first report.',
+    whenToUse:
+      'When confirming reporting group and timing, when preparing the first sustainability report, before engaging an assurance provider, when entity size or NGER registration changes, and when directors need to understand what they will be signing. Not for: EU CSRD reporting (use the CSRD assessor) or greenwashing claims in marketing.',
+    inputs: [
+      { name: 'Entity profile', description: 'Consolidated revenue, gross assets, employees, financial year, and whether a registered corporation or asset owner.', required: true },
+      { name: 'Emissions reporting status', description: 'Whether the entity or group is an NGER reporter and existing emissions data.', required: true },
+      { name: 'Current climate work', description: 'Governance, risk registers, scenario analysis and any voluntary disclosures.' },
+      { name: 'Data systems', description: 'Sources for scope 1, 2 and 3 data and their quality.' },
+      { name: 'Assurance arrangements', description: 'Current auditor and any sustainability assurance engaged.' },
+    ],
+    outputs: [
+      { name: 'Group determination', description: 'Reporting group, first reporting period and the criteria applied.' },
+      { name: 'Readiness assessment', description: 'Each AASB S2 pillar rated with the evidence available.' },
+      { name: 'Scenario analysis plan', description: 'Required scenarios and method for the first report.' },
+      { name: 'Emissions gap analysis', description: 'Scope 1, 2 and 3 data availability and quality.' },
+      { name: 'Assurance map', description: 'Assurance level applying to each disclosure by year.' },
+      { name: 'Liability note', description: 'Where modified liability applies and where it does not.' },
+      { name: 'Implementation plan', description: 'Workstreams, owners and dates to the first report.' },
+    ],
+    prompt: `You are an Australian corporate reporting lawyer assessing readiness for mandatory climate-related financial disclosure.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+In force:
+- Chapter 2M Corporations Act sustainability reporting, phased by group [CONFIRMED].
+- AASB S2 first application: Group 1 for annual reporting periods beginning on or after 1 January 2025; Group 2 on or after 1 July 2026; Group 3 on or after 1 July 2027 [CONFIRMED, AASB].
+- Group criteria (revenue, assets, employees, NGER registration, asset owners) [VERIFY against RG 280 and the Act].
+- Assurance phasing under AUASB standards and the modified liability period [VERIFY].
+
+INPUTS
+- Entity: <revenue, gross assets, employees, financial year, registered corporation or asset owner>
+- Emissions reporting: <NGER status, data>
+- Current climate work: <governance, risks, scenarios, voluntary disclosures>
+- Data systems: <scope 1, 2, 3 sources and quality>
+- Assurance: <auditor, sustainability assurance>
+
+TASK
+1. SCOPE GATE. Confirm the entity must prepare a financial report under Chapter 2M, then apply the group criteria at the consolidated level and record the first reporting period start date. If below all group thresholds, stop and note voluntary options.
+2. MISSING INFORMATION. Identify missing size data and emissions data. The group determination and scope 3 readiness depend on them.
+3. GOVERNANCE. Assess board and management oversight of climate-related risks and opportunities, skills, and how climate is integrated into strategy and remuneration.
+4. STRATEGY AND SCENARIO ANALYSIS. Assess identification of climate-related risks and opportunities, effects on business model and value chain, transition planning, and climate resilience using scenario analysis, including the scenarios the Act requires [VERIFY].
+5. RISK MANAGEMENT. Assess processes to identify, assess, prioritise and monitor climate-related risks and their integration into enterprise risk management.
+6. METRICS AND TARGETS. Assess scope 1, 2 and 3 emissions measurement, the timing relief for scope 3 in the first year [VERIFY], industry-based metrics, and targets.
+7. ASSURANCE MAP. Map the level of assurance required for each disclosure in each reporting year under the phasing, and the readiness of evidence.
+8. LIABILITY NOTE. Explain which statements fall within the modified liability arrangements for the initial period and which do not, and what directors should understand before signing [VERIFY scope and duration].
+9. IMPLEMENTATION PLAN. Workstreams, owners and dates to the first report, sequenced by the assurance timeline.
+10. LAWYER REVIEW TRIGGERS. Escalate: uncertain group classification; forward-looking statements outside modified liability; transition plan claims; scope 3 estimates; and director sign-off concerns.
+
+RULES
+- Determine group and first period before assessing readiness.
+- Label each item CORPORATIONS ACT, AASB S2, ASIC GUIDANCE, AUASB STANDARD or BEST PRACTICE.
+- Do not describe the modified liability period as broader immunity than the Act provides.
+
+OUTPUT FORMAT
+Open with the reporting group, first reporting period and first assurance requirement. Then the sections above, with readiness and assurance map as tables. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A private logistics group with A$420 million revenue and NGER reporting obligations needs to know when it must first report and whether its data is ready.',
+      result:
+        'Group classification tested against the criteria with the group flagged for verification, the first reporting period start calculated, governance rated partly ready, scenario analysis not yet performed, scope 1 and 2 data strong from NGER but scope 3 largely absent with first-year relief noted for verification, an assurance map by year, and an implementation plan sequenced to the first assured disclosures.',
+    },
+  },
+  {
+    id: 'au-whs-psychosocial-hazard-assessor',
+    name: 'WHS Psychosocial Hazard Assessor',
+    description: 'Identifies psychosocial hazards and assesses controls under the applicable WHS or OHS jurisdiction.',
+    jurisdiction: 'au',
+    category: 'compliance',
+    tags: ['workforce', 'assessment', 'work-health-safety', 'psychosocial', 'risk-assessment', 'due-diligence'],
+    sources: [
+      { citation: 'Model Work Health and Safety Regulations psychosocial risk provisions, as adopted in each jurisdiction', authority: 'primary', publisher: 'State and Territory legislatures', jurisdiction: 'au', note: 'Require PCBUs to manage psychosocial risks using the hierarchy of controls, with adoption on different dates across jurisdictions.' },
+      { citation: 'Occupational Health and Safety (Psychological Health) Regulations 2025 (Vic)', authority: 'primary', publisher: 'Victorian Parliament', jurisdiction: 'au', note: 'Commenced 1 December 2025 with a supporting compliance code. Victoria has not adopted the model WHS laws. Confirmed as at 2026-09-16.' },
+      { citation: 'Safe Work Australia model Code of Practice on managing psychosocial hazards at work', authority: 'guidance', publisher: 'Safe Work Australia', jurisdiction: 'au', url: 'https://www.safeworkaustralia.gov.au', note: 'Approved codes may be admissible as evidence of what is known about a hazard; status varies by jurisdiction.' },
+      { citation: 'WorkSafe Victoria psychological health compliance code', authority: 'regulator', publisher: 'WorkSafe Victoria', jurisdiction: 'au', url: 'https://www.worksafe.vic.gov.au' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['au-whs-incident-assessor', 'au-positive-duty-sexual-harassment-assessment', 'au-right-to-disconnect-triage'],
+    whatItDoes:
+      'Runs a proactive psychosocial risk assessment under the WHS or OHS law of the jurisdiction where the work is done: identifying hazards such as job demands, low job control, poor support, poor organisational change management, inadequate reward and recognition, poor organisational justice, traumatic events, remote or isolated work, poor physical environment, violence and aggression, bullying, harassment including sexual harassment, and conflict or poor workplace relationships. It assesses the risk from their duration, frequency and severity and how they interact, tests existing controls against the hierarchy of controls, and produces a control register with consultation and review steps.',
+    whenToUse:
+      'As a standing risk assessment, when work design or structure changes, after complaints, surveys or claims point to psychological harm, when entering a new jurisdiction, and when a regulator requests the psychosocial risk assessment. Not for: responding to a specific notifiable incident (use the WHS incident assessor) or assessing compliance with the Sex Discrimination Act positive duty (use the positive duty assessment).',
+    inputs: [
+      { name: 'Jurisdiction and workplaces', description: 'The State or Territory for each workplace, and remote or hybrid work locations.', required: true },
+      { name: 'Work design', description: 'Roles, workloads, hours, rostering, change programmes and reporting lines.', required: true },
+      { name: 'Indicators', description: 'Surveys, complaints, turnover, absence, workers compensation claims and incident data.', required: true },
+      { name: 'Existing controls', description: 'Policies, EAP, training, workload management and design controls.' },
+      { name: 'Consultation record', description: 'How workers and health and safety representatives have been consulted.' },
+    ],
+    outputs: [
+      { name: 'Jurisdiction map', description: 'The applicable law and regulator for each workplace.' },
+      { name: 'Hazard register', description: 'Hazards identified by role, team and location.' },
+      { name: 'Risk assessment', description: 'Risk rated on duration, frequency, severity and interaction.' },
+      { name: 'Control evaluation', description: 'Existing controls tested against the hierarchy of controls.' },
+      { name: 'Control plan', description: 'New and improved controls with owners and dates.' },
+      { name: 'Consultation and review plan', description: 'Worker consultation steps and review triggers.' },
+      { name: 'Officer reporting summary', description: 'What officers need to know to exercise due diligence.' },
+    ],
+    prompt: `You are an Australian work health and safety lawyer running a psychosocial risk assessment.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+In force:
+- Model WHS Regulations psychosocial provisions as adopted in the model jurisdictions, with adoption dates varying [VERIFY for the jurisdiction in issue].
+- Victoria: Occupational Health and Safety (Psychological Health) Regulations 2025, commenced 1 December 2025, with a compliance code [CONFIRMED, WorkSafe Victoria]. Victoria is not a model WHS jurisdiction; use its terminology and duties.
+Guidance:
+- Safe Work Australia model Code of Practice on managing psychosocial hazards; approval status varies by jurisdiction [VERIFY].
+
+INPUTS
+- Jurisdiction and workplaces: <State or Territory per workplace, remote locations>
+- Work design: <roles, workloads, hours, rosters, change, reporting lines>
+- Indicators: <surveys, complaints, turnover, absence, claims, incidents>
+- Existing controls: <policies, EAP, training, workload management, design>
+- Consultation: <workers and HSRs consulted>
+
+TASK
+1. SCOPE GATE. Identify the governing law and regulator for each workplace. Where work is performed in several jurisdictions, run the assessment per jurisdiction and note differences in terminology and duties.
+2. MISSING INFORMATION. Identify missing indicators and missing consultation. Consultation with workers is a duty in its own right and necessary for a credible assessment.
+3. HAZARD IDENTIFICATION. Identify psychosocial hazards by role, team and location, including job demands, low control, poor support, poor change management, poor reward and recognition, poor organisational justice, traumatic events, remote or isolated work, poor physical environment, violence and aggression, bullying, harassment including sexual and gender-based harassment, and conflict.
+4. RISK ASSESSMENT. Assess risk considering duration, frequency and severity of exposure, how hazards interact or combine, work design and systems, and the physical environment.
+5. CONTROL EVALUATION. Test existing controls against the hierarchy: eliminate the hazard where reasonably practicable, then minimise through work design and engineering controls before relying on administrative controls. Treat reliance on an employee assistance programme or resilience training as a low-order control that does not address the hazard.
+6. CONTROL PLAN. Propose controls addressing the source of each hazard, with owners and dates.
+7. CONSULTATION AND REVIEW. Plan worker and HSR consultation and set review triggers: changes to work, new information about hazards, incidents, and control failures, plus any jurisdiction-specific requirements such as prevention plans [VERIFY].
+8. OFFICER REPORTING. Summarise what officers need to know about hazards, controls and resourcing to discharge due diligence.
+9. LAWYER REVIEW TRIGGERS. Escalate: serious or systemic harm indicators; bullying or harassment involving senior people; regulator notices; claims trends; and hazards that are also Sex Discrimination Act positive duty issues.
+
+RULES
+- Apply the law of each workplace's jurisdiction; never apply one national rule.
+- Label each item WHS OR OHS LAW, REGULATION, CODE OF PRACTICE, REGULATOR GUIDANCE or BEST PRACTICE.
+- Prefer controls that change work design over individual coping measures.
+
+OUTPUT FORMAT
+Open with the highest-rated hazards and the jurisdictions involved. Then the sections above, with the hazard register, risk assessment and control plan as tables. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A contact centre operator with sites in Victoria and New South Wales sees rising stress claims after introducing call-handling targets and remote rostering.',
+      result:
+        'Victorian and NSW frameworks mapped separately, high job demands, low control and customer aggression identified as the highest-rated hazards and assessed as interacting, the existing EAP and resilience training assessed as low-order controls, a control plan redesigning targets and adding call-escalation rights, consultation with health and safety representatives planned, and an officer summary for due diligence.',
+    },
+  },
+  {
+    id: 'au-ransomware-payment-notification-triage',
+    name: 'Ransomware Payment Reporting Triage',
+    description: 'Determines Cyber Security Act ransomware payment reporting duties and prepares the 72-hour report.',
+    jurisdiction: 'au',
+    category: 'regulatory',
+    tags: ['regulatory-change', 'incident-response', 'cybersecurity', 'ransomware', 'cyber-extortion', 'regulatory-notification'],
+    sources: [
+      { citation: 'Cyber Security Act 2024 (Cth), Part 3 (ransomware payment reporting)', authority: 'primary', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'Reporting commenced 30 May 2025. A reporting business entity must report within 72 hours of making a ransomware or cyber extortion payment, or becoming aware a payment was made on its behalf. Confirmed as at 2026-09-16.' },
+      { citation: 'Cyber Security (Ransomware Payment Reporting) Rules 2025', authority: 'regulator', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'Sets the A$3 million annual turnover threshold, with a pro-rata formula for part-year businesses, and required information.' },
+      { citation: 'Department of Home Affairs and Australian Signals Directorate reporting guidance', authority: 'guidance', publisher: 'Department of Home Affairs; Australian Signals Directorate', jurisdiction: 'au', url: 'https://www.cyber.gov.au', note: 'Reports are made through the ASD reporting form. Implementation was phased; check current compliance posture.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['technology', 'healthcare', 'financial-services', 'energy-infrastructure'],
+    relatedSkills: ['au-soci-obligations-mapper', 'au-privacy-ndb-assessor', 'eu-nis2-incident-reporting'],
+    whatItDoes:
+      'Works out whether a business that has paid, or had a payment made on its behalf, in response to ransomware or cyber extortion must report it under the Cyber Security Act, and if so builds the 72-hour report with the information required. It separates the payment report from the other obligations the same incident usually triggers — notifiable data breach assessment, critical infrastructure incident reporting, insurer notice, and sanctions and law enforcement considerations — so none is missed and none is mistaken for another.',
+    whenToUse:
+      'Immediately after any ransomware or cyber extortion payment is made or becomes known, and during incident planning so the reporting path is ready before a payment decision. Not for: deciding whether to pay, notifiable data breach assessment itself (use the NDB assessor), or critical infrastructure incident reporting (use the SOCI mapper).',
+    inputs: [
+      { name: 'Payment facts', description: 'Whether a payment was made, when, by whom, amount, form and to whom.', required: true },
+      { name: 'Entity profile', description: 'Annual turnover for the last financial year or part-year, and whether a responsible entity for critical infrastructure.', required: true },
+      { name: 'Incident facts', description: 'The attack, systems affected, data involved, demands and communications with the extortionist.', required: true },
+      { name: 'Third parties', description: 'Incident responders, negotiators, insurers or others who made or facilitated payment.' },
+      { name: 'Other notifications', description: 'Notices already made to regulators, law enforcement or insurers.' },
+    ],
+    outputs: [
+      { name: 'Reporting obligation determination', description: 'Whether the entity is a reporting business entity and a report is required.' },
+      { name: 'Clock', description: 'The 72-hour deadline calculated from payment or awareness.' },
+      { name: 'Report content draft', description: 'The information required, with gaps marked.' },
+      { name: 'Parallel obligations map', description: 'NDB, SOCI, sector, insurer, sanctions and law enforcement steps.' },
+      { name: 'Record of decisions', description: 'A contemporaneous log of facts and reporting decisions.' },
+      { name: 'Lawyer review list', description: 'Sanctions exposure, privilege and legal limits on use of the report.' },
+    ],
+    prompt: `You are an Australian cyber and regulatory lawyer triaging ransomware payment reporting under the Cyber Security Act 2024.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+In force:
+- Mandatory ransomware and cyber extortion payment reporting commenced 30 May 2025 [CONFIRMED, Home Affairs and cyber.gov.au].
+- Reporting business entities include businesses with annual turnover of A$3 million or more in the previous financial year, with a pro-rata formula for part-year businesses [CONFIRMED]; responsible entities for critical infrastructure assets are also captured [VERIFY scope].
+- Report within 72 hours of making the payment or becoming aware that a payment was made on the entity's behalf, using the ASD reporting form [CONFIRMED].
+- Limits on how reported information may be used and disclosed [VERIFY].
+
+INPUTS
+- Payment: <made or not, when, by whom, amount, form, recipient>
+- Entity: <turnover last financial year or part-year, critical infrastructure status>
+- Incident: <attack, systems, data, demands, communications>
+- Third parties: <responders, negotiators, insurers who paid or facilitated>
+- Other notices: <already made>
+
+TASK
+1. SCOPE GATE. Confirm a ransomware or cyber extortion payment was made by or on behalf of the entity in connection with a cyber security incident. A demand without payment does not trigger this report, though voluntary reporting may be encouraged.
+2. REPORTING BUSINESS ENTITY. Apply the turnover threshold, showing the pro-rata calculation for part-year businesses, and check critical infrastructure responsible entity status. Record the conclusion.
+3. CLOCK. Fix the time of payment or of becoming aware of a payment made on the entity's behalf, and calculate the 72-hour deadline. Where a negotiator or insurer paid, identify when the entity became aware.
+4. MISSING INFORMATION. List required details not yet known and prepare to report within the deadline with what is known.
+5. REPORT CONTENT. Draft the information required under the Rules, typically including entity details, incident details and impact, the demand, the payment amount and method, and communications with the extortionist [VERIFY field list].
+6. PARALLEL OBLIGATIONS. Map separately: notifiable data breach assessment under the Privacy Act; critical infrastructure incident reporting; sector regulator notifications; insurer notice; law enforcement reporting; and sanctions considerations, since a payment to a sanctioned person may be an offence regardless of reporting.
+7. RECORD OF DECISIONS. Keep a log of facts, times, decisions and who made them.
+8. LAWYER REVIEW TRIGGERS. Escalate: any sanctions nexus; payments made without board authority; privilege over forensic work; conflicting obligations across regimes; and any regulator follow-up.
+
+RULES
+- The payment report does not satisfy any other obligation, and none of them satisfies it.
+- Label each item ACT, RULES, GOVERNMENT GUIDANCE or BEST PRACTICE.
+- Do not advise on whether to pay.
+- Never delay the report beyond 72 hours to complete an investigation.
+
+OUTPUT FORMAT
+Open with whether a report is required and the deadline as a date and time. Then the sections above, with the parallel obligations map as a table and the report content as a usable draft. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A healthcare provider’s insurer-appointed negotiator paid a ransom on a Friday evening and told the provider on Saturday morning; patient records were exfiltrated.',
+      result:
+        'Reporting business entity status confirmed on turnover, the 72-hour clock fixed from Saturday morning awareness rather than the Friday payment with the reasoning recorded, a report drafted with open fields marked, a parallel notifiable data breach assessment flagged as likely eligible given health information, insurer and law enforcement steps mapped, and a sanctions check on the recipient escalated before anything else.',
     },
   },
 ];
