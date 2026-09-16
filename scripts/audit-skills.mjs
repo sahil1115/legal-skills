@@ -39,6 +39,16 @@ const iIds = new Set(industries.map((i) => i.id));
 const VALID_AUTHORITY = new Set(['primary', 'regulator', 'guidance', 'secondary']);
 const VALID_REVIEW = new Set(['unverified', 'community-reviewed', 'practitioner-reviewed']);
 
+/** Longest skill name that still fits two lines on a card at 400px. */
+const NAME_MAX = 44;
+/**
+ * Share of the tag vocabulary that may be used by exactly one skill before the
+ * tag filter has stopped being a filter. See the note in `src/data/tags.ts`:
+ * a tag used once is a name, not a filter. Reported, never blocking — the fix
+ * is editorial and cannot be made mechanically.
+ */
+const SINGLETON_TAG_LIMIT = 0.7;
+
 const ids = new Set();
 const names = new Set();
 // `lastReviewed` is date-only and therefore timezone-less. Comparing it against
@@ -84,6 +94,10 @@ for (const s of skills) {
   if (!cIds.has(s.category)) E(`${at} unknown category "${s.category}"`);
 
   // --- copy quality ---
+  // Card titles wrap to three lines on a narrow viewport past roughly this
+  // length. The median skill name is around 25 characters; the cap is a house
+  // style rule rather than a correctness one, hence a warning.
+  if (s.name?.length > NAME_MAX) W(`${at} name is ${s.name.length} chars (>${NAME_MAX}) — "${s.name}"`);
   if (!s.description?.endsWith('.')) E(`${at} description is not a sentence`);
   if (s.description?.length > 130) W(`${at} description ${s.description.length} chars (>130)`);
   if (s.description?.length < 40) E(`${at} description too short`);
@@ -224,6 +238,55 @@ for (const s of skills) {
 for (const [old, target] of Object.entries(ID_ALIASES)) {
   if (skillsById.has(old)) E(`[aliases] "${old}" is aliased but still exists as a live id`);
   if (!skillsById.has(target)) E(`[aliases] "${old}" points at unknown skill "${target}"`);
+}
+
+// ---------------------------------------------------------------- tag health
+// Per-skill checks above catch a skill with no shared tag at all. They cannot
+// see the shape of the vocabulary as a whole, which is where this drifts: every
+// skill passes individually while the tag filter fills with one-use names.
+const tagCounts = new Map();
+for (const s of skills) {
+  for (const t of s.tags ?? []) tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
+}
+const singletons = [...tagCounts.values()].filter((n) => n === 1).length;
+const singletonShare = singletons / tagCounts.size;
+if (singletonShare > SINGLETON_TAG_LIMIT) {
+  W(
+    `[tags] ${singletons} of ${tagCounts.size} tags (${Math.round(singletonShare * 100)}%) are used ` +
+      `by one skill — over the ${Math.round(SINGLETON_TAG_LIMIT * 100)}% guide. Reuse existing tags, ` +
+      `or promote one that has earned its place into src/data/tags.ts.`,
+  );
+}
+
+// A tag that repeats a category id adds nothing the category filter does not
+// already do, and a near-duplicate of a shared tag splits the same filter in two.
+for (const [tag, n] of tagCounts) {
+  if (cIds.has(tag)) {
+    W(`[tags] "${tag}" (${n} skills) duplicates a category id — the category filter already covers it`);
+  }
+}
+const NEAR_DUPLICATES = {
+  privacy: 'data-protection',
+  incident: 'incident-response',
+  'breach-notification': 'incident-response',
+  employment: 'workforce',
+};
+for (const [tag, preferred] of Object.entries(NEAR_DUPLICATES)) {
+  const n = tagCounts.get(tag);
+  // Skip anything already reported just above as a category duplicate, so a
+  // tag that is both does not produce two lines saying the same thing.
+  if (n && !cIds.has(tag)) {
+    W(`[tags] "${tag}" (${n} skills) overlaps the shared tag "${preferred}" — prefer one`);
+  }
+}
+
+// Tags that have quietly earned a place in the shared vocabulary.
+const READY = [...tagCounts.entries()]
+  .filter(([t, n]) => n >= 4 && !SHARED_TAGS.includes(t) && !cIds.has(t))
+  .sort((a, b) => b[1] - a[1]);
+if (READY.length) {
+  console.log('\nTags used by 4+ skills but not in the shared vocabulary');
+  for (const [t, n] of READY) console.log(`  ${t.padEnd(26)} ${String(n).padStart(2)}`);
 }
 
 // ---------------------------------------------------------------- coverage

@@ -25,11 +25,11 @@ Deep links work per skill — for example [`#eu-ai-act-classifier`](https://sahi
 | Jurisdiction | Skills | Examples |
 | --- | --- | --- |
 | Global | 10 | Playbook Maker, Smart Redline, Contract Obligation Extraction, Data Rights Request Handler |
-| United States | 28 | NDA Reviewer, Separation & Release Reviewer, Commercial Lease Reviewer, HSR Threshold Tester, Delaware Corporate Approval Planner |
-| United Kingdom | 7 | Employment Tribunal Risk Assessor, TUPE Transfer Assessor, UK GDPR Breach Assessor, Companies Act Corporate Actions Planner, NSI Act Transaction Screener |
+| United States | 28 | NDA Reviewer, Separation & Release Reviewer, Commercial Lease Reviewer, HSR Threshold Tester, Delaware Corporate Approval & Fiduciary Process Planner |
+| United Kingdom | 7 | Employment Tribunal Risk Assessor, TUPE Transfer Assessor, UK GDPR Breach & ICO Notification Assessor, Companies Act Corporate Actions & Filings Planner, NSI Act Transaction Screener & Notification Planner |
 | European Union | 6 | AI Act Classifier, DPIA & ROPA Builder, NIS2 Scope Tester, DORA Third-Party Reviewer |
 | Canada | 5 | Termination Entitlements Assessor, Privacy Breach & Reporting Assessor, CASL Compliance Checker, Quebec Law 25 & Language Compliance Checker, Advertising & Claims Reviewer |
-| Australia | 12 | Unfair Dismissal Risk Assessor, Director Duties Checker, Retail Lease Reviewer, ACCC Merger Notification Planner, FATA / FIRB Approval Planner |
+| Australia | 12 | Unfair Dismissal Risk Assessor, Director Duties & Insolvent Trading Checker, Retail & Commercial Lease Reviewer, ACCC Merger Notification & Waiver Planner, FATA / FIRB Foreign Investment Approval Planner |
 | Singapore | 6 | PDPA Obligation Mapper, MAS Notice Checker, SIAC Clause Builder |
 | Cross-jurisdiction | 4 | Contract Localizer, Four-Regime Gap Analyzer, Strictest-Rule Resolver |
 
@@ -202,7 +202,7 @@ Every skill must declare all of these. `npm run audit` enforces them.
 | Field | Requirement |
 | --- | --- |
 | `id` | Unique, `<jurisdiction>-<slug>`. **Permanent once merged** — rename via `ID_ALIASES`. |
-| `name` / `description` | Unique name; description a sentence, roughly ≤ 130 chars |
+| `name` / `description` | Unique name, roughly ≤ 44 chars so it fits a card at 400px; description a sentence, roughly ≤ 130 chars |
 | `jurisdiction` / `category` | Must exist in their registries (enforced by TypeScript) |
 | `tags` | ≥ 4, at least one from [`src/data/tags.ts`](src/data/tags.ts) |
 | `whatItDoes` / `whenToUse` | Substantive, not a restatement of the description |

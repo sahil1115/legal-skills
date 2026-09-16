@@ -97,7 +97,8 @@ You do not need to be a developer to contribute a skill. If you can edit a text 
 
 - **`id` must be unique** and follow `<jurisdiction>-<slug>`. It is a published deep link, so treat it as permanent once merged. If a rename is genuinely warranted, add the old id to `ID_ALIASES` in `src/data/skills/index.ts` and **never delete that entry**.
 - **`jurisdiction` and `category` must be valid.** TypeScript rejects a typo at build time. Valid categories are in `src/data/categories.ts`.
-- **At least one tag from `src/data/tags.ts`.** `npm run audit` fails a skill whose tags are all words no other skill uses, and the dev server warns in the console. A tag used once is a name, not a filter.
+- **At least one tag from `src/data/tags.ts`.** `npm run audit` fails a skill whose tags are all words no other skill uses, and the dev server warns in the console. A tag used once is a name, not a filter. The audit also reports the share of the whole vocabulary used by a single skill, and lists tags used by four or more skills that are candidates for promotion into the shared list — reach for an existing tag before inventing one.
+- **Keep the `name` short**, roughly 44 characters or fewer. It is a card title, and a longer one wraps to three lines at 400px. Prefer one idea per name: if it needs an ampersand to join two halves, the second half usually belongs in the description. The audit warns above the limit.
 
 ### 4. Check it
 
@@ -108,7 +109,7 @@ npm run dev     # open the app, find your skill, open it, copy the prompt
 npm run build   # must pass before you open a PR
 ```
 
-`npm run audit` checks what TypeScript cannot: source metadata and authority tiers, deep links in source URLs, review dates and semver, the safety block's own integrity, required prompt sections, provider names leaking into prompts, an inlined safety block, thin content, malformed or duplicate ids/names/tags/sources, broken or self-referencing `relatedSkills`, dangling `ID_ALIASES`, and that both export formats round-trip with their safety block intact. Errors fail CI; warnings report without blocking.
+`npm run audit` checks what TypeScript cannot: source metadata and authority tiers, deep links in source URLs, review dates and semver, the safety block's own integrity, required prompt sections, provider names leaking into prompts, an inlined safety block, thin content, malformed or duplicate ids/names/tags/sources, broken or self-referencing `relatedSkills`, dangling `ID_ALIASES`, tag-vocabulary health and name length, and that both export formats round-trip with their safety block intact. Errors fail CI; warnings report without blocking.
 
 ---
 
