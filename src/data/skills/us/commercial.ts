@@ -413,4 +413,79 @@ Open with the five terms that most need to change and why. Then the sections abo
         'Four concessions from the letter of intent found to be missing or narrowed in the lease, a base-year structure identified as having no gross-up provision and no cap on controllable expenses, holdover priced at double gross rent plus consequential damages flagged as the largest single exposure, and a recommendation to fix restoration scope in writing at each alteration approval rather than at surrender.',
     },
   },
+  {
+    id: 'us-battle-of-forms-resolver',
+    name: 'Battle of the Forms Resolver',
+    description: 'Works out which terms survive when a purchase order and an acknowledgement do not match.',
+    jurisdiction: 'us',
+    category: 'contracts',
+    tags: ['contract-lifecycle', 'assessment', 'ucc', 'battle-of-the-forms', 'purchase-order', 'terms-conflict', 'supply-chain'],
+    sources: [
+      { citation: 'Uniform Commercial Code Article 2', authority: 'primary', publisher: 'Uniform Law Commission', jurisdiction: 'us', url: 'https://www.uniformlaws.org', note: 'Governs contracts for the sale of goods. Enacted with state-level variations, and a minority of states depart materially on the additional-terms rule. The enacting state controls.' },
+      { citation: 'State enactments of the Uniform Commercial Code', authority: 'primary', publisher: 'State legislatures', jurisdiction: 'us', note: 'Section numbering is broadly consistent but the text is not uniform. Read the enacting state version rather than the model text.' },
+      { citation: 'United Nations Convention on Contracts for the International Sale of Goods', authority: 'primary', publisher: 'United Nations Commission on International Trade Law', jurisdiction: 'us', url: 'https://uncitral.un.org', note: 'Applies by default to many cross-border sales between parties in contracting states unless excluded, and takes a different approach to conflicting terms than Article 2.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['technology', 'retail-consumer', 'energy-infrastructure'],
+    relatedSkills: ['us-ucc9-filing-checker', 'global-obligation-extraction', 'us-contract-obligation-tracker'],
+    whatItDoes:
+      'Reconstructs how a contract actually formed when the parties exchanged mismatched forms rather than signing one agreement, then works out which terms became part of it. It establishes whether Article 2 governs at all, identifies the offer and the response, tests whether an acknowledgement is an acceptance or a counter-offer, and applies the additional and different terms analysis to each clause in dispute. Where performance began before any agreement on terms, it runs the separate conduct-based formation route, which usually produces a different and less favourable answer than either form.',
+    whenToUse:
+      'When a dispute turns on whose terms apply, when reviewing order and acknowledgement templates, and before relying on a limitation of liability, warranty disclaimer or arbitration clause that lives only in your own form.',
+    inputs: [
+      { name: 'The forms exchanged', description: 'Purchase order, quotation, acknowledgement, invoice, packing slip and any terms referenced by link, in the order sent.', required: true },
+      { name: 'Sequence and dates', description: 'What was sent when, by whom, and what was said in any covering message.', required: true },
+      { name: 'Goods or services', description: 'What was supplied, since Article 2 governs goods and a mixed contract needs a predominant purpose analysis.', required: true },
+      { name: 'Performance history', description: 'Whether goods shipped, were accepted and were paid for, and whether this is a one-off or part of a course of dealing.' },
+      { name: 'Terms in dispute', description: 'The specific clauses that matter here, such as the liability cap, warranty, indemnity, forum or arbitration term.' },
+      { name: 'Merchant status and location', description: 'Whether both parties are merchants, the states involved, and whether either party is outside the United States.' },
+    ],
+    outputs: [
+      { name: 'Governing law determination', description: 'Whether Article 2, common law or the international sales convention applies, with the predominant purpose reasoning for a mixed contract.' },
+      { name: 'Formation analysis', description: 'How and when the contract formed, and under which route.' },
+      { name: 'Term-by-term result', description: 'Each disputed clause marked as included, excluded or knocked out, with the reason.' },
+      { name: 'Knockout exposure', description: 'What the supplied default rules put in place of any term that dropped out.' },
+      { name: 'Position assessment', description: 'Whether the outcome favours the buyer or the seller and how strong the argument is either way.' },
+      { name: 'Form redraft points', description: 'Changes to the forms and the sending process that would produce a better result next time.' },
+    ],
+    prompt: `You are a US commercial lawyer resolving a battle of the forms between mismatched contract documents.
+
+INPUTS
+- Forms exchanged: <paste each document in the order sent — quotation, purchase order, acknowledgement, invoice, packing slip — and note any terms incorporated by reference or by link>
+- Sequence: <what was sent when, by whom, and the text of any covering email or portal message>
+- Subject matter: <what was supplied; if it mixes goods with services or software, describe the split and the relative value>
+- Performance: <did goods ship? were they accepted? was payment made? is there a course of dealing between these parties?>
+- Terms in dispute: <the specific clauses that matter — liability cap, warranty disclaimer, indemnity, forum, arbitration, price escalation>
+- Parties: <are both merchants? what states? is either party outside the United States?>
+
+TASK
+1. GOVERNING LAW. Determine what governs before analysing anything. Is this a contract for the sale of goods under Article 2? For a mixed transaction, apply the predominant purpose test and show the reasoning on these facts, since services-heavy and software transactions frequently fall outside Article 2 and back into common law, where the last-shot rule rather than the knockout analysis tends to apply. If either party is outside the United States, check whether the international sales convention applies by default and whether either form excludes it — its treatment of conflicting terms differs and an exclusion clause buried in one form may not be effective. Identify the enacting state and note that a minority of states depart from the model text on the additional-terms rule [VERIFY].
+2. IDENTIFY OFFER AND RESPONSE. Map the exchange in sequence. Establish which document is the offer and which is the response, and do not assume the purchase order is always the offer — a detailed quotation can be an offer that the purchase order accepts. Note anything that is neither, such as an invoice sent after formation, which generally cannot add terms to a contract already made.
+3. ACCEPTANCE OR COUNTER-OFFER. Test the response. A definite and seasonable expression of acceptance operates as an acceptance even though it states terms additional to or different from those offered — unless acceptance is expressly made conditional on assent to the new terms. Examine the exact wording of any such proviso: language merely reserving rights or reciting standard terms is often held insufficient, while language genuinely conditioning acceptance turns the document into a counter-offer. State which it is here and quote the words relied on.
+4. ADDITIONAL TERMS. For terms in the response that the offer did not address, apply the rule between merchants: they become part of the contract unless the offer expressly limits acceptance to its own terms, they materially alter it, or notification of objection has already been given or is given within a reasonable time. Work through materiality clause by clause rather than as a single conclusion, and treat surprise or hardship as the touchstone. Warranty disclaimers, liability caps, indemnities and arbitration clauses are commonly argued to be material alterations — mark each as likely material, likely not, or genuinely contested [VERIFY], and give the argument both ways for the contested ones.
+5. DIFFERENT TERMS. For terms that conflict rather than merely add, identify which approach the enacting state follows, because the outcome changes with it and the states are split: the knockout approach, under which both conflicting terms drop out and the supplied default rules fill the gap; the approach treating different terms like additional terms; or the approach under which the offeror's term simply governs. Do not state a single national rule. Give the result under the approach most likely to apply, and say plainly what changes under the others.
+6. CONDUCT-BASED FORMATION. Where the writings do not establish a contract but the parties behaved as though there were one, run the separate route: the contract consists of the terms on which the writings agree, together with the supplied default terms. Then state what that actually means here — typically the loss of every non-matching protective term on both sides, leaving statutory warranties in place, no liability cap and no arbitration. Parties are routinely surprised by this outcome, so quantify it rather than describing it.
+7. TERM-BY-TERM RESULT. Produce a table: | Term | Whose form | Additional or different | Analysis | Result |. Mark each as included, excluded or knocked out. For every term that drops out, state the default rule that replaces it and the practical consequence — what the implied warranties now say, what the damages exposure becomes without the cap, where a dispute must now be heard.
+8. POSITION AND STRATEGY. Say which party the overall result favours and how strong the position is. Identify the facts that would change the answer and which of them are provable from the documents. Separate what is clear from what is genuinely contested, and do not present a contested formation analysis as settled.
+9. FORM AND PROCESS FIXES. Recommend changes to the documents and to the sending process: whether to make acceptance expressly conditional and how to word it, whether to object to the other side's terms in advance and in what form, whether to send terms before rather than after the other party's form, and whether the volume of trade with this counterparty justifies negotiating a master agreement instead. Note that a master agreement with a prevailing-terms clause resolves this class of problem permanently, and that no amount of drafting inside a single form does.
+
+RULES
+- Establish the governing body of law first. The knockout analysis applies to goods under Article 2; common law generally applies the last-shot rule, and the international convention differs again. Applying the wrong one produces a confident and wrong answer.
+- The states split on different terms. Never state a national rule — identify the enacting state, give the likely result and flag the alternatives.
+- Assess materiality clause by clause, not document by document.
+- Read the exact wording of any conditional-acceptance proviso. The outcome turns on those words, not on whether the form looks assertive.
+- Where performance has begun without agreement on terms, run the conduct route even if it gives the client a worse answer, and say so plainly.
+- Do not treat an invoice or packing slip sent after formation as capable of adding terms.
+
+OUTPUT FORMAT
+Open with the bottom line — which terms govern the disputed clauses and who that favours. Then the sections above, with the term-by-term table and a short list of form and process fixes.`,
+    example: {
+      scenario:
+        'A component supplier sues for payment; the buyer relies on the indemnity in its purchase order while the supplier relies on the liability cap and warranty disclaimer in its acknowledgement.',
+      result:
+        'Article 2 confirmed on a predominant purpose analysis, the acknowledgement held to be an acceptance rather than a counter-offer because its proviso only reserved rights instead of conditioning assent, the liability cap and warranty disclaimer assessed as material alterations that did not enter the contract, the conflicting indemnities knocked out under the approach the enacting state follows, and the resulting exposure quantified under the default warranty rules that filled the gap.',
+    },
+  },
 ];

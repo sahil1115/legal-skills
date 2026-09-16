@@ -455,4 +455,85 @@ Open with a verdict — present as drafted, present with changes, or do not pres
         'Release found unenforceable as to age claims for the eleven employees over 40 because no group disclosure schedule was prepared and the decisional unit had never been defined, a confidentiality clause narrowed after it was found to reach discussion of severance terms among employees, wage claims and agency participation carved out of an otherwise general release, and one state identified as requiring disclaimer language the template omitted.',
     },
   },
+  {
+    id: 'us-ada-fmla-interactive-process',
+    name: 'ADA & FMLA Interactive Process Mapper',
+    description: 'Structures the interactive process for an accommodation or leave request and builds the record.',
+    jurisdiction: 'us',
+    category: 'employment',
+    tags: ['workforce', 'assessment', 'accommodations', 'leave', 'disability', 'interactive-process', 'undue-hardship'],
+    sources: [
+      { citation: 'Americans with Disabilities Act (42 U.S.C. ch. 126), as amended', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.congress.gov', note: 'The amendments broadened the definition of disability substantially and directed that it not demand extensive analysis. Coverage is rarely the contested question it once was.' },
+      { citation: 'Family and Medical Leave Act (29 U.S.C. ch. 28) and its implementing regulations', authority: 'primary', publisher: 'United States Congress; Department of Labor', jurisdiction: 'us', url: 'https://www.dol.gov', note: 'Relied on for eligibility, qualifying reasons, notice and certification, and the designation and tracking rules.' },
+      { citation: 'EEOC enforcement guidance on reasonable accommodation and undue hardship', authority: 'regulator', publisher: 'Equal Employment Opportunity Commission', jurisdiction: 'us', url: 'https://www.eeoc.gov' },
+      { citation: 'Pregnant Workers Fairness Act', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.congress.gov', note: 'Creates a separate accommodation duty for known limitations related to pregnancy and childbirth, on a lower threshold than disability and without requiring an impairment.' },
+      { citation: 'State and local disability, leave and accommodation statutes', authority: 'primary', publisher: 'State and local legislatures', jurisdiction: 'us', note: 'Many impose broader definitions, additional leave entitlements, paid leave and separate notice obligations. These stack with the federal duties rather than replacing them.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-employment-policy-checker', 'us-separation-agreement-reviewer', 'us-worker-classification'],
+    whatItDoes:
+      'Takes an accommodation or leave request and runs the parallel analyses that actually apply to it, because a single request routinely engages disability accommodation, federal leave and a state entitlement at the same time with different tests and different clocks. It identifies what has been triggered even where the employee never used any legal term, determines what medical information may lawfully be requested and from whom, structures the dialogue itself, and tests any proposed denial against the undue hardship standard rather than against inconvenience.',
+    whenToUse:
+      'The moment an employee mentions a medical condition affecting their work, requests a schedule or duty change, exhausts leave, returns with restrictions, or when a performance process is about to begin against someone who has raised a health issue.',
+    inputs: [
+      { name: 'The request', description: 'What the employee said or wrote, in their own words, and when.', required: true },
+      { name: 'Role and essential functions', description: 'The job, its actual essential functions, and the job description if one exists.', required: true },
+      { name: 'Limitation described', description: 'The condition or restriction as described, and any medical documentation already provided.', required: true },
+      { name: 'Employment details', description: 'Tenure, hours worked, worksite headcount, and leave already taken this year.' },
+      { name: 'Operational context', description: 'Coverage, cost, team size, and what accommodating would actually require.' },
+      { name: 'Prior history', description: 'Earlier requests, accommodations in place, performance issues, and any complaint or leave preceding this.' },
+    ],
+    outputs: [
+      { name: 'Trigger analysis', description: 'Every statute engaged by the request, including those the employee did not name.' },
+      { name: 'Coverage and eligibility', description: 'Disability coverage and leave eligibility assessed separately, with the headcount and hours tests shown.' },
+      { name: 'Essential functions analysis', description: 'Which functions are genuinely essential and which are marginal, tested against evidence rather than the job description alone.' },
+      { name: 'Permitted medical inquiries', description: 'What may lawfully be asked, of whom, in what form, and what may not.' },
+      { name: 'Accommodation options', description: 'Options to consider including leave as an accommodation, with the effectiveness of each.' },
+      { name: 'Undue hardship assessment', description: 'Any proposed denial tested against the statutory factors, with the evidence required to support it.' },
+      { name: 'Process record and timeline', description: 'The dated documentation trail, the notices due and when, and the next scheduled step.' },
+    ],
+    prompt: `You are a US employment lawyer structuring the interactive process for an accommodation or leave request.
+
+INPUTS
+- The request: <exactly what the employee said or wrote, in their words, and the date; note if it came through a manager rather than HR>
+- Role: <job title, actual duties, the job description if one exists, and how the role is really performed day to day>
+- Limitation: <the condition or restriction as described, duration if known, and any medical documentation already provided>
+- Employment: <start date, hours worked in the last 12 months, headcount at and within 75 miles of the worksite, leave already taken this leave year>
+- Operations: <coverage requirements, team size, cost of the accommodation, what it would actually require>
+- History: <prior requests, accommodations already in place, performance issues, and any complaint, injury or leave preceding this request>
+
+TASK
+1. TRIGGER ANALYSIS. Establish what the request set in motion, and do this before anything else. An employee need not use the words accommodation, disability or leave, need not cite any statute, and need not make the request in writing. A manager being told about a medical problem affecting work is usually enough, and knowledge held by a manager is generally imputed to the employer. Identify every regime engaged: disability accommodation; federal leave; pregnancy-related accommodation, which applies on a lower threshold and does not require an impairment; workers compensation if the condition is work-related; state and local disability, leave and paid-leave statutes; and any collective agreement or company policy that is more generous. List which ones the employee named and which they did not, and state that the employer's duty does not depend on the employee identifying the right one.
+2. COVERAGE AND ELIGIBILITY, SEPARATELY. These are different tests and a person can satisfy one and not the other.
+   a. Disability: does the condition substantially limit a major life activity, including major bodily functions? Apply the broadened standard and note that the analysis is not meant to be demanding, that episodic conditions and conditions in remission are assessed in their active state, and that mitigating measures other than ordinary eyeglasses are disregarded. Also consider the record-of and regarded-as routes.
+   b. Leave eligibility: months of service, hours worked in the preceding twelve months, and the worksite headcount test. Show the arithmetic. Then check whether the reason qualifies.
+   Where leave eligibility fails, say plainly that the accommodation duty continues regardless and that leave may still be required as an accommodation.
+3. ESSENTIAL FUNCTIONS. Identify which functions are genuinely essential and which are marginal. Test against the evidence rather than the job description alone: the reason the position exists, the number of employees available to perform the function, the degree of specialisation, time actually spent on it, and how the role is really performed. A written job description is evidence but is not conclusive, and one that has not been updated in years usually is not persuasive. Address attendance and on-site presence directly and on these facts rather than asserting either as inherently essential.
+4. MEDICAL INQUIRIES. State precisely what may lawfully be requested and what may not. Where the disability or the need for accommodation is not obvious, reasonable documentation of the limitation and the need may be sought — but not an unrestricted medical history, not the full file, and not a diagnosis where the limitation is what matters. Cover: certification for leave and the separate, narrow route for seeking clarification or a second opinion; who may make contact and the restrictions on doing so; the confidentiality requirement that medical information be kept separate from the personnel file; and who inside the business may be told what, which is ordinarily only the restriction and not the condition. Flag any inquiry already made that exceeded these limits.
+5. THE DIALOGUE. Structure the process itself. It is an interactive obligation, and a breakdown attributable to the employer is itself actionable even where no accommodation was ultimately required. Set out who meets whom, what is asked, how the employee's own proposal is considered, how alternatives are generated, and the cadence of follow-up. Emphasise that delay is the most common failure: a request left unanswered for weeks while documentation is chased is a breakdown. Where the employee's proposal is not workable, the employer must consider alternatives rather than simply refusing — and it may choose among effective accommodations, but the one it chooses must actually be effective.
+6. ACCOMMODATION OPTIONS. Generate concrete options for these facts, covering schedule and hours changes, remote or hybrid arrangements, equipment and software, workplace modification, adjustment of marginal functions, temporary reassignment of duties, and reassignment to a vacant position as an accommodation of last resort. Treat leave as an accommodation explicitly, including leave beyond any statutory entitlement and leave after entitlement is exhausted. Address indefinite leave separately and honestly: a request with no expected end date is treated differently from a defined extension, and the distinction turns on the medical evidence. Assess each option for effectiveness rather than convenience.
+7. UNDUE HARDSHIP. Any denial must rest on this standard, and it is significant difficulty or expense judged against the employer's overall resources — not inconvenience, not a preference, not that other employees may resent it, and not that no one has done it before. Work through the factors: the nature and net cost after tax credits and outside funding, the financial resources of the facility and of the whole employer, the type of operation, and the impact on operations and on other employees' ability to do their jobs. State exactly what evidence would have to be assembled to support a denial here, and say plainly if it does not exist. Address any conflict with a collective agreement or a seniority system separately.
+8. RECORD AND TIMELINE. Build the dated trail: the request, acknowledgement, documentation requested and received, meetings and what was discussed, options considered and why each was accepted or rejected, the decision and its reasons, the trial period if any, and the review date. Then list the notices due and when — eligibility and rights notices, designation, certification deadlines — and mark each period [VERIFY]. Note that these records must be kept separately from the personnel file.
+9. RELATED EXPOSURE. Flag risks the accommodation analysis does not resolve: retaliation, especially where a performance process is starting against someone who has just made a request; interference with leave rights, including discouraging use; the treatment of intermittent leave and attendance policies that count protected absences; no-fault attendance and maximum-leave policies, which are a recurring source of enforcement; return-to-work and fitness-for-duty requirements; and the interaction with any separation being contemplated. Where a performance or disciplinary process is in train, address the timing directly rather than leaving it implicit.
+
+RULES
+- Run the statutes in parallel, never in sequence. Leave ineligibility does not end the accommodation duty, and exhausting leave does not end it either.
+- Never require the employee to have used legal terminology, a form, or a written request to have triggered the duty.
+- Do not treat a stale job description as settling what is essential.
+- Undue hardship is significant difficulty or expense, evidenced. Do not let inconvenience, cost assumptions or fairness complaints stand in for it.
+- State and local law frequently gives more. Identify the jurisdiction and treat the federal analysis as a floor, marking state entitlements [VERIFY].
+- Treat delay as a live risk in its own right and give a next date for every open step.
+- Do not advise on the medical merits. The question is the limitation and its effect on essential functions, not the diagnosis.
+
+OUTPUT FORMAT
+Open with every statute triggered and the single most urgent step with its date. Then the sections above, with tables for the essential functions analysis and the accommodation options, closing with the dated process record and notice schedule.`,
+    example: {
+      scenario:
+        'An employee tells their manager they are struggling with a flare-up of a chronic condition and asks to start later some mornings; a performance review is scheduled the following week.',
+      result:
+        'Request identified as triggering the accommodation duty despite no legal terminology being used and the mention going to a manager rather than HR, leave eligibility failing the hours test while the accommodation duty continued regardless, punctuality assessed as a marginal rather than essential function for this role on the evidence, the scope of permitted medical inquiry narrowed after an overbroad records request had already gone out, a trial flexible-start arrangement structured with a review date, and the scheduled review flagged as a retaliation risk requiring documented independent grounds.',
+    },
+  },
 ];

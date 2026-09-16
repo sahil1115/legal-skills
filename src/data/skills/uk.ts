@@ -568,4 +568,173 @@ Open with the provisional route, completion restriction and most important missi
         'Each share, voting and governance trigger mapped; the target activity tested against the current technical definitions rather than its AI label; mandatory and wider call-in routes kept separate; the completion restriction and interim-control risk identified; a notification evidence pack prepared; and NSI conditions precedent, cooperation rights and long-stop assumptions added to the deal plan.',
     },
   },
+  {
+    id: 'uk-ir35-status-assessor',
+    name: 'IR35 Status Determination Builder',
+    description: 'Assesses off-payroll working status and builds a defensible status determination statement.',
+    jurisdiction: 'uk',
+    category: 'employment',
+    tags: ['workforce', 'assessment', 'worker-classification', 'independent-contractor', 'ir35', 'off-payroll', 'status-determination'],
+    sources: [
+      { citation: 'Income Tax (Earnings and Pensions) Act 2003, Part 2 Chapters 8 and 10', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Chapter 10 places the determination and, in most cases, the liability on the client for medium and large organisations and public authorities. Chapter 8 continues to apply where the client is small, leaving the intermediary responsible.' },
+      { citation: 'Case law on employment status', authority: 'primary', publisher: 'UK courts and tribunals', jurisdiction: 'uk', note: 'Status is determined by the hypothetical contract and the whole picture, drawn from decided cases rather than from any statutory test. The tax and employment law tests are related but not identical, and a person can be a contractor for one and not the other.' },
+      { citation: 'HMRC Employment Status Manual and off-payroll working guidance', authority: 'guidance', publisher: 'HM Revenue and Customs', jurisdiction: 'uk', url: 'https://www.gov.uk', note: 'Sets out HMRC practice, the status determination statement requirements and the client-led disagreement process. Guidance is persuasive, not binding, and the CEST tool output is not determinative.' },
+      { citation: 'Companies Act 2006', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Relied on for the definition of a small company, which determines whether the client or the intermediary carries the obligation.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['financial-services', 'technology', 'professional-services', 'public-sector'],
+    relatedSkills: ['eu-platform-work-status-assessor', 'us-worker-classification', 'uk-employment-tribunal-risk'],
+    whatItDoes:
+      'Works out who carries the off-payroll obligation before assessing anything, because that turns on the size of the client and determines whether the client or the intermediary bears the liability. It then constructs the hypothetical contract between the worker and the client — which is what the test actually applies to, not the contract anyone signed — assesses it against the status factors on the working practices rather than the paperwork, and produces a status determination statement with reasons capable of surviving challenge rather than a bare conclusion.',
+    whenToUse:
+      'Before engaging any contractor through an intermediary, when a role or working practice changes mid-engagement, when a contractor disputes a determination, when reviewing an existing contractor population, and on any HMRC compliance check.',
+    inputs: [
+      { name: 'Engagement structure', description: 'The chain from client to worker, including any agency, umbrella or personal service company.', required: true },
+      { name: 'Client size', description: 'Turnover, balance sheet total and headcount, and whether the client is a public authority.', required: true },
+      { name: 'Working practices', description: 'How the work is really carried out, as opposed to what the contract says.', required: true },
+      { name: 'Contract documents', description: 'The upper and lower level contracts in the chain, and any statement of work.' },
+      { name: 'Substitution and control', description: 'Whether a substitute has ever been used, who directs the work, and who decides how it is done.' },
+      { name: 'Integration facts', description: 'Equipment, systems access, team position, financial risk borne, and other concurrent clients.' },
+    ],
+    outputs: [
+      { name: 'Regime determination', description: 'Which chapter applies, who must determine status, and who bears the liability.' },
+      { name: 'Hypothetical contract', description: 'The notional direct contract constructed from the chain and the actual practices.' },
+      { name: 'Status factor analysis', description: 'Each factor weighed with the evidence, not asserted.' },
+      { name: 'Status determination statement', description: 'A drafted statement giving the conclusion and the reasons for it.' },
+      { name: 'Evidence file', description: 'What must be retained to support the determination if challenged.' },
+      { name: 'Disagreement process', description: 'The client-led process, its deadline and the consequence of not operating it.' },
+      { name: 'Exposure and adjacent risk', description: 'Tax and National Insurance exposure, and the separate employment rights claim the same facts can support.' },
+    ],
+    prompt: `You are a UK employment tax specialist producing an off-payroll working status assessment and determination.
+
+INPUTS
+- Chain: <client, any agency or managed service provider, umbrella, personal service company, and the worker; identify the fee-payer — the entity paying the worker's intermediary>
+- Client size: <turnover, balance sheet total, employee numbers; is the client a public authority? is it part of a group?>
+- The role: <what the worker does, the deliverable or the function, expected duration, and whether the role pre-existed>
+- Working practices: <how work is allocated day to day, who says what to do and how, hours and location, whether the worker attends internal meetings or appraisals, how performance is addressed>
+- Substitution: <does the contract permit a substitute? is it fettered by client approval? has one ever been used? who would pay them?>
+- Financial and integration: <who provides equipment and systems, is the worker paid by time or by deliverable, do they correct defects at their own cost, do they carry insurance, do they work for other clients concurrently, do they appear in internal directories or manage staff>
+- Contracts: <upper-level and lower-level contracts, statement of work>
+
+TASK
+1. REGIME AND RESPONSIBILITY. Settle this first, because it determines who is exposed. Apply the small company test to the client using turnover, balance sheet total and employee numbers, and address group aggregation and the rules for when a change in size takes effect. Mark the thresholds [VERIFY]. If the client is medium or large, or is a public authority, the client must determine status and the fee-payer generally accounts for tax and National Insurance, with liability able to transfer up the chain where a party fails in its obligations. If the client is small, the older regime continues to apply and responsibility stays with the intermediary. State plainly which applies, who must produce the determination, and who carries the liability, including the position of any offshore party in the chain.
+2. THE HYPOTHETICAL CONTRACT. State the central point that most assessments get wrong: the test is not applied to the written contract between the client and the intermediary, nor to the contract between the intermediary and the worker. It is applied to a notional contract constructed as if the worker had contracted directly with the client, built from the terms across the whole chain and from what actually happens. Construct that hypothetical contract here, and identify any term in the written documents that the working practices contradict — where they conflict, the practices prevail.
+3. STATUS FACTOR ANALYSIS. Weigh each factor with the evidence, and do not assert conclusions:
+   - PERSONAL SERVICE AND SUBSTITUTION. Is there a genuine and unfettered right of substitution? A right subject to client approval may still count if approval cannot be unreasonably withheld, but a right that is fettered in practice, never exercised, or commercially unrealistic carries little weight. Ask who would pay the substitute — payment by the intermediary points away from employment. Treat a clause inserted solely to influence status as weak evidence.
+   - CONTROL. Examine control over what, how, when and where. What matters most is control over the manner of performance. A highly skilled worker whom nobody could direct technically is not automatically outside the regime — look for the right of control rather than its exercise, and for control over hours, location, priorities and reallocation to other tasks.
+   - MUTUALITY OF OBLIGATION. Is there an obligation to offer work and to accept it during the engagement? Address this carefully rather than mechanically: the irreducible minimum of obligation is usually present within any engagement where work is done for pay, so mutuality rarely decides the question on its own, and an assessment resting mainly on it is fragile.
+   - OTHER FACTORS. Financial risk and the opportunity to profit from sound management, provision of equipment, whether defects are corrected at the worker's own cost and time, integration into the organisation, whether the worker is in effect part and parcel of it, exclusivity and concurrent engagements, length and pattern of engagement, employee-type benefits, and how the parties described the relationship — which carries weight only where the other factors are finely balanced.
+   Produce a table with columns Factor, Evidence, Points toward, Weight.
+4. OVERALL CONCLUSION. Stand back and assess the whole picture rather than counting factors. State the conclusion as inside or outside the off-payroll rules, and state the confidence level honestly. Where the position is borderline, say so and identify precisely which facts would move it either way. Do not present a borderline case as clear-cut in either direction.
+5. USE OF THE CHECKING TOOL. Where HMRC's check employment status for tax tool has been used, treat it as an input rather than an answer. Note that its result is only as good as the inputs and that HMRC stands behind it only where the information given is accurate and the working practices match. Identify any question where the answer given does not match the facts established above, since a mismatch removes whatever comfort the output provided. Record that an undetermined output is not a conclusion and requires a reasoned assessment.
+6. STATUS DETERMINATION STATEMENT. Draft the statement. It must state the conclusion and give the reasons for it, and it must be passed to the worker and to the next party in the chain. State plainly that a determination without reasons, or one issued without reasonable care, is treated as not having been made at all — with the consequence that liability stays with the client. Address blanket determinations directly: determining an entire population as inside without individual assessment fails the reasonable care requirement, and role-based determinations are defensible only where the working practices are genuinely uniform and that uniformity is evidenced.
+7. DISAGREEMENT PROCESS. Set out the client-led disagreement process: the worker or fee-payer may make representations, the client must consider them and respond within the prescribed period with either a new determination or reasons for maintaining the existing one, and failing to respond within the period shifts liability to the client. Mark the period [VERIFY]. Confirm whether a process exists, who operates it, and whether it is genuinely capable of changing an outcome.
+8. EVIDENCE FILE. Specify what to retain: the determination and its reasons, the completed assessment and its inputs, the contracts across the chain, the statement of work, evidence of the actual working practices, any substitution evidence, the tool output if used, records of representations and responses, and the date of each review. Recommend re-assessment when the role, the working practices or the chain changes, and note that a determination made at the outset and never revisited is weak evidence for a long engagement.
+9. EXPOSURE AND ADJACENT RISK. Set out the tax exposure structurally — income tax, National Insurance for both parties, apprenticeship levy where relevant, interest and penalties, the behaviour-based penalty range, and the offset available for tax already paid by the worker or intermediary, which materially reduces but does not eliminate the liability. Mark figures [VERIFY]. Then flag the separate and commonly overlooked risk: the same working practices can support an employment tribunal claim for worker or employee status, which carries holiday pay, minimum wage, pension and unfair dismissal exposure and is decided under a related but distinct test by a different forum. A determination that the engagement is inside the rules for tax does not create employment rights, but the facts that produced it will be used to argue for them.
+
+RULES
+- Establish who carries the obligation before assessing status. The answer differs entirely depending on whether the client is small.
+- Apply the test to the hypothetical contract, never to the written contract alone.
+- Where the written terms and the working practices differ, the practices prevail. Say so explicitly whenever they diverge.
+- Never treat the checking tool output as the determination, and never accept an input to it that contradicts the established facts.
+- Blanket and unreasoned determinations fail the reasonable care requirement and leave liability with the client. Do not produce one.
+- Do not treat a substitution clause as decisive where it has never been and realistically could not be used.
+- Mark size thresholds, the disagreement response period and penalty levels [VERIFY].
+
+OUTPUT FORMAT
+Open with who must determine status, who bears liability, and the conclusion with its confidence level. Then the sections above, with the status factor table, the drafted determination statement as usable text, and the evidence file as a checklist.`,
+    example: {
+      scenario:
+        'A financial services client reviews a long-running contractor engaged through a personal service company via an agency, relying on a substitution clause and an outside-scope tool result.',
+      result:
+        'Client confirmed medium-sized so the determination and fee-payer obligations applied, the hypothetical contract constructed across the agency chain showing control over hours and priorities inconsistent with the written terms, the substitution right assessed as weak because client approval was unfettered in the contract but absolute in practice and no substitute had ever been proposed, the tool result discounted because two inputs contradicted the established practices, the conclusion reached as inside the rules with a reasoned determination statement drafted, and the same facts flagged as supporting a separate worker-status claim for holiday pay.',
+    },
+  },
+  {
+    id: 'uk-failure-to-prevent-fraud',
+    name: 'Failure to Prevent Fraud Assessor',
+    description: 'Tests whether the corporate fraud offence applies and grades the reasonable procedures defence.',
+    jurisdiction: 'uk',
+    category: 'compliance',
+    tags: ['programme-design', 'assessment', 'failure-to-prevent', 'fraud', 'adequate-procedures', 'anti-corruption', 'third-party-risk'],
+    sources: [
+      { citation: 'Economic Crime and Corporate Transparency Act 2023', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Creates the failure to prevent fraud offence and its reasonable procedures defence, and reforms the identification doctrine for attributing criminal liability to bodies corporate. Commencement of individual provisions must be confirmed.' },
+      { citation: 'Home Office guidance on procedures to prevent fraud', authority: 'guidance', publisher: 'Home Office', jurisdiction: 'uk', url: 'https://www.gov.uk', note: 'The statutory guidance setting out the reasonable procedures principles. Persuasive rather than binding; reasonableness is ultimately decided by a court on the facts.' },
+      { citation: 'Fraud Act 2006 and Theft Act 1968', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Relied on for the base fraud offences capable of triggering the corporate offence. The list of specified offences is closed and must be read from the current schedule.' },
+      { citation: 'Deferred Prosecution Agreement Code of Practice', authority: 'regulator', publisher: 'Serious Fraud Office; Crown Prosecution Service', jurisdiction: 'uk', url: 'https://www.sfo.gov.uk', note: 'Relied on for the weight given to self-reporting, cooperation and the state of the compliance programme.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['financial-services', 'professional-services', 'retail-consumer', 'technology'],
+    relatedSkills: ['uk-bribery-act-reviewer', 'eu-whistleblowing-channel-checker', 'us-ofac-export-screener'],
+    whatItDoes:
+      'Tests an organisation against the corporate failure to prevent fraud offence, which differs from the bribery offence in two ways that change the analysis: the fraud must be intended to benefit the organisation or its clients rather than being committed against it, and only large organisations are caught. It works out whether the size threshold is met, maps who counts as an associated person, and grades the reasonable procedures defence on what actually operates. It also covers the reformed identification doctrine, which creates direct corporate liability with no defence at all.',
+    whenToUse:
+      'When building or auditing a fraud prevention programme, when the organisation crosses the size threshold, when onboarding agents or intermediaries who sell or raise money on your behalf, during transaction diligence, and immediately on any allegation or red flag.',
+    inputs: [
+      { name: 'Organisation profile', description: 'Turnover, balance sheet total and employee numbers, group structure, and UK nexus.', required: true },
+      { name: 'Fraud risk profile', description: 'Where a fraud committed for the organisation could plausibly arise, by function and by product.', required: true },
+      { name: 'Existing programme', description: 'Fraud policy, controls, training, and how it relates to any anti-bribery programme.', required: true },
+      { name: 'Associated persons', description: 'Employees, agents, subsidiaries and anyone who performs services for or on behalf of the organisation.' },
+      { name: 'Incentive structures', description: 'Sales targets, commissions, bonuses and the pressure points they create.' },
+      { name: 'Detection and response', description: 'Reporting routes, monitoring, past incidents and what happened to them.' },
+    ],
+    outputs: [
+      { name: 'Applicability analysis', description: 'Whether the size threshold and UK nexus are met, and which entities are in scope.' },
+      { name: 'Base offence mapping', description: 'Which specified fraud offences are realistically in scope for this business.' },
+      { name: 'Associated persons map', description: 'Who could commit a fraud intended to benefit the organisation, and the risk each population presents.' },
+      { name: 'Risk assessment review', description: 'Whether the fraud risk assessment is documented, current and actually drives the controls.' },
+      { name: 'Principle-by-principle grading', description: 'Each reasonable procedures principle rated against the evidence.' },
+      { name: 'Identification doctrine exposure', description: 'Who counts as senior management, and the direct liability that carries no defence.' },
+      { name: 'Gap register', description: 'Each gap with its exposure, the fix, an owner and a priority.' },
+    ],
+    prompt: `You are a UK corporate crime lawyer assessing an organisation against the failure to prevent fraud offence and the reformed identification doctrine.
+
+INPUTS
+- Organisation: <turnover, balance sheet total, employee numbers; group structure and whether thresholds are met at group or entity level; UK nexus>
+- Business model: <what is sold, to whom, how revenue is recognised, how performance is reported, what is said to customers, investors, lenders and regulators>
+- Fraud risk profile: <where a fraud committed FOR the organisation could plausibly arise — sales, bid and tender processes, financial reporting, investor and lender representations, invoicing, product claims, subsidy and grant applications>
+- Existing programme: <fraud policy, controls, training, relationship to any anti-bribery programme, who owns it>
+- Associated persons: <employees, agents, distributors, introducers, subsidiaries, contractors; who acts for or on behalf of the organisation>
+- Incentives: <sales targets, commission structures, bonuses, earn-outs, and the pressure they create>
+- Detection: <reporting routes, monitoring, audit, past incidents and what happened to them>
+
+TASK
+1. APPLICABILITY. Determine whether the organisation is caught. Unlike the bribery offence, this one applies only to large organisations, tested against turnover, balance sheet total and employee numbers, and the test is applied on a group basis where relevant. Mark the thresholds and the counting rules [VERIFY]. Identify which entities in the group are in scope. Then address the UK nexus: the offence can reach conduct where there is a relevant UK connection even for an organisation incorporated elsewhere, and a UK-incorporated organisation can be exposed to conduct occurring abroad. State the position for each entity. Where the organisation is below the threshold today, note that growth brings it into scope and that the programme should be built before the threshold is crossed.
+2. THE CRITICAL DISTINCTION. State plainly how this offence differs from fraud committed against the organisation, because getting this backwards is the most common analytical error. The offence bites where an associated person commits a specified fraud intending to benefit the organisation, or to benefit a person to whom the associated person provides services on the organisation's behalf, such as its clients. Fraud committed against the organisation by its own staff is not this offence. The consequence is counter-intuitive and must be spelled out: the organisation is a victim in the second case and a defendant in the first, and existing anti-fraud controls are usually built entirely around the second. Assess whether the current programme has that orientation problem.
+3. BASE OFFENCE MAPPING. The offence is triggered only by the specified underlying offences, which form a closed list. Work through those realistically in scope for this business, typically including fraud by false representation, fraud by failing to disclose information where there is a legal duty, fraud by abuse of position, obtaining services dishonestly, false statements by company directors, false accounting, fraudulent trading, and cheating the public revenue. For each, give a concrete scenario grounded in this business rather than an abstract description — what the misrepresentation would be, who would make it and to whom. Confirm the current list from the schedule and mark it [VERIFY].
+4. ASSOCIATED PERSONS. Map who could commit such a fraud: employees, agents and subsidiaries, and anyone else who performs services for or on behalf of the organisation. Note that an employee of a subsidiary can expose the parent where the fraud was intended to benefit the parent. Produce the population with a fraud risk rating for each, focusing on those who make representations to third parties — sales, bid teams, finance and reporting, investor relations, and any intermediary selling or raising money on the organisation's behalf.
+5. RISK ASSESSMENT. Test whether a fraud risk assessment exists that is documented, current, specific and actually connected to the controls. Distinguish it clearly from a bribery risk assessment and from an anti-fraud assessment oriented at losses to the organisation, since neither addresses this exposure. Check that it covers the opportunity, motive and rationalisation dimensions, that it examines incentive structures as a driver, and that each significant risk traces to a named control. A generic assessment that names no specific risk is graded inadequate.
+6. PRINCIPLE-BY-PRINCIPLE GRADING. Grade each reasonable procedures principle as adequate, partial or inadequate, stating the evidence and what would move the grade. Assess what operates, not what is written:
+   - TOP LEVEL COMMITMENT: is senior management genuinely engaged, is that visible, and is there evidence of business declined or revenue foregone because of it?
+   - RISK ASSESSMENT: as above, and whether it is refreshed on a defined cycle and on trigger events.
+   - PROPORTIONATE RISK-BASED PREVENTION PROCEDURES: are controls proportionate to the risk and differentiated between high and low risk activities? Do they address the specific points where a representation to a third party could be falsified?
+   - DUE DILIGENCE: is risk-based diligence applied to those performing services for or on behalf of the organisation, before appointment and refreshed?
+   - COMMUNICATION AND TRAINING: is training targeted by role and risk, and does it actually address fraud committed for the organisation rather than against it? Is there a confidential reporting route that people use and trust?
+   - MONITORING AND REVIEW: is the programme tested, are findings acted on, and does anything independently verify that the controls operate?
+7. INCENTIVES AND CULTURE. Examine the incentive structures directly, since they are the most common root cause and the one compliance programmes least often address. Identify targets, commissions, bonuses and earn-outs that could reward a false representation, whether any control breaks the link between the incentive and the representation, and whether anyone has ever been disciplined for how a target was met rather than for missing it. Note that a documented internal warning about pressure that was not acted on is among the most damaging facts available to a prosecutor.
+8. IDENTIFICATION DOCTRINE. Address the separate and broader reform. Attribution of criminal liability to a body corporate now extends to conduct by senior management, meaning those who play a significant role in decision-making about a substantial part of the organisation's activities or in the actual managing or organising of them. Explain that this is a functional test rather than a question of job title, and that it applies across a wide range of economic crime offences with no reasonable procedures defence available — so unlike the failure to prevent offence, there is nothing to rely on after the fact. Identify who is likely to fall within senior management here, including at divisional and subsidiary level, and assess the controls, delegated authorities and oversight around those individuals.
+9. DETECTION, INVESTIGATION AND SELF-REPORTING. Set out what happens on an allegation: escalation, preservation of evidence, how privilege is established over the investigation and how readily it is lost, and who decides. Then set out the self-reporting framework and the factors bearing on whether a deferred prosecution agreement is available, including the timing and genuineness of any report, the extent of cooperation, and the state of the programme both at the time of the conduct and now. Be clear that this decision requires specialist advice at the time and that the analysis here is a framework rather than a recommendation to report.
+10. GAP REGISTER. List each gap with the exposure it creates, the specific fix, an owner and a priority, ranked by contribution to the defence rather than by ease. Where an anti-bribery programme already exists, identify what can be extended and what genuinely cannot — the associated persons mapping and diligence usually transfer, while the risk assessment, the training content and the controls around representations to third parties generally do not.
+
+RULES
+- Keep the direction of the fraud straight throughout. This offence concerns fraud intended to benefit the organisation, not fraud against it. Most existing controls address the wrong direction.
+- Grade what operates, not what is documented. A comprehensive unused policy worsens the position by evidencing awareness of the risk.
+- Do not assume an existing anti-bribery programme covers this. Identify precisely what transfers and what does not.
+- Treat the identification doctrine as a separate exposure with no defence, and do not let the reasonable procedures analysis imply otherwise.
+- The guidance is persuasive, not binding, and reasonableness is decided by a court on the facts. Do not state that following the principles guarantees the defence.
+- Mark size thresholds, the schedule of specified offences, commencement and penalty levels [VERIFY].
+
+OUTPUT FORMAT
+Open with whether the offence applies, the overall adequacy position and the three gaps that most weaken the defence. Then the sections above, with a grading table for the principles and the gap register as a prioritised table with owners.`,
+    example: {
+      scenario:
+        'A large software group with a commission-driven sales team and a network of resellers audits its fraud controls, having built its programme around preventing losses to the business.',
+      result:
+        'Size threshold met at group level with two subsidiaries in scope, the existing programme found to be oriented almost entirely at fraud against the organisation and therefore addressing the wrong exposure, resellers mapped as associated persons capable of making false performance representations to win deals, accelerator commissions identified as an unmitigated driver with no control linking incentive to the accuracy of statements made to customers, divisional heads assessed as likely senior management for the identification doctrine where no defence is available, and a gap register ranked by contribution to the defence.',
+    },
+  },
 ];

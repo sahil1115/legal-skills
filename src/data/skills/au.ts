@@ -959,4 +959,175 @@ Open with the provisional submission route, whether the action may be taken befo
         'The fund, manager, sovereign holdings and associates traced before investor status was decided; the share, business and land steps classified separately; current national-security and land tests applied without recalled thresholds; offshore and agreement-country assumptions challenged; a pre-action submission and evidence pack mapped; and approval conditions, ACCC clearance and foreign-ownership registration sequenced into the deal timetable.',
     },
   },
+  {
+    id: 'au-ppsr-priority-checker',
+    name: 'PPSR Registration & Priority Checker',
+    description: 'Tests whether a security interest is attached, perfected and correctly registered on the PPSR.',
+    jurisdiction: 'au',
+    category: 'contracts',
+    tags: ['contract-lifecycle', 'review', 'secured-transactions', 'perfection', 'collateral', 'financing-statement', 'ppsr', 'retention-of-title'],
+    sources: [
+      { citation: 'Personal Property Securities Act 2009 (Cth)', authority: 'primary', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'Governs attachment, perfection, registration, priority, vesting on insolvency and enforcement. Substance prevails over form, so an arrangement not called a security interest may still be one.' },
+      { citation: 'Personal Property Securities Regulations 2010 (Cth)', authority: 'primary', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'Prescribes collateral classes and the required content of a registration, including the serial-number rules that decide whether a defect is fatal.' },
+      { citation: 'PPSR registration and search guidance', authority: 'regulator', publisher: 'Australian Financial Security Authority', jurisdiction: 'au', url: 'https://www.ppsr.gov.au', note: 'Used for registration mechanics, search practice and data requirements. It is administrative guidance and does not determine priority.' },
+      { citation: 'Corporations Act 2001 (Cth)', authority: 'primary', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'Relevant to administration and liquidation, and to the consequences when a security interest vests in the grantor on insolvency.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['financial-services', 'retail-consumer', 'energy-infrastructure'],
+    relatedSkills: ['us-ucc9-filing-checker', 'au-director-duties-checker', 'au-acl-unfair-terms'],
+    whatItDoes:
+      'Checks the chain that decides whether a security interest survives the grantor becoming insolvent: whether it attached, whether it is perfected, whether it was registered correctly and in time, and where it sits in priority against competing interests. It works from substance rather than labels, so it catches the arrangements that are security interests without being called one — retention of title supply terms, consignments, and leases of equipment — and treats a registration defect as the potentially fatal event it is, because an interest that vests in the grantor is lost outright to the liquidator.',
+    whenToUse:
+      'Before supplying goods on retention of title terms, when onboarding a customer or registering against one, when auditing an existing registration portfolio, and immediately on any sign that a grantor is entering administration or liquidation.',
+    inputs: [
+      { name: 'The arrangement', description: 'The agreement and what it does in substance, whatever it is called.', required: true },
+      { name: 'Grantor identity', description: 'The exact legal entity, its ACN and ABN, and whether it grants in its own right or as trustee.', required: true },
+      { name: 'Collateral', description: 'What the interest covers, the collateral class, and whether any of it is serial-numbered property.', required: true },
+      { name: 'Existing registration', description: 'The current financing statement details, including registration and end dates and whether PMSI is claimed.' },
+      { name: 'Timing', description: 'When the agreement was made, when value was given, when possession passed and when registration occurred.' },
+      { name: 'Competing interests', description: 'Other registrations against the grantor, any general security agreement, and any buyer or third party involved.' },
+    ],
+    outputs: [
+      { name: 'Characterisation', description: 'Whether the arrangement is a security interest in substance, and whether a deemed security interest applies.' },
+      { name: 'Attachment and perfection', description: 'Each element tested on the facts, with the method of perfection identified.' },
+      { name: 'Registration defect review', description: 'Every required field checked, with each defect assessed as seriously misleading or not.' },
+      { name: 'PMSI analysis', description: 'Whether super-priority is available, the deadline that applied and whether it was met.' },
+      { name: 'Priority ranking', description: 'The order against each competing interest, with the rule that produces it.' },
+      { name: 'Vesting risk', description: 'Whether the interest would vest in the grantor on insolvency, and what that costs.' },
+      { name: 'Remediation plan', description: 'What can still be fixed, what cannot, and the order to do it in.' },
+    ],
+    prompt: `You are an Australian secured transactions lawyer testing a security interest under the Personal Property Securities Act.
+
+INPUTS
+- The arrangement: <paste the agreement or terms; describe what it does commercially whatever it is called>
+- Grantor: <exact legal name, ACN, ABN; is it contracting in its own right or as trustee of a trust? is it an individual?>
+- Collateral: <what the interest covers; collateral class; is any of it serial-numbered property such as motor vehicles, watercraft or aircraft?>
+- Existing registration: <financing statement details, registration date, end date, collateral class selected, PMSI claimed or not, secured party details>
+- Timing: <date of agreement, date value given, date possession passed to the grantor, date of registration>
+- Competing interests: <other registrations against this grantor, any general security agreement, any buyer of the goods, any landlord or processor>
+
+TASK
+1. CHARACTERISATION. Determine whether this is a security interest, working from substance rather than the label the parties used. It is an interest in personal property provided for by a transaction that in substance secures payment or performance of an obligation. Then check the deemed security interests separately, because these catch parties who do not think of themselves as secured at all: retention of title supply terms, commercial consignments, and a PPS lease of goods. For a PPS lease, apply the current duration and regularity tests and mark them [VERIFY], since the thresholds have been amended. State plainly that a supplier trading on retention of title terms without registering is an unsecured creditor in substance, whatever the terms say.
+2. GRANTOR IDENTITY. This is where registrations most often fail, and the failure is usually fatal. Establish the exact grantor and the correct identifier: the ACN or ABN for a company, the prescribed identifier taken from the required document for an individual, and — critically — the ABN of the trust rather than the trustee company's ACN where the grantor contracts as trustee. Check the identifier actually used in any existing registration against the correct one, character by character. Note that a registration against the wrong identifier is ineffective against that grantor and that searching under the wrong identifier will not reveal it.
+3. ATTACHMENT. Test each element: the grantor has rights in the collateral or the power to transfer rights in it, and either value has been given or the grantor has done an act by which the interest arises. Identify the date attachment occurred, because the perfection and priority analysis runs from it.
+4. PERFECTION. Identify the method relied on — registration, possession, or control for the classes where control is available — and confirm the interest has attached and the step has been taken. Where more than one method is available, say which gives the better priority, since control outranks other methods for the classes that allow it. Confirm perfection is continuous: an interest that lapses and is re-registered takes a new priority date, not the original one.
+5. REGISTRATION DEFECT REVIEW. Go through every required element of the financing statement: grantor identifier, secured party details, collateral class, collateral description, serial number where the property is serial-numbered and where registration by serial number is required, PMSI flag, whether the collateral is inventory, subordination, and the end date. For each defect, apply the correct test — a defect invalidates the registration only if it is seriously misleading, or if it falls into the categories treated as fatal regardless. Be specific rather than general: an incorrect grantor identifier and a missing or wrong serial number for property required to be registered by serial number are the classic fatal errors, while a minor error in a collateral description often is not. Mark each defect as fatal, arguably seriously misleading, or immaterial, and state what turns on it.
+6. PMSI. Determine whether a purchase money security interest is available — collateral supplied on credit to enable acquisition, or a PPS lease or consignment. Then apply the timing rule, which is the point of failure: registration must occur within the prescribed period, and the period differs for inventory, where it must be before the grantor obtains possession, from other collateral. Mark both periods [VERIFY]. Confirm the PMSI was actually claimed in the registration, since super-priority is lost if the flag was not set even where every other condition is met. Where the deadline was missed, say so plainly — the interest is not void, but it drops to ordinary priority behind any earlier general security agreement, which usually means behind everything.
+7. PRIORITY. Rank this interest against each competing interest and name the rule producing each result: perfected beats unperfected; between perfected interests, priority runs by the earliest of registration, possession or control; control outranks other methods for the classes allowing it; a properly perfected PMSI takes super-priority over an earlier general security agreement. Then address the rules that defeat a perfected interest anyway: taking free by a buyer in the ordinary course of the seller's business, taking free of certain serial-numbered property where it was not registered by serial number, accessions, commingling and processing into a product, and proceeds. State whether proceeds are automatically perfected here or need their own registration.
+8. VESTING ON INSOLVENCY. This is the consequence that makes the rest urgent. Where a security interest is unperfected immediately before the grantor enters administration or liquidation, or where registration occurred within the vulnerable period before it, the interest vests in the grantor — the secured party loses the collateral outright and ranks as an unsecured creditor. Apply this to the facts, state the vulnerable period and mark it [VERIFY], and quantify what is at stake in terms of the goods or value at risk. Where insolvency is in prospect, say that registering now may not save the interest and that the timing must be checked immediately.
+9. REMEDIATION. Separate what can still be fixed from what cannot. Registering now fixes future priority but does not restore a lost priority date and does not cure the vulnerable-period exposure. Amending a defective registration may work for some defects and not for a wrong grantor identifier, which generally needs a fresh registration with a new priority date. Give the steps in order, with the deadline for each, and identify the portfolio-level fix — reconciling registrations against grantor identifiers at onboarding, diarising end dates, and registering before delivery rather than after.
+
+RULES
+- Substance governs. Never conclude there is no security interest because the document does not use the word, and always test the deemed categories.
+- Check the grantor identifier first and character by character, including the trustee ABN point. It causes more total losses than every other defect combined.
+- PMSI timing and the PMSI flag are separate requirements. Both must be satisfied; failing either loses super-priority.
+- Do not describe an unperfected interest as merely lower in priority. On insolvency it vests in the grantor and is lost entirely.
+- Mark PPS lease thresholds, PMSI registration periods and the vesting vulnerable period [VERIFY] against the current Act and Regulations.
+- A PPSR search result and a registration are evidence of what was registered, not proof that the interest is valid or that it has priority.
+
+OUTPUT FORMAT
+Open with whether the interest is perfected, where it ranks, and whether it would survive the grantor's insolvency. Then the sections above, with a defect table and a priority ranking table, closing with dated remediation steps.`,
+    example: {
+      scenario:
+        'An equipment supplier trading on retention of title terms discovers its customer has appointed administrators, and reviews its registrations across the customer group.',
+      result:
+        'Retention of title terms characterised as a deemed security interest, two registrations found to name the trustee company ACN where the grantor contracted as trustee so the correct identifier was the trust ABN, one serial-numbered item registered without its serial number and assessed as seriously misleading, the PMSI flag never set on any registration so super-priority was unavailable behind an earlier general security agreement, and the goods at risk of vesting in the grantor quantified with the vulnerable period flagged for immediate verification.',
+    },
+  },
+  {
+    id: 'au-whs-incident-assessor',
+    name: 'WHS Incident & Officer Duties Assessor',
+    description: 'Tests a workplace incident for notifiability and maps officer due diligence duties under the WHS laws.',
+    jurisdiction: 'au',
+    category: 'compliance',
+    tags: ['workforce', 'incident-response', 'work-health-safety', 'notifiable-incident', 'officer-duties', 'due-diligence', 'psychosocial'],
+    sources: [
+      { citation: 'Model Work Health and Safety Act, as enacted in each State and Territory', authority: 'primary', publisher: 'State and Territory legislatures', jurisdiction: 'au', note: 'Harmonised in most jurisdictions but not uniform. Western Australia and Victoria differ materially, Victoria having never adopted the model law. The jurisdiction of the workplace governs.' },
+      { citation: 'Model Work Health and Safety Regulations, as enacted', authority: 'primary', publisher: 'State and Territory legislatures', jurisdiction: 'au', note: 'Prescribe hazard-specific duties, including the psychosocial hazard provisions, which have been adopted on different timetables across jurisdictions.' },
+      { citation: 'Safe Work Australia model codes of practice and guidance', authority: 'guidance', publisher: 'Safe Work Australia', jurisdiction: 'au', url: 'https://www.safeworkaustralia.gov.au', note: 'Codes of practice are admissible in proceedings and a court may rely on them as evidence of what is known about a hazard. Approval and status differ by jurisdiction.' },
+      { citation: 'State and Territory industrial manslaughter provisions', authority: 'primary', publisher: 'State and Territory legislatures', jurisdiction: 'au', note: 'Enacted in most jurisdictions with different elements, thresholds and penalties. Personal exposure for officers is real and is not insurable in the way commercial penalties often are.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['energy-infrastructure', 'healthcare', 'retail-consumer', 'public-sector'],
+    relatedSkills: ['au-director-duties-checker', 'au-unfair-dismissal-assessor', 'au-soci-obligations-mapper'],
+    whatItDoes:
+      'Handles the two things that run on completely different clocks after a workplace incident: the immediate notification and site-preservation duties, which are criminal obligations measured in minutes, and the slower question of whether the duty holder and its officers can show they discharged their duties beforehand. It applies the notifiable incident definitions of the governing jurisdiction rather than a national rule, and treats psychosocial hazards as squarely within the duty rather than as an adjacent wellbeing matter.',
+    whenToUse:
+      'Immediately after any serious workplace injury, illness, near miss or dangerous incident, when a regulator attends or issues a notice, and as a standing review of officer due diligence before anything goes wrong.',
+    inputs: [
+      { name: 'The incident', description: 'What happened, when, where, to whom, and what injury or exposure resulted.', required: true },
+      { name: 'Jurisdiction and workplace', description: 'The State or Territory, the site, and who controls it.', required: true },
+      { name: 'Who was involved', description: 'Workers, contractors, labour hire, visitors or members of the public, and their engagement status.', required: true },
+      { name: 'Response so far', description: 'What was done, whether the site was disturbed, and whether anyone has been notified.' },
+      { name: 'Existing controls', description: 'Risk assessments, safe work procedures, training, maintenance and consultation records for this hazard.' },
+      { name: 'Officer information', description: 'Who the officers are, what safety information reached them, and what resources they approved.' },
+    ],
+    outputs: [
+      { name: 'Notifiability determination', description: 'Whether the incident is notifiable in the governing jurisdiction, against each limb of the definition.' },
+      { name: 'Immediate obligations', description: 'Notification, site preservation and record-keeping duties, with who must do what and by when.' },
+      { name: 'Duty holder map', description: 'Every person conducting a business or undertaking with a duty here, including overlapping and shared duties.' },
+      { name: 'Control adequacy review', description: 'The hazard controls tested against the hierarchy of controls and the reasonably practicable standard.' },
+      { name: 'Officer due diligence assessment', description: 'Each due diligence element assessed against the evidence that actually exists.' },
+      { name: 'Regulator engagement plan', description: 'Powers of inspectors, notices, interviews, and how privilege and self-incrimination protections operate.' },
+      { name: 'Remediation actions', description: 'Immediate and systemic fixes with owners and dates.' },
+    ],
+    prompt: `You are an Australian work health and safety lawyer responding to a workplace incident.
+
+INPUTS
+- The incident: <what happened, date and time, location, who was injured or exposed, the injury or illness, and what treatment was required>
+- Jurisdiction: <State or Territory of the workplace; is the business operating across more than one?>
+- Workplace: <site, who controls it, whether it is a shared or multi-employer workplace, principal contractor arrangements>
+- Who was involved: <employees, contractors, subcontractors, labour hire, apprentices, volunteers, visitors, members of the public — and how each is engaged>
+- Response so far: <what was done, whether anything was moved or cleaned up, whether the plant is still in place, who has been told>
+- Existing controls: <risk assessment, safe work method statement, training records, maintenance records, consultation records, prior incidents or reports involving this hazard>
+- Officers: <who they are, what safety information reached them and how, what resources they approved, what they were told about this hazard before>
+
+TASK
+1. JURISDICTION. Identify the governing Act before applying any definition. The model law is harmonised across most jurisdictions but is not uniform, Western Australia differs, and Victoria never adopted it and operates a separate regime with its own terminology and notification triggers. Name the applicable Act and regulator. If the business operates across jurisdictions, say that duties and definitions must be run separately for each site and do not assume the model position applies everywhere.
+2. NOTIFIABILITY. Apply the notifiable incident definition of the governing jurisdiction, limb by limb, and show the reasoning on the facts:
+   a. Death of a person.
+   b. Serious injury or illness — work through the enumerated categories, which typically include immediate treatment as an in-patient in a hospital, immediate treatment for specified injuries such as amputation, serious head or eye injury, serious burn, degloving or scalping, spinal injury, loss of bodily function or serious laceration, and medical treatment within a set period of exposure to a substance. Mark the categories and periods [VERIFY].
+   c. Dangerous incident — an incident exposing any person to a serious risk from an immediate or imminent exposure, including uncontrolled escape or spill, uncontrolled implosion explosion or fire, electric shock, falling objects, plant collapse, and similar. Emphasise that a dangerous incident is notifiable even where nobody was injured, which is the limb most often missed.
+   Conclude NOTIFIABLE or NOT NOTIFIABLE. Where it is finely balanced, say that the safer course is to notify and explain why: failing to notify is an offence, while notifying an incident that turns out not to require it is not.
+3. IMMEDIATE OBLIGATIONS. If notifiable, set out the duties as a clock:
+   - Notify the regulator immediately after becoming aware, by the fastest means, and confirm in writing within the prescribed period. Mark it [VERIFY].
+   - Preserve the site so far as is reasonably practicable until an inspector arrives or directs otherwise. Set out the narrow exceptions — assisting an injured person, removing a deceased person, making the site safe, and acts under police direction. State plainly that disturbing the site outside those exceptions is a separate offence, and if the site has already been disturbed, say what to record now about who did what and why.
+   - Keep the record of the notifiable incident for the prescribed period.
+   Also cover notification to insurers and to any principal contractor, and workers compensation reporting, which is a separate obligation on a different timeframe and does not satisfy the WHS duty.
+4. DUTY HOLDER MAP. Identify every person conducting a business or undertaking with a duty in relation to this incident, and note that duties are concurrent and cannot be contracted out of or delegated away. Cover the primary duty to workers and to others affected, and the specific duties of a person with management or control of a workplace, of plant or structures, and of a designer, manufacturer, importer or supplier where relevant. Address the duty to consult, cooperate and coordinate with other duty holders, which is a distinct obligation and a common failure at shared sites. Note that worker is defined broadly and includes contractors, subcontractors, labour hire and volunteers, so an injured contractor is not outside the duty.
+5. CONTROL ADEQUACY. Test what was in place against the reasonably practicable standard: the likelihood of the hazard occurring, the degree of harm, what the person knew or ought reasonably to have known about the hazard and about ways of eliminating or minimising it, the availability and suitability of those ways, and — only after weighing those — the cost, including whether it is grossly disproportionate to the risk. Apply the hierarchy of controls in order and identify where the response stopped short: administrative controls and personal protective equipment where elimination or engineering controls were available is the recurring finding. Check the consultation obligation with workers and health and safety representatives, and check whether prior reports, near misses or hazard reports had flagged this hazard and what was done about them. A documented prior warning that was not acted on is the most damaging single fact in this area.
+6. PSYCHOSOCIAL HAZARDS. Where the incident involves psychological injury, bullying, harassment, occupational violence, fatigue or excessive workload, assess it under the psychosocial provisions rather than treating it as a wellbeing or human resources matter. These are WHS hazards subject to the same duty, the same hierarchy of controls and the same enforcement. Note that adoption timetables differ by jurisdiction and mark them [VERIFY], and address the overlap with sexual harassment duties, which carry a separate positive obligation.
+7. OFFICER DUE DILIGENCE. Assess each element against evidence that actually exists rather than against intentions, because this duty is personal, is owed by each officer individually, and is not discharged by the organisation having done the right thing:
+   - Acquiring and keeping up to date knowledge of work health and safety matters.
+   - Gaining an understanding of the operations and of the hazards and risks associated with them.
+   - Ensuring the business has and uses appropriate resources and processes to eliminate or minimise risks.
+   - Ensuring the business has appropriate processes for receiving and considering information about incidents, hazards and risks, and for responding in a timely way.
+   - Ensuring the business has and implements processes for complying with its duties.
+   - Verifying the provision and use of those resources and processes.
+   For each, state what evidence exists, what is missing, and what should be created going forward. Emphasise the verification element, which is the one most often absent — receiving a report is not verifying. Then identify the personal exposure, including the industrial manslaughter offence in the governing jurisdiction where the elements may be engaged, and mark elements and penalties [VERIFY].
+8. REGULATOR ENGAGEMENT. Set out what to expect: inspector powers of entry, inspection, seizure and to require production of documents and answers; improvement, prohibition and non-disturbance notices and the response and appeal routes for each; and how interviews are conducted. Address legal professional privilege over any internal investigation and how easily it is lost, the limited protection against self-incrimination and the fact that it generally differs between individuals and bodies corporate, and the need to obtain advice before anyone gives an account. Recommend that any internal investigation be structured for privilege from the outset, and warn against creating an unprivileged root cause analysis that becomes the regulator's brief of evidence.
+9. REMEDIATION. Separate the immediate fix from the systemic one. Give actions with owners and dates, covering the specific hazard, the control that failed, the process that allowed it, the consultation gap if any, and the officer-level reporting change needed. Note that steps taken after an incident do not undo the offence but are relevant to penalty and to the regulator's enforcement decision.
+
+RULES
+- Identify the governing jurisdiction first and apply its definitions. Never state a national notifiability rule; the model law is not uniform and Victoria is not a model jurisdiction.
+- Deal with notification and site preservation before anything else. They are criminal obligations running immediately and cannot be deferred pending investigation.
+- Where notifiability is finely balanced, advise notifying and explain the asymmetry of the risk.
+- Treat psychosocial hazards as WHS hazards subject to the same duty. Do not route them to human resources.
+- Assess officer due diligence on evidence, element by element. Do not infer diligence from seniority, good intentions or the absence of prior incidents.
+- Never advise disturbing a site outside the statutory exceptions, or delaying notification to complete an internal inquiry.
+- Flag privilege before any investigation begins, not after.
+
+OUTPUT FORMAT
+Open with the notifiability conclusion, the notification deadline as a time, and whether the site must be preserved. Then the sections above, with a duty holder table and a due diligence table showing evidence against each element, closing with dated remediation actions.`,
+    example: {
+      scenario:
+        'A contractor receives an electric shock from unisolated plant at a shared site; the area was tidied before anyone considered the regulator, and a near-miss report on the same plant had been filed two months earlier.',
+      result:
+        'Governing State Act identified and the incident found notifiable as a dangerous incident regardless of injury severity, the site disturbance flagged as a probable separate offence with a contemporaneous record of who moved what directed immediately, concurrent duties mapped across the principal contractor and the contractor entity with the consultation duty unmet, the earlier near-miss report assessed as the most damaging fact against the reasonably practicable standard, officer due diligence failing on the verification element because incident reports reached officers but no verification process existed, and privilege structured over the investigation before it began.',
+    },
+  },
 ];
