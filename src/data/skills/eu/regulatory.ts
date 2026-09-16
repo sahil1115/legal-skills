@@ -1,7 +1,7 @@
 import type { Skill } from '../../../types/skill';
 
 /**
- * EU regulatory skills — AI, cybersecurity, operational resilience and member-state divergence.
+ * EU regulatory skills — AI, cybersecurity, platforms, operational resilience and member-state divergence.
  */
 export const euRegulatorySkills: Skill[] = [
   {
@@ -18,7 +18,7 @@ export const euRegulatorySkills: Skill[] = [
     reviewStatus: 'unverified',
     version: '1.0.0',
     industries: ['technology'],
-    relatedSkills: ['global-horizon-scanner', 'eu-dpia-ropa-builder'],
+    relatedSkills: ['global-horizon-scanner', 'eu-dpia-ropa-builder', 'eu-ai-act-annex-iv-technical-documentation'],
     whatItDoes:
       'Works through the AI Act analysis in the order that actually matters: first whether the system is in scope at all, then what role you play (provider, deployer, importer, distributor) — because the obligations differ enormously by role — then the risk tier, and only then the obligation set. It handles the general-purpose AI model questions separately, since those follow their own track, and flags the transparency duties that bite even for systems that are otherwise low-risk.',
     whenToUse:
@@ -90,7 +90,7 @@ Seven sections matching the tasks above, opening with a one-paragraph bottom lin
     reviewStatus: 'unverified',
     version: '1.0.0',
     industries: ['energy-infrastructure', 'technology'],
-    relatedSkills: ['au-soci-obligations-mapper', 'eu-dora-third-party-reviewer'],
+    relatedSkills: ['au-soci-obligations-mapper', 'eu-dora-third-party-reviewer', 'eu-nis2-incident-reporting', 'eu-nis2-supply-chain-vendor-risk'],
     whatItDoes:
       'Determines whether an organisation is in scope of the NIS2 Directive — by sector, by size, and by the special cases that pull entities in regardless of size — and whether it is essential or important, which changes the supervisory regime. It then maps the risk-management measures required, the multi-stage incident reporting timeline that catches teams out, and the management-body accountability that makes this a board issue rather than an IT one. Because NIS2 is a directive, it flags throughout that the binding detail lives in each member state\'s implementing law.',
     whenToUse:
@@ -301,6 +301,323 @@ Seven sections matching the tasks above.`,
         'A group employer plans a single whistleblowing channel across six member states and wants to know whether one design can work everywhere.',
       result:
         'A divergence map identifying group-level channel sharing, anonymous reporting and feedback deadlines as the variable points, a grid with two states marked unknown, a common-denominator design, and a six-question brief ready to send to local counsel.',
+    },
+  },
+  {
+    id: 'eu-nis2-incident-reporting',
+    name: 'NIS2 Incident Reporting Workflow',
+    description: 'Runs a live NIS2 incident through the significance test, national routing and each reporting stage.',
+    jurisdiction: 'eu',
+    category: 'regulatory',
+    tags: ['regulatory-change', 'incident-response', 'nis2', 'cybersecurity', 'csirt', 'transposition'],
+    sources: [
+      { citation: 'Directive (EU) 2022/2555 (NIS2), Article 23', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'Early warning within 24 hours of becoming aware of a significant incident, an incident notification within 72 hours, intermediate reports on request, and a final report within one month of the notification. Confirmed as at 2026-09-16. The operative obligations are national.' },
+      { citation: 'Commission Implementing Regulation (EU) 2024/2690', authority: 'regulator', publisher: 'European Commission', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'Specifies when an incident is significant for certain digital infrastructure, ICT service management and digital provider entities, including cloud, data centre, DNS and managed service providers.' },
+      { citation: 'National measures transposing NIS2 and competent authority or CSIRT reporting procedures', authority: 'primary', publisher: 'Member State legislatures and authorities', jurisdiction: 'eu', note: 'Reporting portals, recipient bodies, templates and some thresholds are national. Transposition status varies by Member State.' },
+      { citation: 'ENISA guidance on NIS2 implementation', authority: 'guidance', publisher: 'European Union Agency for Cybersecurity', jurisdiction: 'eu', url: 'https://www.enisa.europa.eu' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['energy-infrastructure', 'technology', 'healthcare', 'public-sector'],
+    relatedSkills: ['eu-nis2-scope-tester', 'eu-gdpr-breach-notification', 'au-soci-obligations-mapper'],
+    whatItDoes:
+      'Runs a live cybersecurity incident at an essential or important entity through the NIS2 reporting process on its actual clock. It applies the significance test — including the specific criteria for digital infrastructure and ICT service entities — identifies the competent authority or CSIRT in each relevant Member State, drafts the early warning, incident notification and final report with the content each stage requires, handles recipient notification where services are affected, and keeps an evidence log recording when awareness occurred and why each reporting decision was taken.',
+    whenToUse:
+      'From the moment a cyber incident affecting the services of an entity in NIS2 scope is detected, at each reporting stage, and when an incident spans several Member States. Not for: deciding whether the entity is in NIS2 scope at all (use the scope tester), personal data breach notification (use the GDPR breach skill), or DORA reporting for financial entities.',
+    inputs: [
+      { name: 'Incident facts', description: 'What happened, detection time, systems and services affected, and current status.', required: true },
+      { name: 'Entity profile', description: 'Sector, essential or important classification, and Member States where services are provided.', required: true },
+      { name: 'Impact data', description: 'Service disruption, users affected, duration, financial loss and cross-border effects.', required: true },
+      { name: 'Cause indicators', description: 'Whether malicious or unlawful action is suspected, and threat intelligence.' },
+      { name: 'Prior reports', description: 'Any early warning or notification already sent and feedback received.' },
+    ],
+    outputs: [
+      { name: 'Significance determination', description: 'Whether the incident is significant, with the criteria applied.' },
+      { name: 'Routing map', description: 'The competent authority or CSIRT and portal in each relevant Member State.' },
+      { name: 'Reporting clock', description: 'Awareness time and each stage deadline.' },
+      { name: 'Draft reports', description: 'Early warning, incident notification and final report drafts.' },
+      { name: 'Recipient communications', description: 'Notices to service recipients where required.' },
+      { name: 'Evidence log', description: 'A contemporaneous record of facts, decisions and timings.' },
+    ],
+    prompt: `You are an EU cybersecurity regulatory lawyer running NIS2 incident reporting for an essential or important entity.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+In force (directive level):
+- Article 23: early warning within 24 hours of becoming aware of a significant incident; incident notification within 72 hours of becoming aware; intermediate reports on request; final report within one month after the incident notification. The CSIRT or authority provides initial feedback within 24 hours where possible [CONFIRMED].
+- Implementing Regulation (EU) 2024/2690 sets significance criteria for certain digital infrastructure and ICT service entities [CONFIRMED].
+National:
+- The binding obligations, recipients, portals and templates are in each Member State's transposing law. Transposition status varies [VERIFY per Member State].
+
+INPUTS
+- Incident: <what happened, detection time, systems and services affected, status>
+- Entity: <sector, essential or important, Member States where services are provided>
+- Impact: <disruption, users affected, duration, financial loss, cross-border effects>
+- Cause: <suspected malicious or unlawful action, threat intelligence>
+- Prior reports: <what has been sent and feedback received>
+
+TASK
+1. SCOPE GATE. Confirm the entity has been assessed as essential or important. If not, stop and redirect to the scope tester. If the entity is a financial entity under DORA, note that DORA incident reporting applies instead for ICT incidents [VERIFY lex specialis position].
+2. AWARENESS AND CLOCK. Fix when the entity became aware of a significant incident, recording who knew what and when, and calculate each deadline from that point. Record that uncertainty about significance should not delay the early warning where indicators are present.
+3. SIGNIFICANCE. Apply the test: the incident has caused or is capable of causing severe operational disruption of services or financial loss to the entity, or has affected or is capable of affecting other persons by causing considerable material or non-material damage. For entities covered by Implementing Regulation (EU) 2024/2690, apply its specific criteria. Record each criterion as met, not met or unknown.
+4. ROUTING MAP. For each Member State where the entity is established or provides the affected services, identify the competent authority or CSIRT, the portal and any national template [VERIFY]. Note the rules on which Member State has jurisdiction.
+5. EARLY WARNING. Draft it: whether the incident is suspected of being caused by unlawful or malicious acts and whether it could have a cross-border impact. Keep it short; it is not a full analysis.
+6. INCIDENT NOTIFICATION. Draft it: update the early warning, give an initial assessment of severity and impact, and indicators of compromise where available.
+7. INTERMEDIATE AND FINAL REPORTS. Plan intermediate reports on request. Draft the final report structure: detailed description, severity and impact, type of threat or root cause likely to have triggered the incident, mitigation measures applied and ongoing, and cross-border impact. If the incident is ongoing at one month, provide a progress report then and a final report within one month of handling it [VERIFY].
+8. RECIPIENTS. Where appropriate and required, notify recipients of services of significant incidents likely to affect their service, and communicate measures they can take in response to significant cyber threats.
+9. PARALLEL REGIMES. Flag GDPR breach notification, sector rules, contractual notices and law enforcement. These run on separate clocks.
+10. EVIDENCE LOG. Maintain a log of facts, decisions, timings, recipients and sources for every report.
+11. LAWYER REVIEW TRIGGERS. Escalate: disputed significance; multi-country incidents; suspected state-sponsored activity; ransomware payment decisions; personal data involvement; and any public statement.
+
+RULES
+- The national transposing law is operative. Use the directive for structure and the national law for detail.
+- Label each item DIRECTIVE, IMPLEMENTING REGULATION, NATIONAL LAW, AUTHORITY GUIDANCE or BEST PRACTICE.
+- Do not delay the early warning to finish significance analysis where indicators of significance are present.
+- Never treat a GDPR notification as satisfying NIS2, or the reverse.
+
+OUTPUT FORMAT
+Open with the significance conclusion, the next reporting deadline as a date and time, and the recipient authority. Then the sections above, with the routing map and evidence log as tables and the reports as usable drafts. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A managed service provider operating in three Member States detects ransomware that has disrupted client environments for six hours.',
+      result:
+        'Entity confirmed in scope and covered by the Implementing Regulation criteria, significance assessed as met on service disruption and client impact, awareness fixed at the time the security team confirmed encryption with the 24-hour and 72-hour deadlines calculated, the competent CSIRT identified for the main establishment with national portals marked for verification, an early warning drafted flagging suspected malicious action and cross-border impact, client notifications prepared, and GDPR breach analysis flagged in parallel.',
+    },
+  },
+  {
+    id: 'eu-nis2-supply-chain-vendor-risk',
+    name: 'NIS2 Supplier Security Assessor',
+    description: 'Tiers suppliers by criticality and assesses their security obligations, contracts and evidence under NIS2.',
+    jurisdiction: 'eu',
+    category: 'regulatory',
+    tags: ['regulatory-change', 'assessment', 'nis2', 'third-party-risk', 'cybersecurity', 'supplier-management'],
+    sources: [
+      { citation: 'Directive (EU) 2022/2555 (NIS2), Article 21', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'Requires cybersecurity risk-management measures including supply chain security and security-related aspects of relationships with direct suppliers and service providers, taking into account supplier vulnerabilities, product quality and secure development practices.' },
+      { citation: 'Commission Implementing Regulation (EU) 2024/2690, Annex', authority: 'regulator', publisher: 'European Commission', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'Sets detailed supply chain security requirements for the digital infrastructure and ICT service entities it covers.' },
+      { citation: 'National transposing measures and competent authority guidance', authority: 'primary', publisher: 'Member State legislatures and authorities', jurisdiction: 'eu', note: 'The operative detail for most entities. Some Member States specify supplier requirements further.' },
+      { citation: 'ENISA technical implementation guidance on cybersecurity risk-management measures', authority: 'guidance', publisher: 'European Union Agency for Cybersecurity', jurisdiction: 'eu', url: 'https://www.enisa.europa.eu' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['energy-infrastructure', 'technology', 'healthcare', 'public-sector'],
+    relatedSkills: ['eu-nis2-scope-tester', 'eu-dora-third-party-reviewer', 'eu-gdpr-art28-dpa-auditor'],
+    whatItDoes:
+      'Builds the supplier security workflow an entity in NIS2 scope needs: tiering direct suppliers and service providers by how critical they are to the entity’s services, setting the security obligations each tier must meet, reviewing contracts for the terms that make those obligations enforceable, collecting evidence rather than assurances, and scheduling reassessment. It distinguishes what the directive and, where applicable, the Implementing Regulation require from what is good practice, and treats national transposition as the operative detail.',
+    whenToUse:
+      'When building or auditing a NIS2 supply chain security programme, onboarding a supplier that touches critical services, renewing supplier contracts, after a supplier security incident, and on the periodic reassessment cycle. Not for: DORA ICT third-party risk for financial entities (use the DORA reviewer) or processor data protection terms (use the Article 28 auditor).',
+    inputs: [
+      { name: 'Entity profile', description: 'Sector, essential or important classification, Member States and whether the Implementing Regulation applies.', required: true },
+      { name: 'Supplier inventory', description: 'Suppliers and service providers with the services, systems and data each touches.', required: true },
+      { name: 'Contracts', description: 'Security, incident notification, audit, subcontracting and termination terms.' },
+      { name: 'Evidence held', description: 'Certifications, audit reports, questionnaires and testing results per supplier.' },
+      { name: 'Incident history', description: 'Supplier-related incidents and vulnerabilities.' },
+    ],
+    outputs: [
+      { name: 'Criticality tiers', description: 'Suppliers tiered by impact on the entity’s services, with reasoning.' },
+      { name: 'Obligation matrix', description: 'Security requirements per tier, labelled by source.' },
+      { name: 'Contract gap review', description: 'Missing or weak terms per critical supplier, with replacement wording.' },
+      { name: 'Evidence assessment', description: 'Whether evidence held supports each requirement.' },
+      { name: 'Remediation plan', description: 'Actions per supplier with owners and dates.' },
+      { name: 'Reassessment schedule', description: 'Review frequency per tier and trigger events.' },
+    ],
+    prompt: `You are an EU cybersecurity regulatory lawyer building supply chain security for an entity subject to NIS2.
+
+CURRENT-LAW STATUS (as at 2026-09-16)
+- Article 21 NIS2 requires supply chain security measures, including security-related aspects of relationships with direct suppliers and service providers [CONFIRMED].
+- Implementing Regulation (EU) 2024/2690 sets detailed supply chain requirements for the digital infrastructure and ICT service entities it covers [CONFIRMED].
+- National transposing laws and authority guidance supply the operative detail for other entities [VERIFY per Member State].
+
+INPUTS
+- Entity: <sector, essential or important, Member States, whether the Implementing Regulation applies>
+- Supplier inventory: <suppliers, services, systems and data touched>
+- Contracts: <security, incident notice, audit, subcontracting, termination terms>
+- Evidence held: <certifications, audits, questionnaires, testing>
+- Incident history: <supplier incidents and vulnerabilities>
+
+TASK
+1. SCOPE GATE. Confirm the entity is essential or important under NIS2 and identify whether the Implementing Regulation applies. If the entity is a financial entity under DORA, redirect ICT third-party risk to the DORA reviewer.
+2. MISSING INFORMATION. Identify suppliers whose access to systems or data is unknown. An unmapped supplier cannot be tiered.
+3. CRITICALITY TIERS. Tier suppliers by impact on the entity's services: access to network and information systems, role in delivering essential services, data handled, substitutability and concentration. Record the reasoning for each tier.
+4. OBLIGATION MATRIX. For each tier, set security requirements covering supplier vulnerabilities, product and service quality, secure development practices, access control, incident notification to the entity, vulnerability handling, subcontractor control, and exit. Label each as DIRECTIVE, IMPLEMENTING REGULATION, NATIONAL LAW or BEST PRACTICE.
+5. CONTRACT GAP REVIEW. For critical suppliers, check contracts for security obligations, incident notification to the entity (a contractual period is a CONTRACTUAL PREFERENCE unless national law sets one), audit and information rights, subcontracting controls, vulnerability disclosure, and termination and exit support. Give replacement wording.
+6. EVIDENCE ASSESSMENT. Assess whether evidence supports each requirement: independent certifications and their scope, audit reports, penetration tests and remediation records. Treat a self-assessment questionnaire alone as weak evidence for critical suppliers.
+7. REMEDIATION PLAN. Actions per supplier with owners and dates, prioritised by tier and gap severity.
+8. REASSESSMENT SCHEDULE. Set frequency by tier and triggers: supplier incidents, material changes in service, ownership changes and new vulnerabilities.
+9. LAWYER REVIEW TRIGGERS. Escalate: critical suppliers refusing audit or notification terms; suppliers from jurisdictions subject to national security restrictions; concentration risk; and supplier incidents that may be reportable.
+
+RULES
+- Label each requirement by its source.
+- Do not present a fixed supplier notification period as a legal requirement unless national law sets one.
+- Evidence outweighs assurances; record which is held.
+
+OUTPUT FORMAT
+Open with the number of critical suppliers and the most serious gap. Then the sections above, with tiers, obligation matrix and contract gaps as tables. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A regional energy distributor classified as essential maps 140 suppliers after a remote-access vendor was compromised.',
+      result:
+        'Twelve suppliers tiered critical including the compromised remote-access vendor, an obligation matrix labelling each requirement by source, contract gaps showing no incident notification term for five critical suppliers with wording proposed as a contractual preference, questionnaire-only evidence flagged as insufficient for critical tiers, a remediation plan, and reassessment triggers including supplier incidents.',
+    },
+  },
+  {
+    id: 'eu-dsa-notice-action-triage',
+    name: 'DSA Notice & Action Triage',
+    description: 'Triages a Digital Services Act notice, decides the action and drafts the statement of reasons and redress steps.',
+    jurisdiction: 'eu',
+    category: 'regulatory',
+    tags: ['regulatory-change', 'review', 'dsa', 'content-moderation', 'platform-governance', 'statement-of-reasons'],
+    sources: [
+      { citation: 'Regulation (EU) 2022/2065 (Digital Services Act), including Articles 16, 17, 20, 21 and 24', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'Notice and action mechanisms for hosting services, statements of reasons, internal complaint handling and out-of-court dispute settlement for online platforms, and submission of statements of reasons to the transparency database.' },
+      { citation: 'European Commission DSA Transparency Database documentation', authority: 'regulator', publisher: 'European Commission', jurisdiction: 'eu', url: 'https://transparency.dsa.ec.europa.eu', note: 'Defines the fields and formats for submitting statements of reasons. Fields change; check the current documentation.' },
+      { citation: 'National law defining illegal content and Digital Services Coordinator guidance', authority: 'primary', publisher: 'Member State legislatures and Digital Services Coordinators', jurisdiction: 'eu', note: 'Whether content is illegal is determined by Union or national law, which varies.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['technology', 'retail-consumer'],
+    relatedSkills: ['uk-online-safety-risk-assessment', 'eu-ai-act-classifier', 'global-legal-research'],
+    whatItDoes:
+      'Takes a notice alleging illegal content on a hosting service or online platform and works it through the Digital Services Act process: whether the notice is sufficiently precise and substantiated to give actual knowledge, which law makes the content illegal if any, whether terms of service are also engaged, the proportionate action, the statement of reasons to the affected user, the complaint and redress routes available, and the transparency database record. It keeps the illegality assessment, which depends on national law, separate from the procedural obligations, which are uniform.',
+    whenToUse:
+      'For each notice about allegedly illegal content, for each moderation decision that restricts content or an account on illegal-content or terms grounds, and when auditing notice-and-action workflows. Not for: UK Online Safety Act risk assessments (use the UK skill), orders from authorities under Articles 9 and 10, or very large platform systemic risk duties.',
+    inputs: [
+      { name: 'The notice', description: 'The notice as received, with notifier details, URL or location, explanation and date.', required: true },
+      { name: 'The content', description: 'The content, its context, and the account or user that posted it.', required: true },
+      { name: 'Service profile', description: 'Hosting service, online platform or marketplace, size and Member States served.', required: true },
+      { name: 'Terms of service', description: 'The relevant terms and community guidelines.' },
+      { name: 'Prior history', description: 'Previous notices, actions and complaints involving the content or user.' },
+      { name: 'Notifier status', description: 'Whether the notifier is a trusted flagger.' },
+    ],
+    outputs: [
+      { name: 'Notice validity', description: 'Whether the notice meets the required elements and gives actual knowledge.' },
+      { name: 'Illegality and terms analysis', description: 'The law invoked, whether the content appears illegal, and any terms breach.' },
+      { name: 'Action decision record', description: 'The proportionate action and its reasoning.' },
+      { name: 'Statement of reasons', description: 'A draft statement containing the required elements.' },
+      { name: 'Redress information', description: 'Internal complaint, out-of-court and judicial routes available.' },
+      { name: 'Transparency database fields', description: 'The record for submission where the provider is an online platform.' },
+      { name: 'Notifier response', description: 'Confirmation and decision notice to the notifier.' },
+    ],
+    prompt: `You are an EU platform regulation lawyer triaging a notice under the Digital Services Act.
+
+CURRENT-LAW STATUS (as at 2026-09-16)
+- DSA obligations for all intermediary services apply, including notice and action for hosting services, statements of reasons, and internal complaint handling and out-of-court dispute settlement for online platforms [CONFIRMED].
+- Transparency database field definitions are set in Commission documentation and change over time [VERIFY current fields].
+- Illegality is defined by Union or national law, not by the DSA [CONFIRMED].
+
+INPUTS
+- Notice: <text, notifier, location, explanation, date>
+- Content: <content, context, account>
+- Service: <hosting, platform, marketplace; size; Member States served>
+- Terms: <relevant terms and guidelines>
+- History: <prior notices, actions, complaints>
+- Notifier: <trusted flagger or not>
+
+TASK
+1. SCOPE GATE. Confirm the provider is a hosting service and whether it is an online platform, marketplace or very large platform, since obligations differ. Note any micro or small enterprise exemptions from platform-specific duties [VERIFY]. If this is an authority order, redirect.
+2. NOTICE VALIDITY. Check the required elements: a sufficiently substantiated explanation of why the content is illegal, the exact electronic location, the notifier's name and email except for certain offences, and a statement of good-faith belief. Decide whether the notice gives actual knowledge — whether a diligent provider could identify illegality without detailed legal examination.
+3. PRIORITY. If the notifier is a trusted flagger, the notice must be prioritised and processed without undue delay.
+4. ILLEGALITY ANALYSIS. Identify the Union or national law invoked, the Member State whose law is relevant, and whether the content appears illegal under it. Record uncertainty. Separately assess whether the content breaches the terms of service.
+5. ACTION DECISION. Decide the proportionate action: removal, disabling access, geo-restriction, demotion, demonetisation, account suspension, or no action. Consider freedom of expression and other fundamental rights. Record whether automated means were used.
+6. STATEMENT OF REASONS. Draft it with the required content: the action taken and its territorial scope and duration; the facts and circumstances relied on including whether a notice triggered it; whether automated means were used; the legal ground or the terms-of-service ground with explanation; and the redress available.
+7. REDRESS. Set out the internal complaint route for online platforms and its handling expectations, out-of-court dispute settlement, and judicial redress.
+8. TRANSPARENCY DATABASE. For online platforms, prepare the record for submission without personal data, using the current field set [VERIFY].
+9. NOTIFIER RESPONSE. Draft confirmation of receipt and notice of the decision with redress information.
+10. LAWYER REVIEW TRIGGERS. Escalate: uncertain illegality; political, journalistic or public-interest content; government or law enforcement notifiers; repeat-infringer suspension; and cross-border conflicts of law.
+
+RULES
+- Keep illegality analysis, which depends on national law, separate from DSA procedure.
+- Label each item DSA, NATIONAL LAW, TERMS OF SERVICE, COMMISSION GUIDANCE or BEST PRACTICE.
+- Never state content is illegal without identifying the specific law.
+- Record every decision so the statement of reasons can be defended.
+
+OUTPUT FORMAT
+Open with notice validity, the action recommended and whether escalation is needed. Then the sections above, with the statement of reasons and notifier response as usable text and the database record as a table. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'An online marketplace receives a notice from a brand owner alleging that a listing sells counterfeit goods, with a link but no explanation of which trademark is infringed.',
+      result:
+        'Notice found incomplete for lack of a substantiated explanation so not giving actual knowledge, a request for information sent to the notifier, a parallel terms-of-service review finding the listing uses restricted brand terms, a proportionate interim action of demoting the listing with a statement of reasons citing the terms ground, redress routes set out, and a transparency database record prepared.',
+    },
+  },
+  {
+    id: 'eu-ai-act-annex-iv-technical-documentation',
+    name: 'AI Act Annex IV Documentation Builder',
+    description: 'Builds the Annex IV technical documentation for a high-risk AI system ahead of the postponed application dates.',
+    jurisdiction: 'eu',
+    category: 'regulatory',
+    tags: ['regulatory-change', 'drafting', 'ai-act', 'ai-governance', 'documentation', 'conformity-assessment'],
+    sources: [
+      { citation: 'Regulation (EU) 2024/1689 (Artificial Intelligence Act), Article 11 and Annex IV', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'Providers of high-risk AI systems must draw up technical documentation before placing on the market or putting into service, containing at least the elements in Annex IV.' },
+      { citation: 'Regulation amending the AI Act (Digital Omnibus on AI)', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'In force 27 July 2026. High-risk obligations apply from 2 December 2027 for stand-alone systems and 2 August 2028 for systems embedded in products. Confirmed as at 2026-09-16.' },
+      { citation: 'Harmonised standards, common specifications and Commission guidelines under the AI Act', authority: 'guidance', publisher: 'European Commission; European standardisation organisations', jurisdiction: 'eu', url: 'https://digital-strategy.ec.europa.eu', note: 'Standards were not final by the original deadline, which was one reason for the postponement. Check which have been published before relying on presumption of conformity.' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['technology', 'healthcare', 'financial-services'],
+    relatedSkills: ['eu-ai-act-classifier', 'eu-dpia-ropa-builder', 'us-cppa-risk-admt-cyber-compliance'],
+    whatItDoes:
+      'Takes an AI system that has already been classified as high-risk and builds the technical documentation file Annex IV requires, section by section, from the evidence the provider actually holds: general description, development process and design choices, data governance, monitoring and control, performance and accuracy metrics, risk management, lifecycle changes, standards applied, the declaration of conformity and the post-market monitoring plan. It records what is missing, links each section to the underlying records, and frames the work against the postponed application dates rather than the original ones.',
+    whenToUse:
+      'After a system has been classified as high-risk and the organisation is the provider, when preparing for conformity assessment, when a substantial modification is planned, and when building documentation during development rather than retrofitting it. Not for: deciding whether a system is high-risk or what role the organisation plays (use the AI Act classifier) or deployer-only obligations.',
+    inputs: [
+      { name: 'Classification record', description: 'The high-risk classification, the Annex or product legislation route, and the provider role.', required: true },
+      { name: 'System description', description: 'Intended purpose, versions, hardware and software, and how it is placed on the market.', required: true },
+      { name: 'Development records', description: 'Design specifications, architecture, training methods, data sources and validation.', required: true },
+      { name: 'Testing evidence', description: 'Accuracy, robustness, cybersecurity and bias testing results.' },
+      { name: 'Governance records', description: 'Risk management system, quality management system, human oversight design and logging.' },
+      { name: 'Standards used', description: 'Harmonised standards, common specifications or other solutions applied.' },
+    ],
+    outputs: [
+      { name: 'Applicability and timing', description: 'Confirmed high-risk status, provider role and the application date that applies.' },
+      { name: 'Annex IV file structure', description: 'Each required section with its content drawn from the records supplied.' },
+      { name: 'Evidence map', description: 'Each section linked to the underlying records.' },
+      { name: 'Gap register', description: 'Missing or insufficient elements with owners and dates.' },
+      { name: 'Standards position', description: 'Standards relied on and their publication status.' },
+      { name: 'Maintenance plan', description: 'How the file stays current through changes and post-market monitoring.' },
+    ],
+    prompt: `You are an EU AI regulatory lawyer building the technical documentation for a high-risk AI system under Article 11 and Annex IV of the AI Act.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+In force:
+- The AI Act, and the Digital Omnibus on AI amending it, in force 27 July 2026 [CONFIRMED].
+Scheduled:
+- High-risk obligations apply from 2 December 2027 for stand-alone high-risk systems and from 2 August 2028 for high-risk systems embedded in products [CONFIRMED, Council and AI Act Service Desk].
+- Any simplified documentation arrangements for smaller providers introduced by the amendments [VERIFY scope and conditions].
+- Harmonised standards and common specifications [VERIFY which are published].
+
+INPUTS
+- Classification record: <high-risk route, provider role>
+- System description: <intended purpose, versions, hardware and software, market placement>
+- Development records: <design, architecture, training methods, data sources, validation>
+- Testing evidence: <accuracy, robustness, cybersecurity, bias>
+- Governance: <risk management, quality management, human oversight, logging>
+- Standards: <harmonised standards, common specifications, other solutions>
+
+TASK
+1. SCOPE GATE. Confirm a high-risk classification exists and the organisation is the provider. If classification is missing or the organisation is only a deployer, stop and redirect to the classifier.
+2. TIMING. Identify which application date applies to this system and record it. Note that documentation must exist before placing on the market or putting into service, so it should be built during development.
+3. MISSING INFORMATION. List absent records. Annex IV requires evidence; mark missing elements rather than drafting content that is not supported by records.
+4. ANNEX IV FILE. Build each section from the records: a general description including intended purpose, provider, version, interactions with other systems, forms of market placement, hardware, user interface and instructions for use; a detailed description of elements and development process, including methods and steps, design specifications and key choices, system architecture and computational resources, data requirements and datasheets covering provenance, scope, characteristics, collection, labelling and cleaning, human oversight measures, pre-determined changes, and validation and testing procedures with metrics and test logs; monitoring, functioning and control information including capabilities, limitations, foreseeable unintended outcomes and input data specifications; appropriateness of performance metrics; the risk management system; relevant changes over the lifecycle; the harmonised standards or other solutions applied; a copy of the EU declaration of conformity; and the post-market monitoring plan [VERIFY against the current text of Annex IV as amended].
+5. EVIDENCE MAP. Link each section to the underlying document, version and owner.
+6. GAP REGISTER. Record each missing or weak element with severity, owner and date, ordered by dependency.
+7. STANDARDS POSITION. Record which standards or common specifications are relied on and whether they are published, and what alternative evidence is needed where they are not.
+8. MAINTENANCE. Set out how the file is updated for substantial modifications, retained for the required period, and connected to post-market monitoring and serious incident reporting [VERIFY retention period].
+9. LAWYER REVIEW TRIGGERS. Escalate: uncertain classification; substantial modification questions; reliance on unpublished standards; third-party conformity assessment routes; and any use of personal data in training requiring a separate data protection assessment.
+
+RULES
+- Build from records. Never draft technical content that is not supported by evidence.
+- Label each item AI ACT, AMENDING REGULATION, HARMONISED STANDARD, COMMISSION GUIDANCE or BEST PRACTICE.
+- Use the postponed application dates confirmed above, not the original dates.
+
+OUTPUT FORMAT
+Open with the applicable application date and the number of Annex IV sections with gaps. Then the sections above, with the evidence map and gap register as tables. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A provider of a CV-screening system classified as high-risk under Annex III starts building its documentation file eighteen months before the stand-alone application date.',
+      result:
+        'Provider role and Annex III route confirmed with the 2 December 2027 date recorded, the file structured from existing model cards and validation reports, data governance sections found missing provenance and labelling records for one training dataset, bias testing present but without subgroup metrics, harmonised standards marked unpublished with alternative evidence identified, and a gap register ordered by dependency.',
     },
   },
 ];

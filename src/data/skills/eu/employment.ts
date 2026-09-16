@@ -1,7 +1,7 @@
 import type { Skill } from '../../../types/skill';
 
 /**
- * EU employment skills — platform work and the national measures transposing it.
+ * EU employment skills — platform work and pay transparency, and the national measures transposing them.
  */
 export const euEmploymentSkills: Skill[] = [
   {
@@ -85,6 +85,85 @@ Open with the classification conclusion for each Member State and the strength o
         'A delivery platform operating in three Member States reviews its courier model after transposition, relying on contractual terms permitting substitution and work for competitors.',
       result:
         'Scope confirmed in all three with two having transposed on broader criteria than the directive minimum, the presumption triggered on rate-setting and electronic supervision, the substitution and multi-apping clauses assessed as weak rebuttal evidence because the allocation algorithm demonstrably reduced offers after refusals, separate algorithmic management gaps identified on explanation and human review of deactivations irrespective of classification, retroactive social security exposure framed by Member State with limitation periods flagged, and contract redrafting rejected as a response to facts about control.',
+    },
+  },
+  {
+    id: 'eu-pay-transparency-gap-analysis',
+    name: 'Pay Transparency Gap Analysis',
+    description: 'Maps an employer’s pay practices against the EU Pay Transparency Directive and each national transposition.',
+    jurisdiction: 'eu',
+    category: 'employment',
+    tags: ['workforce', 'assessment', 'pay-transparency', 'equal-pay', 'transposition', 'reporting'],
+    sources: [
+      { citation: 'Directive (EU) 2023/970 on pay transparency and enforcement mechanisms for equal pay', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'The transposition deadline of 7 June 2026 has passed. Transposition was incomplete in most Member States as the deadline approached. Obligations bind employers through national law. Confirmed as at 2026-09-16.' },
+      { citation: 'National measures transposing Directive (EU) 2023/970', authority: 'primary', publisher: 'Member State legislatures', jurisdiction: 'eu', note: 'The operative law. Member States may go further than the directive, set their own reporting mechanics and penalties, and have transposed on different timetables.' },
+      { citation: 'European Commission guidance on equal pay and pay transparency', authority: 'guidance', publisher: 'European Commission', jurisdiction: 'eu', url: 'https://commission.europa.eu' },
+    ],
+    lastReviewed: '2026-09-16',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-pay-transparency-multistate-checker', 'eu-member-state-delta', 'eu-platform-work-status-assessor'],
+    whatItDoes:
+      'Maps an employer’s recruiting, pay structure and reporting practices against the Pay Transparency Directive as it has actually been transposed in each country where the employer operates, because the operative obligations are national and transposition has been uneven. It covers pay information before hiring, the ban on asking about pay history, workers’ right to pay information, pay-setting criteria, gender pay gap reporting by headcount band, and the joint pay assessment trigger, and produces a gap analysis and a country-by-country implementation plan.',
+    whenToUse:
+      'When preparing for or implementing national pay-transparency laws, when a Member State adopts its transposing measure, before the first gender pay gap report is due, and when a gap report shows an unexplained difference that may trigger a joint pay assessment. Not for: US state pay-transparency rules (use the US multistate checker) or individual equal-pay claims.',
+    inputs: [
+      { name: 'Country footprint', description: 'Member States where the employer has workers, with headcount per country and legal entity.', required: true },
+      { name: 'Pay structure', description: 'Job architecture, grades, pay ranges, criteria for pay setting and progression, and variable pay.', required: true },
+      { name: 'Recruiting practice', description: 'Job adverts, application forms and interview practice regarding pay.', required: true },
+      { name: 'Pay data', description: 'Pay data by gender and category of workers, if available.' },
+      { name: 'Transposition status', description: 'Any national law or draft the employer has identified for each country.' },
+      { name: 'Worker representation', description: 'Works councils or unions and any collective agreements setting pay.' },
+    ],
+    outputs: [
+      { name: 'Transposition matrix', description: 'Per country: status, operative law, effective dates and departures from the directive.' },
+      { name: 'Obligation map', description: 'Each obligation mapped to the entities and headcount bands it applies to.' },
+      { name: 'Gap analysis', description: 'Current practice against each obligation, per country.' },
+      { name: 'Pay structure review', description: 'Whether criteria are objective, gender-neutral and accessible to workers.' },
+      { name: 'Reporting readiness', description: 'Data needed for gap reporting and the first reporting date per country.' },
+      { name: 'Joint pay assessment triggers', description: 'Where a gap may trigger an assessment and what it requires.' },
+      { name: 'Implementation plan', description: 'Country-by-country actions with owners and dates.' },
+    ],
+    prompt: `You are an EU employment lawyer mapping an employer's compliance with the Pay Transparency Directive as transposed in each Member State.
+
+CURRENT-LAW STATUS (verified 2026-09-16 — re-check before relying on it)
+- Directive (EU) 2023/970 transposition deadline: 7 June 2026, which has passed [CONFIRMED, eur-lex and Commission].
+- Transposition was incomplete in most Member States as the deadline approached; the Commission may open infringement proceedings [CONFIRMED]. Current status per country [VERIFY].
+- Employers are bound through national law. Where a Member State has not transposed, identify what applies nationally today rather than applying the directive directly to a private employer.
+
+INPUTS
+- Countries: <Member States, headcount per country and entity>
+- Pay structure: <job architecture, grades, ranges, criteria, progression, variable pay>
+- Recruiting: <adverts, forms, interview practice>
+- Pay data: <by gender and category of workers>
+- Transposition status: <known national laws or drafts>
+- Representation: <works councils, unions, collective agreements>
+
+TASK
+1. SCOPE GATE. Confirm the employer has workers in EU Member States. Note that the directive distinguishes obligations for all employers from reporting obligations tied to headcount bands.
+2. TRANSPOSITION MATRIX. For each country, check official national sources and record: status (transposed, draft, not started), the operative law, effective dates, reporting start dates, and departures from the directive such as lower thresholds or additional duties. Record the date checked. Do not apply the directive's timetable where national law differs.
+3. MISSING INFORMATION. Identify missing pay data broken down by gender and category of workers. Reporting and joint pay assessments depend on it.
+4. OBLIGATION MAP. Map each obligation to the entities in scope: pay information to applicants before interview or in advance; prohibition on asking about pay history; gender-neutral job adverts and titles; making pay-setting and progression criteria accessible to workers; workers' right to request information on their pay level and average pay levels by gender for workers doing the same work or work of equal value, and the response period [VERIFY national]; bans on pay secrecy clauses; gender pay gap reporting by headcount band with its frequency; and joint pay assessment where reporting shows a gap of at least the directive's threshold in any category of workers that is not justified by objective, gender-neutral criteria and not remedied within the set period [VERIFY national threshold and period].
+5. GAP ANALYSIS. Assess current practice against each obligation per country, with severity and owner.
+6. PAY STRUCTURE REVIEW. Test whether the job architecture supports identifying work of equal value using objective, gender-neutral criteria such as skills, effort, responsibility and working conditions. Identify where categories of workers are not defined in a way that would survive challenge.
+7. REPORTING READINESS. For each country, identify the first reporting date, the metrics required, the data sources and gaps, and whether reports go to a national body, workers or representatives.
+8. JOINT PAY ASSESSMENT. Where data suggests an unexplained gap at or above the threshold in any category, set out what a joint assessment requires, including involvement of worker representatives, and the remediation timeline.
+9. IMPLEMENTATION PLAN. Sequence actions country by country, with no-regret actions that are advisable everywhere before national detail is final.
+10. LAWYER REVIEW TRIGGERS. Escalate: unexplained gaps; countries with conflicting or unclear rules; collective agreements that may conflict; pay secrecy clauses in contracts; and any worker information request already received.
+
+RULES
+- National law is operative. Never apply the directive's text as though it binds a private employer directly.
+- Label each item NATIONAL LAW, DIRECTIVE MINIMUM, COMMISSION GUIDANCE or BEST PRACTICE.
+- Mark every national threshold, period and reporting date [VERIFY] unless confirmed from the national source.
+- Do not conclude that a pay difference is justified; identify the criteria that would need to justify it.
+
+OUTPUT FORMAT
+Open with the transposition matrix summary and the first reporting date. Then the sections above, with the transposition matrix, obligation map and gap analysis as tables. Close with: Assumptions made; [VERIFY] points; Lawyer review items.`,
+    example: {
+      scenario:
+        'A retailer with 1,400 workers across four Member States prepares for pay transparency after the transposition deadline, with only two countries having adopted national laws.',
+      result:
+        'A transposition matrix showing two countries transposed with one imposing a lower reporting threshold than the directive and two still in draft, adverts found to omit pay ranges and application forms asking current salary, job architecture assessed as unable to compare work of equal value across store and warehouse roles, first reporting dates mapped per country, one category flagged at or near the joint pay assessment threshold, and a plan separating no-regret actions from those awaiting national detail.',
     },
   },
 ];

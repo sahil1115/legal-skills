@@ -20,7 +20,7 @@ export const ukPrivacyComplianceSkills: Skill[] = [
     lastReviewed: '2026-09-08',
     reviewStatus: 'unverified',
     version: '1.0.0',
-    relatedSkills: ['au-privacy-ndb-assessor', 'sg-pdpc-breach-notifier', 'global-data-rights-request-handler'],
+    relatedSkills: ['au-privacy-ndb-assessor', 'sg-pdpc-breach-notifier', 'global-data-rights-request-handler', 'eu-gdpr-breach-notification'],
     whatItDoes:
       'Runs an incident against the two separate notification thresholds the UK GDPR sets — risk to rights and freedoms for the regulator, and high risk for the individuals themselves — which are different tests producing different answers. It fixes the moment of awareness that starts the 72-hour clock, establishes whether the organisation is acting as controller or processor because that decides who notifies whom, drafts both notifications, and separates the underlying compliance failures the incident exposes from the notification question itself.',
     whenToUse:

@@ -177,7 +177,7 @@ Open with the scope conclusion and any notification deadline. Then the sections 
     reviewStatus: 'unverified',
     version: '1.0.0',
     industries: ['technology'],
-    relatedSkills: ['uk-sar-exemption-triage', 'eu-ai-act-classifier', 'uk-consumer-rights-checker'],
+    relatedSkills: ['eu-dsa-notice-action-triage', 'uk-sar-exemption-triage', 'eu-ai-act-classifier'],
     whatItDoes:
       'Structures the risk assessments the Online Safety Act requires: whether a service is in scope, the illegal content risk assessment across the kinds of priority illegal content, the children’s access assessment and, where children are likely to access the service, the children’s risk assessment. It maps each identified risk to the measures in Ofcom’s codes or to alternative measures, records the evidence used, and sets the review triggers and record keeping that make the assessment defensible to the regulator.',
     whenToUse:

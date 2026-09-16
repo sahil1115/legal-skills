@@ -404,10 +404,10 @@ Score table, band and lane, reviewer briefing, escalation triggers.`,
       { citation: 'Privacy Act 1988 (Cth) and the Australian Privacy Principles', authority: 'primary', publisher: 'Federal Register of Legislation', jurisdiction: 'au', url: 'https://www.legislation.gov.au' },
       { citation: 'Data subject and consumer rights regimes generally', authority: 'secondary', note: 'This skill spans several regimes. It identifies which apply and what each requires; it does not state the current text of any one of them.' },
     ],
-    lastReviewed: '2026-08-26',
+    lastReviewed: '2026-09-16',
     reviewStatus: 'unverified',
-    version: '1.0.0',
-    relatedSkills: ['us-privacy-request-router', 'eu-dpia-ropa-builder', 'sg-pdpa-obligation-mapper', 'au-privacy-ndb-assessor'],
+    version: '1.1.0',
+    relatedSkills: ['us-privacy-request-router', 'uk-sar-exemption-triage', 'eu-member-state-delta', 'sg-pdpa-obligation-mapper', 'au-privacy-ndb-assessor'],
     whatItDoes:
       'Classifies an incoming data subject or consumer rights request by the right exercised (access, erasure, portability, objection, rectification, restriction), identifies which privacy regimes plausibly apply given the requester’s location and your operations, calculates the response deadline under each, and drafts both the acknowledgement and the substantive response. It also flags where an exemption may apply and what evidence you would need to rely on it, rather than assuming every request must be fulfilled in full.',
     whenToUse:
@@ -424,6 +424,7 @@ Score table, band and lane, reviewer briefing, escalation triggers.`,
       { name: 'Exemption analysis', description: 'Exemptions that may apply and the evidence needed to rely on each.' },
       { name: 'Draft correspondence', description: 'Acknowledgement letter and substantive response, ready to adapt.' },
       { name: 'Internal action list', description: 'Systems to search, teams to notify, and identity checks to complete.' },
+      { name: 'Response package', description: 'The disclosure set, supplementary information, recipient notifications and the record of how the request was handled.' },
     ],
     prompt: `You are a privacy operations specialist handling an inbound data subject or consumer rights request.
 
@@ -440,15 +441,25 @@ TASK
 4. EXEMPTIONS: which exemptions or refusal grounds might apply (third-party data, legal privilege, manifestly unfounded or excessive requests, ongoing legal claims, retention obligations). For each, state what evidence you would need.
 5. DRAFT the acknowledgement letter and the substantive response, leaving [BRACKETS] for facts you do not have.
 6. INTERNAL ACTIONS: systems to search, teams to involve, identity verification steps.
+7. GDPR OPERATIONAL CHECKS (where the GDPR applies):
+   - Timing: respond without undue delay and in any event within one month of receipt; this may be extended by two further months where necessary, taking into account the complexity and number of requests, provided the requester is told of the extension and the reasons within the first month (Article 12(3)).
+   - Identity: where there are reasonable doubts about identity, request only the additional information necessary to confirm it (Article 12(6)). Do not demand more than is proportionate.
+   - Manifestly unfounded or excessive: the controller may charge a reasonable fee or refuse, but bears the burden of demonstrating the request is manifestly unfounded or excessive (Article 12(5)). Treat this as exceptional.
+   - Access: provide a copy of the personal data and the supplementary information in Article 15(1), and ensure the right to obtain a copy does not adversely affect the rights and freedoms of others (Article 15(4)), redacting third-party data where necessary.
+   - Downstream notification: for rectification, erasure or restriction, communicate it to each recipient to whom the data was disclosed unless impossible or involving disproportionate effort, and tell the requester about those recipients if they ask (Article 19).
+   - National restrictions: Member State law may restrict rights under Article 23. Identify any that apply and route the country-specific question to the member-state delta analysis [VERIFY].
+   - UK requests: the UK GDPR and Data Protection Act 2018, as amended in 2025, now diverge on subject access. Route UK requests to the UK SAR skill rather than applying the EU analysis.
+8. RESPONSE PACKAGE: assemble the disclosure set in an intelligible form, the supplementary information, any recipient notifications sent, and a short record of the request, the verification, the decision, each deadline and the response date.
 
 RULES
 - Never assume identity is verified. If it is not, the first action is verification — and say how that affects the clock.
 - Do not advise refusing a request on a bare assertion; tie every refusal ground to evidence.
 - Where regimes give different deadlines, plan to the shortest.
+- Label each GDPR step with its article so it can be checked against the text.
 - Flag if the request also looks like a complaint, a breach report, or a litigation trigger.
 
 OUTPUT FORMAT
-Six sections matching the tasks above.`,
+Eight sections matching the tasks above.`,
     example: {
       scenario:
         'A former employee in Ireland emails "send me everything you have on me and delete my file" to a shared HR mailbox.',

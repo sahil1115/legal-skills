@@ -551,7 +551,7 @@ Open with every statute triggered and the single most urgent step with its date.
     lastReviewed: '2026-09-16',
     reviewStatus: 'unverified',
     version: '1.0.0',
-    relatedSkills: ['us-fifty-state-survey', 'us-employment-policy-checker', 'us-fcra-adverse-action-manager'],
+    relatedSkills: ['us-fifty-state-survey', 'us-employment-policy-checker', 'eu-pay-transparency-gap-analysis'],
     whatItDoes:
       'Checks job advertisements and the recruiting process against a pay-transparency rule matrix that the organisation maintains, rather than against rules hard-coded into the prompt that would go stale. It validates each matrix row against current official sources and flags rows that are missing, outdated or unverified, then tests each posting for the jurisdictions it reaches — including remote roles — against pay range content, benefits disclosure, timing, applicant and employee request rights, salary-history restrictions and recordkeeping. It outputs posting-level fixes and an updated matrix.',
     whenToUse:
