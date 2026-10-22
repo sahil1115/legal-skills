@@ -623,4 +623,74 @@ Open with any notice that is due now or may already be late. Then the sections a
         'The suit mapped to the cyber, technology E&O and umbrella policies with a prior-period policy included protectively, notice conditions quoted and dates calculated with the renewal deadline flagged as the controlling date, a tender map separating the vendor’s contractual indemnity from additional-insured status, drafted notice and tender letters that reserve rights without characterising coverage, and a response tracker ready for reservations of rights.',
     },
   },
+  {
+    id: 'us-deposition-outline-builder',
+    name: 'Deposition Outline Builder',
+    description: 'Builds a deposition outline tied to claim elements and exhibits, with time and objection planning.',
+    jurisdiction: 'us',
+    category: 'litigation',
+    tags: ['drafting', 'disputes', 'discovery', 'deposition', 'witness-examination'],
+    sources: [
+      { citation: 'Federal Rules of Civil Procedure', authority: 'primary', publisher: 'United States Courts', jurisdiction: 'us', url: 'https://www.uscourts.gov', note: 'Depositions by oral examination, including the default duration limit, objections and instructions not to answer, and depositions of organisations through a designated representative. State rules differ.' },
+      { citation: 'Federal Rules of Evidence', authority: 'primary', publisher: 'United States Courts', jurisdiction: 'us', url: 'https://www.uscourts.gov', note: 'Admissibility points that shape questioning, including authentication, hearsay and statements of a party opponent.' },
+      { citation: 'Local rules, standing orders and judge-specific deposition protocols', authority: 'regulator', jurisdiction: 'us', note: 'Courts and individual judges often modify deposition practice — speaking objections, time limits, remote depositions. Check the assigned judge.' },
+    ],
+    lastReviewed: '2026-10-23',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-esi-protocol-rule-26f-builder', 'us-local-rules-formatter', 'global-chronology-builder', 'us-privilege-log-builder'],
+    whatItDoes:
+      'Builds an examination outline for a fact witness, expert or organisational representative that is organised around what you need to prove or disprove, not around the documents. For each claim or defence element it sets the admissions to lock in, the questions that get there in order — funnelling from open to closed — the exhibits to use and when, and follow-ups for evasive answers. It budgets time against the default duration limit, anticipates objections and instructions not to answer, and for an organisational deposition maps every question to a noticed topic.',
+    whenToUse:
+      'When preparing to take a deposition in US litigation, when a corporate representative notice needs its topics mapped to questions, and when re-planning mid-deposition after testimony changes the picture. Also useful in reverse, to prepare your own witness for likely lines of questioning.',
+    inputs: [
+      { name: 'Case posture', description: 'Claims and defences, the court, the assigned judge, and the elements genuinely in dispute.', required: true },
+      { name: 'Witness', description: 'Who they are, their role and relationship to the parties, and the type of deposition.', required: true },
+      { name: 'Key documents', description: 'Exhibits with identifiers, and the case chronology.' },
+      { name: 'Goals', description: 'Admissions sought, theories to test and impeachment material.' },
+      { name: 'Time and rules', description: 'Time allotted, stipulations, and any local rules or orders on objections and remote depositions.' },
+    ],
+    outputs: [
+      { name: 'Goals and admissions list', description: 'Must-get and nice-to-have admissions, each tied to an element.' },
+      { name: 'Question outline', description: 'Numbered questions by topic, funnelled from open to closed, with follow-ups.' },
+      { name: 'Exhibit plan', description: 'When each exhibit is introduced, the foundation questions and the admission it serves.' },
+      { name: 'Time budget', description: 'Minutes per topic against the time available, must-get topics first.' },
+      { name: 'Objection and privilege plan', description: 'Likely objections, cures, and how to make a record on instructions not to answer.' },
+      { name: 'Organisational topic map', description: 'For a corporate representative, each noticed topic mapped to questions and gaps.' },
+    ],
+    prompt: `You are a US litigator preparing to take a deposition.
+
+INPUTS
+- Case: <claims, defences, court (federal or state), assigned judge, elements genuinely in dispute>
+- Witness: <name, role, relationship to the parties; fact / expert / organisational representative; for an organisational deposition, the noticed topics>
+- Documents: <exhibits with identifiers; the chronology>
+- Goals: <admissions to lock in, theories to test, impeachment material>
+- Time and rules: <time allotted, stipulations, local rules or orders on objections and remote depositions>
+
+TASK
+1. GOALS. List the admissions and facts this deposition must secure, each tied to a claim or defence element. Separate "must get" from "nice to have". State what you will deliberately not ask, and why — for example, to avoid educating the witness before trial.
+2. OUTLINE. For each goal, write the actual questions in sequence: background and foundation; open questions to exhaust the witness's knowledge; closed questions to commit the witness; then lock-down ("Have you told me everything you know about...?"). Mark follow-ups for evasive or non-responsive answers.
+3. EXHIBITS. For each exhibit: when to introduce it, the foundation questions to authenticate it or establish the witness's knowledge of it, and the admission it is used for. Note documents to hold back.
+4. IMPEACHMENT. Where prior statements, documents or other testimony conflict with expected answers, set out the commit, credit and confront sequence.
+5. TIME BUDGET. Allocate time across topics against the time allowed, putting must-get goals first. Federal depositions are limited by default to one day of a fixed number of hours unless stipulated or ordered otherwise [VERIFY the current rule and any order]; state practice differs.
+6. OBJECTIONS AND PRIVILEGE. Anticipate form objections and how to cure them by rephrasing; instructions not to answer on privilege and how to make a record for a later motion; and areas where confidentiality designations are likely.
+7. ORGANISATIONAL DEPOSITIONS. Map every question to a noticed topic, flag questions outside the topics, and include questions testing the representative's preparation and the sources they consulted.
+8. CLOSE. Questions confirming the witness had the opportunity to give complete answers, and documents or information to request on the record.
+
+RULES
+- Never invent testimony, exhibits or prior statements. Use only the documents supplied; where a question depends on an assumed fact, mark [ASSUMED].
+- Do not state a local rule, standing order or time limit as settled; mark [VERIFY] and say where to check.
+- Closed-phase questions must be single-fact and non-compound.
+- Do not include questions designed to harass or embarrass, or to probe privileged communications.
+- Flag any ethics issue, such as contact with a represented person outside the deposition.
+
+OUTPUT FORMAT
+Open with the goals list and a one-line theory of the deposition. Then the outline by topic with numbered questions, exhibit cues in brackets and time per topic; the impeachment sequences; the objection and privilege plan; and, for an organisational deposition, the topic map (Topic | Questions | Gaps).`,
+    example: {
+      scenario:
+        'Plaintiff in a federal breach of contract case is deposing the defendant\'s former sales director, who negotiated the disputed renewal and sent the key emails.',
+      result:
+        'A goals list of six admissions tied to formation and notice, a 140-question outline across eight topics with exhibit cues, a commit-credit-confront sequence on an email that contradicts an interrogatory answer, and a time budget with 30 minutes held in reserve.',
+    },
+  },
 ];

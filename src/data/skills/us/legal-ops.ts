@@ -248,4 +248,74 @@ Open with the controlling deadline and any escalation flag. Then the sections ab
         'Portal deadlines calculated, the complaint also identified as a billing error notice triggering a separate statutory timeline that was earlier and therefore controlling, account records showing the dispute was logged but not investigated, a draft response acknowledging the error with the fee reversed and the charge credited, a remediation record, and a systemic flag because the same queue backlog affected other disputes that month.',
     },
   },
+  {
+    id: 'us-trademark-clearance-triage',
+    name: 'Trademark Clearance Triage',
+    description: 'Triages a proposed US brand for registrability and likelihood-of-confusion risk before a full search.',
+    jurisdiction: 'us',
+    category: 'research',
+    tags: ['research', 'screening', 'trademark', 'intellectual-property', 'brand-clearance'],
+    sources: [
+      { citation: 'Lanham Act (Trademark Act of 1946)', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.govinfo.gov', note: 'Federal registration and infringement, including refusal of descriptive marks and of marks likely to cause confusion with prior marks.' },
+      { citation: 'Trademark Manual of Examining Procedure', authority: 'guidance', publisher: 'United States Patent and Trademark Office', jurisdiction: 'us', url: 'https://www.uspto.gov', note: 'How examining attorneys apply refusal grounds, including likelihood of confusion and descriptiveness. Revised periodically; use the current edition.' },
+      { citation: 'Likelihood-of-confusion factors applied by the Trademark Trial and Appeal Board and the federal courts', authority: 'primary', jurisdiction: 'us', note: 'The Board applies a multi-factor test from Federal Circuit authority, and each regional circuit has its own formulation for infringement. Verify the test for the relevant forum.' },
+    ],
+    lastReviewed: '2026-10-23',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer', 'technology'],
+    relatedSkills: ['global-legal-research', 'ca-advertising-claims-reviewer', 'us-fifty-state-survey'],
+    whatItDoes:
+      'Gives a first-pass risk view on a proposed brand before money is spent on a full clearance search. It places the mark on the distinctiveness spectrum and flags descriptiveness, geographic, surname and other common refusal grounds; analyses supplied search results — USPTO records, common-law uses, domain and marketplace findings — against the likelihood-of-confusion factors, concentrating on the two that usually decide it, similarity of the marks and relatedness of the goods or services; and returns separate registration and use risk ratings with the reasons, the gaps in the search, and practical options.',
+    whenToUse:
+      'When marketing or product teams shortlist names, before ordering a full clearance search, when screening several candidates to decide which to clear properly, and before filing an application. It is triage, not a clearance opinion, and says what a full search and opinion would add.',
+    inputs: [
+      { name: 'Proposed mark', description: 'The word mark, any design element, and how it will appear in use.', required: true },
+      { name: 'Goods and services', description: 'What will be offered under the mark, to whom and through which channels.', required: true },
+      { name: 'Search results', description: 'USPTO knockout results, common-law, domain and marketplace findings.' },
+      { name: 'Markets', description: 'US only or other countries too, and the launch date.' },
+      { name: 'Existing portfolio', description: 'Your own marks and any family of marks.' },
+    ],
+    outputs: [
+      { name: 'Distinctiveness assessment', description: 'Where the mark sits on the spectrum for these goods, with reasons.' },
+      { name: 'Registrability flags', description: 'Likely refusal grounds other than conflicts with prior marks.' },
+      { name: 'Conflicts table', description: 'Each relevant prior mark rated on similarity and relatedness.' },
+      { name: 'Risk ratings', description: 'Registration risk and use risk, separately, for each candidate.' },
+      { name: 'Search gaps', description: 'What the supplied results do not cover.' },
+      { name: 'Options and next steps', description: 'Ways to reduce risk, the candidate to clear first, and full search scope.' },
+    ],
+    prompt: `You are a US trademark lawyer triaging a proposed brand before a full clearance search.
+
+INPUTS
+- Mark: <word mark; any design element; how it will be used on products, packaging, app stores and domains>
+- Goods and services: <specifically what will be offered under the mark, to whom and through which channels>
+- Search results (optional): <USPTO knockout results with owner, goods and services, and status; common-law uses; domain, social handle and marketplace findings>
+- Markets: <US only, or other countries; launch date>
+- Portfolio: <our existing marks>
+
+TASK
+1. DISTINCTIVENESS. Place the mark on the spectrum — generic, descriptive, suggestive, arbitrary or fanciful — for these goods and services, with reasoning. Flag likely refusal grounds: descriptiveness or deceptive misdescriptiveness, geographic descriptiveness, surname, merely laudatory terms, and ornamental or informational use. Say whether acquired distinctiveness would be needed.
+2. CLASSES. Identify the likely classes and draft an indicative identification of goods and services [VERIFY against the USPTO ID Manual].
+3. CONFLICTS. For each relevant prior mark in the search results, assess similarity in appearance, sound, meaning and commercial impression, and relatedness of the goods or services and channels of trade. Consider the strength of the prior mark, crowded fields, and status (live, dead or pending; use-based or intent-to-use). Rate each HIGH, MEDIUM or LOW.
+4. OVERALL RISK. Rate registration risk and use (infringement) risk separately — they are different questions — and give the reasons for each.
+5. SEARCH GAPS. What the supplied results do not cover: state registrations, unregistered use, phonetic and translation variants, design elements, and other jurisdictions.
+6. OPTIONS. Practical routes: modify the mark, narrow the goods, add distinctive elements, approach a prior owner, or choose another candidate. If several candidates were given, say which to clear first.
+7. NEXT STEPS. Full search scope, whether a formal opinion is warranted, and the filing basis (use in commerce or intent to use) with timing considerations.
+
+RULES
+- This is triage, not a clearance opinion. Say so in the first line.
+- A knockout search with no conflicts is not clearance. Never describe a mark as "clear".
+- Never invent prior marks, registration numbers, owners or decisions. Use only what is in the search results.
+- Do not state filing fees, deadlines or current examination practice from memory; mark [VERIFY] and point to the USPTO.
+- Keep registrability and infringement risk separate throughout.
+
+OUTPUT FORMAT
+Open with a one-line risk rating per candidate. Then: distinctiveness analysis; classes and draft identification; conflicts table (Prior mark | Owner | Goods/services | Status | Similarity | Relatedness | Rating); search gaps; options; next steps.`,
+    example: {
+      scenario:
+        'A consumer app startup shortlists three names for a budgeting app and supplies a USPTO knockout search showing two similar marks for financial software.',
+      result:
+        'A triage report rating one candidate high risk against a live registration for closely related software, one as likely descriptive, and recommending the third for full search, with indicative identifications and a list of search gaps.',
+    },
+  },
 ];

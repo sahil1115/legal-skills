@@ -20,18 +20,18 @@ Deep links work per skill — for example [`#eu-ai-act-classifier`](https://sahi
 
 ## What's in it
 
-**123 skills** across **8 jurisdictions**, **8 practice areas** and an optional **industry** dimension.
+**133 skills** across **8 jurisdictions**, **8 practice areas** and an optional **industry** dimension.
 
 | Jurisdiction | Skills | Examples |
 | --- | --- | --- |
-| Global | 10 | Playbook Maker, Smart Redline, Contract Obligation Extraction, Data Rights Request Handler |
-| United States | 40 | NDA Reviewer, Rule 26(f) & ESI Protocol Builder, Form I-9 Audit & Inspection Response, FCRA Adverse Action Manager, Cyber Incident 8-K Materiality Record |
-| United Kingdom | 17 | UK SAR Exemption & Response Triage, FCA Consumer Duty Outcome Assessor, Sexual Harassment Prevention Duty Audit, IR35 Status Determination Builder, TUPE Transfer Assessor |
-| European Union | 19 | GDPR Breach Notification Workflow, NIS2 Incident Reporting Workflow, EUDR Due Diligence Statement Builder, CBAM Declarant Compliance Planner, AI Act Classifier |
-| Canada | 5 | Termination Entitlements Assessor, Privacy Breach & Reporting Assessor, CASL Compliance Checker, Quebec Law 25 & Language Compliance Checker, Advertising & Claims Reviewer |
+| Global | 13 | Chronology Builder, Due Diligence Red-Flag Review, AI Vendor Terms Reviewer, Playbook Maker, Smart Redline, Contract Obligation Extraction, Data Rights Request Handler |
+| United States | 42 | Deposition Outline Builder, Trademark Clearance Triage, NDA Reviewer, Rule 26(f) & ESI Protocol Builder, Form I-9 Audit & Inspection Response, FCRA Adverse Action Manager, Cyber Incident 8-K Materiality Record |
+| United Kingdom | 18 | ACAS Disciplinary Process Checker, UK SAR Exemption & Response Triage, FCA Consumer Duty Outcome Assessor, Sexual Harassment Prevention Duty Audit, IR35 Status Determination Builder, TUPE Transfer Assessor |
+| European Union | 21 | Data Act Readiness Assessment, Accessibility Act Readiness, GDPR Breach Notification Workflow, NIS2 Incident Reporting Workflow, EUDR Due Diligence Statement Builder, CBAM Declarant Compliance Planner, AI Act Classifier |
+| Canada | 6 | Supply Chains Act Report Builder, Termination Entitlements Assessor, Privacy Breach & Reporting Assessor, CASL Compliance Checker, Quebec Law 25 & Language Compliance Checker, Advertising & Claims Reviewer |
 | Australia | 22 | Payday Super Compliance Checker, Ransomware Payment Reporting Triage, AASB S2 Climate Disclosure Readiness, PPSR Registration & Priority Checker, Unfair Dismissal Risk Assessor |
 | Singapore | 6 | PDPA Obligation Mapper, MAS Notice Checker, SIAC Clause Builder |
-| Cross-jurisdiction | 4 | Contract Localizer, Four-Regime Gap Analyzer, Strictest-Rule Resolver |
+| Cross-jurisdiction | 5 | Sanctions Ownership Reconciler, Contract Localizer, Four-Regime Gap Analyzer, Strictest-Rule Resolver |
 
 Each skill carries what it does, when to use it, inputs, expected outputs, a full prompt, a worked example, **its legal sources with authority tiers**, a **last-reviewed date**, a **review status**, a **version**, and related skills.
 
@@ -190,7 +190,7 @@ scripts/
 
 ### Notable design decisions
 
-- **Safety rules are composed, not copied.** One block in `safety.ts`, appended by `composePrompt()`. Updating it updates all 123 skills at once, and the audit fails if a skill inlines its own copy.
+- **Safety rules are composed, not copied.** One block in `safety.ts`, appended by `composePrompt()`. Updating it updates all 133 skills at once, and the audit fails if a skill inlines its own copy.
 - **The URL owns modal state.** `useSkillRoute` derives React state from the hash and marks its own history entries in `history.state`, so Back/Forward stay synchronised. Closing pops our entry rather than pushing a new one. (A ref would desync on same-document fragment navigation, which does not remount React.)
 - **Renamed skills keep working.** `ID_ALIASES` maps retired ids to current ones; `getSkill()` resolves both and the URL is rewritten to the live id. **Never delete an alias** — an id is a published deep link.
 - **Facet counts answer "what if I tick this?"** Each facet is counted with its own selection ignored, so ticking "US" does not zero out "UK". Values within a facet are OR-ed, facets are AND-ed, and tags narrow (every selected tag must match).

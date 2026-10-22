@@ -314,4 +314,81 @@ Seven sections matching the tasks above, opening with the number of true conflic
         'Fourteen dimensions decomposed, eleven resolved as stricter-versus-looser into one standard, two independent requirements applied cumulatively, and one true conflict — a consultation requirement that cannot be satisfied by a globally uniform rollout — escalated with three options priced and a recommendation to stage the rollout by market.',
     },
   },
+  {
+    id: 'cross-sanctions-ownership-reconciler',
+    name: 'Sanctions Ownership Reconciler',
+    description: 'Reconciles the US, UK and EU sanctions ownership and control tests for a counterparty structure.',
+    jurisdiction: 'cross',
+    category: 'compliance',
+    tags: ['screening', 'third-party-risk', 'financial-services', 'sanctions', 'ownership-and-control', 'trade-compliance'],
+    sources: [
+      { citation: 'OFAC Fifty Percent Rule guidance and related FAQs', authority: 'regulator', publisher: 'Office of Foreign Assets Control, US Department of the Treasury', jurisdiction: 'us', url: 'https://ofac.treasury.gov', note: 'Entities owned 50 percent or more, directly or indirectly, individually or in aggregate, by blocked persons are themselves blocked. March 2026 guidance on sham transactions and evasion stresses control and diligence beyond the ownership arithmetic; check the current text.' },
+      { citation: 'Sanctions and Anti-Money Laundering Act 2018 and regulations made under it', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'UK regimes treat an entity as owned or controlled by a designated person on ownership of more than 50 percent or on control tests set in the regime regulations.' },
+      { citation: 'OFSI guidance on ownership and control', authority: 'guidance', publisher: 'Office of Financial Sanctions Implementation, HM Treasury', jurisdiction: 'uk', url: 'https://www.gov.uk', note: 'Includes comparative material with OFAC published in 2026. Check the current version.' },
+      { citation: 'EU Council sanctions regulations and Commission guidance on ownership and control', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'EU measures prohibit making funds or economic resources available indirectly, including to entities owned or controlled by listed persons; Commission FAQs set out control indicators. Regime-specific; check the consolidated text.' },
+    ],
+    lastReviewed: '2026-10-23',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['financial-services', 'energy-infrastructure'],
+    relatedSkills: ['us-ofac-export-screener', 'cross-strictest-rule-resolver', 'global-due-diligence-review'],
+    whatItDoes:
+      'Takes a counterparty\'s ownership and control structure and runs it separately through the US, UK and EU tests before reconciling them, because a structure that is clear under one regime can be caught under another. It shows the ownership arithmetic through every chain, aggregates holdings of designated persons where the regime does, applies the UK and EU control tests that the OFAC ownership rule does not replicate, treats recent divestments and restructurings as an evasion question rather than a percentage, and works out which regimes have a nexus to the deal at all. The result is a per-regime determination, a combined position and the evidence still needed.',
+    whenToUse:
+      'Onboarding a counterparty with complex or opaque ownership, before a transaction touching a jurisdiction with significant sanctions exposure, after a designation or delisting changes an ownership chain, and whenever a counterparty has recently restructured away from a designated owner.',
+    inputs: [
+      { name: 'Ownership structure', description: 'Chart with percentages, share classes, voting rights, trusts and nominees, up to the ultimate owners.', required: true },
+      { name: 'Designations', description: 'Which persons in the structure are designated, under which regimes, and the screening date.', required: true },
+      { name: 'Control facts', description: 'Board appointment rights, management roles, contractual and financing arrangements, powers of attorney and family links.' },
+      { name: 'Transaction', description: 'What is proposed, the currency, and the people and places involved.' },
+      { name: 'History', description: 'Recent transfers, restructurings or divestments and their terms.' },
+    ],
+    outputs: [
+      { name: 'Nexus map', description: 'Which of the US, UK and EU regimes apply to this transaction, and why.' },
+      { name: 'Ownership calculations', description: 'Direct, indirect and aggregated ownership per regime, with the arithmetic shown.' },
+      { name: 'Control analysis', description: 'The UK and EU control tests applied, and US control red flags.' },
+      { name: 'Reconciled determination', description: 'Caught, not caught or unresolved per regime, and the combined position.' },
+      { name: 'Red flags', description: 'Evasion indicators, opaque holdings and inconsistent information.' },
+      { name: 'Evidence gaps and next steps', description: 'Documents to obtain, licence routes, and whether to escalate or decline.' },
+    ],
+    prompt: `You are a sanctions compliance lawyer reconciling US, UK and EU ownership and control analysis for a counterparty.
+
+CURRENT POSITION (checked 2026-10-23 — re-check before relying on it)
+- US: entities owned 50 percent or more, directly or indirectly, individually or in aggregate, by blocked persons are blocked under the OFAC fifty percent rule; control without that ownership does not trigger automatic blocking under the rule [CONFIRMED]. OFAC guidance of March 2026 on sham transactions and sanctions evasion raises expectations to look at control and at transfers that bring holdings below the threshold [VERIFY scope].
+- UK: ownership of more than 50 percent, or control as defined in the regime regulations, including the ability to ensure the entity's affairs are conducted in accordance with the designated person's wishes [VERIFY regulations and current OFSI guidance].
+- EU: ownership of more than 50 percent, or control assessed against indicators in Commission guidance; the prohibitions also reach making funds or economic resources available indirectly [VERIFY regime and current guidance].
+- Exactly 50 percent is caught by the US rule but not by a more-than-50-percent ownership test [CONFIRMED].
+
+INPUTS
+- Structure: <ownership chart with percentages, share classes, voting rights, trusts and nominees, up to ultimate owners>
+- Designations: <persons in the structure designated, by regime, and the date screened>
+- Control facts: <board appointment rights, management, contracts, financing, powers of attorney, family relationships>
+- Transaction: <what is proposed, currency, people and places involved>
+- History: <recent transfers, restructurings or divestments and their terms>
+
+TASK
+1. NEXUS. For each regime, decide whether it applies: US persons, US-origin goods or US dollar clearing; UK persons, UK territory or UK-incorporated entities; EU persons, EU territory or business done in the EU. A regime without a nexus is noted, not applied — but say what would create one.
+2. SCREENING CHECK. Confirm every person in the structure was screened against each regime's lists on a stated date. Flag anyone screened under one regime only.
+3. OWNERSHIP. For each regime separately, calculate direct and indirect ownership through each chain, and aggregate holdings of designated persons where that regime aggregates [VERIFY for UK and EU]. Show the arithmetic. Treat nominee, trust and bearer arrangements as unresolved until the beneficial position is evidenced.
+4. CONTROL. Apply the UK and EU control tests to the control facts. For the US, assess control as a diligence and evasion red flag rather than an automatic block, and consider whether a designated person may hold property interests beyond equity.
+5. RESTRUCTURING AND EVASION. Where holdings were recently transferred or reduced, test whether the change is genuine — consideration paid, independence of the transferee, continuing influence — against the March 2026 US guidance and the UK and EU anti-circumvention rules [VERIFY].
+6. RECONCILE. Give the determination per regime — CAUGHT, NOT CAUGHT or UNRESOLVED — and the combined position for the business, which follows the strictest regime with a nexus.
+7. NEXT STEPS. Evidence to obtain, licence or authorisation routes where a regime applies, and whether to escalate or decline.
+
+RULES
+- Never conclude NOT CAUGHT on incomplete ownership information. Missing tiers, nominees or undisclosed agreements make the answer UNRESOLVED.
+- Run each regime separately before reconciling. Never import one regime's threshold into another.
+- Lists change daily; every determination is as at the screening date given.
+- Do not advise on structuring a transaction to avoid sanctions.
+- Mark every legal proposition you are not certain of [VERIFY], naming the regime and source to check.
+
+OUTPUT FORMAT
+Open with a table (Regime | Nexus | Ownership | Control | Determination) and the combined position in one sentence. Then the calculations, the control analysis, red flags, and next steps.`,
+    example: {
+      scenario:
+        'A bank with London and Frankfurt branches is asked to finance a trading company 49 percent owned by a designated individual through a holding company, with the rest held by a trust and two of three directors appointed by the designated individual.',
+      result:
+        'A reconciliation showing the US ownership test not met but UNRESOLVED pending the trust, CAUGHT under the UK and EU control tests because of the board appointment rights, a combined position to decline or seek authorisation, and an evidence list for the trust.',
+    },
+  },
 ];

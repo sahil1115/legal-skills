@@ -620,4 +620,83 @@ Open with the applicable application date and the number of Annex IV sections wi
         'Provider role and Annex III route confirmed with the 2 December 2027 date recorded, the file structured from existing model cards and validation reports, data governance sections found missing provenance and labelling records for one training dataset, bias testing present but without subgroup metrics, harmonised standards marked unpublished with alternative evidence identified, and a gap register ordered by dependency.',
     },
   },
+  {
+    id: 'eu-data-act-readiness',
+    name: 'Data Act Readiness Assessment',
+    description: 'Maps EU Data Act duties for connected products, data sharing and cloud switching into a compliance plan.',
+    jurisdiction: 'eu',
+    category: 'regulatory',
+    tags: ['assessment', 'regulatory-change', 'data-act', 'connected-products', 'cloud-switching', 'data-sharing'],
+    sources: [
+      { citation: 'Regulation (EU) 2023/2854 (Data Act)', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'Applies from 12 September 2025. The access-by-design duty applies to connected products and related services placed on the market after 12 September 2026; cloud switching charges must be removed entirely from 12 January 2027. Confirmed as at 2026-10-23.' },
+      { citation: 'European Commission guidance, FAQs and model contractual terms under the Data Act', authority: 'guidance', publisher: 'European Commission', jurisdiction: 'eu', url: 'https://digital-strategy.ec.europa.eu', note: 'Non-binding FAQs, recommended model contractual terms for data sharing and standard contractual clauses for cloud contracts. Check the current versions.' },
+      { citation: 'European Commission Digital Omnibus proposal (November 2025)', authority: 'guidance', publisher: 'European Commission', jurisdiction: 'eu', url: 'https://digital-strategy.ec.europa.eu', note: 'A legislative proposal under negotiation, not law. It would amend parts of the Data Act, including cloud switching for some pre-September 2025 contracts. Listed so its status is checked, not relied on.' },
+    ],
+    lastReviewed: '2026-10-23',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['technology', 'energy-infrastructure', 'retail-consumer'],
+    relatedSkills: ['eu-member-state-delta', 'eu-gdpr-art28-dpa-auditor', 'eu-nis2-scope-tester', 'global-ai-vendor-terms-reviewer'],
+    whatItDoes:
+      'Works out which roles a business plays under the Data Act — manufacturer of a connected product, provider of a related service, data holder, data recipient, user, or provider of data processing (cloud) services — and maps the obligations each brings: user access to product and related-service data, pre-contract information, sharing with third parties, conditions and compensation for making data available, the unfair-terms regime for B2B data clauses, trade secret safeguards, public-sector exceptional-need requests, and cloud switching and interoperability. It sequences the dates that matter and keeps the GDPR analysis separate wherever the data is personal.',
+    whenToUse:
+      'Now that access by design applies to products placed on the market after 12 September 2026, ahead of the 12 January 2027 removal of switching charges, when negotiating data-sharing or cloud contracts, and when a user or third party asks for access to product data.',
+    inputs: [
+      { name: 'Products and services', description: 'Connected products, related services and data processing services offered in the EU.', required: true },
+      { name: 'Data inventory', description: 'What product and related-service data is generated, where it goes, who can access it, and whether it is personal.', required: true },
+      { name: 'Contracts', description: 'User terms, data-sharing agreements and cloud contracts, with their dates.' },
+      { name: 'Market dates', description: 'When each product model was or will be placed on the EU market.' },
+      { name: 'Company size', description: 'Whether the business or its counterparties are micro, small or medium-sized enterprises.' },
+    ],
+    outputs: [
+      { name: 'Role map', description: 'Every product and service with the Data Act roles it engages.' },
+      { name: 'Obligation register', description: 'Obligations by role, with the date each applies.' },
+      { name: 'Timeline', description: 'The milestones that matter for this business, past and coming.' },
+      { name: 'Contract gap list', description: 'Clauses to add, amend or remove, including unfair-terms risks.' },
+      { name: 'GDPR interface notes', description: 'Where personal data needs its own lawful basis and rights analysis.' },
+      { name: 'Action plan', description: 'Prioritised actions with owners across product, legal and operations.' },
+    ],
+    prompt: `You are an EU technology regulatory lawyer assessing readiness under Regulation (EU) 2023/2854 (the Data Act).
+
+CURRENT-LAW STATUS (checked 2026-10-23 — re-check before relying on it)
+- The Data Act has applied since 12 September 2025 [CONFIRMED].
+- The duty to design connected products and related services so that data is accessible by default applies to products and services placed on the market after 12 September 2026; it is not retroactive [CONFIRMED].
+- Cloud switching charges may not exceed costs directly incurred until 12 January 2027 and must be removed entirely from that date [CONFIRMED]. Whether ordinary subscription fees and early termination penalties are affected is a separate question [VERIFY].
+- The unfair-terms rules for B2B data clauses extend to certain contracts concluded before 12 September 2025 from 12 September 2027 [VERIFY scope].
+- A Commission Digital Omnibus proposal would amend parts of the Data Act, including cloud switching for some existing contracts. It is under negotiation and is NOT law [VERIFY status before advising].
+
+INPUTS
+- Products and services: <connected products, related services and data processing services offered in the EU, with Member States>
+- Data inventory: <data generated by each product or service, where it flows, who can access it, whether personal>
+- Contracts: <user terms, data-sharing agreements, cloud contracts, with conclusion dates and durations>
+- Market dates: <when each model was or will be placed on the EU market>
+- Size: <whether we or our counterparties are micro, small or medium-sized enterprises>
+
+TASK
+1. ROLE MAP. For each product and service, decide whether the business is a manufacturer of a connected product, a provider of a related service, a data holder, a data recipient, a user, or a provider of data processing services. A business can hold several roles. Explain each conclusion and flag borderline cases, such as whether a device is a connected product or an app is a related service.
+2. USER ACCESS AND SHARING. For connected products and related services: pre-contract information to users; direct access by design for products placed on the market after 12 September 2026, or access on request otherwise; sharing with third parties at the user's request; limits on gatekeepers as recipients; and the data holder's own use of non-personal data under contract with the user.
+3. MAKING DATA AVAILABLE. Fair, reasonable and non-discriminatory terms, compensation rules including for SMEs, dispute settlement, and technical protection measures.
+4. TRADE SECRETS. The safeguards available before disclosure and the narrow grounds to withhold or suspend, with the evidence and notification each requires [VERIFY].
+5. UNFAIR TERMS. Review B2B data access and use clauses against the unfairness test and the listed terms, and identify which contracts are in scope by date.
+6. CLOUD SWITCHING. For data processing services: contractual switching rights, notice and transition periods, portability of data and exportable assets, switching charges by date, interoperability, and transparency about international access to data.
+7. PUBLIC SECTOR AND INTERNATIONAL ACCESS. Readiness to handle exceptional-need requests, and safeguards against unlawful third-country governmental access to non-personal data.
+8. GDPR INTERFACE. Where data is personal, the Data Act does not supply a GDPR legal basis. Flag where a separate lawful basis, transparency or data subject rights analysis is needed.
+9. ACTION PLAN. Prioritised by date and exposure, with owners: product design, terms and notices, contract remediation, and request-handling processes.
+
+RULES
+- Keep personal-data analysis separate. Never treat a Data Act duty as a GDPR legal basis.
+- Penalties and competent authorities are set nationally; do not state them from memory. Mark [VERIFY] and name the Member State to check.
+- Do not treat the Digital Omnibus proposal as law. Give the current-law answer and, separately, what would change if it were adopted as proposed.
+- Tie every obligation to the role that carries it.
+- Mark any article reference, date or threshold you are not certain of [VERIFY].
+
+OUTPUT FORMAT
+Open with the role map as a table (Product/service | Roles | Key obligations | Applies from). Then the obligation register, timeline, contract gap list, GDPR interface notes and action plan. Close with: Assumptions; [VERIFY] points; Member State checks needed.`,
+    example: {
+      scenario:
+        'A manufacturer of smart heat pumps sells in four Member States, runs a companion app and cloud platform, and offers the platform to installers on three-year contracts.',
+      result:
+        'A role map showing manufacturer, related-service provider, data holder and cloud provider roles; access-by-design gaps for models placed on the market after 12 September 2026; installer contract clauses flagged under the unfair-terms test; and a switching-charge plan for 12 January 2027.',
+    },
+  },
 ];

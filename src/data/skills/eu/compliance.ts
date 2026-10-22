@@ -406,4 +406,79 @@ Open with the protection conclusion, the acknowledgement deadline and any immedi
         'Reporter treated as protected with French transposition applied, the anonymous report accepted with a secure two-way messaging route set up, the finance team excluded as conflicted and the case routed to the group audit committee chair, acknowledgement and feedback deadlines calculated, preservation and possible regulatory reporting flagged, and a retaliation safeguard requiring documented independent grounds for any adverse action in the reporting team.',
     },
   },
+  {
+    id: 'eu-accessibility-act-readiness',
+    name: 'Accessibility Act Readiness',
+    description: 'Scopes European Accessibility Act duties for products and services and plans conformity and evidence.',
+    jurisdiction: 'eu',
+    category: 'compliance',
+    tags: ['assessment', 'regulatory-change', 'accessibility', 'consumer-protection', 'product-compliance'],
+    sources: [
+      { citation: 'Directive (EU) 2019/882 (European Accessibility Act)', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'National measures apply from 28 June 2025, subject to transitional provisions. Microenterprises providing services are exempt from the service requirements; there is no equivalent exemption from product requirements. Confirmed as at 2026-10-23.' },
+      { citation: 'National laws transposing the European Accessibility Act', authority: 'primary', jurisdiction: 'eu', note: 'Penalties, market surveillance authorities, complaint routes and some transitional choices are national. Check each Member State where the offering is sold.' },
+      { citation: 'EN 301 549 (accessibility requirements for ICT products and services)', authority: 'guidance', publisher: 'ETSI, CEN and CENELEC', url: 'https://www.etsi.org', note: 'The European standard most commonly used to evidence ICT accessibility. Check which standards are currently cited as harmonised under the Act, since only those give a presumption of conformity.' },
+    ],
+    lastReviewed: '2026-10-23',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer', 'technology', 'financial-services'],
+    relatedSkills: ['eu-member-state-delta', 'eu-dsa-notice-action-triage', 'uk-consumer-rights-checker'],
+    whatItDoes:
+      'Determines whether products and services fall within the European Accessibility Act — e-commerce, consumer banking, e-books, electronic communications, elements of passenger transport services, and the consumer hardware and operating systems it lists — and what each economic operator must do. It separates product obligations (manufacturers, importers and distributors: conformity assessment, technical documentation, declaration of conformity, marking) from service obligations (meeting the accessibility requirements, publishing how the service meets them, keeping conformity as the service changes), tests the microenterprise and disproportionate-burden routes properly, and applies the transitional rules.',
+    whenToUse:
+      'When a business sells to EU consumers online, launches a product or service in scope, receives a complaint or a market surveillance enquiry, or wants to rely on the microenterprise exemption or a disproportionate burden or fundamental alteration assessment.',
+    inputs: [
+      { name: 'Offerings', description: 'Products and services offered to consumers in the EU, by Member State.', required: true },
+      { name: 'Operator role', description: 'Manufacturer, importer, distributor or service provider, for each offering.', required: true },
+      { name: 'Company size', description: 'Headcount, turnover and balance sheet total, including linked and partner enterprises.' },
+      { name: 'Accessibility evidence', description: 'Audits, standards followed, accessibility statements and user testing.' },
+      { name: 'Dates', description: 'When products were placed on the market and services launched or contracted.' },
+    ],
+    outputs: [
+      { name: 'Scope determination', description: 'Each offering in or out of scope, with the reason.' },
+      { name: 'Obligation map', description: 'What each operator role must do for each offering.' },
+      { name: 'Exemption assessment', description: 'Microenterprise, disproportionate burden and fundamental alteration, tested against evidence.' },
+      { name: 'Gap list', description: 'Current evidence against the requirements, offering by offering.' },
+      { name: 'Documentation checklist', description: 'What must exist, where it is published and how long it is kept.' },
+      { name: 'Remediation plan', description: 'Prioritised fixes, including supplier and procurement requirements.' },
+    ],
+    prompt: `You are an EU product and consumer regulatory lawyer assessing compliance with the European Accessibility Act (Directive (EU) 2019/882) and its national transpositions.
+
+CURRENT-LAW STATUS (checked 2026-10-23 — re-check before relying on it)
+- National measures apply from 28 June 2025 [CONFIRMED]. Member States could defer the requirements for answering emergency communications to no later than 28 June 2027 [CONFIRMED].
+- Transitional provisions let service providers keep using products lawfully used before 28 June 2025 for a period, and let some service contracts agreed before that date continue, within outer limits set by the Directive and national law [VERIFY dates and national choices].
+- Microenterprises providing services are exempt from the service accessibility requirements. There is no microenterprise exemption from product requirements [CONFIRMED].
+- Penalties, market surveillance authorities and complaint routes are national [VERIFY per Member State].
+
+INPUTS
+- Offerings: <products and services offered to EU consumers, with Member States>
+- Role: <manufacturer / importer / distributor / service provider, per offering>
+- Size: <headcount, annual turnover and balance sheet total, including linked and partner enterprises>
+- Evidence: <audits, standards followed, accessibility statements, user testing>
+- Dates: <when products were placed on the market; when services launched; key contract dates>
+
+TASK
+1. SCOPE. For each offering, decide whether it is a listed product or service and whether it is offered to consumers. Explain borderline cases — a B2B platform also used by consumers, a website that sells as well as informs, a banking feature inside a wider app.
+2. ROLE AND OBLIGATIONS. For products: manufacturer, importer and distributor obligations — conformity assessment, technical documentation, declaration of conformity, marking, identification, accessible instructions, corrective action and cooperation with authorities. For services: meeting the accessibility requirements, providing information on how the service meets them (typically in the general terms and conditions or an equivalent), and maintaining conformity as the service changes.
+3. EXEMPTIONS. Microenterprise status for service providers, applying the headcount and financial thresholds with linked and partner enterprises included [VERIFY thresholds]. Disproportionate burden and fundamental alteration: the documented assessment the Directive requires, its criteria, its review and any notification to authorities. Reject an exemption that is asserted rather than evidenced.
+4. GAP ANALYSIS. Map current evidence against the requirements for each offering. Conformity with a harmonised standard cited in the Official Journal gives a presumption of conformity; check what is currently cited [VERIFY].
+5. TRANSITIONAL POSITION. Which offerings benefit from transitional rules, and until when.
+6. DOCUMENTATION. What must exist, where it must be published, and how long it must be kept [VERIFY retention periods].
+7. REMEDIATION PLAN. Prioritised by exposure and user impact: quick wins, structural fixes, and accessibility requirements to impose on suppliers.
+
+RULES
+- Accessibility is assessed against the requirements of the Act and the applicable standards, not a single automated scan. Never treat a scanner score as conformity.
+- The microenterprise exemption applies to services only. Never extend it to products.
+- Do not state penalty amounts or national authorities from memory.
+- Separate what the Directive requires from national additions and from good practice.
+
+OUTPUT FORMAT
+Open with a scope table (Offering | In scope? | Role | Key obligations | Exemption claimed | Status). Then the sections above. Close with: Assumptions; [VERIFY] points; Member State checks needed.`,
+    example: {
+      scenario:
+        'A non-EU online retailer with 40 staff sells consumer electronics to customers in France, Germany and Spain through its own website and app, and holds an automated accessibility scan report.',
+      result:
+        'A scope finding that the e-commerce service is in scope with no microenterprise exemption, a gap list noting the scan does not evidence conformity, draft accessibility information for the terms, and a check of importer obligations for listed hardware it sells.',
+    },
+  },
 ];

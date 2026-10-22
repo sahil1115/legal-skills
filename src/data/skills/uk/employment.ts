@@ -326,4 +326,80 @@ Open with the standard in force today, the date of the change, and the three mos
         'Current and strengthened standards mapped with the commencement date flagged for verification, no workplace risk assessment found and recorded as the first gap, customer harassment identified as the highest risk with no refuse-service or escalation process, training assessed as generic and not role-specific, a two-standard gap table, and a remediation plan ranked to demonstrate all reasonable steps before the change.',
     },
   },
+  {
+    id: 'uk-acas-disciplinary-checker',
+    name: 'ACAS Disciplinary Process Checker',
+    description: 'Audits a UK disciplinary or dismissal process against the Acas Code before a decision is taken.',
+    jurisdiction: 'uk',
+    category: 'employment',
+    tags: ['review', 'workforce', 'disciplinary', 'unfair-dismissal', 'acas-code', 'employment-tribunal'],
+    sources: [
+      { citation: 'Employment Rights Act 1996', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Unfair dismissal: potentially fair reasons, the reasonableness test and the qualifying period.' },
+      { citation: 'Employment Rights Act 2025', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Reduces the unfair dismissal qualifying period from two years to six months and removes the cap on the compensatory award, both from 1 January 2027; other changes commence in stages. Confirmed as at 2026-10-23.' },
+      { citation: 'Trade Union and Labour Relations (Consolidation) Act 1992', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Allows tribunals to adjust relevant awards by up to 25% for unreasonable failure to follow a relevant Code of Practice.' },
+      { citation: 'Employment Relations Act 1999', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'The statutory right to be accompanied at disciplinary and grievance hearings.' },
+      { citation: 'Acas Code of Practice on Disciplinary and Grievance Procedures', authority: 'regulator', publisher: 'Acas', jurisdiction: 'uk', url: 'https://www.acas.org.uk', note: 'Statutory Code that tribunals must take into account. Acas consulted on a fully revised draft from 30 July 2026; check whether a new Code has been brought into force.' },
+    ],
+    lastReviewed: '2026-10-23',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['uk-employment-tribunal-risk', 'uk-worker-protection-harassment-audit', 'uk-tupe-assessor'],
+    whatItDoes:
+      'Checks a live disciplinary, capability or misconduct process step by step — investigation, written notification, hearing, right to be accompanied, decision and appeal — against the Acas Code and the reasonableness standard tribunals apply, before the decision letter goes out. It identifies defects that are still fixable, separates Code breaches that risk an uplift of up to 25% from wider fairness points, and maps the employee\'s protection under the new rules: a six-month qualifying period and uncapped compensatory award from 1 January 2027, alongside the claims that never needed qualifying service.',
+    whenToUse:
+      'Before inviting an employee to a disciplinary hearing, before sending an outcome or dismissal letter, when an appeal is lodged, and when a grievance is raised mid-process. Especially for dismissals taking effect on or after 1 January 2027, when far more employees qualify and compensation is uncapped.',
+    inputs: [
+      { name: 'Process so far', description: 'Every step taken, with dates and the documents produced.', required: true },
+      { name: 'Allegations or concerns', description: 'What the employee is accused of, or the capability concern, and the evidence.', required: true },
+      { name: 'Employee profile', description: 'Start date, contract and role; any health condition, protected characteristic, family leave or protected disclosure.', required: true },
+      { name: 'Policy', description: 'The disciplinary policy and whether it is contractual.' },
+      { name: 'Proposed outcome', description: 'The sanction under consideration.' },
+    ],
+    outputs: [
+      { name: 'Qualifying status and claim map', description: 'Service at the effective date of termination and every claim the facts engage.' },
+      { name: 'Code audit', description: 'Each Code step marked compliant, defective or not yet done, with evidence.' },
+      { name: 'Fixable defects', description: 'The step that cures each defect now, and whether an appeal can cure it.' },
+      { name: 'Sanction check', description: 'Whether the proposed sanction is within the range of reasonable responses.' },
+      { name: 'Risk ratings', description: 'Unfair dismissal, uplift and discrimination or whistleblowing risk, separately.' },
+      { name: 'Draft letter', description: 'The next letter in the process, consistent with the audit.' },
+    ],
+    prompt: `You are a UK employment lawyer auditing a disciplinary or capability process before the employer takes a decision.
+
+CURRENT-LAW STATUS (checked 2026-10-23 — re-check before relying on it)
+- The unfair dismissal qualifying period falls from two years to six months from 1 January 2027, and the cap on the compensatory award is removed from the same date [CONFIRMED, Employment Rights Act 2025]. How the effective date of termination, including any extension for statutory notice, falls either side of that date can decide the claim [VERIFY transitional provisions].
+- The Acas Code of Practice on Disciplinary and Grievance Procedures applies; tribunals must take it into account and may adjust relevant awards by up to 25% for unreasonable failure to follow it [CONFIRMED]. Acas consulted on a fully revised draft Code from 30 July 2026 [VERIFY whether a new Code is in force and from when].
+- Other Employment Rights Act 2025 changes, including to tribunal time limits [VERIFY commencement].
+
+INPUTS
+- Process: <every step so far with dates: concern raised, suspension, investigation, invitation, hearing, outcome, appeal>
+- Allegations: <the misconduct or capability concern, and the evidence>
+- Employee: <start date, contract, role; any disability or health issue, pregnancy or family leave, protected disclosures, trade union activity, prior grievances>
+- Policy: <our disciplinary policy; whether it is contractual>
+- Proposed outcome: <warning / final warning / dismissal / other>
+
+TASK
+1. STATUS AND CLAIMS. Calculate continuous service at the proposed effective date of termination and whether ordinary unfair dismissal protection applies, showing the calculation and any extension for statutory notice. Then list the claims available regardless of service that the facts engage — discrimination, whistleblowing detriment and dismissal, automatically unfair reasons, wrongful dismissal.
+2. CODE AUDIT. Walk each Code step: establishing the facts (an investigation proportionate to the allegation, separated from the decision where practicable); informing the employee in writing with enough detail and the evidence; the meeting; the statutory right to be accompanied and its limits; the decision and written reasons; and the right of appeal, heard where practicable by someone not previously involved. Mark each COMPLIANT, DEFECT or NOT YET DONE with the evidence.
+3. FAIRNESS BEYOND THE CODE. For conduct: genuine belief, reasonable grounds, reasonable investigation. For capability: clear standards, support, time to improve, and whether health or disability engages reasonable adjustments. Check consistency with comparable cases and whether the policy was followed.
+4. FIXABLE DEFECTS. For each defect, the step that cures it now — further investigation, a further meeting, disclosure of evidence, a fresh decision-maker — and whether the appeal can cure it.
+5. SANCTION. Whether the proposed sanction falls within the range of reasonable responses, considering length of service, record, mitigation and alternatives to dismissal.
+6. RISK. Rate ordinary unfair dismissal, Code uplift, and discrimination or whistleblowing risk separately, noting the effect of uncapped compensation for dismissals from 1 January 2027.
+7. LETTER. Draft the next letter in the process — invitation, outcome or appeal outcome — consistent with the audit.
+
+RULES
+- Do not state a compensation figure, weekly pay cap, time limit or award multiplier from memory; mark [VERIFY].
+- Never advise withholding evidence from the employee or backdating documents.
+- A grievance raised during the process must be considered, not ignored; say whether to pause or deal with both together.
+- If a protected characteristic, health condition or protected disclosure is mentioned, flag it in the first lines.
+- Label each point CODE, STATUTE, CASE LAW PRINCIPLE [VERIFY] or GOOD PRACTICE.
+
+OUTPUT FORMAT
+Open with: qualifying status; the three most serious defects; and whether to proceed, pause or restart. Then the sections above, with the Code audit as a table (Step | Code expectation | What happened | Status | Fix) and the draft letter last.`,
+    example: {
+      scenario:
+        'An employer plans to dismiss a warehouse supervisor with eight months\' service for gross misconduct in January 2027; the investigator will also chair the hearing and CCTV footage has not been shown to the employee.',
+      result:
+        'A pre-decision audit showing the supervisor qualifies for ordinary unfair dismissal under the six-month rule, two Code defects with fixes (evidence not disclosed; investigator also deciding), a material uplift risk rating, and a revised hearing invitation enclosing the footage.',
+    },
+  },
 ];

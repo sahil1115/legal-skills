@@ -431,4 +431,79 @@ Open with the claims that cannot run as drafted and why. Then the sections above
         'Battery life claim found to rest on testing conducted under conditions not reflecting normal use and commissioned after the copy was written, so unsupportable on the timing requirement alone, the reference price found to have been offered for only nine days with negligible volume so failing both ordinary selling price tests, mandatory activation and shipping fees appearing after the headline flagged under all-in pricing, the recycled packaging claim narrowed to the specific component it applied to, and revised copy supplied for each.',
     },
   },
+  {
+    id: 'ca-supply-chains-act-report',
+    name: 'Supply Chains Act Report Builder',
+    description: 'Tests whether Canada\'s forced and child labour reporting Act applies and drafts the May 31 annual report.',
+    jurisdiction: 'ca',
+    category: 'compliance',
+    tags: ['drafting', 'supply-chain', 'third-party-risk', 'modern-slavery', 'forced-labor', 'annual-reporting'],
+    sources: [
+      { citation: 'Fighting Against Forced Labour and Child Labour in Supply Chains Act', authority: 'primary', publisher: 'Parliament of Canada', jurisdiction: 'ca', url: 'https://laws-lois.justice.gc.ca', note: 'In force since 1 January 2024. Reporting entities must report to the Minister of Public Safety by May 31 each year on steps taken in the previous financial year. Confirmed as at 2026-10-23; no amendment to the reporting obligation identified.' },
+      { citation: 'Public Safety Canada guidance and annual report questionnaire', authority: 'guidance', publisher: 'Public Safety Canada', jurisdiction: 'ca', url: 'https://www.publicsafety.gc.ca', note: 'Explains the entity definitions, mandatory content, online questionnaire, and approval and attestation requirements. Updated between reporting cycles.' },
+      { citation: 'Customs Tariff prohibition on goods produced by forced labour, and proposed replacement legislation', authority: 'primary', jurisdiction: 'ca', note: 'Separate from the reporting obligation. A bill tabled in June 2026 proposes a standalone import-ban framework; check its status.' },
+    ],
+    lastReviewed: '2026-10-23',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer', 'energy-infrastructure'],
+    relatedSkills: ['uk-modern-slavery-statement-builder', 'au-modern-slavery-statement-builder', 'us-uflpa-supply-chain-traceability'],
+    whatItDoes:
+      'Determines whether a business is an "entity" that must report — through a Canadian listing, or through the business-presence and size tests — and whether it produces, sells or distributes goods, imports goods into Canada, or controls an entity that does. If it must report, it builds the annual report around the content the Act requires: structure, activities and supply chains; policies and due diligence; the parts of the business and supply chains at risk and the steps taken to assess and manage that risk; remediation, including of loss of income to vulnerable families; training; and how effectiveness is assessed. It also drafts the approval, attestation and questionnaire notes.',
+    whenToUse:
+      'Ahead of each May 31 deadline, when a business first grows into the size thresholds or starts importing into Canada, after an acquisition that changes group structure, and when aligning Canadian reporting with UK or Australian modern slavery statements.',
+    inputs: [
+      { name: 'Entity profile', description: 'Listing, place of business, business or assets in Canada, and size measures for the two most recent financial years.', required: true },
+      { name: 'Activities', description: 'What the entity produces, sells, distributes or imports, and its group structure.', required: true },
+      { name: 'Supply chain information', description: 'Tiers, geographies, commodities, key suppliers and known risk indicators.' },
+      { name: 'Policies and due diligence', description: 'Codes of conduct, supplier contracts, audits, grievance mechanisms and training.' },
+      { name: 'Prior reports', description: 'The last Canadian report and any UK or Australian statements.' },
+    ],
+    outputs: [
+      { name: 'Applicability determination', description: 'Whether the Act applies, with the entity and activity tests worked through.' },
+      { name: 'Draft report', description: 'Narrative under headings matching the content the Act requires.' },
+      { name: 'Evidence map', description: 'The internal evidence behind every statement in the report.' },
+      { name: 'Questionnaire notes', description: 'Answers prepared so they match the narrative.' },
+      { name: 'Approval and attestation', description: 'Draft approval resolution and attestation wording.' },
+      { name: 'Gaps and improvement plan', description: 'Shortfalls against the required content and good practice, with next-year actions.' },
+    ],
+    prompt: `You are a Canadian supply chain compliance lawyer preparing an annual report under the Fighting Against Forced Labour and Child Labour in Supply Chains Act.
+
+CURRENT-LAW STATUS (checked 2026-10-23 — re-check before relying on it)
+- The Act has been in force since 1 January 2024. Reports are due to the Minister of Public Safety by May 31 each year and cover steps taken in the previous financial year [CONFIRMED].
+- No amendment to the reporting obligation has been identified. A June 2026 bill proposing a new import-ban framework for goods made with forced labour is separate from reporting [VERIFY status].
+- The size criteria that make a business an "entity" (assets, revenue and employees, assessed over the two most recent financial years) [VERIFY current figures in the Act].
+
+INPUTS
+- Entity: <listed on a Canadian stock exchange? place of business, business or assets in Canada; for the two most recent financial years: assets, revenue, employees>
+- Activities: <producing, selling or distributing goods in Canada or elsewhere; importing goods produced outside Canada; controlling an entity that does; group structure>
+- Supply chain: <tiers, geographies, commodities, key suppliers, known risk indicators>
+- Policies and due diligence: <codes of conduct, supplier contracts, audits, grievance mechanisms, training>
+- Prior reporting: <last Canadian report; UK or Australian statements>
+
+TASK
+1. APPLICABILITY. Apply the definition of "entity": a Canadian listing, or the business-presence test combined with meeting at least two of the three size criteria in at least one of the two most recent financial years [VERIFY]. Then apply the activity test. Show the working. If the Act does not apply, say so, stop, and list what would change the answer.
+2. REPORTING APPROACH. Decide between a single report and a joint report for related entities, and how it maps to the group structure.
+3. REQUIRED CONTENT. Draft each mandatory element: structure, activities and supply chains; policies and due diligence processes; the parts of the business and supply chains carrying a risk of forced or child labour and the steps taken to assess and manage that risk; remediation measures; remediation of loss of income to the most vulnerable families resulting from measures taken; training; and how effectiveness is assessed.
+4. EVIDENCE DISCIPLINE. For each statement, cite the internal evidence — policy, audit, contract clause, training record. Where no measure was taken in the year, say so plainly; the report may state that.
+5. QUESTIONNAIRE. Prepare notes for the online questionnaire so the answers match the narrative.
+6. APPROVAL AND ATTESTATION. Draft the approval resolution and the attestation by a director or equivalent in the required form [VERIFY wording], and note publication duties: prominent placement on the website, and provision to shareholders with the annual financial statements where corporate law requires it [VERIFY].
+7. GAPS AND PLAN. Gaps against the required content and good practice, with an improvement plan for the next reporting year.
+8. ALIGNMENT. Where UK or Australian statements exist, note what can be shared and where Canada asks for something different, such as remediation of loss of income.
+
+RULES
+- Never describe a measure the evidence does not support. A false or misleading report creates offence risk for the entity and potentially its directors and officers [VERIFY].
+- Do not state size thresholds or penalty figures from memory; mark [VERIFY].
+- Distinguish forced labour and child labour as the Act defines them from wider labour rights concerns.
+- Keep the import prohibition analysis out of the report.
+
+OUTPUT FORMAT
+Open with the applicability conclusion and the filing deadline. Then the draft report under headings matching the required content, the evidence map, the questionnaire notes, the approval and attestation, and the gaps and improvement plan.`,
+    example: {
+      scenario:
+        'A privately held apparel distributor with its head office in Ontario imports garments from Bangladesh and Viet Nam and must decide whether it reports and what to say.',
+      result:
+        'An applicability analysis showing the business meets two of three size criteria in the latest year, a draft report under the required headings tied to evidence, a candid statement that no income-loss remediation was undertaken, draft approval and attestation, and five improvements.',
+    },
+  },
 ];

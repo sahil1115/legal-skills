@@ -667,4 +667,211 @@ Six sections matching the tasks above. Open with a three-sentence bottom line, m
         'A memo that identifies jurisdiction as the threshold question, sets out the analysis under two plausible candidates, marks enforceability thresholds as [VERIFY], and returns a checklist of six items to confirm before advising.',
     },
   },
+  {
+    id: 'global-chronology-builder',
+    name: 'Chronology Builder',
+    description: 'Builds a sourced fact chronology from case documents, flagging gaps, conflicts and undated events.',
+    jurisdiction: 'global',
+    category: 'litigation',
+    tags: ['extraction', 'disputes', 'chronology', 'evidence', 'fact-finding', 'investigations'],
+    sources: [
+      { citation: 'Litigation and investigations fact-management practice', authority: 'secondary', note: 'A method, not a statement of law. Rules on disclosure, privilege and witness evidence differ by forum and must be checked locally.' },
+    ],
+    lastReviewed: '2026-10-23',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-litigation-hold-builder', 'us-privilege-log-builder', 'global-legal-research'],
+    whatItDoes:
+      'Turns a document set — emails, contracts, notes, transcripts — into a chronology where every entry cites the document and passage it comes from. It separates what the documents record from what a witness asserts and what is inferred, normalises dates and time zones, and surfaces the things a chronology is actually for: periods where nothing is documented, conflicts between sources, events whose date is uncertain, and the moments that bear on the issues in dispute. The output is built to be checked line by line, not trusted.',
+    whenToUse:
+      'At the start of a dispute or internal investigation, before witness interviews, when preparing pleadings or a witness statement, and whenever new documents arrive and an existing chronology needs to be merged and re-checked.',
+    inputs: [
+      { name: 'Documents', description: 'The documents or extracts, each with an identifier such as a Bates number, file name or exhibit reference.', required: true },
+      { name: 'Issues in dispute', description: 'The claims, defences or allegations the chronology must serve, so key events can be flagged.', required: true },
+      { name: 'Existing chronology', description: 'A previous version to merge new material into.' },
+      { name: 'People', description: 'Who is who — names, roles, aliases and email addresses.' },
+      { name: 'Date conventions', description: 'The reference time zone and the date format used in the documents.' },
+    ],
+    outputs: [
+      { name: 'Cast list', description: 'Every person and organisation, with roles and aliases reconciled.' },
+      { name: 'Master chronology', description: 'One event per row with date, source reference, quoted support and evidential status.' },
+      { name: 'Key events', description: 'The rows that bear directly on an issue in dispute, and which issue.' },
+      { name: 'Gaps and conflicts register', description: 'Undocumented periods, contradictory sources and documents referred to but missing.' },
+      { name: 'Undated and uncertain events', description: 'Events placed by inference, with the reasoning shown.' },
+      { name: 'Follow-up questions', description: 'Questions for witnesses and documents to request, each tied to a gap or conflict.' },
+    ],
+    prompt: `You are a disputes lawyer building a fact chronology from source documents. Accuracy and traceability matter more than narrative.
+
+INPUTS
+- Documents: <paste documents or extracts, each headed with its identifier, e.g. [DOC-014] or a Bates number>
+- Issues in dispute: <the claims, defences or allegations — e.g. "whether notice of termination was validly given before 30 June">
+- Existing chronology (optional): <previous version to merge into>
+- People: <names, roles, aliases and email addresses, if known>
+- Conventions: <reference time zone; date format used in the documents, e.g. DD/MM/YYYY or MM/DD/YYYY>
+
+TASK
+1. CAST LIST. Identify every person and organisation, with role, aliases and email addresses. Flag where the same person appears under different names.
+2. EXTRACT EVENTS. For each document, extract every event relevant to the issues: what happened, who was involved, and when. One event per row. Quote the shortest passage that supports it and give the document identifier.
+3. NORMALISE DATES. Convert to YYYY-MM-DD, with time and time zone where known. Where the format is ambiguous (03/04 could be 3 April or 4 March), mark [AMBIGUOUS DATE] and give both readings. Where only the document date is known, say whether the event date is the document date or merely precedes it.
+4. EVIDENTIAL STATUS. Classify each row: DOCUMENTED (the document records the event itself), ASSERTED (someone states it happened), INFERRED (deduced from other facts — show the reasoning) or DISPUTED (sources conflict).
+5. BUILD THE CHRONOLOGY. Order all rows. Where an existing chronology is supplied, merge it, mark rows NEW or AMENDED, and never silently drop an existing row.
+6. KEY EVENTS. Mark rows that bear directly on an issue in dispute and say which issue.
+7. GAPS AND CONFLICTS. List periods where something should be documented but nothing is, sources that contradict each other, and documents that refer to other documents not in the set.
+8. FOLLOW-UP. Questions for witnesses and documents to request, each tied to a gap or conflict.
+
+RULES
+- Every row must cite a document identifier. If something is known but not in the documents, put it in the follow-up list instead of the chronology.
+- Never fill a missing date with a guess. Use [UNDATED] and place the row after the latest event it must follow, saying so.
+- Quote; do not paraphrase in the support column. Keep quotes short.
+- Do not characterise conduct ("wrongly", "deliberately", "admitted") unless quoting.
+- If a document appears to be legal advice or prepared for litigation, flag [PRIVILEGE?] and do not summarise its advice in the chronology.
+- Do not decide disputed facts. Present each version with its source.
+
+OUTPUT FORMAT
+Open with a five-line summary of the shape of the story and the three most significant gaps. Then: 1. Cast list (table). 2. Master chronology (table: Date | Time/TZ | Event | People | Source | Quoted support | Status | Issue). 3. Key events. 4. Gaps and conflicts register. 5. Undated and uncertain events. 6. Follow-up questions.`,
+    example: {
+      scenario:
+        'A supplier disputes whether a termination notice was served in time; 140 emails, two contract versions and a meeting note are provided, with US and UK correspondents.',
+      result:
+        'A sourced chronology of 63 events normalised to UTC, two [AMBIGUOUS DATE] entries on the critical notice email, a conflict between the meeting note and a follow-up email about what was agreed, and eight follow-up questions for the account manager.',
+    },
+  },
+  {
+    id: 'global-due-diligence-review',
+    name: 'Due Diligence Red-Flag Review',
+    description: 'Reviews a transaction data room and produces a red-flag report with consents, risks and proposed fixes.',
+    jurisdiction: 'global',
+    category: 'corporate',
+    tags: ['review', 'mergers-acquisitions', 'corporate-transactions', 'due-diligence', 'change-of-control', 'red-flags'],
+    sources: [
+      { citation: 'Transactional due diligence practice', authority: 'secondary', note: 'A method, not a statement of law. Whether a consent or notice is legally required depends on the governing law of each contract and on local corporate, merger control and foreign investment regimes.' },
+    ],
+    lastReviewed: '2026-10-23',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['global-obligation-extraction', 'us-hsr-threshold-tester', 'uk-nsi-transaction-screener', 'au-firb-foreign-investment-planner'],
+    whatItDoes:
+      'Works through a data room by workstream — corporate, material contracts, employment, IP and data, disputes, regulatory, property and finance — against the deal structure, and returns a red-flag report rather than a document summary. Its centre of gravity is what the transaction itself triggers: change-of-control and anti-assignment clauses, consents and notices, termination rights, exclusivity and non-compete terms that would bind the buyer group, and approvals the deal may need. Each finding is rated, tied to the document it comes from, and paired with a proposed treatment — a condition, a specific indemnity, a warranty, a price point or a post-completion fix.',
+    whenToUse:
+      'During buy-side or vendor due diligence, when a new tranche of documents lands in the data room, and when preparing the diligence-driven parts of the purchase agreement. Not a substitute for specialist tax, merger control or foreign investment advice, which it flags rather than gives.',
+    inputs: [
+      { name: 'Deal structure', description: 'Share purchase, asset purchase, merger or investment; the parties, the target group and the buyer group.', required: true },
+      { name: 'Data room documents', description: 'Documents or extracts, each with its data room index reference.', required: true },
+      { name: 'Materiality threshold', description: 'For example contracts above a stated value, the top customers and suppliers, or anything with exclusivity.' },
+      { name: 'Buyer priorities', description: 'Known deal breakers, integration plans and valuation sensitivities.' },
+      { name: 'Governing laws', description: 'Of the target and the key contracts, where known.' },
+    ],
+    outputs: [
+      { name: 'Red-flag summary', description: 'The most serious findings, most severe first.' },
+      { name: 'Consent schedule', description: 'Per contract: clause, trigger, consequence, counterparty, action and timing.' },
+      { name: 'Workstream findings', description: 'Rated findings by workstream, each with its source.' },
+      { name: 'Drafted protections', description: 'Operative wording for conditions precedent and specific indemnities.' },
+      { name: 'Specialist referrals', description: 'Tax, merger control, foreign investment, regulatory and employee consultation points to route.' },
+      { name: 'Information request list', description: 'Missing documents and questions for the seller, tied to findings.' },
+    ],
+    prompt: `You are a transactional lawyer running legal due diligence for a corporate transaction. Your job is to find what matters to the deal, not to summarise every document.
+
+INPUTS
+- Deal structure: <share purchase / asset purchase / merger / minority investment; seller; target group; buyer group and where it operates>
+- Documents: <data room documents or extracts, each with its index reference>
+- Materiality: <e.g. contracts over a stated annual value, top 20 customers and suppliers, anything with exclusivity>
+- Buyer priorities: <deal breakers, integration plans, valuation sensitivities>
+- Governing laws: <of the target and the key contracts, if known>
+
+TASK
+1. TRIGGER ANALYSIS FIRST. For the stated structure, identify what the transaction itself triggers. A share purchase usually engages change-of-control clauses but not anti-assignment clauses; an asset purchase usually needs assignment or novation of each contract; a merger depends on the governing law. State which applies and why, and mark [VERIFY] where the governing law of a contract changes the answer.
+2. CONSENT SCHEDULE. For every in-scope contract, extract the clause, the trigger as drafted (including indirect or upstream changes of control and how "control" is defined), the consequence (consent, notice, termination right, price change, acceleration), the counterparty and any timing requirement. Quote the operative words.
+3. WORKSTREAM REVIEW. Corporate (title to shares, constitution, shareholder agreements, pre-emption, drag and tag, security over shares); material contracts (exclusivity, non-compete and most-favoured-customer terms that would bind the buyer group, unusual liability, guarantees, termination for convenience); employment (key person terms, change-of-control payments, collective arrangements); IP and data (ownership of core IP, licences in and out, open-source exposure, personal data practices); disputes (current and threatened, regulatory); regulatory (licences and permits and whether they survive the transaction); property; finance (change-of-control events of default, security).
+4. RATE each finding RED (deal issue: price, condition or walk-away), AMBER (needs a specific contractual protection or pre-completion fix) or GREEN (note only), with the reason.
+5. TREATMENT. For each RED and AMBER finding, propose the treatment — condition precedent, specific indemnity, warranty, price adjustment, pre-completion covenant or post-completion action — and draft the operative wording for conditions and specific indemnities.
+6. APPROVALS AND SPECIALISTS. Flag where merger control, foreign investment screening, sector regulatory approval, tax or employee information and consultation may be engaged. Do not apply thresholds; name what must be tested and by whom.
+7. INFORMATION REQUESTS. List missing documents and questions for the seller, each tied to the finding it would resolve.
+
+RULES
+- Every finding must cite the document reference and quote the operative words. No finding without a source.
+- Distinguish what a document says from what it means under its governing law; mark the latter [VERIFY] unless the governing law is stated and the point is settled.
+- Absence of a document is a finding, not a pass. Say "not provided", never "none".
+- Never apply a merger control, foreign investment or tax threshold from memory.
+- Do not assume a consent will be given because the counterparty relationship is good.
+
+OUTPUT FORMAT
+Open with a red-flag summary of no more than ten items, most severe first. Then: consent schedule (table: Document | Clause | Trigger | Consequence | Counterparty | Action | Timing); workstream findings (tables by workstream: Finding | Source | Rating | Treatment); drafted conditions and indemnities; specialist referrals; information request list.`,
+    example: {
+      scenario:
+        'A buyer is acquiring the shares of a software company; the data room holds 60 customer contracts, two reseller agreements, a shareholders agreement and an office lease.',
+      result:
+        'A red-flag report leading with a reseller exclusivity clause that would bind the buyer group, a consent schedule showing 11 customer contracts with change-of-control termination rights, a drafted condition precedent for the top three consents, and 14 information requests.',
+    },
+  },
+  {
+    id: 'global-ai-vendor-terms-reviewer',
+    name: 'AI Vendor Terms Reviewer',
+    description: 'Reviews AI and SaaS vendor terms for training on your data, output rights, indemnities and model changes.',
+    jurisdiction: 'global',
+    category: 'contracts',
+    tags: ['review', 'ai-governance', 'third-party-risk', 'contract-lifecycle', 'vendor-contracts', 'data-use'],
+    sources: [
+      { citation: 'Commercial contracting practice for AI-enabled services', authority: 'secondary', note: 'A method for reviewing contract terms. Whether a term is adequate depends on the use case, the data involved and the governing law.' },
+      { citation: 'Regulation (EU) 2024/1689 (Artificial Intelligence Act)', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'Relevant where the customer deploys an AI system in the EU; the allocation of provider and deployer obligations may need contractual support. Application dates have been amended; check the current position.' },
+      { citation: 'Regulation (EU) 2016/679 (General Data Protection Regulation)', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'Where personal data is processed, processor terms and limits on any further use of that data for model training must be addressed.' },
+    ],
+    lastReviewed: '2026-10-23',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['global-smart-redline', 'eu-gdpr-art28-dpa-auditor', 'eu-ai-act-classifier', 'global-contract-triage'],
+    whatItDoes:
+      'Reviews the terms on which a vendor supplies an AI model, an AI feature inside a SaaS product, or an AI-powered service, focusing on the clauses a standard SaaS review misses. It traces what happens to your inputs and outputs — training, retention, human review, downstream model providers — and who owns and may use the outputs; tests IP and third-party claim indemnities and their carve-outs; looks for the vendor\'s right to change, replace or deprecate the underlying model; and checks use restrictions against how you actually intend to use the tool. Each issue comes with a proposed redline and a fallback.',
+    whenToUse:
+      'Before signing or renewing a contract for an AI tool or AI feature, when a vendor updates its terms or adds generative features to an existing product, and when the business proposes a new use — customer-facing output, sensitive data, decisions about people — for a tool already under contract.',
+    inputs: [
+      { name: 'Vendor terms', description: 'MSA, product or AI terms, acceptable use policy, DPA and any documents incorporated by reference.', required: true },
+      { name: 'Intended use', description: 'What the tool will be used for, by whom, on what data, and whether output reaches customers or decisions about people.', required: true },
+      { name: 'Data categories', description: 'Confidential, personal, special category, regulated or client data.' },
+      { name: 'Playbook', description: 'Existing positions on liability, IP and data.' },
+      { name: 'Jurisdictions', description: 'Where the tool will be used and whose data it processes.' },
+    ],
+    outputs: [
+      { name: 'Data use map', description: 'What the terms allow for inputs, outputs, feedback and telemetry at each stage.' },
+      { name: 'Issues table', description: 'Each issue with the clause, quote, risk, redline and fallback.' },
+      { name: 'Intended-use conflicts', description: 'Where planned use breaches the vendor\'s restrictions or disclaimers.' },
+      { name: 'Model change risk', description: 'Vendor rights to swap, retrain or deprecate models, and missing protections.' },
+      { name: 'Regulatory allocation notes', description: 'What the contract must support under AI and data protection rules.' },
+      { name: 'Negotiation priorities', description: 'The issues to spend leverage on, in order.' },
+    ],
+    prompt: `You are a technology lawyer reviewing contract terms for an AI-enabled product or service on behalf of the customer.
+
+INPUTS
+- Terms: <MSA, product or service terms, AI-specific or acceptable use terms, DPA, and any policy or documentation incorporated by reference — list every document actually provided>
+- Intended use: <what the tool does for us, who uses it, what data goes in, whether outputs are customer-facing or used in decisions about individuals>
+- Data: <confidential / personal / special category / regulated / client data>
+- Playbook (optional): <our standard positions>
+- Jurisdictions: <where used; whose data>
+
+TASK
+1. DOCUMENT MAP. List the documents that make up the contract, including anything incorporated by reference through a link. Flag terms the vendor can change unilaterally and how changes are notified.
+2. DATA USE MAP. Trace inputs, prompts, files, outputs, feedback and telemetry: whether the vendor may use each to train or improve models (its own or third-party), retention periods, human review by the vendor, downstream model providers and sub-processors, processing location, and deletion on exit. Quote the controlling words. Distinguish prohibited, opt-in and opt-out.
+3. OUTPUT RIGHTS. Who owns outputs, what licence the vendor retains, whether similar outputs may be generated for other customers, and any limits on how outputs may be used.
+4. IP AND THIRD-PARTY CLAIMS. Whether the vendor indemnifies against claims that the service or outputs infringe, and the carve-outs (modified outputs, combination with other material, disabled safeguards, inputs we supplied). Check caps and survival.
+5. MODEL CHANGE. The vendor's rights to change, replace, retrain or deprecate the underlying model, and whether that triggers notice, testing or termination rights.
+6. RELIANCE AND RESTRICTIONS. Accuracy disclaimers, prohibited uses and conditions — and whether our intended use breaches any of them, for example decisions about individuals, regulated advice or high-risk categories.
+7. CONFIDENTIALITY, SECURITY AND LIABILITY. Whether confidentiality covers inputs and outputs, security commitments, incident notice, and how the liability cap treats data and IP claims.
+8. REGULATORY ALLOCATION. Where our use may make us a deployer under AI regulation, or personal data is processed, note what the contract must support — information, logs, transparency, cooperation [VERIFY against the applicable regime].
+9. REDLINES. For each issue: risk rating, proposed redline, fallback and walk-away point.
+
+RULES
+- Quote the operative words for every issue. Do not rely on marketing pages or FAQs unless they are incorporated into the contract, and say so when they are not.
+- A "we do not train on your data" statement in a policy the vendor may update is not a contractual prohibition. Say which it is.
+- Do not assume enterprise terms apply if only self-serve terms were provided.
+- Never state AI regulation obligations or dates from memory as settled; mark [VERIFY].
+- Separate legal requirements from commercial preferences.
+
+OUTPUT FORMAT
+Open with a go / go-with-conditions / do-not-sign recommendation and the five issues that drive it. Then: document map; data use map (table: Data | Training | Retention | Human review | Downstream | Exit); issues table (Issue | Clause | Quote | Risk | Redline | Fallback); intended-use conflicts; negotiation priorities.`,
+    example: {
+      scenario:
+        'Marketing wants to roll out a generative writing feature added to an existing SaaS product; the vendor\'s new AI terms are incorporated by link and the DPA predates the feature.',
+      result:
+        'A go-with-conditions recommendation showing that training on customer content is restricted only by an updatable policy, an IP indemnity that excludes outputs, a vendor right to swap model providers without notice, and drafted redlines with fallbacks for each.',
+    },
+  },
 ];
