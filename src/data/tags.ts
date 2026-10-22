@@ -22,6 +22,29 @@ export const WORKFLOW_TAGS = [
   'programme-design',
 ] as const;
 
+export type WorkflowTag = (typeof WORKFLOW_TAGS)[number];
+
+/** Display names for the workflow tags, shown as the "Task type" filter. */
+export const WORKFLOW_LABELS: Record<WorkflowTag, string> = {
+  assessment: 'Assessment',
+  drafting: 'Drafting',
+  review: 'Review',
+  extraction: 'Extraction',
+  research: 'Research',
+  screening: 'Screening',
+  'incident-response': 'Incident response',
+  'programme-design': 'Programme design',
+};
+
+export function isWorkflowTag(tag: string): tag is WorkflowTag {
+  return (WORKFLOW_TAGS as readonly string[]).includes(tag);
+}
+
+/** The first workflow tag a skill carries, used as its headline task type. */
+export function primaryTask(tags: string[]): WorkflowTag | undefined {
+  return tags.find(isWorkflowTag);
+}
+
 /** The area of practice the skill sits in. */
 export const DOMAIN_TAGS = [
   'contract-lifecycle',

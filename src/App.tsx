@@ -3,17 +3,18 @@ import type { TabId } from './types/skill';
 import { skills } from './data/skills';
 import { jurisdictions } from './data/jurisdictions';
 import { categories } from './data/categories';
+import { isWorkflowTag } from './data/tags';
 import { useSkillFilters } from './hooks/useSkillFilters';
 import { useSkillRoute } from './hooks/useSkillRoute';
-import { FilterBar } from './components/FilterBar';
-import { SkillCard } from './components/SkillCard';
+import { Catalogue } from './components/Catalogue';
 import { SkillDetail } from './components/SkillDetail';
+import { SkillShowcase } from './components/SkillShowcase';
 import { RoadmapPanel } from './components/RoadmapPanel';
 import { AGENT_ITEMS, CONNECTOR_ITEMS } from './data/roadmap';
 import {
   AgentIcon,
+  ArrowDownIcon,
   ConnectorIcon,
-  FilterOffIcon,
   GithubIcon,
   MoonIcon,
   ScaleIcon,
@@ -29,8 +30,8 @@ import {
 } from './lib/analytics';
 
 const TABS: { id: TabId; label: string; count: number | null }[] = [
-  { id: 'agents', label: 'Agents', count: null },
   { id: 'skills', label: 'Skills', count: skills.length },
+  { id: 'agents', label: 'Agents', count: null },
   { id: 'connectors', label: 'Connectors', count: null },
 ];
 
@@ -39,23 +40,13 @@ const activeCategories = categories.filter((c) => skills.some((s) => s.category 
 export default function App() {
   const [tab, setTab] = useState<TabId>('skills');
   const [theme, setTheme] = useState<'light' | 'dark'>(getInitialTheme);
+  const catalogueRef = useRef<HTMLElement>(null);
 
   // The URL owns which skill is open, so Back/Forward stay in sync.
   const { openSkill, open: handleOpen, close: handleClose } = useSkillRoute();
 
-  const {
-    filters,
-    results,
-    tags,
-    total,
-    isFiltered,
-    setQuery,
-    setJurisdiction,
-    setCategory,
-    setIndustry,
-    toggleTag,
-    clearFilters,
-  } = useSkillFilters();
+  const filterApi = useSkillFilters();
+  const { filters, toggle } = filterApi;
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -89,12 +80,32 @@ export default function App() {
     else trackPageView();
   }, [openSkill]);
 
+  // Not a hash link: the hash is the skill route, and "#catalogue" would be
+  // read as a skill id.
+  const scrollToCatalogue = useCallback(() => {
+    catalogueRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, []);
+
+  // A tag picked inside the sheet filters the catalogue. The scroll waits for
+  // the sheet to close, because closing restores focus to wherever the sheet
+  // was opened from — possibly the hero — and that would scroll back up.
+  const scrollOnClose = useRef(false);
+  useEffect(() => {
+    if (!openSkill && scrollOnClose.current) {
+      scrollOnClose.current = false;
+      scrollToCatalogue();
+    }
+  }, [openSkill, scrollToCatalogue]);
+
   const handleTagSelect = useCallback(
     (tag: string) => {
-      if (!filters.tags.includes(tag)) toggleTag(tag);
+      // Workflow tags have their own "Task type" facet.
+      const facet = isWorkflowTag(tag) ? 'tasks' : 'tags';
+      if (!(filters[facet] as string[]).includes(tag)) toggle(facet, tag);
       setTab('skills');
+      scrollOnClose.current = true;
     },
-    [filters.tags, toggleTag],
+    [filters, toggle],
   );
 
   return (
@@ -133,8 +144,8 @@ export default function App() {
       </header>
 
       <main>
-        <div className="shell">
-          <section className="hero">
+        <section className="hero">
+          <div className="shell hero__inner">
             <span className="hero__eyebrow">
               <span className="hero__eyebrow-dot" aria-hidden />
               Free and open source · No sign-up · Nothing leaves your browser
@@ -149,6 +160,22 @@ export default function App() {
               employment, regulatory and litigation tasks — written for specific jurisdictions and
               designed to be copied into any model. Browse, search, copy, run it wherever you like.
             </p>
+            <div className="hero__actions">
+              <button type="button" className="btn btn--primary btn--lg" onClick={scrollToCatalogue}>
+                Browse {skills.length} skills
+                <ArrowDownIcon />
+              </button>
+              <a
+                className="btn btn--secondary btn--lg"
+                href={`${REPO_URL}/blob/main/CONTRIBUTING.md`}
+                target="_blank"
+                rel="noreferrer noopener"
+                onClick={() => trackOutboundLink('github-contributing')}
+              >
+                <GithubIcon />
+                Contribute a skill
+              </a>
+            </div>
             <div className="hero__stats">
               <div className="hero__stat">
                 <span className="hero__stat-value">{skills.length}</span>
@@ -167,107 +194,77 @@ export default function App() {
                 <span className="hero__stat-label">accounts required</span>
               </div>
             </div>
-          </section>
+          </div>
 
-          <section className="workspace">
-            <div className="workspace__head">
-              <div className="workspace__icon">
-                <ScaleIcon size={22} />
-              </div>
-              <div className="workspace__meta">
-                <div className="workspace__title">
-                  Legal
-                  <span className="badge badge--accent">Workspace</span>
-                </div>
-                <p className="workspace__desc">
-                  Skills, agents and connectors for legal, compliance and legal operations teams.
+          <SkillShowcase onOpen={handleOpen} />
+        </section>
+
+        <section
+          className="catalogue"
+          ref={catalogueRef}
+          aria-labelledby="catalogue-title"
+        >
+          <div className="shell">
+            <div className="catalogue__head">
+              <div>
+                <h2 className="catalogue__title" id="catalogue-title">
+                  Skills for every legal need
+                </h2>
+                <p className="catalogue__lede">
+                  Filter by jurisdiction, practice area, task type and industry, or search
+                  everything — names, tags and the prompts themselves.
                 </p>
               </div>
+
+              <div className="segmented" role="tablist" aria-label="Library sections">
+                {TABS.map((t) => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    role="tab"
+                    className="segmented__item"
+                    aria-selected={tab === t.id}
+                    onClick={() => setTab(t.id)}
+                  >
+                    {t.id === 'agents' && <AgentIcon size={15} />}
+                    {t.id === 'skills' && <SkillIcon size={15} />}
+                    {t.id === 'connectors' && <ConnectorIcon size={15} />}
+                    {t.label}
+                    {t.count !== null ? (
+                      <span className="segmented__count">{t.count}</span>
+                    ) : (
+                      <span className="segmented__soon">Soon</span>
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div className="tabs" role="tablist" aria-label="Workspace sections">
-              {TABS.map((t) => (
-                <button
-                  key={t.id}
-                  type="button"
-                  role="tab"
-                  className="tab"
-                  aria-selected={tab === t.id}
-                  onClick={() => setTab(t.id)}
-                >
-                  {t.id === 'agents' && <AgentIcon size={15} />}
-                  {t.id === 'skills' && <SkillIcon size={15} />}
-                  {t.id === 'connectors' && <ConnectorIcon size={15} />}
-                  {t.label}
-                  {t.count !== null && <span className="tab__count">{t.count}</span>}
-                </button>
-              ))}
-            </div>
-
-            {tab === 'skills' && (
-              <>
-                <FilterBar
-                  filters={filters}
-                  tags={tags}
-                  isFiltered={isFiltered}
-                  onQueryChange={setQuery}
-                  onJurisdictionChange={setJurisdiction}
-                  onCategoryChange={setCategory}
-                  onIndustryChange={setIndustry}
-                  onTagToggle={toggleTag}
-                  onClear={clearFilters}
-                />
-
-                <div className="results-bar" role="status" aria-live="polite">
-                  <span>
-                    Showing <strong>{results.length}</strong> of <strong>{total}</strong> skills
-                    {filters.jurisdiction !== 'all' &&
-                      ` in ${jurisdictions.find((j) => j.id === filters.jurisdiction)?.name}`}
-                  </span>
-                </div>
-
-                {results.length > 0 ? (
-                  <div className="grid">
-                    {results.map(({ skill }) => (
-                      <SkillCard key={skill.id} skill={skill} onOpen={handleOpen} />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="empty">
-                    <div className="empty__icon">
-                      <FilterOffIcon />
-                    </div>
-                    <p className="empty__title">No skills match those filters</p>
-                    <p className="empty__body">
-                      Try a broader search term, or clear the filters to see all {total} skills.
-                    </p>
-                    <button type="button" className="btn btn--primary" onClick={clearFilters}>
-                      Clear filters
-                    </button>
-                  </div>
-                )}
-              </>
-            )}
+            {tab === 'skills' && <Catalogue api={filterApi} onOpen={handleOpen} />}
 
             {tab === 'agents' && (
-              <RoadmapPanel
-                icon={<AgentIcon size={18} />}
-                title="Agents"
-                body="Agents will chain several skills into an end-to-end workflow that runs with less hand-holding — taking a document in at one end and returning a reviewed, cited work product at the other. The catalogue below sketches where this is heading."
-                items={AGENT_ITEMS}
-              />
+              <div className="panel">
+                <RoadmapPanel
+                  icon={<AgentIcon size={18} />}
+                  title="Agents"
+                  body="Agents will chain several skills into an end-to-end workflow that runs with less hand-holding — taking a document in at one end and returning a reviewed, cited work product at the other. The catalogue below sketches where this is heading."
+                  items={AGENT_ITEMS}
+                />
+              </div>
             )}
 
             {tab === 'connectors' && (
-              <RoadmapPanel
-                icon={<ConnectorIcon size={18} />}
-                title="Connectors"
-                body="Connectors will let a skill read from where your documents already live instead of relying on copy and paste. Any connector added here will be opt-in and configured locally — the project's default remains that nothing leaves your browser."
-                items={CONNECTOR_ITEMS}
-              />
+              <div className="panel">
+                <RoadmapPanel
+                  icon={<ConnectorIcon size={18} />}
+                  title="Connectors"
+                  body="Connectors will let a skill read from where your documents already live instead of relying on copy and paste. Any connector added here will be opt-in and configured locally — the project's default remains that nothing leaves your browser."
+                  items={CONNECTOR_ITEMS}
+                />
+              </div>
             )}
-          </section>
-        </div>
+          </div>
+        </section>
       </main>
 
       <footer className="footer">

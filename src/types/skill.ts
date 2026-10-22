@@ -9,6 +9,8 @@
  * breaking migration.
  */
 
+import type { WorkflowTag } from '../data/tags';
+
 /** Stable jurisdiction identifiers. Used as filter keys and in skill ids. */
 export type JurisdictionId =
   | 'global'
@@ -210,11 +212,26 @@ export interface Skill {
 /** The three workspace tabs. Agents and Connectors are roadmap surfaces. */
 export type TabId = 'agents' | 'skills' | 'connectors';
 
-/** Everything the filter UI can express, in one serialisable object. */
+/**
+ * Everything the filter UI can express, in one serialisable object.
+ *
+ * Each facet is multi-select. Values within a facet are OR-ed (US or UK);
+ * facets are AND-ed together (US or UK, and Employment). Tags are the
+ * exception: every selected tag must be present, because tags narrow.
+ */
 export interface FilterState {
   query: string;
-  jurisdiction: JurisdictionId | 'all';
-  category: CategoryId | 'all';
-  industry: IndustryId | 'all';
+  jurisdictions: JurisdictionId[];
+  categories: CategoryId[];
+  industries: IndustryId[];
+  /** Workflow tags from the shared vocabulary in `src/data/tags.ts`. */
+  tasks: WorkflowTag[];
   tags: string[];
 }
+
+/** The multi-select dimensions of {@link FilterState}. */
+export type FacetId = 'jurisdictions' | 'categories' | 'industries' | 'tasks' | 'tags';
+
+export type SortId = 'relevance' | 'name' | 'reviewed';
+
+export type ViewMode = 'grid' | 'list';

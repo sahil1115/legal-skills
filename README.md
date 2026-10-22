@@ -38,7 +38,9 @@ Each skill carries what it does, when to use it, inputs, expected outputs, a ful
 ### Features
 
 - Instant client-side search across names, tags, descriptions and prompt bodies
-- Filter by jurisdiction, practice area, industry and tag, with live counts
+- Multi-select filters for jurisdiction, practice area, task type, industry and tag, with live faceted counts
+- Shareable filtered views: selections are kept in the query string (search text never is)
+- Grid or list layout, sorting by relevance, name or last review date, and a filter drawer on mobile
 - Per-skill detail view with **Copy Prompt**, **Download SKILL.md** and **Download JSON**
 - Deep links with working Back/Forward, and permanent redirects for renamed skills
 - Light and dark themes, responsive from 320px
@@ -163,11 +165,12 @@ src/
 │   ├── tags.ts             # Shared tag vocabulary
 │   └── disclaimer.ts
 ├── lib/
-│   ├── search.ts           # Scored client-side search, no index library
+│   ├── search.ts           # Scored search, facet filtering and counts, sorting
 │   ├── export.ts           # SKILL.md / JSON transforms + download
 │   └── analytics.ts        # Optional GoatCounter hits; no-ops when unconfigured
 ├── hooks/
-│   ├── useSkillFilters.ts  # All filter state in one place
+│   ├── useSkillFilters.ts  # All filter state in one place, mirrored to the URL
+│   ├── useDialog.ts        # Shared modal behaviour: Escape, focus trap, scroll lock
 │   ├── useSkillRoute.ts    # Hash routing, Back/Forward correctness
 │   └── useCopyToClipboard.ts
 ├── components/
@@ -190,6 +193,7 @@ scripts/
 - **Safety rules are composed, not copied.** One block in `safety.ts`, appended by `composePrompt()`. Updating it updates all 123 skills at once, and the audit fails if a skill inlines its own copy.
 - **The URL owns modal state.** `useSkillRoute` derives React state from the hash and marks its own history entries in `history.state`, so Back/Forward stay synchronised. Closing pops our entry rather than pushing a new one. (A ref would desync on same-document fragment navigation, which does not remount React.)
 - **Renamed skills keep working.** `ID_ALIASES` maps retired ids to current ones; `getSkill()` resolves both and the URL is rewritten to the live id. **Never delete an alias** — an id is a published deep link.
+- **Facet counts answer "what if I tick this?"** Each facet is counted with its own selection ignored, so ticking "US" does not zero out "UK". Values within a facet are OR-ed, facets are AND-ed, and tags narrow (every selected tag must match).
 - **Industry is additive.** A skill with no `industries` is industry-agnostic and matches every industry filter, so the dimension works over a registry where most skills declare nothing.
 - **Analytics is opt-in, typed and provider-isolated.** `analytics.ts` injects the GoatCounter script itself (no dependency added) and exposes helpers that accept `Skill` objects and closed label unions — a caller cannot casually pass free text into a hit. Pageviews are sent manually so the query string is always stripped. Every call site goes through the helpers, which is why changing provider touched exactly one file.
 

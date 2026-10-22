@@ -8,6 +8,8 @@ import { composePrompt } from '../data/safety';
 import { getSkill } from '../data/skills';
 import { downloadSkillJson, downloadSkillMarkdown } from '../lib/export';
 import { useCopyToClipboard } from '../hooks/useCopyToClipboard';
+import { useDialog } from '../hooks/useDialog';
+import { JurisdictionFlag } from './Flag';
 import {
   hostOf,
   trackOutboundLink,
@@ -87,45 +89,7 @@ export function SkillDetail({ skill, onClose, onTagSelect, onOpenSkill }: SkillD
     [skill.relatedSkills],
   );
 
-  // Escape closes; Tab is trapped inside the dialog while it is open.
-  useEffect(() => {
-    function onKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') {
-        e.stopPropagation();
-        onClose();
-        return;
-      }
-      if (e.key !== 'Tab' || !sheetRef.current) return;
-
-      const focusable = sheetRef.current.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      );
-      if (focusable.length === 0) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
-    document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
-  }, [onClose]);
-
-  // Lock background scroll while the sheet is open, and restore focus on close.
-  useEffect(() => {
-    const previouslyFocused = document.activeElement as HTMLElement | null;
-    document.body.classList.add('no-scroll');
-    closeRef.current?.focus();
-    return () => {
-      document.body.classList.remove('no-scroll');
-      previouslyFocused?.focus?.();
-    };
-  }, []);
+  useDialog(sheetRef, closeRef, onClose);
 
   // Reset scroll when navigating between skills without unmounting the sheet.
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -172,11 +136,7 @@ export function SkillDetail({ skill, onClose, onTagSelect, onOpenSkill }: SkillD
           <div className="sheet__head-meta">
             <div className="sheet__pills">
               <span className="pill pill--jurisdiction">
-                <span
-                  className="pill__dot"
-                  style={{ background: jurisdiction.color }}
-                  aria-hidden
-                />
+                <JurisdictionFlag id={skill.jurisdiction} />
                 {jurisdiction.name}
               </span>
               <span className="pill">{category.name}</span>
@@ -370,7 +330,7 @@ export function SkillDetail({ skill, onClose, onTagSelect, onOpenSkill }: SkillD
                       <span className="related__name">{r.name}</span>
                       <span className="related__desc">{r.description}</span>
                       <span className="pill pill--jurisdiction">
-                        <span className="pill__dot" style={{ background: rj.color }} aria-hidden />
+                        <JurisdictionFlag id={r.jurisdiction} />
                         {rj.short}
                       </span>
                     </button>

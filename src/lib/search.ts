@@ -1,4 +1,6 @@
-import type { FilterState, Skill } from '../types/skill';
+import type { FacetId, FilterState, IndustryId, Skill, SortId } from '../types/skill';
+import { industries } from '../data/industries';
+import { isWorkflowTag } from '../data/tags';
 
 /**
  * Client-side search and filtering. Deliberately dependency-free: the whole
@@ -75,38 +77,15 @@ export interface SearchResult {
 }
 
 /**
- * Applies filters first (cheap, exact) then the text query (scored). Returns
- * results sorted by score, falling back to registry order for equal scores so
- * the grid is stable while typing.
+ * Scores every skill against the text query, in registry order. An empty
+ * query matches everything with a score of zero.
  */
-export function searchSkills(index: IndexedSkill[], filters: FilterState): SearchResult[] {
-  const queryTerms = terms(filters.query);
+export function matchQuery(index: IndexedSkill[], query: string): SearchResult[] {
+  const queryTerms = terms(query);
+  if (queryTerms.length === 0) return index.map(({ skill }) => ({ skill, score: 0 }));
 
   const results: SearchResult[] = [];
-
-  for (let i = 0; i < index.length; i++) {
-    const entry = index[i];
-    const { skill } = entry;
-
-    if (filters.jurisdiction !== 'all' && skill.jurisdiction !== filters.jurisdiction) continue;
-    if (filters.category !== 'all' && skill.category !== filters.category) continue;
-    // A skill with no declared industries is industry-agnostic and matches
-    // every industry filter, so the dimension is additive over old skills.
-    if (
-      filters.industry !== 'all' &&
-      skill.industries !== undefined &&
-      skill.industries.length > 0 &&
-      !skill.industries.includes(filters.industry)
-    ) {
-      continue;
-    }
-    if (filters.tags.length > 0 && !filters.tags.every((t) => skill.tags.includes(t))) continue;
-
-    if (queryTerms.length === 0) {
-      results.push({ skill, score: 0 });
-      continue;
-    }
-
+  for (const entry of index) {
     let total = 0;
     let matchedAll = true;
     for (const term of queryTerms) {
@@ -117,24 +96,107 @@ export function searchSkills(index: IndexedSkill[], filters: FilterState): Searc
       }
       total += termScore;
     }
-    if (matchedAll) results.push({ skill, score: total });
+    if (matchedAll) results.push({ skill: entry.skill, score: total });
   }
+  return results;
+}
 
-  return results.sort((a, b) => b.score - a.score);
+const FACETS: FacetId[] = ['jurisdictions', 'categories', 'industries', 'tasks', 'tags'];
+
+const ALL_INDUSTRIES: IndustryId[] = industries.map((i) => i.id);
+
+function passesFacet(skill: Skill, filters: FilterState, facet: FacetId): boolean {
+  switch (facet) {
+    case 'jurisdictions':
+      return filters.jurisdictions.length === 0 || filters.jurisdictions.includes(skill.jurisdiction);
+    case 'categories':
+      return filters.categories.length === 0 || filters.categories.includes(skill.category);
+    case 'industries':
+      // A skill with no declared industries is industry-agnostic and matches
+      // every industry filter, so the dimension is additive over old skills.
+      return (
+        filters.industries.length === 0 ||
+        !skill.industries?.length ||
+        skill.industries.some((i) => filters.industries.includes(i))
+      );
+    case 'tasks':
+      return filters.tasks.length === 0 || filters.tasks.some((t) => skill.tags.includes(t));
+    case 'tags':
+      return filters.tags.every((t) => skill.tags.includes(t));
+  }
+}
+
+/** True when the skill passes every facet, optionally ignoring one of them. */
+function passesFacets(skill: Skill, filters: FilterState, except?: FacetId): boolean {
+  return FACETS.every((facet) => facet === except || passesFacet(skill, filters, facet));
+}
+
+export function applyFacets(results: SearchResult[], filters: FilterState): SearchResult[] {
+  return results.filter(({ skill }) => passesFacets(skill, filters));
+}
+
+/** The values a skill contributes to a facet's counts. */
+function facetValues(skill: Skill, facet: FacetId): string[] {
+  switch (facet) {
+    case 'jurisdictions':
+      return [skill.jurisdiction];
+    case 'categories':
+      return [skill.category];
+    case 'industries':
+      // Counted the same way the filter treats it: agnostic counts everywhere.
+      return skill.industries?.length ? skill.industries : ALL_INDUSTRIES;
+    case 'tasks':
+      return skill.tags.filter(isWorkflowTag);
+    case 'tags':
+      // Workflow tags have their own facet, so they are not repeated here.
+      return skill.tags.filter((t) => !isWorkflowTag(t));
+  }
+}
+
+export type FacetCounts = Record<FacetId, Map<string, number>>;
+
+/**
+ * Live counts for every facet value, given the query and the other filters.
+ *
+ * Each facet is counted with its own selection ignored, so choosing "US" does
+ * not zero out "UK" — the count beside each option is the number of results
+ * you would get by ticking it. Tags narrow rather than widen, so tag counts
+ * are taken over the fully filtered results instead.
+ */
+export function facetCounts(matched: SearchResult[], filters: FilterState): FacetCounts {
+  const counts: FacetCounts = {
+    jurisdictions: new Map(),
+    categories: new Map(),
+    industries: new Map(),
+    tasks: new Map(),
+    tags: new Map(),
+  };
+  for (const { skill } of matched) {
+    for (const facet of FACETS) {
+      const passes =
+        facet === 'tags' ? passesFacets(skill, filters) : passesFacets(skill, filters, facet);
+      if (!passes) continue;
+      for (const value of facetValues(skill, facet)) {
+        counts[facet].set(value, (counts[facet].get(value) ?? 0) + 1);
+      }
+    }
+  }
+  return counts;
 }
 
 /**
- * Tags available given the current filters, so tag chips never lead to an
- * empty result set. Counts reflect the currently visible skills.
+ * Orders results. Sorting is stable, so equal scores — including every skill
+ * when there is no query — keep registry order and the grid does not shuffle
+ * while typing.
  */
-export function availableTags(results: SearchResult[]): { tag: string; count: number }[] {
-  const counts = new Map<string, number>();
-  for (const { skill } of results) {
-    for (const tag of skill.tags) {
-      counts.set(tag, (counts.get(tag) ?? 0) + 1);
-    }
+export function sortResults(results: SearchResult[], sort: SortId): SearchResult[] {
+  const sorted = [...results];
+  switch (sort) {
+    case 'name':
+      return sorted.sort((a, b) => a.skill.name.localeCompare(b.skill.name));
+    case 'reviewed':
+      return sorted.sort((a, b) => b.skill.lastReviewed.localeCompare(a.skill.lastReviewed));
+    case 'relevance':
+      return sorted.sort((a, b) => b.score - a.score);
   }
-  return [...counts.entries()]
-    .map(([tag, count]) => ({ tag, count }))
-    .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag));
 }

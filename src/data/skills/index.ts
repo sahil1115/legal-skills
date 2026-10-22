@@ -47,28 +47,6 @@ export function getSkill(id: string): Skill | undefined {
   return skillsById.get(id) ?? skillsById.get(ID_ALIASES[id] ?? '');
 }
 
-/** Skill counts per jurisdiction, used for the filter chips. */
-export const countsByJurisdiction = skills.reduce<Record<string, number>>((acc, skill) => {
-  acc[skill.jurisdiction] = (acc[skill.jurisdiction] ?? 0) + 1;
-  return acc;
-}, {});
-
-/** Skill counts per category, used for the filter chips. */
-export const countsByCategory = skills.reduce<Record<string, number>>((acc, skill) => {
-  acc[skill.category] = (acc[skill.category] ?? 0) + 1;
-  return acc;
-}, {});
-
-/**
- * Skill counts per industry. A skill with no `industries` is industry-agnostic
- * and counts toward every industry, matching how the filter treats it.
- */
-export const countsByIndustry = skills.reduce<Record<string, number>>((acc, skill) => {
-  const ids: IndustryId[] = skill.industries ?? [];
-  for (const id of ids) acc[id] = (acc[id] ?? 0) + 1;
-  return acc;
-}, {});
-
 /** Every tag in use, sorted by frequency then alphabetically. */
 export const allTags: { tag: string; count: number }[] = (() => {
   const counts = new Map<string, number>();
