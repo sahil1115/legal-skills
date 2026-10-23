@@ -27,6 +27,7 @@ const { industries } = await server.ssrLoadModule('/src/data/industries.ts');
 const { SHARED_TAGS } = await server.ssrLoadModule('/src/data/tags.ts');
 const { LEGAL_SAFETY_BLOCK, composePrompt } = await server.ssrLoadModule('/src/data/safety.ts');
 const { toSkillMarkdown, toSkillJson } = await server.ssrLoadModule('/src/lib/export.ts');
+const { agents, composeAgentPrompt } = await server.ssrLoadModule('/src/data/agents.ts');
 
 const errors = [];
 const warnings = [];
@@ -288,6 +289,41 @@ if (READY.length) {
   console.log('\nTags used by 4+ skills but not in the shared vocabulary');
   for (const [t, n] of READY) console.log(`  ${t.padEnd(26)} ${String(n).padStart(2)}`);
 }
+
+// ---------------------------------------------------------------- agents
+// An agent embeds its skills' prompts, so a dangling step id would break the
+// prompt a user copies. Both checkpoint modes must compose cleanly.
+const seenAgentIds = new Set();
+for (const a of agents) {
+  const at = `[${a.id}]`;
+  if (!/^agent-[a-z0-9-]+$/.test(a.id ?? '')) E(`${at} agent id must look like agent-<slug>`);
+  if (seenAgentIds.has(a.id)) E(`${at} duplicate agent id`);
+  seenAgentIds.add(a.id);
+  if (skillsById.has(a.id)) E(`${at} agent id collides with a skill id`);
+  if (!Array.isArray(a.steps) || a.steps.length < 2) E(`${at} an agent needs at least 2 steps`);
+  for (const step of a.steps ?? []) {
+    if (!skillsById.has(step.skillId)) E(`${at} step references unknown skill "${step.skillId}"`);
+    if (!step.purpose?.trim() || !step.handoff?.trim()) E(`${at} step "${step.skillId}" lacks a purpose or handoff`);
+    if (!step.review?.trim()) E(`${at} step "${step.skillId}" has no review checkpoint text`);
+  }
+  if ((a.inputs ?? []).length < 2 || !a.inputs.some((i) => i.required)) E(`${at} needs inputs, at least one required`);
+  if (!/^\d+\.\d+\.\d+$/.test(a.version ?? '')) E(`${at} version must be semver`);
+  if (!VALID_REVIEW.has(a.reviewStatus)) E(`${at} invalid reviewStatus "${a.reviewStatus}"`);
+  if (/\b(ChatGPT|GPT-4|Claude|Gemini|OpenAI|Anthropic|Copilot)\b/.test(`${a.intro}${a.finalOutput}`)) {
+    E(`${at} agent prompt names an LLM provider — prompts must stay provider-neutral`);
+  }
+  for (const checkpoints of [true, false]) {
+    try {
+      const p = composeAgentPrompt(a, { checkpoints });
+      if (!p.includes('NEVER INVENT AUTHORITY')) E(`${at} composed prompt is missing the legal-safety block`);
+      if (p.split('STANDING RULES').length !== 2) E(`${at} safety block must appear exactly once`);
+      if (checkpoints !== p.includes('CHECKPOINT AFTER STAGE')) E(`${at} checkpoint mode not reflected in prompt`);
+    } catch (err) {
+      E(`${at} prompt failed to compose: ${err.message}`);
+    }
+  }
+}
+console.log(`\n${agents.length} agent(s) checked`);
 
 // ---------------------------------------------------------------- coverage
 console.log('Jurisdictions');

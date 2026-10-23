@@ -10,6 +10,8 @@ import { Catalogue } from './components/Catalogue';
 import { SkillDetail } from './components/SkillDetail';
 import { SkillShowcase } from './components/SkillShowcase';
 import { RoadmapPanel } from './components/RoadmapPanel';
+import { AgentPanel } from './components/AgentPanel';
+import { agents } from './data/agents';
 import { AGENT_ITEMS, CONNECTOR_ITEMS } from './data/roadmap';
 import {
   AgentIcon,
@@ -31,7 +33,7 @@ import {
 
 const TABS: { id: TabId; label: string; count: number | null }[] = [
   { id: 'skills', label: 'Skills', count: skills.length },
-  { id: 'agents', label: 'Agents', count: null },
+  { id: 'agents', label: 'Agents', count: agents.length },
   { id: 'connectors', label: 'Connectors', count: null },
 ];
 
@@ -243,13 +245,25 @@ export default function App() {
             {tab === 'skills' && <Catalogue api={filterApi} onOpen={handleOpen} />}
 
             {tab === 'agents' && (
-              <div className="panel">
-                <RoadmapPanel
-                  icon={<AgentIcon size={18} />}
-                  title="Agents"
-                  body="Agents will chain several skills into an end-to-end workflow that runs with less hand-holding — taking a document in at one end and returning a reviewed, cited work product at the other. The catalogue below sketches where this is heading."
-                  items={AGENT_ITEMS}
-                />
+              <div className="agents">
+                {agents.map((agent) => (
+                  <AgentPanel key={agent.id} agent={agent} onOpenSkill={handleOpen} />
+                ))}
+                <div className="panel">
+                  <RoadmapPanel
+                    icon={<AgentIcon size={18} />}
+                    title="More agents"
+                    body="Each planned agent chains existing skills the same way — one document in, a reviewed work product out, with a review pause between stages."
+                    items={AGENT_ITEMS}
+                    note={
+                      <>
+                        These are planned, not built. An agent is a few lines in{' '}
+                        <code>src/data/agents.ts</code> once its skills exist, so new ones need no
+                        interface changes.
+                      </>
+                    }
+                  />
+                </div>
               </div>
             )}
 

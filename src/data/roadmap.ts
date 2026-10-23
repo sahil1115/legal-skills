@@ -11,12 +11,8 @@ export interface RoadmapItem {
   description: string;
 }
 
+/** Planned agents only. Built ones live in `src/data/agents.ts`. */
 export const AGENT_ITEMS: RoadmapItem[] = [
-  {
-    name: 'Contract review agent',
-    description:
-      'Chains triage, redline and obligation extraction over an inbound agreement, then hands a reviewer a single briefing.',
-  },
   {
     name: 'Privacy request agent',
     description:

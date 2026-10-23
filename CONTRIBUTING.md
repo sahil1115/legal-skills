@@ -187,6 +187,20 @@ If you spot an inaccuracy in an existing skill, please open an issue or a PR. Sa
 
 ---
 
+## Adding an agent
+
+An agent chains existing skills into one workflow. It carries **no legal content of its own** — each stage embeds a registered skill's prompt unchanged, so improving a skill improves every agent that uses it. If the workflow needs a skill that does not exist, add the skill first.
+
+Add an object to `src/data/agents.ts`:
+
+- `steps` — two or more `{ skillId, purpose, handoff, review, gate? }`. `handoff` says what the stage passes on; `review` is what the user is asked to check at the checkpoint after it; `gate` is an optional condition for skipping or stopping.
+- `intro` — the agent inputs, supplied once, and how to run the stages.
+- `finalOutput` — the combined deliverable after the last stage.
+
+`composeAgentPrompt()` assembles the prompt in two modes: with a review checkpoint after every stage (the default — the model stops and waits for the user to continue or correct) or straight through, with assumptions listed for confirmation. The shared safety block is appended once. `npm run audit` fails an agent whose steps reference an unknown skill or lack review text, or whose prompt does not compose in both modes. The Agents tab picks it up automatically.
+
+---
+
 ## Adding a jurisdiction
 
 1. Add the id to the `JurisdictionId` union in `src/types/skill.ts`.

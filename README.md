@@ -42,6 +42,7 @@ Each skill carries what it does, when to use it, inputs, expected outputs, a ful
 - Shareable filtered views: selections are kept in the query string (search text never is)
 - Grid or list layout, sorting by relevance, name or last review date, and a filter drawer on mobile
 - Per-skill detail view with **Copy Prompt**, **Download SKILL.md** and **Download JSON**
+- **Agents** that chain skills into one workflow, copied as a single prompt — with an optional review checkpoint after every stage, so nothing builds on an unchecked step. First up: the Contract Review Agent (triage → redline → obligations → reviewer briefing)
 - Deep links with working Back/Forward, and permanent redirects for renamed skills
 - Light and dark themes, responsive from 320px
 - No accounts, no cookies, no user-content collection; optional [privacy-friendly analytics](#analytics), off by default
@@ -159,6 +160,7 @@ src/
 │   │   ├── global|ca|sg|cross.ts
 │   │   └── us/ uk/ eu/ au/ # Larger packs, split by practice area
 │   ├── safety.ts           # Shared legal-safety block + composePrompt()
+│   ├── agents.ts           # Agents: skill workflows + composeAgentPrompt()
 │   ├── jurisdictions.ts    # Jurisdiction registry
 │   ├── categories.ts       # Practice-area registry
 │   ├── industries.ts       # Optional industry dimension

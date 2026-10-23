@@ -209,7 +209,51 @@ export interface Skill {
   connectors?: string[];
 }
 
-/** The three workspace tabs. Agents and Connectors are roadmap surfaces. */
+/** One stage of an agent: a skill, what it contributes, and what it hands on. */
+export interface AgentStep {
+  /** Must resolve in the skill registry. Validated by `npm run audit`. */
+  skillId: string;
+  /** What this stage contributes to the workflow, in one line. */
+  purpose: string;
+  /** How this stage's output feeds the next stage or the final deliverable. */
+  handoff: string;
+  /** Optional condition under which the agent skips or stops after this stage. */
+  gate?: string;
+  /**
+   * What the user is asked to check at the review checkpoint after this stage,
+   * when the agent runs with checkpoints. Their reply is carried forward.
+   */
+  review: string;
+}
+
+/**
+ * An agent chains existing skills into one workflow. It owns no legal content
+ * of its own: each stage runs a registered skill's prompt unchanged, so fixing
+ * a skill fixes every agent that uses it. `composeAgentPrompt()` assembles the
+ * stages, the handoffs and the shared safety block into one copyable prompt.
+ */
+export interface Agent {
+  /** Stable, URL-safe identifier. Convention: `agent-<slug>`. */
+  id: string;
+  name: string;
+  description: string;
+  whatItDoes: string;
+  whenToUse: string;
+  /** What the user supplies once, up front, for the whole workflow. */
+  inputs: SkillInput[];
+  outputs: SkillOutput[];
+  steps: AgentStep[];
+  /** Orchestration instructions placed before the first stage. */
+  intro: string;
+  /** Instructions for the combined deliverable after the last stage. */
+  finalOutput: string;
+  example: SkillExample;
+  lastReviewed: string;
+  reviewStatus: ReviewStatus;
+  version: string;
+}
+
+/** The three workspace tabs. Connectors is a roadmap surface. */
 export type TabId = 'agents' | 'skills' | 'connectors';
 
 /**

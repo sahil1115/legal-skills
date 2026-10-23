@@ -263,3 +263,13 @@ const CATEGORY_PATHS: Record<CategoryId, ReactNode> = {
     </>
   ),
 };
+
+/** A pause in a workflow, where the user reviews before it continues. */
+export function CheckpointIcon({ size = 14, className }: IconProps) {
+  return (
+    <svg {...base(size)} className={className}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M10 9v6M14 9v6" />
+    </svg>
+  );
+}

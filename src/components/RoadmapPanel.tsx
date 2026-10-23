@@ -8,6 +8,8 @@ interface RoadmapPanelProps {
   title: string;
   body: string;
   items: RoadmapItem[];
+  /** Replaces the default "nothing here is built yet" note. */
+  note?: ReactNode;
 }
 
 /**
@@ -15,7 +17,7 @@ interface RoadmapPanelProps {
  * the data model already carries the fields they will need, but nothing is
  * shipped yet, and the panel says so plainly rather than faking a catalogue.
  */
-export function RoadmapPanel({ icon, title, body, items }: RoadmapPanelProps) {
+export function RoadmapPanel({ icon, title, body, items, note }: RoadmapPanelProps) {
   return (
     <div className="roadmap">
       <div className="roadmap__head">
@@ -37,8 +39,12 @@ export function RoadmapPanel({ icon, title, body, items }: RoadmapPanelProps) {
       </div>
 
       <p className="roadmap__note">
-        Nothing here is built yet. The skill model in <code>src/types/skill.ts</code> already reserves
-        the fields these surfaces need, so they can be added without a breaking change.{' '}
+        {note ?? (
+          <>
+            Nothing here is built yet. The skill model in <code>src/types/skill.ts</code> already
+            reserves the fields these surfaces need, so they can be added without a breaking change.
+          </>
+        )}{' '}
         <a
           href={REPO_URL}
           target="_blank"
