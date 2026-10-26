@@ -874,4 +874,327 @@ Open with a go / go-with-conditions / do-not-sign recommendation and the five is
         'A go-with-conditions recommendation showing that training on customer content is restricted only by an updatable policy, an IP indemnity that excludes outputs, a vendor right to swap model providers without notice, and drafted redlines with fallbacks for each.',
     },
   },
+  {
+    id: 'global-tax-dispute-strategy',
+    name: 'Tax Dispute Strategy Memo',
+    description: 'Builds a strategy memo for a tax dispute: forums, costs, settlement value, reserves and decision points.',
+    jurisdiction: 'global',
+    category: 'tax',
+    tags: ['assessment', 'tax-controversy', 'disputes', 'litigation-strategy', 'settlement'],
+    sources: [
+      { citation: 'Tax controversy and dispute strategy practice', authority: 'secondary', note: 'A method, not a statement of law. Forums, time limits, pay-first rules and settlement powers are set by each jurisdiction\'s law and must be checked locally.' },
+    ],
+    lastReviewed: '2026-10-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-irs-appeals-protest-builder', 'uk-hmrc-adr-settlement', 'global-map-apa-planner', 'global-chronology-builder'],
+    whatItDoes:
+      'Gives a general counsel, head of tax or private client a decision-ready strategy for a tax dispute in any jurisdiction. It maps the procedural road ahead — administrative appeal, alternative dispute resolution, litigation, and for cross-border cases mutual agreement — with the deadlines and pay-first rules that constrain each step; values each issue on a probability-weighted basis including interest, penalties and costs; sets out what the dispute means for financial statement reserves and disclosures; and identifies the decision points where the strategy should be revisited.',
+    whenToUse:
+      'At the start of any significant tax dispute, when a board or audit committee needs a briefing, before choosing between settlement and litigation, and when a new assessment arrives in a multi-year or multi-country dispute.',
+    inputs: [
+      { name: 'Dispute facts', description: 'Jurisdiction, taxpayer, tax, years, issues, amounts and the stage reached.', required: true },
+      { name: 'Positions and evidence', description: 'The authority\'s position, the taxpayer\'s, and the quality of the evidence.', required: true },
+      { name: 'Constraints', description: 'Cash position, reputation, related years, other jurisdictions affected.' },
+      { name: 'Accounting context', description: 'Applicable accounting framework and current reserve, if any.' },
+    ],
+    outputs: [
+      { name: 'Procedural road map', description: 'Each forum and step, with deadlines and pay-first rules.' },
+      { name: 'Issue valuation', description: 'Probability-weighted outcomes per issue, with interest, penalties and costs.' },
+      { name: 'Options comparison', description: 'Concede, settle, litigate or seek mutual agreement, for each issue.' },
+      { name: 'Reserve and disclosure note', description: 'What the analysis implies for uncertain tax position accounting.' },
+      { name: 'Decision points', description: 'When and on what triggers the strategy should be revisited.' },
+    ],
+    prompt: `You are a senior tax controversy adviser preparing a dispute strategy memo for a decision-maker.
+
+INPUTS
+- Dispute: <jurisdiction(s), taxpayer, tax, years, issues, amounts, current stage>
+- Positions: <authority's position, taxpayer's position, evidence quality>
+- Constraints: <cash, reputation, related open years, other jurisdictions>
+- Accounting: <framework (for example IFRS or US GAAP), current reserve>
+
+TASK
+1. ROAD MAP. Lay out the procedural route in the jurisdiction: administrative objection or appeal, internal review, alternative dispute resolution, first-instance tribunal or court, further appeals, and — for cross-border issues — mutual agreement or arbitration under a treaty. For each step, the time limit and whether tax must be paid or secured first [VERIFY for the jurisdiction].
+2. ISSUES. For each issue, state the authority's argument and the taxpayer's fairly, then estimate the probability of success with reasons. Distinguish factual from legal issues.
+3. VALUE. For each issue, compute the expected outcome: tax at stake, interest, penalties, and costs to each stage. Show the working and assumptions.
+4. OPTIONS. For each issue: concede, settle, litigate, or seek a treaty remedy, with the effect on other years and on other jurisdictions (for example a correlative adjustment or double taxation if one side is settled unilaterally).
+5. ACCOUNTING. Summarise what the analysis implies for recognising and measuring uncertain tax positions and for disclosure, flagging judgement for the auditors [VERIFY framework requirements].
+6. DECISION POINTS. Define the triggers to revisit: new evidence, a relevant court decision, a settlement offer, a change in law, a deadline.
+
+RULES
+- Every probability must have reasons. Do not present false precision; use ranges.
+- Do not state deadlines, interest rates or penalty rates from memory; mark [VERIFY].
+- Keep the memo candid; it is internal and should be prepared so as to preserve privilege where possible — flag how.
+- Flag any issue where unilateral settlement would create double taxation.
+
+OUTPUT FORMAT
+Open with a one-paragraph recommendation. Then the road map (Step | Forum | Deadline | Pay first?), the issue valuation table (Issue | Amount | Probability | Expected cost | Recommendation), options, accounting note and decision points.`,
+    example: {
+      scenario:
+        'A multinational faces a three-year assessment in one country denying interest deductions and recharacterising a royalty, with the same structure open in two other countries.',
+      result:
+        'A memo recommending litigation on the interest issue and a mutual agreement request on the royalty, with probability-weighted values, the pay-first rule for the first appeal stage, the knock-on exposure in the other countries, and four decision points.',
+    },
+  },
+  {
+    id: 'global-transfer-pricing-audit-defense',
+    name: 'Transfer Pricing Audit Defense',
+    description: 'Defends a transfer pricing audit by testing the delineation, method, comparables and documentation.',
+    jurisdiction: 'global',
+    category: 'tax',
+    tags: ['review', 'tax-controversy', 'transfer-pricing', 'corporate-transactions', 'disputes'],
+    sources: [
+      { citation: 'OECD Transfer Pricing Guidelines for Multinational Enterprises and Tax Administrations', authority: 'guidance', publisher: 'OECD', url: 'https://www.oecd.org', note: 'The arm\'s length principle, accurate delineation, methods, comparability, intangibles and documentation. Given legal effect in many countries by domestic law; an Amount B simplified approach for baseline distribution may apply for fiscal years from 2025 where adopted, and Chapter VII on services is under review. Check the version a country applies.' },
+      { citation: 'Domestic transfer pricing legislation and documentation rules', authority: 'primary', note: 'Each country implements the arm\'s length principle and documentation, penalty protection and burden of proof rules differently.' },
+    ],
+    lastReviewed: '2026-10-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['technology', 'financial-services'],
+    relatedSkills: ['global-map-apa-planner', 'global-tax-dispute-strategy', 'global-permanent-establishment-risk'],
+    whatItDoes:
+      'Responds to a tax authority\'s challenge to related-party pricing by testing the challenge where these audits are usually won or lost: whether the transaction has been accurately delineated from the contracts and the actual conduct, who controls and can bear the economically significant risks, whether the chosen method is the most appropriate, and whether the comparables and adjustments hold up. It checks the documentation for penalty protection, builds the evidence of functions and risk control, and identifies the relief route — mutual agreement or arbitration — for any adjustment that would cause double taxation.',
+    whenToUse:
+      'On receipt of transfer pricing information requests or a proposed adjustment, when preparing for a functional interview, before documentation deadlines in a high-risk year, and when deciding whether to settle domestically or seek a treaty remedy.',
+    inputs: [
+      { name: 'The authority\'s challenge', description: 'Requests, proposed adjustment, and the authority\'s analysis.', required: true },
+      { name: 'Transactions', description: 'Intercompany agreements, flows, entities and the business model.', required: true },
+      { name: 'Documentation', description: 'Master file, local file, benchmarking and any APAs or rulings.' },
+      { name: 'Conduct evidence', description: 'Who actually makes decisions, approves budgets and manages risks.' },
+    ],
+    outputs: [
+      { name: 'Delineation analysis', description: 'The transaction as contracts and conduct actually show it.' },
+      { name: 'Risk control analysis', description: 'Which entity controls and can bear each significant risk.' },
+      { name: 'Method and comparables critique', description: 'Weaknesses in the authority\'s approach and in ours.' },
+      { name: 'Documentation and penalty check', description: 'Whether documentation gives penalty protection.' },
+      { name: 'Response and relief plan', description: 'Response to the authority and the treaty relief route.' },
+    ],
+    prompt: `You are a transfer pricing controversy adviser defending a multinational's related-party pricing in an audit.
+
+INPUTS
+- Challenge: <information requests, proposed adjustment, the authority's analysis and method>
+- Transactions: <intercompany agreements, flows, entities, business model>
+- Documentation: <master file, local file, benchmarking, APAs or rulings>
+- Conduct: <who makes decisions, approves budgets, manages and monitors risks, by entity and person>
+
+TASK
+1. DELINEATION. Accurately delineate each challenged transaction from the contractual terms and the actual conduct, following the OECD framework. Where conduct departs from the contract, say which prevails and why.
+2. RISK. Identify the economically significant risks, which entity performs the control functions and has the financial capacity to bear each, and the consequences for the allocation of returns.
+3. INTANGIBLES. Where relevant, analyse development, enhancement, maintenance, protection and exploitation functions, and legal ownership versus returns.
+4. METHOD AND COMPARABLES. Assess whether the method is the most appropriate, test the comparables, the tested party, adjustments and the range, and critique the authority's method. Note any simplified approach (for example for baseline distribution) the country has adopted [VERIFY].
+5. DOCUMENTATION AND PENALTIES. Check whether documentation met the local requirements on time, which may shift the burden or give penalty protection [VERIFY local rules].
+6. EVIDENCE PLAN. Witnesses, interviews and documents that prove functions and control, and how to prepare people for functional interviews.
+7. RELIEF. If an adjustment is likely, identify mutual agreement or arbitration routes and their deadlines, and the effect of accepting a domestic settlement on treaty relief [VERIFY].
+
+RULES
+- Do not build a defence on contractual terms that the conduct contradicts; authorities and courts follow conduct.
+- Do not state documentation deadlines, penalty rates or thresholds from memory; mark [VERIFY].
+- Flag where a domestic settlement or waiver could block treaty relief.
+- Be candid about weaknesses in our own documentation.
+
+OUTPUT FORMAT
+Open with the overall exposure and the strongest line of defence. Then the delineation and risk analysis, the method critique, the documentation check, the evidence plan and the relief route.`,
+    example: {
+      scenario:
+        'A tax authority proposes to reprice a local limited-risk distributor to a much higher margin, arguing it controls market risk because local managers set discounts.',
+      result:
+        'A delineation analysis showing pricing authority sits with the regional principal under documented approval limits, a critique of the authority\'s comparables, a gap in the local file timing, and a mutual agreement plan with the filing deadline.',
+    },
+  },
+  {
+    id: 'global-map-apa-planner',
+    name: 'MAP & APA Planner',
+    description: 'Plans a mutual agreement procedure, treaty arbitration or advance pricing agreement to remove double tax.',
+    jurisdiction: 'global',
+    category: 'tax',
+    tags: ['assessment', 'tax-controversy', 'transfer-pricing', 'tax-treaties', 'disputes'],
+    sources: [
+      { citation: 'OECD Model Tax Convention on Income and on Capital, and Commentary', authority: 'guidance', publisher: 'OECD', url: 'https://www.oecd.org', note: 'The model mutual agreement procedure and arbitration provisions. Each bilateral treaty may differ from the model; read the treaty in force.' },
+      { citation: 'Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting', authority: 'primary', publisher: 'OECD (depositary)', url: 'https://www.oecd.org', note: 'Modifies covered tax agreements, including mutual agreement and optional arbitration provisions, depending on each party\'s choices and reservations.' },
+      { citation: 'Council Directive (EU) 2017/1852 on tax dispute resolution mechanisms in the European Union', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'A binding dispute resolution procedure for double taxation disputes between EU Member States.' },
+      { citation: 'BEPS Action 14 minimum standard and national MAP and APA guidance', authority: 'guidance', publisher: 'OECD and national tax authorities', note: 'Access to MAP, timelines and APA programmes vary by country.' },
+    ],
+    lastReviewed: '2026-10-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['technology', 'financial-services'],
+    relatedSkills: ['global-transfer-pricing-audit-defense', 'global-tax-dispute-strategy', 'global-treaty-residence-tiebreaker'],
+    whatItDoes:
+      'For a business facing double taxation from a transfer pricing or treaty-based adjustment — or wanting certainty before one — it identifies the treaty and EU routes available, checks the filing deadlines that run from the first notification of the action, and plans how the mutual agreement procedure interacts with domestic appeals and settlements, collection, and interest. Where certainty is needed for future years, it assesses a unilateral, bilateral or multilateral advance pricing agreement, the programme requirements and timeline, and whether roll-back to open years is available.',
+    whenToUse:
+      'As soon as an adjustment that may cause double taxation is proposed, before signing any domestic settlement, when an authority refuses access to mutual agreement, and when planning certainty for a significant recurring intercompany transaction.',
+    inputs: [
+      { name: 'Adjustment or transaction', description: 'The proposed or final adjustment, or the transaction to be covered by an APA.', required: true },
+      { name: 'Countries and treaty', description: 'The jurisdictions involved and the treaty or EU framework that applies.', required: true },
+      { name: 'Domestic status', description: 'Appeals filed, settlements offered, and deadlines in each country.' },
+      { name: 'Objectives', description: 'Speed, certainty for future years, cash flow and relationship with each authority.' },
+    ],
+    outputs: [
+      { name: 'Route map', description: 'Treaty MAP, arbitration, EU directive procedure and domestic remedies available.' },
+      { name: 'Deadline table', description: 'Filing deadlines with their trigger events.' },
+      { name: 'Interaction plan', description: 'How MAP interacts with domestic appeals, settlements and collection.' },
+      { name: 'APA assessment', description: 'Unilateral, bilateral or multilateral APA suitability, process and roll-back.' },
+      { name: 'Submission outline', description: 'What the request must contain for each authority.' },
+    ],
+    prompt: `You are an international tax controversy adviser planning relief from double taxation.
+
+INPUTS
+- Adjustment or transaction: <proposed or final adjustment, amounts, years; or the recurring transaction for an APA>
+- Countries and treaty: <jurisdictions, the bilateral treaty, whether the multilateral convention modifies it, whether both are EU Member States>
+- Domestic status: <appeals, settlements, deadlines in each country>
+- Objectives: <speed, future certainty, cash flow, relationships>
+
+TASK
+1. ROUTES. Identify every route: the treaty mutual agreement procedure (as modified by the multilateral convention, if it applies to this treaty [VERIFY each party's choices]); any mandatory or optional arbitration; the EU dispute resolution directive procedure for intra-EU cases; and domestic remedies.
+2. DEADLINES. Identify the time limit for presenting a case, which commonly runs from the first notification of the action resulting in taxation not in accordance with the treaty [VERIFY the treaty], and the deadlines under the EU procedure [VERIFY]. Show trigger events and dates.
+3. INTERACTION. Explain how mutual agreement interacts with domestic appeals (some authorities require appeals to be suspended or withdrawn; some will not depart from a court decision), with domestic settlements (which can bar treaty relief), with collection and with interest. Recommend the sequence.
+4. SUBMISSION. Outline what each authority requires in a request: facts, the treaty provisions concerned, the years, the amounts, and the taxpayer's position.
+5. APA. Where forward certainty matters, assess unilateral versus bilateral or multilateral APAs, programme requirements, typical timeline, critical assumptions, annual reporting, and roll-back to open years [VERIFY country programmes].
+6. RISKS. Partial relief, timing, and the authorities' track records in the pair of countries concerned [VERIFY using published statistics].
+
+RULES
+- Never let a mutual agreement filing deadline pass while negotiating domestically.
+- Flag any domestic settlement or waiver that would block treaty relief before it is signed.
+- Do not state deadlines or arbitration availability from memory; read the treaty and mark [VERIFY].
+- Model provisions are not law; the treaty in force governs.
+
+OUTPUT FORMAT
+Open with the first filing deadline as a date and the recommended route. Then the route map, the deadline table (Route | Trigger | Deadline | Status), the interaction plan, the submission outline and the APA assessment.`,
+    example: {
+      scenario:
+        'Country A proposes a transfer pricing adjustment on management fees charged by a parent in Country B; both have a treaty modified by the multilateral convention, and Country A offers a quick settlement.',
+      result:
+        'A route map showing mutual agreement with arbitration available under the modified treaty, the filing deadline from the notification date, a warning that accepting the settlement would bar relief in Country B, and a recommendation to file MAP and suspend the domestic appeal.',
+    },
+  },
+  {
+    id: 'global-permanent-establishment-risk',
+    name: 'Permanent Establishment Risk Assessor',
+    description: 'Assesses permanent establishment risk from people, premises and agents abroad, and defends a challenge.',
+    jurisdiction: 'global',
+    category: 'tax',
+    tags: ['assessment', 'tax-controversy', 'permanent-establishment', 'tax-treaties', 'workforce'],
+    sources: [
+      { citation: 'OECD Model Tax Convention on Income and on Capital, and Commentary', authority: 'guidance', publisher: 'OECD', url: 'https://www.oecd.org', note: 'The model definitions of a fixed place of business, construction sites, dependent agents and preparatory or auxiliary activities, as changed in 2017. Treaties vary.' },
+      { citation: 'Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting', authority: 'primary', publisher: 'OECD (depositary)', url: 'https://www.oecd.org', note: 'Optional provisions widening the dependent agent test and narrowing the preparatory or auxiliary exception, applying only where both parties adopted them.' },
+      { citation: 'Domestic law on taxable presence and profit attribution', authority: 'primary', note: 'Where no treaty applies, domestic rules decide taxable presence, often more broadly than a treaty.' },
+    ],
+    lastReviewed: '2026-10-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['technology', 'professional-services'],
+    relatedSkills: ['global-transfer-pricing-audit-defense', 'global-treaty-residence-tiebreaker', 'global-map-apa-planner'],
+    whatItDoes:
+      'Assesses whether a company\'s activities in another country create a permanent establishment and therefore corporate tax there: remote employees working from home, sales staff who conclude or play the principal role in concluding contracts, project sites, servers, and dependent agents. It applies the relevant treaty — checking whether the multilateral convention has changed its dependent agent or preparatory and auxiliary rules — or domestic law where there is no treaty, estimates the profit that would be attributed, and lists the operational controls that reduce risk. When an authority asserts a permanent establishment, it frames the defence.',
+    whenToUse:
+      'Before hiring or allowing employees to work from another country, when a sales team starts negotiating locally, before a construction or installation project abroad, and on receipt of an authority\'s assertion of a permanent establishment.',
+    inputs: [
+      { name: 'Activities abroad', description: 'People, roles, authority to negotiate or sign, premises, equipment and duration.', required: true },
+      { name: 'Countries', description: 'The company\'s residence country and the country of activity.', required: true },
+      { name: 'Contracts and authority', description: 'Who negotiates, approves and signs customer contracts.' },
+      { name: 'Authority challenge', description: 'Any enquiry or assertion of a permanent establishment.' },
+    ],
+    outputs: [
+      { name: 'Treaty map', description: 'The applicable treaty, with any changes from the multilateral convention.' },
+      { name: 'Test-by-test analysis', description: 'Fixed place, construction, dependent agent and exceptions.' },
+      { name: 'Risk rating', description: 'Overall risk with the facts that drive it.' },
+      { name: 'Profit attribution estimate', description: 'What profit could be attributed and the tax at stake.' },
+      { name: 'Controls or defence', description: 'Operational controls, or the defence to a challenge.' },
+    ],
+    prompt: `You are an international corporate tax adviser assessing permanent establishment exposure.
+
+INPUTS
+- Activities: <people abroad, roles, authority to negotiate or sign, premises (including home offices), equipment, servers, duration>
+- Countries: <residence country of the company; country of activity>
+- Contracts: <who negotiates, approves and signs; any local entity or agent>
+- Challenge: <enquiry or assertion by the authority, if any>
+
+TASK
+1. TREATY. Identify whether a tax treaty applies between the countries and whether the multilateral convention modifies its permanent establishment article — wider dependent agent rules, the anti-fragmentation rule, a narrower preparatory or auxiliary exception, or contract-splitting for construction [VERIFY each country's positions]. If no treaty applies, note that domestic law decides and may be broader.
+2. FIXED PLACE. Test for a fixed place of business at the company's disposal, including home offices: degree of permanence, whether the company requires its use, and whether business is carried on through it [VERIFY current guidance on home offices].
+3. CONSTRUCTION AND SERVICES. Apply any construction or installation time threshold and any services permanent establishment clause in the treaty [VERIFY thresholds].
+4. DEPENDENT AGENT. Test whether a person habitually concludes contracts, or habitually plays the principal role leading to contracts routinely concluded without material modification, on behalf of the company, and whether any independent agent exception applies.
+5. EXCEPTIONS. Test the preparatory or auxiliary exception, including the anti-fragmentation rule for related activities.
+6. ATTRIBUTION. Estimate profit attributable to the permanent establishment and the tax at stake, plus local filing, payroll and withholding consequences.
+7. CONTROLS OR DEFENCE. Recommend controls (contract authority limits, approval workflows, time limits, local entity or employer of record), or for a challenge, the defence and treaty relief route.
+
+RULES
+- Treaty text governs; the OECD Commentary is guidance. Mark every treaty-specific threshold [VERIFY].
+- Do not recommend artificial arrangements to avoid a permanent establishment; anti-avoidance rules target them.
+- Separate corporate tax exposure from the employee's personal tax and social security, which are flagged but not analysed.
+- Base conclusions on what people actually do, not job titles.
+
+OUTPUT FORMAT
+Open with the risk rating and the single fact that most drives it. Then the treaty map, the test-by-test table (Test | Facts | Met? | Notes), the attribution estimate and the controls or defence.`,
+    example: {
+      scenario:
+        'A US software company lets a senior account executive work from home in Germany; she negotiates enterprise deals and the US team signs the contracts she brings in without changes.',
+      result:
+        'A high risk rating driven by the principal-role dependent agent test and the home office at the company\'s disposal, a note on the treaty position, an attribution estimate, and controls including moving pricing authority to the US and using a local employer of record.',
+    },
+  },
+  {
+    id: 'global-treaty-residence-tiebreaker',
+    name: 'Treaty Residence Tie-Breaker',
+    description: 'Resolves dual tax residence for an individual or company using the treaty tie-breaker tests.',
+    jurisdiction: 'global',
+    category: 'tax',
+    tags: ['assessment', 'tax-controversy', 'tax-residence', 'tax-treaties', 'disputes'],
+    sources: [
+      { citation: 'OECD Model Tax Convention on Income and on Capital, and Commentary', authority: 'guidance', publisher: 'OECD', url: 'https://www.oecd.org', note: 'The model residence article: the cascading tie-breaker for individuals (permanent home, centre of vital interests, habitual abode, nationality, mutual agreement) and, since 2017, case-by-case mutual agreement for non-individuals. Treaties vary.' },
+      { citation: 'Multilateral Convention to Implement Tax Treaty Related Measures to Prevent Base Erosion and Profit Shifting', authority: 'primary', publisher: 'OECD (depositary)', url: 'https://www.oecd.org', note: 'May replace a place-of-effective-management tie-breaker for companies with mutual agreement, depending on each party\'s choices.' },
+      { citation: 'Domestic tax residence rules', authority: 'primary', note: 'Each country decides first whether a person is resident under its own law (for example day counts, domicile, incorporation or central management and control). The treaty only breaks a tie.' },
+    ],
+    lastReviewed: '2026-10-26',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-state-residency-audit-defense', 'global-permanent-establishment-risk', 'global-map-apa-planner'],
+    whatItDoes:
+      'For an individual or a company claimed as resident by two countries, it first confirms residence under each country\'s domestic law — because the treaty only breaks a tie that exists — and then applies the treaty tie-breaker in the order the treaty sets. For individuals that means permanent home, centre of vital interests, habitual abode and nationality, each tested on evidence. For companies it checks whether the treaty uses place of effective management or, after the multilateral convention, requires the authorities to agree case by case, and what happens to treaty benefits meanwhile. It flags the consequences: which country taxes what, credit relief, and filings.',
+    whenToUse:
+      'When an internationally mobile individual may be resident in two countries, on a move part-way through a tax year, when a company\'s board or management sits outside its country of incorporation, and when an authority challenges a claimed treaty residence.',
+    inputs: [
+      { name: 'Person', description: 'Individual or company, and the two countries claiming residence.', required: true },
+      { name: 'Domestic residence facts', description: 'For individuals: days, homes, family, work; for companies: incorporation, board meetings, management.', required: true },
+      { name: 'Treaty', description: 'The treaty between the countries, if known.' },
+      { name: 'Income and assets', description: 'Main income sources and where assets are, to work out consequences.' },
+    ],
+    outputs: [
+      { name: 'Domestic residence check', description: 'Residence under each country\'s law, with the tests applied.' },
+      { name: 'Tie-breaker analysis', description: 'Each step of the treaty test with the evidence.' },
+      { name: 'Conclusion', description: 'Treaty residence, or the need for mutual agreement.' },
+      { name: 'Consequences', description: 'Which country taxes what, relief for double tax, and filings.' },
+      { name: 'Evidence and actions', description: 'Records to keep and steps that strengthen the position.' },
+    ],
+    prompt: `You are an international tax adviser resolving dual tax residence under a tax treaty.
+
+INPUTS
+- Person: <individual or company; the two countries>
+- Facts: <individual: days in each country, homes available, family, work, social and economic ties, nationality; company: place of incorporation, where the board meets and decides, where senior management operates>
+- Treaty: <the treaty, if known>
+- Income and assets: <main income sources and asset locations>
+
+TASK
+1. DOMESTIC RESIDENCE. Apply each country's domestic residence rules first (for example day-count tests, domicile, incorporation, central management and control) [VERIFY each country's rules]. If either country does not treat the person as resident, stop: there is no tie.
+2. TREATY. Identify the treaty and its residence article, and whether the multilateral convention modified the corporate tie-breaker [VERIFY].
+3. INDIVIDUALS. Apply the tie-breaker in order, stopping at the first decisive test: a permanent home available; centre of vital interests (personal and economic relations); habitual abode; nationality; then mutual agreement. Test each on evidence and explain why it is or is not decisive.
+4. COMPANIES. Apply the treaty's test: place of effective management, or determination by mutual agreement considering factors such as where senior management decisions are made, where meetings are held, and place of incorporation. Where the treaty requires mutual agreement, explain the effect on treaty benefits until agreement is reached [VERIFY].
+5. CONSEQUENCES. Which country may tax which income under the treaty, how double tax relief works, and the filings each country requires, including treaty-based return positions [VERIFY].
+6. EVIDENCE AND ACTIONS. Records to keep and practical steps (for example where board meetings happen, or where the family home is) that support the position — without recommending artificial arrangements.
+
+RULES
+- Never apply a treaty tie-breaker before confirming dual residence under domestic law.
+- Do not state day thresholds or treaty wording from memory; mark [VERIFY] and read the treaty.
+- Some countries, such as the United States for its citizens, tax regardless of treaty residence under a saving clause; flag where relevant [VERIFY].
+- Keep the analysis to the years and facts given; residence can change year by year.
+
+OUTPUT FORMAT
+Open with the conclusion (treaty resident in which country, or mutual agreement needed) and the decisive test. Then the domestic residence table (Country | Test | Met?), the tie-breaker walk-through, consequences, and evidence and actions.`,
+    example: {
+      scenario:
+        'A British national moves to Portugal for work in July, keeps a family home in London where his spouse and children stay until the school year ends, and returns monthly.',
+      result:
+        'Confirms dual residence under both domestic laws for the year, finds a permanent home available in both countries, resolves the tie on centre of vital interests in the UK for the overlap period, and lists the relief and filings in each country.',
+    },
+  },
 ];

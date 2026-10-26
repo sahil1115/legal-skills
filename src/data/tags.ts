@@ -60,6 +60,7 @@ export const DOMAIN_TAGS = [
   'cybersecurity',
   'supply-chain',
   'ai-governance',
+  'tax-controversy',
 ] as const;
 
 export const SHARED_TAGS: readonly string[] = [...WORKFLOW_TAGS, ...DOMAIN_TAGS];

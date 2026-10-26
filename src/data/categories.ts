@@ -16,6 +16,7 @@ export const categories: Category[] = [
   { id: 'compliance', name: 'Compliance', blurb: 'Programme design, screening, controls and attestation.' },
   { id: 'research', name: 'Research', blurb: 'Legal research, surveys and horizon scanning.' },
   { id: 'corporate', name: 'Corporate', blurb: 'Entity, governance and transactional support.' },
+  { id: 'tax', name: 'Tax', blurb: 'Tax controversy: audits, appeals, penalties, collection and cross-border disputes.' },
 ];
 
 const byId = new Map<CategoryId, Category>(categories.map((c) => [c.id, c]));

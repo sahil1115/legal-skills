@@ -4,6 +4,7 @@ import { ukPrivacyComplianceSkills } from './privacy-compliance';
 import { ukCorporateSkills } from './corporate';
 import { ukCommercialSkills } from './commercial';
 import { ukRegulatorySkills } from './regulatory';
+import { ukTaxSkills } from './tax';
 
 /**
  * United Kingdom skills — post-Brexit domestic law.
@@ -23,4 +24,5 @@ export const ukSkills: Skill[] = [
   ...ukCorporateSkills,
   ...ukCommercialSkills,
   ...ukRegulatorySkills,
+  ...ukTaxSkills,
 ];

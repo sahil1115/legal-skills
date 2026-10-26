@@ -5,6 +5,7 @@ import { usPrivacyComplianceSkills } from './privacy-compliance';
 import { usCorporateSkills } from './corporate';
 import { usCommercialSkills } from './commercial';
 import { usLegalOpsSkills } from './legal-ops';
+import { usTaxSkills } from './tax';
 
 /**
  * United States skills — federal law and the 50-state patchwork.
@@ -25,4 +26,5 @@ export const usSkills: Skill[] = [
   ...usCorporateSkills,
   ...usCommercialSkills,
   ...usLegalOpsSkills,
+  ...usTaxSkills,
 ];

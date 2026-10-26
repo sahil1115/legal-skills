@@ -224,6 +224,12 @@ export function CategoryIcon({ id, size = 16, className }: IconProps & { id: Cat
 }
 
 const CATEGORY_PATHS: Record<CategoryId, ReactNode> = {
+  tax: (
+    <>
+      <path d="M6 3h12v18l-3-2-3 2-3-2-3 2z" />
+      <path d="m9.5 14.5 5-5M9.75 9.75h.01M14.25 14.25h.01" />
+    </>
+  ),
   contracts: (
     <>
       <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />

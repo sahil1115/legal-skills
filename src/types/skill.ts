@@ -49,7 +49,8 @@ export type CategoryId =
   | 'regulatory'
   | 'compliance'
   | 'research'
-  | 'corporate';
+  | 'corporate'
+  | 'tax';
 
 export interface Category {
   id: CategoryId;
