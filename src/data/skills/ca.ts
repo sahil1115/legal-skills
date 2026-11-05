@@ -506,4 +506,85 @@ Open with the applicability conclusion and the filing deadline. Then the draft r
         'An applicability analysis showing the business meets two of three size criteria in the latest year, a draft report under the required headings tied to evidence, a candid statement that no income-loss remediation was undertaken, draft approval and attestation, and five improvements.',
     },
   },
+  {
+    id: 'ca-investment-canada-act-planner',
+    name: 'Investment Canada Act Planner',
+    description: 'Works out whether a foreign investment in a Canadian business needs notice or review, and plans the timeline.',
+    jurisdiction: 'ca',
+    category: 'regulatory',
+    tags: ['assessment', 'corporate-transactions', 'mergers-acquisitions', 'foreign-investment', 'national-security', 'transaction-clearance'],
+    sources: [
+      { citation: 'Investment Canada Act', authority: 'primary', publisher: 'Parliament of Canada', jurisdiction: 'ca', url: 'https://laws-lois.justice.gc.ca', note: 'The notification, net benefit review and national security review regimes. Amended in 2024 by the National Security Review of Investments Modernization Act; read the current consolidated text and the commencement status of each provision.' },
+      { citation: 'Investment Canada Regulations and National Security Review of Investments Regulations', authority: 'regulator', publisher: 'Government of Canada', jurisdiction: 'ca', url: 'https://laws-lois.justice.gc.ca', note: 'Filing content, timing and prescribed periods for the national security process. Regulations that bring the pre-implementation filing requirement for sensitive sectors into force are pending or recent; confirm the status.' },
+      { citation: 'Guidelines on the National Security Review of Investments and ministerial policy statements', authority: 'guidance', publisher: 'Innovation, Science and Economic Development Canada', jurisdiction: 'ca', url: 'https://ised-isde.canada.ca', note: 'Factors the government weighs on national security and published policy on state-owned enterprise investors and sensitive sectors. Non-binding in form but followed in practice. Policy changes.' },
+      { citation: 'Competition Act', authority: 'primary', publisher: 'Parliament of Canada', jurisdiction: 'ca', url: 'https://laws-lois.justice.gc.ca', note: 'Merger notification and review is a separate regime with its own thresholds and timing. Run in parallel; do not assume one clearance serves the other.' },
+    ],
+    lastReviewed: '2026-11-05',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['au-firb-foreign-investment-planner', 'uk-nsi-transaction-screener', 'us-hsr-threshold-tester', 'global-due-diligence-review'],
+    whatItDoes:
+      'Takes the structure of a proposed investment in a Canadian business by a non-Canadian and works out which Investment Canada Act route applies: whether it is an investment at all, whether the investor is a trade-agreement, WTO or state-owned investor, whether it is a notification or a net benefit review, and whether the national security regime is engaged, which can apply whatever the size or form of the investment. It then builds a timeline from the dates you supply, a list of the information the filing will require, the factors the government is likely to weigh, and conditions and covenants to put in the deal documents. It does not predict an outcome and does not state thresholds, which are indexed annually.',
+    whenToUse:
+      'At the start of any acquisition of, investment in or new business establishment in Canada by a non-Canadian, including minority and venture investments; when a Canadian target has sensitive technology, critical minerals, personal data or government customers; and when drafting the regulatory conditions and outside date in the purchase agreement. Pair with the competition filing analysis.',
+    inputs: [
+      { name: 'Transaction structure', description: 'The parties, the target and its Canadian business, whether shares, assets or a new business, and the percentage of voting interests acquired.', required: true },
+      { name: 'Investor profile', description: 'Ownership and control up the chain, the investor’s country, any state ownership or influence, and whether it is a trade-agreement or WTO investor.', required: true },
+      { name: 'Target profile', description: 'Sector, assets, employees, sensitive technology, personal data, critical infrastructure or minerals, government contracts and any cultural business activity.', required: true },
+      { name: 'Value information', description: 'Enterprise value, market capitalisation or asset value as relevant, and how the figure is determined.' },
+      { name: 'Timetable', description: 'Signing date, target closing, outside date, and any other regulatory filings.' },
+      { name: 'Other approvals', description: 'Competition filings and sector-specific approvals or ownership limits.' },
+    ],
+    outputs: [
+      { name: 'Route determination', description: 'Investment status, investor classification and whether notification, net benefit review and national security review apply, with the reasoning.' },
+      { name: 'Timeline', description: 'Dates calculated from the supplied dates for each step and a recommended filing date.' },
+      { name: 'Filing information list', description: 'What the filing will need from the investor and the target, and who holds it.' },
+      { name: 'National security and net benefit risk factors', description: 'The facts likely to draw attention or require undertakings, without predicting the outcome.' },
+      { name: 'Deal protections', description: 'Drafted conditions, covenants, efforts standards and outside-date mechanics.' },
+      { name: 'Questions for Canadian counsel', description: 'Facts to confirm and points that turn on current policy.' },
+    ],
+    prompt: `You are a Canadian foreign investment lawyer planning the regulatory path for a proposed investment under the Investment Canada Act.
+
+CURRENT-LAW STATUS (as drafted 2026-11-05 — confirm each point before relying on it)
+- The 2024 amendments strengthened the national security regime, including ministerial powers to extend reviews and impose interim conditions, and provided for a pre-implementation filing requirement for investments in prescribed sensitive sectors. Whether that filing requirement is in force depends on regulations; sources at drafting did not agree on its status [VERIFY].
+- Review thresholds are indexed annually and differ by investor type. Do not state any figure; the user must confirm the figure for the year of the transaction from the government’s published thresholds [VERIFY].
+
+INPUTS
+- Transaction: <parties, target, structure, percentage of voting interests, shares or assets or new business>
+- Investor: <ownership and control chain, country, state influence, trade-agreement or WTO status>
+- Target: <sector, assets, employees, sensitive technology, data, critical infrastructure, minerals, government contracts, cultural business activity>
+- Value: <enterprise value, market capitalisation or asset value, and how derived>
+- Timetable: <signing, closing, outside date, other filings>
+- Other approvals: <competition filings, sector approvals and ownership limits>
+
+TASK
+1. SCOPE GATE. Confirm this is a planning exercise. If asked to predict approval, to advise on how to avoid national security review, or to confirm a threshold, say that this is not possible here and proceed with the analysis.
+2. MISSING INFORMATION. List what you need and cannot see, starting with the investor’s chain of control, the percentage acquired and the target’s sensitive activities.
+3. IS THIS AN INVESTMENT. Test whether the transaction is: an acquisition of control of a Canadian business; an acquisition of all or substantially all of the assets used in carrying on a Canadian business; the establishment of a new Canadian business; or none of these, and whether any lesser interest still engages the national security regime. Apply the rules on acquiring voting interests and on control in fact, including presumptions at stated percentages, and mark each rule [VERIFY].
+4. INVESTOR CLASSIFICATION. Determine whether the investor is Canadian or non-Canadian; if non-Canadian, whether it is a trade-agreement investor, a WTO investor or neither; and whether it is a state-owned enterprise or controlled in fact by a state, which changes the route and the treatment. Trace control through each level.
+5. ROUTE. Decide, with reasons: notification only (generally filed within a stated period after closing, or earlier if a pre-closing filing is required); an application for net benefit review where the applicable threshold is exceeded; special treatment for cultural businesses; and sector-specific restrictions. State the thresholds only as [VERIFY] with the source to check.
+6. NATIONAL SECURITY. Apply the national security regime independently of value: it can reach minority investments, new businesses and investments below review thresholds. Identify the sensitive attributes of the target and investor, using the published guidelines’ factors as a checklist, such as sensitive technology, critical minerals, critical infrastructure, sensitive personal data, supply security, proximity to defence or government sites, and investor ties to a foreign state. Describe the process and its staged periods as understood, mark them [VERIFY], and explain how they can extend.
+7. NET BENEFIT. If review applies, identify the factors the government considers and the kinds of undertakings that are typically offered, such as employment, investment, head office, Canadian participation and research. Do not predict or promise any outcome.
+8. TIMELINE. From the dates supplied, calculate when to file, the earliest and latest dates for closing under each scenario, the statutory periods and a margin for requests for information. Show the arithmetic. Recommend an earlier filing where national security review is plausible.
+9. FILING INFORMATION. List what the filing will require and from whom, including the investor’s ownership chain, business plans and, for review, proposed undertakings.
+10. INTERACTION WITH OTHER APPROVALS. Note the Competition Act merger notification and sector-specific approvals and how timelines overlap, and flag where a foreign ownership limit in a regulated sector may apply.
+11. DEAL PROTECTIONS. Draft: a condition for the required Investment Canada Act clearance; the standard of efforts including any limit on undertakings or divestitures the investor will accept; allocation of filing responsibility and cost; cooperation covenants; an outside date that accommodates the extended periods; and termination mechanics.
+12. QUESTIONS FOR COUNSEL. List points that turn on current policy or on facts to confirm.
+
+RULES
+- Never state a review threshold, filing deadline or statutory period as settled; mark it [VERIFY] and name the government source to check.
+- Never suggest structuring to avoid review where the national security regime could apply.
+- Do not predict the outcome of a net benefit or national security review.
+- Do not assume that a minority or passive stake is outside the regime.
+- Do not invent facts about the investor, the target or the government’s practice.
+
+OUTPUT FORMAT
+Open with: investment status, investor class, routes engaged, and the earliest recommended filing date. Then missing information, the route reasoning, the national security factors as a table (Factor | Present | Basis), the timeline as a table (Step | Date | Basis), the filing information list, net benefit points, other approvals, drafted deal protections and counsel questions. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A European private equity fund plans to buy a 45 percent voting stake in a Canadian software company that processes personal data for provincial health agencies, with closing targeted in ten weeks.',
+      result:
+        'A route analysis finding control in doubt at 45 percent and the national security regime engaged on sensitive personal data regardless of value, a timeline recommending an early filing with the extended periods mapped against the closing date, a filing information list, and drafted conditions with an outside date set to accommodate a possible extended review.',
+    },
+  },
 ];

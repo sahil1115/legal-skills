@@ -693,4 +693,80 @@ Open with the goals list and a one-line theory of the deposition. Then the outli
         'A goals list of six admissions tied to formation and notice, a 140-question outline across eight topics with exhibit cues, a commit-credit-confront sequence on an email that contradicts an interrogatory answer, and a time budget with 30 minutes held in reserve.',
     },
   },
+  {
+    id: 'us-discovery-response-builder',
+    name: 'Discovery Response Builder',
+    description: 'Drafts responses and specific objections to document requests, interrogatories and requests for admission.',
+    jurisdiction: 'us',
+    category: 'litigation',
+    tags: ['drafting', 'disputes', 'discovery', 'objections', 'responses', 'deadlines'],
+    sources: [
+      { citation: 'Federal Rules of Civil Procedure', authority: 'primary', publisher: 'United States Courts', jurisdiction: 'us', url: 'https://www.uscourts.gov', note: 'The rules on the scope of discovery, interrogatories, requests for production, requests for admission, the form of objections and the duty to supplement. State rules differ and often diverge on numerical limits and timing.' },
+      { citation: 'Local rules, standing orders and judge-specific discovery procedures', authority: 'regulator', jurisdiction: 'us', note: 'Courts and individual judges modify the default rules, including limits on boilerplate objections and requirements to meet and confer before motion practice. Check the assigned judge.' },
+      { citation: 'Sedona Conference commentary on proportionality and responding to discovery', authority: 'secondary', publisher: 'The Sedona Conference', jurisdiction: 'us', url: 'https://thesedonaconference.org', note: 'Practice commentary on reasonable search, proportionality and objections. Persuasive only.' },
+    ],
+    lastReviewed: '2026-11-05',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-esi-protocol-rule-26f-builder', 'us-privilege-log-builder', 'us-litigation-hold-builder', 'us-local-rules-formatter', 'us-claim-deadline-calculator'],
+    whatItDoes:
+      'Takes a served set of document requests, interrogatories or requests for admission and builds a request-by-request response chart: the due date and consequences of missing it, the objection if one is warranted and the facts that support it, what will be produced or answered, and what will be withheld. It enforces the discipline that makes objections hold — stating grounds with specificity, saying whether responsive material is being withheld on the basis of an objection, and answering the part that is not objectionable — and it avoids general boilerplate. It does not invent facts for interrogatory answers; it lists exactly what the client must supply and confirm under oath.',
+    whenToUse:
+      'When written discovery arrives in federal or state civil litigation, when preparing a supplemental or amended response, and when a deficiency letter or motion to compel needs a reasoned reply. Not for deciding privilege calls or logging privileged documents (use the privilege log skill) or for deciding a search methodology (use the ESI protocol skill).',
+    inputs: [
+      { name: 'Discovery requests', description: 'The requests as served with all definitions and instructions, and the date and manner of service.', required: true },
+      { name: 'Case and forum', description: 'The court, judge, claims and defences, and any scheduling order, discovery plan or protective order.', required: true },
+      { name: 'Client information', description: 'Facts, documents and custodians the client has identified for each request, and what searches have been run.' },
+      { name: 'Privilege and confidentiality', description: 'Known privileged categories and any confidentiality or protective order.' },
+      { name: 'Prior responses', description: 'Earlier responses, stipulations and any meet-and-confer correspondence.' },
+    ],
+    outputs: [
+      { name: 'Deadline and consequences table', description: 'Due dates by type of request and the effect of missing each.' },
+      { name: 'Request-by-request response chart', description: 'For each request: the response, any objection with its basis, what is withheld, and the open facts.' },
+      { name: 'Client fact-gathering list', description: 'Exactly what the client must supply, by interrogatory and request, and who is likely to know.' },
+      { name: 'Definitions and instructions objections', description: 'Specific objections to overbroad definitions and instructions, with proposed narrowing.' },
+      { name: 'Meet-and-confer notes', description: 'Positions and compromises to propose on contested requests.' },
+      { name: 'Verification and supplementation plan', description: 'The signature and oath steps and a schedule for supplementing.' },
+    ],
+    prompt: `You are a US civil litigator preparing responses and objections to written discovery.
+
+CURRENT-LAW STATUS (as drafted 2026-11-05 — confirm each point before relying on it)
+- The federal rules supply default deadlines, limits and requirements; many states, local rules and individual judges differ. Treat every number below as a default to be checked against the rules and orders in this case [VERIFY].
+
+INPUTS
+- Requests: <the discovery requests with definitions and instructions; date and manner of service>
+- Case and forum: <court, judge, claims and defences, scheduling order, discovery plan, protective order>
+- Client information: <facts, documents, custodians per request; searches run>
+- Privilege and confidentiality: <known privileged categories; protective order>
+- Prior responses: <earlier responses, stipulations, meet-and-confer correspondence>
+
+TASK
+1. SCOPE GATE. Confirm this is a response-drafting task. If asked to decide whether a document is privileged, how to design a search, or whether to destroy or alter anything, state that these are for the supervising lawyer or other skills and that preservation must continue.
+2. DEADLINES. For each set, state the response deadline, how it is calculated from service, and the consequence of missing it. Highlight in particular that requests for admission may be deemed admitted if not answered in time, and that untimely objections may be waived. Mark each rule-based figure [VERIFY] against the applicable rules, stipulation and order.
+3. MISSING INFORMATION. List what you need and cannot see: unserved definitions, the actual requests, the case schedule, client information on any request.
+4. PARSE. Number each request. Identify the relevant time period, the defined terms and any instructions that exceed what the rules require. Note requests that exceed any numerical limit for interrogatories, counting discrete subparts, and mark the limit [VERIFY].
+5. FOR EACH DOCUMENT REQUEST. Decide, with reasons: (a) the objection, if any, stated with specificity — the ground, the part of the request affected and why; (b) whether any responsive material is being withheld on the basis of the objection, stated expressly; (c) what will be produced and by when, including a rolling production schedule if appropriate; (d) what does not exist or cannot be found after a reasonable search, stated accurately and only on client confirmation. If the request is partly objectionable, respond to the rest.
+6. FOR EACH INTERROGATORY. Draft the objection if warranted, then an answer built only from facts the client has supplied. Where a fact is missing, insert [CLIENT TO SUPPLY: what is needed, who likely knows]. If answering by reference to business records, specify the records in enough detail for the other side to locate the answer as readily as the client could, and mark this as a decision for the supervising lawyer.
+7. FOR EACH REQUEST FOR ADMISSION. Draft admit, deny, or a response of lack of knowledge, the last only after the client confirms reasonable inquiry. A denial must fairly address the substance, and where only part is true the response must admit that part. List the inquiry the client must make.
+8. DEFINITIONS AND INSTRUCTIONS. Object specifically to any definition or instruction that is overbroad or imposes duties beyond the rules, and propose a narrowing so the objection is not merely obstructive.
+9. PRIVILEGE AND PROTECTION. Identify categories withheld for privilege or work product and note that a log or equivalent description will be needed; refer to the privilege log skill. Identify requests for confidential information and the protective order protection to invoke.
+10. MEET AND CONFER AND SUPPLEMENTATION. Prepare positions on contested requests, with compromises that cost the client little. Set a schedule for supplementing responses and note the duty to supplement when responses prove incomplete.
+11. VERIFICATION. Prepare the signature and verification steps: interrogatory answers are signed under oath by the party or an authorised agent, and objections are signed by counsel; identify who can verify and what they must review.
+
+RULES
+- Never invent facts, document counts, search results or custodian names. Use [CLIENT TO SUPPLY] or [CLIENT TO CONFIRM].
+- Avoid general objections that are not tied to a request. State objections in the response to which they apply.
+- Do not object on grounds you cannot support with a stated reason. Do not use an objection to avoid answering the part of a request that is not objectionable.
+- Never advise the client to withhold, alter or delete responsive material to avoid production.
+- Do not state a numerical limit or deadline as settled; mark it [VERIFY].
+
+OUTPUT FORMAT
+Open with the earliest deadline and any request type at risk of waiver or deemed admission. Then the deadline table, missing information, the request-by-request response chart as a table (No. | Request | Objection and basis | Withheld on objection? | Response | Open facts), the client fact-gathering list, definitions objections, meet-and-confer notes and the verification plan. Close with: Assumptions made; [VERIFY] points; Items for the supervising lawyer.`,
+    example: {
+      scenario:
+        'A defendant in a federal contract dispute is served with 42 requests for production, 19 interrogatories and 25 requests for admission, with a definition of “Company” covering all affiliates and a request period of ten years.',
+      result:
+        'A deadline table with the admissions flagged as the first at risk, a specific objection to the affiliate definition with a proposed narrowing, a response chart that states for each request whether anything is withheld, a client fact-gathering list for 12 interrogatories, and meet-and-confer positions on the ten-year period.',
+    },
+  },
 ];

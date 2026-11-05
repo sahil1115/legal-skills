@@ -699,4 +699,84 @@ Open with the role map as a table (Product/service | Roles | Key obligations | A
         'A role map showing manufacturer, related-service provider, data holder and cloud provider roles; access-by-design gaps for models placed on the market after 12 September 2026; installer contract clauses flagged under the unfair-terms test; and a switching-charge plan for 12 January 2027.',
     },
   },
+  {
+    id: 'eu-cyber-resilience-act-readiness',
+    name: 'Cyber Resilience Act Readiness',
+    description: 'Scopes products under the Cyber Resilience Act and plans conformity, vulnerability handling and reporting.',
+    jurisdiction: 'eu',
+    category: 'regulatory',
+    tags: ['assessment', 'programme-design', 'cybersecurity', 'supply-chain', 'product-security', 'vulnerability-reporting'],
+    sources: [
+      { citation: 'Regulation (EU) 2024/2847 (Cyber Resilience Act)', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'Cybersecurity requirements for products with digital elements, obligations of manufacturers, importers and distributors, vulnerability handling and reporting. Applies in phases; read the application dates for each part.' },
+      { citation: 'ENISA — Single Reporting Platform for the Cyber Resilience Act', authority: 'regulator', publisher: 'European Union Agency for Cybersecurity', jurisdiction: 'eu', url: 'https://www.enisa.europa.eu', note: 'The channel for manufacturer reports of actively exploited vulnerabilities and severe incidents. Its operating details and designated national authorities have been changing; check the current guidance.' },
+      { citation: 'European Commission guidance, delegated and implementing acts and harmonised standards under the Cyber Resilience Act', authority: 'guidance', publisher: 'European Commission', jurisdiction: 'eu', url: 'https://digital-strategy.ec.europa.eu', note: 'Technical descriptions of important and critical product categories, conformity routes and standards follow in secondary acts. Treat any not yet published or cited as pending.' },
+    ],
+    lastReviewed: '2026-11-05',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['technology'],
+    relatedSkills: ['eu-nis2-scope-tester', 'eu-nis2-incident-reporting', 'eu-ai-act-classifier', 'eu-data-act-readiness', 'eu-ai-act-annex-iv-technical-documentation'],
+    whatItDoes:
+      'Works out whether and how the Cyber Resilience Act reaches a product: the economic operator role, whether the product is a product with digital elements within scope or excluded, its class and the conformity route, and then maps the essential requirements, vulnerability-handling duties, documentation and support period against what the manufacturer already does. Because manufacturer reporting duties already apply while most other obligations come later, it also builds the reporting runbook — what triggers a report, the clock and its stages, who files through the single reporting platform, and who decides — so the organisation can act now on products already on the market.',
+    whenToUse:
+      'When a business that makes, imports or distributes connected hardware, embedded or standalone software or components must decide its position under the Act; when a security incident or an actively exploited vulnerability may trigger a report; when planning engineering work ahead of the main application date; and when a customer asks for Act readiness evidence. Not a conformity assessment and not a substitute for a notified body.',
+    inputs: [
+      { name: 'Product description', description: 'What the product does, hardware and software components, remote data processing, connectivity, intended use and the markets where it is sold.', required: true },
+      { name: 'Role and supply chain', description: 'Whether you are manufacturer, importer, distributor or open-source steward, who makes the components, and any third-party and open-source code.', required: true },
+      { name: 'Placement dates', description: 'When each product version was or will be placed on the EU market and the planned support period.', required: true },
+      { name: 'Existing security practice', description: 'Secure development lifecycle, vulnerability disclosure policy, update mechanism, SBOM capability and incident process.' },
+      { name: 'Other regimes', description: 'Sectoral product regulation, AI Act status, radio equipment rules and NIS2 status that may overlap or displace the Act.' },
+    ],
+    outputs: [
+      { name: 'Scope and role determination', description: 'Whether the Act applies, in what role, and any exclusion relied on, with the reasoning.' },
+      { name: 'Classification and conformity route', description: 'Default, important or critical category as supported by the facts, and the available routes, flagged where secondary acts are pending.' },
+      { name: 'Requirements gap register', description: 'Each essential requirement mapped to current practice, with gaps and owners.' },
+      { name: 'Reporting runbook', description: 'Triggers, staged deadlines, decision tree, filing steps and decision owners.' },
+      { name: 'Documentation and support plan', description: 'Technical documentation, declaration of conformity, SBOM, user information and support-period commitments.' },
+      { name: 'Open questions for counsel', description: 'Interpretive points and facts to confirm.' },
+    ],
+    prompt: `You are an EU product regulation and cybersecurity lawyer assessing readiness for the Cyber Resilience Act.
+
+CURRENT-LAW STATUS (as drafted 2026-11-05 — confirm each point before relying on it)
+- Regulation (EU) 2024/2847 entered into force in December 2024 and applies in phases [VERIFY]. As understood at drafting, the manufacturer reporting duties for actively exploited vulnerabilities and severe incidents have applied since 11 September 2026, and most other obligations apply from 11 December 2027 [VERIFY both dates against the Regulation]. Whether the reporting duties also reach products placed on the market before the main application date should be confirmed [VERIFY].
+- Secondary acts, harmonised standards and the technical detail of the single reporting platform were still being finalised or revised at drafting. Treat any not confirmed as published as pending.
+
+INPUTS
+- Product: <function, hardware and software, remote data processing, connectivity, intended use, markets>
+- Role and supply chain: <manufacturer / importer / distributor / open-source steward; component suppliers; open-source code>
+- Placement dates: <when each version is or was placed on the EU market; planned support period>
+- Security practice: <secure development, disclosure policy, update mechanism, SBOM, incident process>
+- Other regimes: <sectoral rules, AI Act, radio equipment, NIS2>
+
+TASK
+1. SCOPE GATE. Confirm this is a readiness assessment. If asked for a conformity assessment, a certificate or a determination binding on a regulator, state that it is not available here.
+2. MISSING INFORMATION. List the facts you need and cannot see, starting with role, product classification facts and placement dates.
+3. ROLE. Decide whether the organisation is a manufacturer, importer, distributor or authorised representative for each product, and note where an importer or distributor becomes treated as the manufacturer by modifying or branding. State the different duties that follow.
+4. SCOPE. Decide whether each product is a product with digital elements: software or hardware and its remote data processing solutions, placed on the EU market with a direct or indirect data connection. Test the exclusions: services that are not remote data processing for a product, non-commercial open-source activity, and products regulated under other Union legislation that displaces the Act [VERIFY each]. Explain the reasoning and flag a product that is borderline.
+5. CLASSIFICATION. Place each product as default, important (Class I or II) or critical by reference to the product-category descriptions, and show the facts used. Where the technical descriptions or implementing acts are pending, say so and do not classify beyond what the facts support.
+6. CONFORMITY ROUTE. State the routes available for the class — internal control, harmonised standards, third-party assessment or European cybersecurity certification — and the dependency on standards that may not yet exist [VERIFY].
+7. REQUIREMENTS GAP. Map the essential requirements against current practice: design and development with security risk assessment; no known exploitable vulnerabilities when placed on the market; secure-by-default configuration; security updates and their default delivery; access control; protection of confidentiality and integrity; minimising data; resilience and logging; and the vulnerability-handling requirements including a coordinated disclosure policy, a contact point, an SBOM covering at least top-level dependencies, and prompt remediation and public disclosure once fixed. Record each as MET, GAP or UNKNOWN with the owner.
+8. THIRD-PARTY AND OPEN-SOURCE COMPONENTS. State the due diligence the manufacturer must exercise over components, including open source, and how defects found in components are reported to the component maintainer and fixed.
+9. SUPPORT PERIOD. State the minimum support period rule and how the planned period compares, and how security updates will be delivered and for how long [VERIFY].
+10. REPORTING RUNBOOK. Build a runbook for actively exploited vulnerabilities and severe incidents: how each trigger is recognised; the staged reports — an early warning, a notification and a final report — with the time limits for each stage as understood [VERIFY against the Regulation]; the recipients through the single reporting platform and the national coordinating authority; who may decide that a trigger is met; and what to tell users and when. Add a decision tree and a template for each stage that contains only facts known at the time.
+11. DOCUMENTATION. List the technical documentation, the EU declaration of conformity, the CE marking steps, and the user information and instructions required, with a retention period [VERIFY].
+12. OVERLAP. Note how the Act interacts with the Network and Information Security Directive, the AI Act, the Data Act and radio equipment rules, and flag any duplicated reporting.
+13. QUESTIONS FOR COUNSEL. List interpretive points: borderline scope, classification, status of products placed before the main application date, and the obligations of an organisation with both manufacturer and operator roles.
+
+RULES
+- Never state a deadline, class threshold, fine or period as settled; mark it [VERIFY] and name the Regulation or authority to check.
+- Never classify a product as important or critical solely on a marketing description; use the functional criteria.
+- Do not assume a report is not required because a vulnerability has been fixed or because an incident did not affect customers.
+- Draft reports only from facts supplied; do not infer cause or impact.
+- Treat pending secondary acts as pending.
+
+OUTPUT FORMAT
+Open with: role, whether the Act applies, the class if determinable, and the reporting duties that apply now. Then missing information, scope reasoning, classification and route, the requirements gap register as a table (Requirement | Current practice | Status | Gap | Owner), the reporting runbook with its decision tree and stage templates, documentation and support plan, overlaps and counsel questions. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A manufacturer of connected industrial gateways sells in 14 EU member states, uses a third-party open-source operating system, ships firmware updates ad hoc and learns of a vulnerability that is being exploited against customers.',
+      result:
+        'Manufacturer role confirmed with the gateway classified as important pending the category description, a reporting runbook that starts the early-warning clock when exploitation is known, a gap register showing no SBOM and no published disclosure policy, a support-period plan, and a note to report the open-source defect upstream.',
+    },
+  },
 ];

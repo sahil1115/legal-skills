@@ -1197,4 +1197,224 @@ Open with the conclusion (treaty resident in which country, or mutual agreement 
         'Confirms dual residence under both domestic laws for the year, finds a permanent home available in both countries, resolves the tie on centre of vital interests in the UK for the overlap period, and lists the relief and filings in each country.',
     },
   },
+  {
+    id: 'global-citation-verifier',
+    name: 'Citation Verification Worksheet',
+    description: 'Extracts every authority cited in a draft and builds a worksheet for checking each against the primary source.',
+    jurisdiction: 'global',
+    category: 'research',
+    tags: ['review', 'extraction', 'legal-ops', 'citations', 'quality-control', 'authorities'],
+    sources: [
+      { citation: 'Court rules, practice directions and standing orders on citation, candour and AI-assisted filings', authority: 'regulator', note: 'Some courts require certification of authorities or disclosure of AI assistance, and sanction fabricated citations. Which applies depends on the forum and the judge. Check the assigned court’s current requirements.' },
+      { citation: 'Professional conduct rules on candour to the tribunal and competence', authority: 'regulator', note: 'The duty not to mislead a tribunal and to take reasonable care over authorities rests on the filing lawyer personally, whoever or whatever produced the draft.' },
+      { citation: 'Legal citation conventions (for example OSCOLA, the Bluebook, AGLC, the McGill Guide)', authority: 'secondary', note: 'Used to spot malformed citations. A malformed citation is a prompt to check, not proof that an authority does not exist.' },
+    ],
+    lastReviewed: '2026-11-05',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['professional-services'],
+    relatedSkills: ['global-legal-research', 'us-local-rules-formatter', 'global-draft-builder'],
+    whatItDoes:
+      'Reads a draft brief, memo, opinion or AI-generated research note and extracts every authority it relies on — cases, statutes, regulations, secondary sources and quotations — into a numbered register. For each entry it records the proposition the draft uses the authority for, where it appears, any internal anomaly such as a court and year that do not fit, and exactly what a human must read to confirm it. It also lists the propositions that carry the argument, the claims that cite nothing, and the same authority cited for inconsistent points. It never marks anything verified: every row is UNCHECKED until a named person records the source they read.',
+    whenToUse:
+      'Before a draft leaves the building: before filing a brief, sending an opinion, circulating a research memo, or relying on output from a research assistant, including an AI tool. Also on inherited work product whose citations nobody has checked. Not a citator and not a substitute for reading the authority — it organises and prioritises the checking.',
+    inputs: [
+      { name: 'Draft text', description: 'The full document to be checked, including footnotes and any table of authorities.', required: true },
+      { name: 'Forum and jurisdiction', description: 'The court or audience, the governing law and the date the document will be used.', required: true },
+      { name: 'Citation style and local rules', description: 'The style guide and any court rule or practice direction on citation or certification.' },
+      { name: 'Provenance of the draft', description: 'Whether any part was produced or suggested by a research tool or AI system, and which parts.' },
+      { name: 'Source copies', description: 'Any authorities already pulled, so the worksheet can mark which rows still need a source.' },
+    ],
+    outputs: [
+      { name: 'Citation register', description: 'One row per authority: as cited, type, court or body, proposition relied on, location in the draft, anomalies and what to check.' },
+      { name: 'Quotation list', description: 'Every quoted passage with its attributed source, to be compared word for word with the original.' },
+      { name: 'Load-bearing authorities', description: 'The authorities the argument cannot survive losing, ranked, to be checked first.' },
+      { name: 'Uncited and inconsistent claims', description: 'Legal propositions with no authority, and authorities cited for points that conflict.' },
+      { name: 'Check plan and sign-off block', description: 'What kind of source to consult for each row, with blank fields for who checked, what they read and when.' },
+    ],
+    prompt: `You are a legal research quality-control specialist preparing a citation verification worksheet. You cannot access any legal database, so you do not and must not verify anything yourself. Your job is to organise the checking so that a human completes it quickly and nothing is missed.
+
+INPUTS
+- Draft: <paste the full document including footnotes>
+- Forum and jurisdiction: <court or audience, governing law, date of intended use>
+- Citation style and local rules: <style guide; any court rule or practice direction on citations or AI-assisted filings>
+- Provenance: <which parts, if any, came from a research tool or AI system>
+- Source copies already pulled: <list, or none>
+
+TASK
+1. SCOPE GATE. Confirm that the task is to build a worksheet. If asked to confirm that citations are correct, say that this requires reading the sources and that the output below is the means of doing so.
+2. EXTRACT. Number every authority and quotation in the order it appears: cases, statutes, regulations, rules, treaties, official guidance, secondary sources and quoted passages. Include those in footnotes and in any table of authorities. Capture each exactly as written in the draft, character for character.
+3. CLASSIFY. For each, record type, court or issuing body, jurisdiction and year as cited, and whether it would be binding, persuasive or merely illustrative in the stated forum. Where binding status is uncertain, say so.
+4. PROPOSITION. State in one line what the draft uses the authority to prove, and whether it is cited for a rule, an application, a quotation or background. Where the draft attributes a holding, test or quotation, restate it so a checker can compare it with the source.
+5. INTERNAL ANOMALIES. Flag only what can be seen from the draft itself, as signals and not conclusions: a court and reporter that do not fit together, a year inconsistent with the volume or neutral citation, a pinpoint beyond what the cited decision plausibly contains, a party name that varies between mentions, the same citation given two ways, a statute cited under a section that the draft elsewhere describes differently, a quotation that changes meaning when read in context, and a proposition stated more broadly than the surrounding text supports. Never say an authority does not exist; say that it must be located.
+6. STATUS AND CURRENCY. For every row list what must be confirmed beyond existence: that the authority says what the draft says it says, that it has not been overruled, reversed, distinguished on the point, amended or repealed, and that it applies to the facts and period in question. Mark each row UNCHECKED.
+7. LOAD-BEARING ORDER. Rank the authorities by how much of the argument depends on them. Put the top ones first in the check plan.
+8. GAPS AND CONFLICTS. List every legal proposition in the draft that cites no authority, and every pair of authorities cited for inconsistent propositions.
+9. CHECK PLAN. For each row, name the type of source to consult (official report or reporter, official legislation database, regulator’s publication, court docket) and what to read. Do not give URLs or deep links.
+10. SIGN-OFF BLOCK. For each row, provide empty fields: checked by, date, source actually read, result (confirmed, corrected, removed), and notes. Leave them blank.
+
+RULES
+- Never describe any authority as verified, confirmed or correct. The only permitted status for a row is UNCHECKED until a human completes the sign-off block.
+- Never supply a citation, pinpoint, quotation or holding that the draft does not already contain. If a row is missing information a checker needs, mark the gap.
+- Treat a draft produced or assisted by an AI system as presumptively unreliable on citations, and say that every row therefore needs reading from the source.
+- Do not rewrite the draft’s legal argument. Report only what the checker needs.
+- Keep the draft’s exact wording in the register; do not tidy it, since an error in the original is the signal.
+
+OUTPUT FORMAT
+Open with a two-line summary: number of authorities, number flagged with anomalies, and the load-bearing five. Then the citation register as a table (No. | As cited | Type | Body and year | Proposition relied on | Location | Anomalies | Check | Status), the quotation list, the load-bearing ranking, the uncited and inconsistent claims, the check plan and the blank sign-off block. Close with: Assumptions made; [VERIFY] points; Items for a supervising lawyer.`,
+    example: {
+      scenario:
+        'An associate has a 22-page opposition brief drafted partly with a research assistant tool, citing 31 cases and four statutes, due to be filed on Friday.',
+      result:
+        'A 38-row register with six rows flagged (two with a court and year that do not fit, one pinpoint beyond the plausible length of the decision, three quotations that read differently in context), the five authorities the argument depends on listed first, four uncited legal propositions, and a blank sign-off block for each row. Nothing is marked verified.',
+    },
+  },
+  {
+    id: 'global-open-source-licence-auditor',
+    name: 'Open-Source Licence Auditor',
+    description: 'Classifies the licences in a software inventory and maps obligations and conflicts to how the software is distributed.',
+    jurisdiction: 'global',
+    category: 'compliance',
+    tags: ['assessment', 'screening', 'third-party-risk', 'supply-chain', 'open-source', 'licensing'],
+    sources: [
+      { citation: 'The licence text shipped with each component', authority: 'primary', note: 'The operative terms are in the licence text for the specific version in use, not in a manifest label, a README or an SPDX tag. Labels are leads; the text controls.' },
+      { citation: 'SPDX specification and licence list', authority: 'guidance', publisher: 'SPDX (Linux Foundation)', url: 'https://spdx.org', note: 'Standard identifiers for licences and for expressions such as dual licensing or “or later” grants. An identifier names a licence; it does not interpret it.' },
+      { citation: 'Open Source Definition and licence list', authority: 'guidance', publisher: 'Open Source Initiative', url: 'https://opensource.org', note: 'Distinguishes OSI-approved licences from source-available licences that use similar language but restrict use.' },
+      { citation: 'Governing copyright and contract law', authority: 'secondary', note: 'How far copyleft reaches, what counts as a derivative work, and whether a licence operates as a contract or a copyright condition vary by jurisdiction and are not settled. Route to qualified counsel.' },
+    ],
+    lastReviewed: '2026-11-05',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['technology'],
+    relatedSkills: ['global-due-diligence-review', 'global-ai-vendor-terms-reviewer', 'global-contract-triage'],
+    whatItDoes:
+      'Takes a software bill of materials or dependency list and builds a licence register: the declared licence and version for each component, a classification from permissive to network copyleft and source-available, and any dual-licensing or exception. It then asks how the software is actually delivered — hosted service, shipped binary, embedded device, library for third parties, container image — and works out which obligations that delivery triggers, which combinations of licences conflict, and what the cheapest compliant fix is. It separates what the licence text requires from what is legally contested, and it never concludes that copyleft does not reach a component on a linking argument alone.',
+    whenToUse:
+      'Before a release or a customer delivery, in buy-side or vendor diligence on a software business, when a customer questionnaire asks about open source, when a dependency changes licence on upgrade, and when engineering proposes adding a component with an unfamiliar licence. Not a code scanner: it reasons over the inventory you supply.',
+    inputs: [
+      { name: 'Component inventory', description: 'SBOM or dependency list with component name, version, declared licence and whether it is a direct or transitive dependency.', required: true },
+      { name: 'Distribution model', description: 'For each product: hosted service only, binaries shipped to customers, embedded or on-premises, library or SDK, container images, internal use only.', required: true },
+      { name: 'Modification and linking facts', description: 'Which components are modified, how they are combined with proprietary code (static, dynamic, separate process, network call).' },
+      { name: 'Licence texts', description: 'The texts of any non-standard or custom licences and any exceptions.' },
+      { name: 'Commercial context', description: 'Customer contract commitments, acquirer or investor requirements, and whether the code base is to be open-sourced.' },
+    ],
+    outputs: [
+      { name: 'Licence register', description: 'Per component: licence and version, source of that declaration, classification, dual-licence options and exceptions.' },
+      { name: 'Obligations by distribution model', description: 'What each licence requires for each way the software is delivered, with the triggering event.' },
+      { name: 'Conflicts and incompatibilities', description: 'Licence combinations that cannot be satisfied together, and the components involved.' },
+      { name: 'Risk-tiered findings', description: 'Components ranked by exposure with the reasoning, separating text-based findings from contested ones.' },
+      { name: 'Remediation options', description: 'Replace, isolate, obtain a commercial licence, comply, or remove, with the trade-offs.' },
+      { name: 'Notice and attribution skeleton', description: 'The notices and licence texts that must accompany each delivery.' },
+    ],
+    prompt: `You are a technology transactions lawyer auditing open-source licence compliance for a software product.
+
+INPUTS
+- Inventory: <SBOM or dependency list: component, version, declared licence, direct or transitive>
+- Distribution model: <for each product: hosted only / binaries shipped / embedded or on-premises / SDK or library / container image / internal use>
+- Modification and linking facts: <which components are modified; how they combine with proprietary code>
+- Licence texts: <any custom or non-standard licence, and any exception>
+- Commercial context: <customer commitments, deal requirements, plans to open-source>
+
+TASK
+1. SCOPE GATE. Confirm this is a licence compliance analysis over a supplied inventory. If asked for a legal opinion on whether a combined work is a derivative work, say that this is a contested question for counsel and provide the factual analysis only.
+2. MISSING INFORMATION. List what is missing, in particular components with no licence, no version, a declared licence that differs from the licence file, or a licence expressed only as a name.
+3. LICENCE REGISTER. For each component record: licence identifier and exact version (for example, only this version or this version or later), where the declaration came from, any dual-licence choice available, and any exception or additional term. Mark a component [UNKNOWN] where no licence can be established; treat the absence of a licence as the absence of permission.
+4. CLASSIFY. Place each in one class: permissive; weak copyleft (file or library level); strong copyleft; network copyleft (obligations triggered by remote interaction); source-available or restricted use; custom; none or unknown. Note any component whose licence changed between versions and which version is in use.
+5. TRIGGERS. For each product and each distribution model, state which events trigger which obligations under each licence: use, modification, conveying or distributing, offering as a network service, providing to third parties as a library. Identify obligations by type: attribution and notices, licence text, source offer, marking of changes, patent grant or retaliation terms, installation information, and prohibitions on additional restrictions.
+6. CONFLICTS. Identify combinations whose obligations cannot be met together, such as licences with incompatible conditions on the same combined work, and components whose licence conflicts with a customer or deal commitment.
+7. CONTESTED POINTS. For each finding that depends on whether a combination is a single work, whether dynamic linking or a separate process changes the analysis, or how a network clause applies to a modified component, label it CONTESTED, set out the factual question, and route it to counsel. Do not resolve it by assertion.
+8. RISK TIERS. Rank findings by exposure, giving the reasoning. Separate what follows from the licence text (TEXT) from what depends on legal interpretation (CONTESTED) from what is a commercial or reputational point (PRACTICE).
+9. REMEDIATION. For each material finding offer the options: replace the component, isolate it behind a boundary, obtain a commercial or alternative licence, comply with the obligation, or remove it. Say which is cheapest if the facts support it, and which require engineering confirmation.
+10. NOTICES. Produce a skeleton of the notices and licence texts that must accompany each delivery, listing components, licences and required text, without reproducing licence texts you have not been given.
+
+RULES
+- Never infer a licence from a component’s name, reputation or popularity.
+- Never state that a combined work is or is not a derivative work. Never state that dynamic linking, a separate process or a service boundary avoids copyleft as a rule; state it as a contested point with the facts that matter.
+- Do not reproduce licence text from memory. Refer to the licence by its identifier and tell the user to read the text for the version in use.
+- Transitive dependencies carry the same obligations; say so where the inventory omits them.
+- A source-available licence is not an open-source licence even if it resembles one; treat its restrictions as terms to read in full.
+- Mark any statement about enforceability or remedies as [VERIFY] for the governing law.
+
+OUTPUT FORMAT
+Open with the three most serious findings and whether any blocks the release as planned. Then the licence register as a table (Component | Version | Licence and version | Source of declaration | Class | Exceptions), the obligations table by distribution model, conflicts, the risk-tiered findings, remediation options and the notices skeleton. Close with: Assumptions made; [VERIFY] points; Questions for engineering; Questions for counsel.`,
+    example: {
+      scenario:
+        'A SaaS company that also ships an on-premises installer is answering a customer security questionnaire and has a 340-component SBOM, including a database driver under a strong copyleft licence and a recently relicensed caching library.',
+      result:
+        'A licence register with eleven components needing attention, an obligations table showing the on-premises installer triggers source and notice duties that the hosted service does not, a flagged network-copyleft component used unmodified behind an API (marked CONTESTED, with the facts for counsel), the relicensed library pinned at the last permissive version as the cheapest fix, and a notices skeleton for the installer.',
+    },
+  },
+  {
+    id: 'global-liability-indemnity-analyser',
+    name: 'Liability and Indemnity Analyser',
+    description: 'Maps the liability caps, exclusions, carve-outs and indemnities in a contract and stress-tests them against realistic losses.',
+    jurisdiction: 'global',
+    category: 'contracts',
+    tags: ['review', 'assessment', 'contract-lifecycle', 'limitation-of-liability', 'indemnity', 'negotiation'],
+    sources: [
+      { citation: 'The contract under review, read as a whole', authority: 'primary', note: 'Liability is decided by how the cap, the exclusions, the carve-outs and the indemnities interact across clauses, including definitions and any schedule or order form. No single clause can be assessed alone.' },
+      { citation: 'Governing law and statutory limits on excluding or limiting liability', authority: 'primary', note: 'Many systems restrict exclusion for fraud, deliberate wrongdoing, death or personal injury caused by negligence, and in consumer or standard-terms contexts apply reasonableness or fairness controls (for example, in England and Wales the Unfair Contract Terms Act 1977 and the Consumer Rights Act 2015; in the United States, UCC Article 2 for goods and state unconscionability doctrine). Which regime applies depends on the governing law and the parties.' },
+      { citation: 'Commercial contract negotiation practice on caps, super-caps and indemnities', authority: 'secondary', note: 'Market positions vary by sector, deal size and bargaining power. Presented as a method, not as a statement of what is standard.' },
+    ],
+    lastReviewed: '2026-11-05',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['global-smart-redline', 'global-playbook-maker', 'global-contract-triage', 'global-ai-vendor-terms-reviewer'],
+    whatItDoes:
+      'Builds a single map of who bears what loss under a commercial contract: the general cap and how it is calculated, any super-caps, the heads of loss that sit outside the cap, the excluded categories of loss, and every indemnity with its trigger, scope and conduct-of-claims terms. Its centre of gravity is the interaction between those provisions — in particular whether an indemnity sits inside or outside the cap — which is where most real exposure hides. It then runs three realistic loss scenarios through the structure with figures you supply, so the effect on each party is concrete, and returns drafted amendments for your side with a fallback ladder.',
+    whenToUse:
+      'When reviewing or negotiating a services, supply, licence or SaaS agreement, when a counterparty returns a draft with changes to the liability clauses, when pricing a risk for a deal committee, and when a dispute turns on whether a loss is recoverable. Use it alongside the general triage and redline skills when the liability clauses are the contested part.',
+    inputs: [
+      { name: 'Contract text', description: 'The full agreement, including definitions, schedules, order forms and any limitation or indemnity provisions elsewhere in the document.', required: true },
+      { name: 'Your party and position', description: 'Which party you act for, the commercial relationship, and your relative bargaining position.', required: true },
+      { name: 'Governing law and forum', description: 'Governing law, courts or arbitration, and whether either party is a consumer or small business.' },
+      { name: 'Deal values and exposures', description: 'Annual fees, total contract value, and the realistic loss in a data incident, service failure and third-party claim.' },
+      { name: 'Insurance', description: 'Cover held by each party and any contractual insurance requirements.' },
+      { name: 'Negotiating playbook', description: 'Your standard positions, if any.' },
+    ],
+    outputs: [
+      { name: 'Liability architecture map', description: 'Caps, super-caps, uncapped heads, exclusions and indemnities in one table with clause references.' },
+      { name: 'Interaction findings', description: 'Where provisions combine to produce a result the headings do not suggest, such as an indemnity swallowed by the cap or a carve-out undone by a definition.' },
+      { name: 'Scenario stress test', description: 'Three realistic losses run through the structure showing recoverable and unrecoverable amounts for each party.' },
+      { name: 'Required and advisable changes', description: 'Changes needed to protect your party separated from changes that are merely helpful.' },
+      { name: 'Drafted amendments and fallback ladder', description: 'Replacement wording with an opening position, a target and a walk-away for each point.' },
+    ],
+    prompt: `You are a commercial contracts lawyer analysing limitation of liability and indemnity provisions for the party named in the inputs.
+
+INPUTS
+- Contract: <full text including definitions, schedules and order forms>
+- Your party and position: <party, relationship, bargaining position>
+- Governing law and forum: <law, courts or arbitration, consumer or small-business status>
+- Values and exposures: <annual fees, total value; realistic loss in a data incident, a service failure and a third-party claim>
+- Insurance: <cover held and any contractual requirements>
+- Playbook: <standard positions, if any>
+
+TASK
+1. SCOPE GATE. Confirm the party you act for. If the user asks whether a clause is enforceable, state that this depends on the governing law and mark it [VERIFY]; provide the analysis of effect, not an enforceability opinion.
+2. MISSING INFORMATION. List what you need and cannot see: a missing schedule, an undefined term, an unstated governing law. Do not assume.
+3. ARCHITECTURE MAP. Build one table of every provision that allocates loss: the general cap (amount; fixed sum or fees paid or payable; period such as the preceding twelve months or the whole term; aggregate or per claim; whether it covers contract, tort and other liability), any super-cap and what it covers, each head of liability stated to be uncapped, each excluded category of loss (indirect, consequential, loss of profit, loss of data, loss of goodwill, wasted expenditure), whether service credits or refunds count towards the cap, and who benefits from each provision (mutual or one-way).
+4. EXCLUDED LOSS. For each excluded category, identify how the governing law is likely to treat the distinction between direct and indirect loss, and whether the contract defines it. Flag any category that, as drafted, excludes the main loss a party would expect to recover, such as loss of profit under a licence whose value is the customer’s profit.
+5. INDEMNITIES. For each indemnity set out: who indemnifies whom; the trigger (arising out of, caused by, in connection with, alleged); whether it covers third-party claims only or first-party loss; covered heads of loss including regulatory fines where recoverable; exclusions; conduct of claims, including control of defence, consent to settlement and duty to mitigate; and any procedural conditions on notice.
+6. INTERACTION. This is the critical step. For every indemnity and carve-out, decide whether it sits inside or outside each cap and exclusion, citing the wording that decides it. Look for: a cap defined as total liability under or in connection with the agreement that captures indemnities; carve-outs that are undone by a definition or a later clause; an uncapped head limited by an exclusion of indirect loss; duplicate recovery; liability for subcontractors and affiliates; and caps that fall as amounts are paid.
+7. STRESS TEST. Using only figures the user supplied, run three scenarios through the structure: a data incident, a service failure, and a third-party intellectual-property or regulatory claim. For each, show the loss, which provisions apply, the amount each party can recover, the unrecovered shortfall and the effect of insurance. Where a figure is not supplied, mark it [ASSUMED] and say so; do not invent amounts.
+8. REQUIRED VERSUS ADVISABLE. Separate changes needed to prevent an unacceptable outcome from changes that would merely improve the position. Rank the required ones by exposure.
+9. DRAFTING. For each change give replacement clause text, a one-line rationale, and a fallback ladder (opening, target, walk-away). Keep drafting neutral on law where possible and flag wording that depends on the governing law.
+10. ESCALATION. List points for a senior lawyer or specialist: statutory control issues, insurance coverage, and any term that appears to leave the client with uninsurable uncapped exposure.
+
+RULES
+- Quote clauses by number and wording. Do not paraphrase a clause when its precise words decide the outcome.
+- Never describe a liability position as market standard unless the user’s playbook says so; mark any such statement as general practice and [VERIFY].
+- Do not invent figures, limits or insurance terms.
+- Do not treat headings as operative. Read the clause.
+- State clearly that statutory limits may override the contract, and do not predict how a court would apply them.
+
+OUTPUT FORMAT
+Open with a three-line exposure summary for your party. Then the architecture map table (Provision | Clause | Cap or exclusion | Applies to | Mutual or one-way), interaction findings, the scenario stress test as a table per scenario, required and advisable changes, drafted amendments with fallback ladder, and escalations. Close with: Assumptions made; [VERIFY] points; Items for senior review.`,
+    example: {
+      scenario:
+        'A customer is signing a three-year SaaS agreement worth 400,000 per year. The supplier’s paper caps liability at fees paid in the prior twelve months and lists a data-protection indemnity, but defines total liability as covering liability under or in connection with the agreement.',
+      result:
+        'A map showing the indemnity is captured by the cap as drafted, a data-incident scenario in which the customer recovers about a quarter of its realistic loss, loss of data excluded as indirect, a required change to carve the data indemnity out of the cap with a separate super-cap as the fallback, and replacement wording for both.',
+    },
+  },
 ];

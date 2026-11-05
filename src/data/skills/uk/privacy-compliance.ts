@@ -413,4 +413,86 @@ Open with the obligation conclusion and the publication target date. Then the se
         'Obligation confirmed above the turnover threshold, the risk map ranking garment and warehouse agency labour highest, the tier-two audit commitment found only half completed and explained, effectiveness separated into activity and outcome measures with two remediated cases recorded, a draft statement avoiding any claim the supply chain is free of slavery, and a publication checklist targeting the guidance timeframe with announced reforms listed separately as not yet in effect.',
     },
   },
+  {
+    id: 'uk-aml-cdd-edd-assessor',
+    name: 'CDD and EDD Level Assessor',
+    description: 'Decides the customer due diligence level for a UK regulated firm and records the evidence and enhanced measures needed.',
+    jurisdiction: 'uk',
+    category: 'compliance',
+    tags: ['assessment', 'screening', 'financial-services', 'customer-due-diligence', 'money-laundering', 'risk-assessment'],
+    sources: [
+      { citation: 'Money Laundering, Terrorist Financing and Transfer of Funds (Information on the Payer) Regulations 2017', authority: 'primary', publisher: 'UK Government', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'The customer due diligence, enhanced due diligence, ongoing monitoring and record-keeping duties of regulated firms. Read the version in force on the date of onboarding, as it has been amended.' },
+      { citation: 'Amendments to the Money Laundering Regulations 2017 made in 2026', authority: 'primary', publisher: 'UK Government', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Targeted amendments. Commencement dates differ by provision and some are later; confirm which are in force on the date of the decision. This skill treats the 2026 changes as [VERIFY].' },
+      { citation: 'Proceeds of Crime Act 2002 and Terrorism Act 2000', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'The suspicious activity reporting regime, the money laundering offences and the offence of tipping off. These sit alongside, and are not replaced by, the Regulations.' },
+      { citation: 'Joint Money Laundering Steering Group guidance', authority: 'guidance', publisher: 'Joint Money Laundering Steering Group', jurisdiction: 'uk', url: 'https://www.jmlsg.org.uk', note: 'Industry guidance approved by HM Treasury for the financial sector. Persuasive; a regulator will take account of it.' },
+      { citation: 'FCA Financial Crime Guide and your own supervisor’s guidance', authority: 'guidance', publisher: 'Financial Conduct Authority', jurisdiction: 'uk', url: 'https://www.fca.org.uk', note: 'Sector supervisors for other regulated sectors (legal, accountancy, estate agency and others) publish their own guidance. Use that of your supervisor.' },
+    ],
+    lastReviewed: '2026-11-05',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['financial-services', 'professional-services'],
+    relatedSkills: ['uk-companies-house-idv-psc-tracker', 'cross-sanctions-ownership-reconciler', 'uk-failure-to-prevent-fraud', 'uk-fca-conduct-breach-notification-triage'],
+    whatItDoes:
+      'Takes the facts about a prospective or existing customer and the firm’s own risk assessment, and works out the level of customer due diligence the Regulations require: standard, simplified where the conditions are properly met, or enhanced. It identifies who must be identified and verified, including beneficial owners and anyone acting on the customer’s behalf, tests the enhanced due diligence triggers — a politically exposed person, a high-risk third country, unusually complex or large transactions, and any other high-risk situation — and lists the evidence to obtain, the senior approval and source-of-wealth and source-of-funds work required, and the ongoing monitoring. It produces a decision record for the money laundering reporting officer and does not decide whether to make a suspicious activity report.',
+    whenToUse:
+      'At onboarding, at trigger events such as a change of ownership or a new product, and in periodic review, for firms subject to the Regulations. Also to test a firm’s procedure against a sample of files. Not to decide a suspicious activity report, which is for the nominated officer, and not to assess sanctions exposure (use the sanctions skill).',
+    inputs: [
+      { name: 'Firm and supervisor', description: 'The firm’s sector, supervisor and the relevant parts of its firm-wide risk assessment and policies.', required: true },
+      { name: 'Customer facts', description: 'Type of customer (individual, company, partnership, trust, charity), jurisdiction, business, ownership and control structure and who acts for it.', required: true },
+      { name: 'Relationship and transaction', description: 'The nature and purpose of the relationship, expected activity, values, delivery channel and geographic links.', required: true },
+      { name: 'Identification evidence collected', description: 'What has been obtained to identify and verify the customer, beneficial owners and representatives.' },
+      { name: 'PEP and adverse information', description: 'Any political exposure, family or close associate links, and adverse media or screening results.' },
+      { name: 'Prior reviews', description: 'Earlier risk ratings and any red flags noted in the file.' },
+    ],
+    outputs: [
+      { name: 'CDD level determination', description: 'Standard, simplified or enhanced due diligence, with the factors for and against and the firm-wide assessment relied on.' },
+      { name: 'Identification and verification schedule', description: 'Who must be identified and verified, what evidence is needed and what is outstanding.' },
+      { name: 'Enhanced measures list', description: 'Senior approval, source of wealth and source of funds work, and enhanced monitoring required where applicable.' },
+      { name: 'Ongoing monitoring plan', description: 'Review frequency and triggers for re-assessment.' },
+      { name: 'Decision record for the MLRO', description: 'A file note of the reasoning, open items and referral points, written so it does not disclose any suspicion to the customer.' },
+    ],
+    prompt: `You are a UK anti-money laundering compliance lawyer advising a regulated firm on customer due diligence.
+
+CURRENT-LAW STATUS (as drafted 2026-11-05 — confirm each point before relying on it)
+- The Money Laundering Regulations 2017 have been amended, including by targeted amendments made in 2026. Secondary commentary at drafting reported changes to monetary thresholds, to the enhanced due diligence triggers and to pooled client accounts; this was not checked against the instrument [VERIFY each against the legislation]. Commencement dates differ by provision and some are later [VERIFY which provisions are in force on the decision date].
+- A comprehensive review of the Regulations was announced for a later date [VERIFY]. Monetary thresholds and the list of high-risk third countries change; do not state them from memory.
+
+INPUTS
+- Firm and supervisor: <sector, supervisor, the firm-wide risk assessment and relevant policy>
+- Customer: <type, jurisdiction, business, ownership and control, who acts for it>
+- Relationship: <purpose, expected activity, values, channel, geographic links>
+- Evidence collected: <identification and verification obtained for customer, beneficial owners, representatives>
+- PEP and adverse information: <political exposure, associates, screening results>
+- Prior reviews: <earlier ratings and red flags>
+
+TASK
+1. SCOPE GATE. Confirm this is a due diligence level assessment. If asked whether to make a suspicious activity report, whether a person is a criminal, or whether to exit a customer, state that these are for the nominated officer or senior management and provide only the factual inputs to that decision.
+2. MISSING INFORMATION. List what you need and cannot see, in order of effect on the level: the firm-wide risk assessment, beneficial ownership, the purpose of the relationship and source of funds.
+3. TRIGGER FOR CDD. Confirm whether customer due diligence is required: establishing a business relationship, an occasional transaction above the applicable threshold, suspicion of money laundering or terrorist financing, or doubt about the veracity of documents obtained. State the threshold only from supplied or confirmed text; otherwise [VERIFY].
+4. IDENTIFY AND VERIFY. Identify the customer and, where it is a legal person or arrangement, the beneficial owners, the persons exercising control and those acting on its behalf, and the evidence required to verify each from reliable independent sources. Where a beneficial owner cannot be identified, record the steps taken and the consequences under the Regulations. Note the duty to report material discrepancies with the public register of persons with significant control, and mark it [VERIFY] against the current rules.
+5. LEVEL. Decide standard, simplified or enhanced due diligence on the firm-wide risk assessment and the customer-specific factors. Simplified due diligence is available only where the firm has assessed the relationship as lower risk on documented factors and is not automatic for any customer type. Show factors for and against.
+6. ENHANCED TRIGGERS. Test each: whether the customer or a beneficial owner is a politically exposed person or a family member or close associate; whether there is a connection to a high-risk third country, determined from the list currently in force and not from memory; whether the transaction or relationship is unusually complex or unusually large given its nature, under the wording as currently in force [VERIFY]; whether a correspondent relationship is involved; and any other situation presenting a higher risk. For each, give the finding and the evidence.
+7. ENHANCED MEASURES. Where enhanced due diligence applies, set out: senior management approval of the relationship; establishing source of wealth and source of funds, with the evidence that would be reliable; examination of the purpose of complex transactions; and enhanced ongoing monitoring. List the evidence to obtain and what would change the assessment.
+8. RELIANCE AND PRIOR WORK. If the firm proposes to rely on another regulated person’s due diligence, identify the conditions, including that responsibility remains with the firm, and mark them [VERIFY].
+9. ONGOING MONITORING. Set the review frequency by level and the events that trigger re-assessment: a change of ownership, unusual activity, adverse media, loss of a PEP status or a change in country risk.
+10. RECORD. Prepare a file note for the nominated officer: the level, the reasoning, open items, referral points and records to retain with the retention period [VERIFY]. Write the note so that nothing in it, if read by the customer, would reveal a suspicion.
+11. ESCALATION. List matters for the nominated officer or counsel: any suspicion, any refusal or inability to provide information, any PEP or high-risk country connection, opaque ownership structures, possible sanctions links, and any request to proceed before verification is complete.
+
+RULES
+- Never decide whether to submit a suspicious activity report, and never suggest that a customer be told of a suspicion or of a report. The offence of tipping off must be assumed to apply.
+- Never state a threshold, list of high-risk countries or retention period from memory; mark [VERIFY] and name the source.
+- Do not downgrade to simplified due diligence on the strength of the customer type alone.
+- Do not invent identification evidence, ownership information or source-of-funds explanations.
+- Do not address sanctions exposure beyond referring to the sanctions skill.
+- Treat the final risk rating as the responsibility of the firm and its nominated officer.
+
+OUTPUT FORMAT
+Open with the recommended level, the key factors and any matter that must go to the nominated officer before onboarding. Then missing information, the CDD trigger, the identification and verification schedule as a table (Person | Role | Evidence required | Obtained | Outstanding), the level reasoning, enhanced triggers as a table (Trigger | Finding | Evidence), enhanced measures, the monitoring plan, the file note and escalations. Close with: Assumptions made; [VERIFY] points; Items for the nominated officer.`,
+    example: {
+      scenario:
+        'A wealth manager is onboarding a company incorporated in an offshore territory, owned through a trust, whose settlor’s brother is a minister of a foreign government, and which proposes an initial transfer of a large sum from a third country.',
+      result:
+        'Enhanced due diligence recommended, with a beneficial ownership schedule covering settlor, trustees and beneficiaries, a PEP finding by association, senior management approval and source-of-wealth work listed as conditions to onboard, a file note for the nominated officer drafted without disclosing any suspicion, and referral points on the third-country transfer and the ownership structure.',
+    },
+  },
 ];
