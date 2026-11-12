@@ -20,11 +20,11 @@ Deep links work per skill — for example [`#eu-ai-act-classifier`](https://sahi
 
 ## What's in it
 
-**163 skills** across **8 jurisdictions**, **9 practice areas** (including tax disputes) and an optional **industry** dimension.
+**183 skills** across **8 jurisdictions**, **9 practice areas** (including tax disputes) and an optional **industry** dimension.
 
 | Jurisdiction | Skills | Examples |
 | --- | --- | --- |
-| Global | 21 | Citation Verification Worksheet, Open-Source Licence Auditor, Liability and Indemnity Analyser, Tax Dispute Strategy Memo, Transfer Pricing Audit Defense, MAP & APA Planner, Chronology Builder, Due Diligence Red-Flag Review, AI Vendor Terms Reviewer, Playbook Maker, Smart Redline, Contract Obligation Extraction, Data Rights Request Handler |
+| Global | 41 | Legal Document Summary, Legal Memo Builder, Board Minutes Drafter, Contract Amendment Drafter, Legal Request Intake Triage, Contract Termination Planner, Settlement Agreement Reviewer, Marketing Claims Reviewer, Privacy Notice Reviewer, Workplace Investigation Planner, Citation Verification Worksheet, Open-Source Licence Auditor, Liability and Indemnity Analyser, Tax Dispute Strategy Memo, Transfer Pricing Audit Defense, MAP & APA Planner, Chronology Builder, Due Diligence Red-Flag Review, AI Vendor Terms Reviewer, Playbook Maker, Smart Redline, Contract Obligation Extraction, Data Rights Request Handler |
 | United States | 56 | State Breach Notification Matrix, FCPA Third-Party Risk Reviewer, Kickback and Stark Law Screener, Discovery Response Builder, IRS Notice Triage & Deadlines, Tax Court Petition & Forum Planner, Trust Fund Recovery Penalty Defense, Deposition Outline Builder, Trademark Clearance Triage, NDA Reviewer, Rule 26(f) & ESI Protocol Builder, Form I-9 Audit & Inspection Response, FCRA Adverse Action Manager, Cyber Incident 8-K Materiality Record |
 | United Kingdom | 24 | CDD and EDD Level Assessor, HMRC Enquiry & Information Notice Response, HMRC Penalty Challenge, HMRC Disclosure Route Selector, ACAS Disciplinary Process Checker, UK SAR Exemption & Response Triage, FCA Consumer Duty Outcome Assessor, Sexual Harassment Prevention Duty Audit, IR35 Status Determination Builder, TUPE Transfer Assessor |
 | European Union | 22 | Cyber Resilience Act Readiness, Data Act Readiness Assessment, Accessibility Act Readiness, GDPR Breach Notification Workflow, NIS2 Incident Reporting Workflow, EUDR Due Diligence Statement Builder, CBAM Declarant Compliance Planner, AI Act Classifier |
@@ -157,7 +157,7 @@ src/
 ├── data/
 │   ├── skills/             # The registry, one file per jurisdiction
 │   │   ├── index.ts        # Combines them, id aliases, dev-time checks
-│   │   ├── global|ca|sg|cross.ts
+│   │   ├── global*.ts, ca|sg|cross.ts
 │   │   └── us/ uk/ eu/ au/ # Larger packs, split by practice area
 │   ├── safety.ts           # Shared legal-safety block + composePrompt()
 │   ├── agents.ts           # Agents: skill workflows + composeAgentPrompt()
@@ -192,7 +192,7 @@ scripts/
 
 ### Notable design decisions
 
-- **Safety rules are composed, not copied.** One block in `safety.ts`, appended by `composePrompt()`. Updating it updates all 163 skills at once, and the audit fails if a skill inlines its own copy.
+- **Safety rules are composed, not copied.** One block in `safety.ts`, appended by `composePrompt()`. Updating it updates all 183 skills at once, and the audit fails if a skill inlines its own copy.
 - **The URL owns modal state.** `useSkillRoute` derives React state from the hash and marks its own history entries in `history.state`, so Back/Forward stay synchronised. Closing pops our entry rather than pushing a new one. (A ref would desync on same-document fragment navigation, which does not remount React.)
 - **Renamed skills keep working.** `ID_ALIASES` maps retired ids to current ones; `getSkill()` resolves both and the URL is rewritten to the live id. **Never delete an alias** — an id is a published deep link.
 - **Facet counts answer "what if I tick this?"** Each facet is counted with its own selection ignored, so ticking "US" does not zero out "UK". Values within a facet are OR-ed, facets are AND-ed, and tags narrow (every selected tag must match).
