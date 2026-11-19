@@ -402,4 +402,217 @@ Open with: qualifying status; the three most serious defects; and whether to pro
         'A pre-decision audit showing the supervisor qualifies for ordinary unfair dismissal under the six-month rule, two Code defects with fixes (evidence not disclosed; investigator also deciding), a material uplift risk rating, and a revised hearing invitation enclosing the footage.',
     },
   },
+  {
+    id: 'uk-employment-settlement-agreement-checker',
+    name: 'Employment Settlement Agreement Checker',
+    description: 'Checks a UK employment settlement agreement against the statutory validity conditions and common drafting traps.',
+    jurisdiction: 'uk',
+    category: 'employment',
+    tags: ['review', 'workforce', 'settlement', 'termination', 'confidentiality'],
+    sources: [
+      { citation: 'Employment Rights Act 1996 and parallel provisions in the Equality Act 2010 and other employment statutes', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Statutory claims can be waived only by a settlement agreement meeting specified conditions, including advice from a relevant independent adviser.' },
+      { citation: 'Employment Rights Act 2025', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Includes provisions restricting confidentiality terms that prevent disclosure of harassment and discrimination, commencing on dates set by regulations.' },
+      { citation: 'Acas Code of Practice on settlement agreements and HMRC guidance on termination payments', authority: 'guidance', publisher: 'Acas and HM Revenue & Customs', jurisdiction: 'uk', url: 'https://www.acas.org.uk', note: 'Pre-termination negotiations and the tax treatment of payments, including post-employment notice pay.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['global-settlement-agreement-reviewer', 'uk-employment-tribunal-risk', 'uk-acas-disciplinary-checker'],
+    whatItDoes:
+      'Reviews a UK employment settlement agreement from the employer’s or the employee’s side. It first checks the statutory conditions that decide whether statutory claims are validly waived — the agreement in writing, relating to particular complaints, the employee having received advice from a named relevant independent adviser who is insured, and the required statements — then reviews the payment structure, including the split between contractual sums, notice pay and any amount treated as compensation, tax indemnities, references, confidentiality and non-disparagement, restrictive covenants and the release. It flags confidentiality wording that may be unenforceable or restricted, including for harassment and whistleblowing disclosures.',
+    whenToUse:
+      'When an exit is being negotiated, when an employee receives a draft and needs a quick map before seeing their adviser, when an employer drafts from a template, and before signature. The employee must receive independent advice for the agreement to be effective, so this does not replace that adviser.',
+    inputs: [
+      { name: 'Draft agreement', description: 'The settlement agreement with schedules, reference and adviser certificate.', required: true },
+      { name: 'Employment facts', description: 'Dates, pay, notice, benefits, any grievances, claims raised and the reason for exit.', required: true },
+      { name: 'Your side', description: 'Employer or employee, and what was agreed.', required: true },
+      { name: 'Contract and incentives', description: 'Employment contract, bonus and equity terms, and restrictive covenants.' },
+    ],
+    outputs: [
+      { name: 'Validity conditions check', description: 'Each statutory condition marked met, missing or to confirm.' },
+      { name: 'Payment and tax map', description: 'Each payment, its character and the tax and reporting points to confirm.' },
+      { name: 'Clause review', description: 'Release, confidentiality, references, covenants and warranties.' },
+      { name: 'Deal reconciliation', description: 'Whether the draft reflects what was agreed.' },
+      { name: 'Proposed changes', description: 'Drafted changes for your side.' },
+    ],
+    prompt: `You are a UK employment lawyer reviewing a settlement agreement for the side named in the inputs.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- Statutory claims can be settled only by an agreement meeting statutory conditions, including advice from a relevant independent adviser [VERIFY the conditions for each claim type].
+- The Employment Rights Act 2025 restricts confidentiality terms in relation to harassment and discrimination, with commencement by regulations [VERIFY whether in force].
+- Payments in lieu of notice and post-employment notice pay are taxed as earnings; the remainder of a termination payment may be treated differently up to a threshold [VERIFY with HMRC guidance].
+
+INPUTS
+- Draft: <agreement, schedules, agreed reference, adviser certificate>
+- Employment facts: <dates, pay, notice, benefits, grievances, claims, reason for exit>
+- Your side: <employer or employee; what was agreed>
+- Contract and incentives: <contract, bonus and equity terms, covenants>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. VALIDITY CONDITIONS. Check each: in writing; relates to particular complaints or proceedings; the employee has received advice on the terms and effect from a named relevant independent adviser; the adviser is covered by insurance or indemnity; the agreement identifies the adviser and states that the statutory conditions are satisfied. Mark MET, MISSING or CONFIRM.
+3. PAYMENTS. List each payment with its character: salary and holiday to termination, notice pay or post-employment notice pay, bonus or commission, and any compensation payment. State the tax and National Insurance points to confirm, and note any tax indemnity and its scope.
+4. RELEASE. Check that the release covers the claims intended and excludes those that cannot or should not be waived, such as accrued pension rights, personal injury not known, and enforcement of the agreement [VERIFY].
+5. CONFIDENTIALITY AND NON-DISPARAGEMENT. Check carve-outs for protected disclosures, reporting to regulators and the police, legal and medical advisers, and any harassment or discrimination disclosures that legislation now protects [VERIFY]. Flag one-sided non-disparagement.
+6. OTHER TERMS. Review the agreed reference, return of property, resignation from offices, restrictive covenants and any payment for them, garden leave, warranties (for example no grounds for summary dismissal, no new job), clawback and governing law.
+7. DEAL RECONCILIATION. Compare with what was agreed.
+8. PROPOSALS. Draft changes for your side, most important first.
+
+RULES
+- Never state that the agreement is valid; report the conditions.
+- Do not state tax treatment as settled; mark [VERIFY] and route to a tax adviser where needed.
+- Do not draft confidentiality terms that prevent protected disclosures or reporting to authorities.
+- The employee’s adviser must give advice; do not present this review as that advice.
+
+OUTPUT FORMAT
+Missing information; validity table (Condition | Status | Clause); payment table (Payment | Amount | Character | Tax point); release, confidentiality and other findings; deal reconciliation; proposed changes. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A sales director leaving after a grievance receives a draft offering three months’ pay, an agreed reference and a confidentiality clause covering "all circumstances of employment", with the adviser section left blank.',
+      result:
+        'Validity conditions marked incomplete because no adviser is named, a payment map separating notice pay from the compensation payment, the confidentiality clause flagged for lacking protected-disclosure and harassment carve-outs, and changes adding a mutual non-disparagement obligation and a clear tax indemnity limit.',
+    },
+  },
+  {
+    id: 'uk-redundancy-consultation-planner',
+    name: 'Redundancy Consultation Planner',
+    description: 'Plans a UK redundancy process: collective thresholds, HR1 notice, consultation, selection and protective-award risk.',
+    jurisdiction: 'uk',
+    category: 'employment',
+    tags: ['programme-design', 'workforce', 'redundancy', 'consultation', 'deadlines'],
+    sources: [
+      { citation: 'Trade Union and Labour Relations (Consolidation) Act 1992', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Collective consultation duties where 20 or more redundancies are proposed at one establishment within 90 days, notification to the Secretary of State, and the protective award.' },
+      { citation: 'Employment Rights Act 1996 and Employment Rights Act 2025', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Unfair dismissal, statutory redundancy pay and alternative employment. The 2025 Act doubled the maximum protective award and is changing qualifying periods and dismissal and re-engagement rules on staged dates.' },
+      { citation: 'Acas guidance on redundancy and the Insolvency Service HR1 form', authority: 'guidance', publisher: 'Acas and the Insolvency Service', jurisdiction: 'uk', url: 'https://www.acas.org.uk', note: 'Process guidance and the advance notification form.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['uk-tupe-assessor', 'uk-employment-tribunal-risk', 'uk-employment-settlement-agreement-checker', 'us-warn-act-trigger-spotter'],
+    whatItDoes:
+      'Plans a redundancy exercise in Great Britain from the business case to notice of dismissal. It counts proposed dismissals against the collective thresholds and the 90-day window, identifies who must be consulted and when the HR1 notification is due, and sets a timetable that cannot start dismissals before minimum consultation periods end. It then plans individual consultation, fair pools and selection criteria, suitable alternative employment and trial periods, and protections for employees on family leave. It flags where the Employment Rights Act 2025 changes risk — the larger protective award and changes to dismissal and re-engagement — with dates to verify.',
+    whenToUse:
+      'When a restructuring, site closure or role reduction is being considered, before announcements are made, when numbers change mid-process, and when redundancies arise alongside a TUPE transfer or contract changes. Start early: consultation must begin when proposals are still at a formative stage.',
+    inputs: [
+      { name: 'Proposal', description: 'The business reason, roles affected, numbers by site and the planned dates.', required: true },
+      { name: 'Workforce data', description: 'Headcount by establishment, length of service, leave status and any recognised union.', required: true },
+      { name: 'Other changes', description: 'Contract changes, transfers or other dismissals planned in the same period.' },
+      { name: 'Policies and agreements', description: 'Redundancy policy, enhanced pay terms and collective agreements.' },
+    ],
+    outputs: [
+      { name: 'Threshold and timetable', description: 'Collective consultation trigger, minimum periods, HR1 date and earliest dismissal date.' },
+      { name: 'Consultation plan', description: 'Who is consulted, information to disclose, election of representatives and topics.' },
+      { name: 'Pool and selection review', description: 'Pools, criteria and scoring risks.' },
+      { name: 'Alternative employment and protected groups', description: 'Vacancies, trial periods and family-leave priority.' },
+      { name: 'Risk register', description: 'Protective award, unfair dismissal and discrimination risks with mitigations.' },
+    ],
+    prompt: `You are a UK employment lawyer planning a redundancy process.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- Collective consultation applies where 20 or more redundancies are proposed at one establishment within 90 days, with minimum periods before the first dismissal takes effect and HR1 notice to the Secretary of State [VERIFY periods and thresholds].
+- The Employment Rights Act 2025 doubled the maximum protective award for failures to consult, reported as applying from April 2026, and is changing unfair-dismissal qualifying periods and fire-and-rehire rules on later dates, reported as 2027 [VERIFY each date against the government timetable].
+- Employees on maternity, adoption and shared parental leave, and pregnant employees, have priority for suitable alternative vacancies in defined periods [VERIFY].
+
+INPUTS
+- Proposal: <business reason, roles, numbers by site, dates>
+- Workforce: <headcount by establishment, service, leave status, union recognition>
+- Other changes: <contract changes, transfers, other dismissals>
+- Policies and agreements: <redundancy policy, enhanced terms, collective agreements>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. COUNT. Count proposed dismissals by establishment within 90 days, including dismissals for refusing changed terms where these may count as redundancies [VERIFY], and decide whether collective consultation applies.
+3. TIMETABLE. Set the latest start of consultation, the HR1 date, the earliest date dismissals can take effect, notice periods and key dates, showing the calculation.
+4. REPRESENTATIVES. Identify the union or existing representatives, or plan the election of representatives, and their rights.
+5. INFORMATION AND TOPICS. List the information to disclose in writing and the topics to consult on: ways of avoiding dismissals, reducing numbers and mitigating consequences.
+6. INDIVIDUAL CONSULTATION. Plan meetings, the right to comment on scores, and appeal.
+7. POOLS AND SELECTION. Review pools and criteria for objectivity and discrimination risk; flag criteria such as attendance that may disadvantage disabled employees or those on family leave.
+8. ALTERNATIVE EMPLOYMENT. Plan vacancies, trial periods, and the priority for protected employees.
+9. PAYMENTS. List statutory redundancy pay, notice and any enhanced terms, using figures supplied and marking statutory caps [VERIFY].
+10. RISK REGISTER. Record protective-award, unfair-dismissal, discrimination and re-engagement risks with mitigations.
+
+RULES
+- Never treat consultation as a formality; flag any decision already made before consultation.
+- Never state statutory periods, caps or commencement dates as settled; mark [VERIFY].
+- Do not draft selection criteria that are discriminatory or target individuals.
+- Do not advise on dismissing and re-engaging on new terms without flagging the 2025 Act changes for counsel.
+
+OUTPUT FORMAT
+Missing information; threshold analysis; timetable table (Step | Date | Basis); consultation plan; pool and selection review; alternative employment plan; payments; risk register. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A logistics company proposes closing a 70-person depot and moving 15 roles to another site, with the announcement planned for next week and dismissals in five weeks.',
+      result:
+        'Collective consultation triggered at the depot, a timetable showing the five-week plan is too short for the minimum period before the first dismissal, an HR1 date, an election plan because no union is recognised, a flag that refusals to relocate may count, and a risk register highlighting the larger protective award.',
+    },
+  },
+  {
+    id: 'uk-right-to-work-check-reviewer',
+    name: 'Right to Work Check Reviewer',
+    description: 'Checks UK right to work processes and individual checks to secure the statutory excuse against civil penalties.',
+    jurisdiction: 'uk',
+    category: 'employment',
+    tags: ['review', 'workforce', 'immigration', 'recordkeeping', 'screening'],
+    sources: [
+      { citation: 'Immigration, Asylum and Nationality Act 2006 and related orders', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Civil penalties for employing a person without permission to work, the statutory excuse, and the criminal offence of knowingly employing an illegal worker.' },
+      { citation: 'Home Office code of practice and employer’s guide to right to work checks', authority: 'guidance', publisher: 'Home Office', jurisdiction: 'uk', url: 'https://www.gov.uk', note: 'Manual, online (share code) and identity service provider checks, follow-up checks and retention. Updated frequently as eVisas replace physical documents.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['sg-work-pass-planner', 'us-i9-audit-noi-response', 'uk-ir35-status-assessor'],
+    whatItDoes:
+      'Reviews an employer’s right to work process and individual check records against the requirements for a statutory excuse. For each worker it identifies which type of check was available — a manual document check, a Home Office online check or a digital identity check through a certified provider — and tests whether the prescribed steps were followed, a compliant copy or record was kept, and any time-limited permission has a follow-up check diarised. At programme level it covers agency and contractor arrangements, records retention, and how to handle a worker whose permission is uncertain without discriminating.',
+    whenToUse:
+      'Before onboarding high-volume or seasonal hires, during an audit or sponsor-licence compliance review, after a Home Office referral notice or visit, when switching to digital checks, and when a worker’s permission is about to expire. Penalties are per illegal worker, so a process failure can multiply quickly.',
+    inputs: [
+      { name: 'Process description', description: 'How checks are done, by whom, when, and which methods are used.', required: true },
+      { name: 'Check records', description: 'A sample of check records with dates, document types and copies or online check results.', required: true },
+      { name: 'Workforce profile', description: 'Employees, workers, agency staff and contractors, and any sponsored workers.' },
+      { name: 'Issue', description: 'Any specific concern, such as an expired permission or a Home Office notice.' },
+    ],
+    outputs: [
+      { name: 'Process gap analysis', description: 'Each step of the process tested against guidance.' },
+      { name: 'Record-by-record findings', description: 'Statutory excuse established, defective or missing, with the reason.' },
+      { name: 'Follow-up check diary', description: 'Time-limited permissions and when follow-up checks are due.' },
+      { name: 'Issue response steps', description: 'Steps for an expired permission, a referral notice or a suspected illegal worker.' },
+      { name: 'Remediation plan', description: 'Process, training and records fixes.' },
+    ],
+    prompt: `You are a UK immigration and employment lawyer reviewing right to work compliance.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- The maximum civil penalty per illegal worker was raised in 2024 [VERIFY current amounts]. The Home Office is replacing physical immigration documents with eVisas, which changes which check applies to many workers [VERIFY current guidance]. Legislation has extended or is extending checks to some non-employee workers [VERIFY scope and commencement].
+
+INPUTS
+- Process: <how, when and by whom checks are done; methods used>
+- Records: <sample records with dates, document types, copies, online check results>
+- Workforce: <employees, workers, agency staff, contractors, sponsored workers>
+- Issue: <specific concern, if any>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. METHOD. For each worker type, identify the permitted check methods: manual check of original documents from the prescribed lists, online check using a share code, or digital identity check through a certified provider for eligible documents [VERIFY].
+3. PROCESS STEPS. Check each step: obtaining originals or the online result, checking in the presence of the holder (or live video for some checks), validity and consistency checks, retaining a compliant copy or record with the date of the check, and timing before employment starts.
+4. RECORDS. For each sampled record, mark STATUTORY EXCUSE ESTABLISHED, DEFECTIVE (state the defect) or MISSING.
+5. FOLLOW-UP CHECKS. For time-limited permissions, list workers and dates when follow-up checks are due, and the process if a worker has a pending application or appeal.
+6. NON-EMPLOYEES. Review agency, contractor and platform arrangements and who is responsible for checks [VERIFY].
+7. ISSUE STEPS. For an expired permission, a referral notice or suspected illegal working, set out steps: verify through the employer checking service where applicable, avoid knowing employment, and consider whether and how employment can lawfully continue — for counsel.
+8. DISCRIMINATION. Check that checks are applied to all workers consistently and that no-one is refused on assumptions about nationality.
+9. REMEDIATION. List fixes, training and audit cadence.
+
+RULES
+- Never advise continuing to employ someone known to lack permission to work.
+- Never state penalty amounts or document lists as settled; mark [VERIFY].
+- Do not recommend checking only people who appear foreign.
+- Retrospective checks do not create a statutory excuse for the past period; say so where relevant.
+
+OUTPUT FORMAT
+Missing information; method map; process gap table (Step | Requirement | Current practice | Gap); record findings table (Worker | Method | Status | Defect); follow-up diary; non-employee arrangements; issue steps; remediation. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A hospitality group with 900 staff, many seasonal and some on time-limited visas, finds that sites photograph documents on managers’ phones and nobody tracks visa expiry dates.',
+      result:
+        'Process gaps on undated copies and checks done after start dates, 14 of 50 sampled records marked defective, a follow-up diary listing 22 workers with expiring permission, a step plan for three workers whose permission has already lapsed, and a switch to centralised online checks.',
+    },
+  },
 ];

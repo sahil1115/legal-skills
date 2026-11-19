@@ -779,4 +779,143 @@ Open with: role, whether the Act applies, the class if determinable, and the rep
         'Manufacturer role confirmed with the gateway classified as important pending the category description, a reporting runbook that starts the early-warning clock when exploitation is known, a gap register showing no SBOM and no published disclosure policy, a support-period plan, and a note to report the open-source defect upstream.',
     },
   },
+  {
+    id: 'eu-product-liability-directive-readiness',
+    name: 'Product Liability Directive Readiness',
+    description: 'Maps exposure under the new EU Product Liability Directive, including software, AI and disclosure risk.',
+    jurisdiction: 'eu',
+    category: 'regulatory',
+    tags: ['assessment', 'regulatory-change', 'product-liability', 'supply-chain', 'ai-governance'],
+    sources: [
+      { citation: 'Directive (EU) 2024/2853 on liability for defective products', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'Replaces Directive 85/374/EEC for products placed on the market after its application date. Extends to software and digital manufacturing files, adds disclosure of evidence and presumptions of defect.' },
+      { citation: 'National transposing legislation in each member state', authority: 'primary', jurisdiction: 'eu', note: 'The Directive operates through national law; check each relevant state’s implementing act and its procedural rules.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['technology', 'retail-consumer', 'healthcare'],
+    relatedSkills: ['eu-cyber-resilience-act-readiness', 'eu-ai-act-classifier', 'eu-gpsr-product-safety-checker', 'global-liability-indemnity-analyser'],
+    whatItDoes:
+      'Maps a business’s exposure under the revised EU product liability regime. It identifies which of its products, software, AI systems, components and related services fall within the new definition of product, which economic operator roles it holds — manufacturer, importer, authorised representative, fulfilment service provider, distributor or online platform — and therefore who can be held liable when no EU manufacturer exists. It then reviews how the business would handle the new evidence-disclosure obligations and presumptions of defect, how software updates and cybersecurity affect defect and the end of liability, and how contracts and insurance should be adjusted. It separates products governed by the old regime from the new one by placing-on-market date.',
+    whenToUse:
+      'Before the new regime applies to products placed on the market, when launching connected or AI-enabled products in the EU, when reviewing supply and distribution contracts or insurance, and when a damage claim arrives. Liability cannot be excluded by contract against the injured person, so preparation is about evidence, design and risk allocation between businesses.',
+    inputs: [
+      { name: 'Product portfolio', description: 'Products, software, AI features and components, and when each was or will be placed on the EU market.', required: true },
+      { name: 'Supply chain roles', description: 'Who manufactures, imports, represents, fulfils and sells, and where each is established.', required: true },
+      { name: 'Software and update practice', description: 'How software and updates are delivered and supported, and for how long.' },
+      { name: 'Contracts and insurance', description: 'Supply, distribution and component contracts and product liability insurance.' },
+    ],
+    outputs: [
+      { name: 'Scope and regime map', description: 'Which items are products under the new regime and which remain under the old one.' },
+      { name: 'Liable-operator analysis', description: 'Who could be liable for each product in the EU, in what order.' },
+      { name: 'Defect and evidence readiness', description: 'Disclosure, presumptions and documentation preparedness.' },
+      { name: 'Software and cybersecurity points', description: 'Updates, control and their effect on defect and defences.' },
+      { name: 'Contract and insurance actions', description: 'Recourse, indemnity and cover changes.' },
+    ],
+    prompt: `You are an EU product liability lawyer assessing readiness for Directive (EU) 2024/2853.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- The Directive must be transposed by 9 December 2026 and is understood to apply to products placed on the market after that date, with the old Directive continuing for earlier products [VERIFY against the text and each national law]. National transposition is uneven [VERIFY each member state].
+
+INPUTS
+- Portfolio: <products, software, AI features, components; EU placing-on-market dates>
+- Supply chain: <manufacturer, importer, authorised representative, fulfilment provider, distributors, platforms; establishment>
+- Software and updates: <delivery, support period>
+- Contracts and insurance: <supply, distribution, component contracts; cover>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. SCOPE AND REGIME. For each item decide whether it is a product under the new definition, including software and digital manufacturing files, and whether it falls under the new or old regime by placing-on-market date. Flag free open-source software supplied outside a commercial activity as potentially excluded [VERIFY].
+3. LIABLE OPERATORS. For each product, identify who could be liable in the EU: the manufacturer, the manufacturer of a defective component, an importer or authorised representative where the manufacturer is outside the EU, a fulfilment service provider where none of those is in the EU, and distributors or online platforms in defined circumstances [VERIFY conditions]. Note that substantially modifying a product can make the modifier a manufacturer.
+4. DAMAGE. Note the recoverable heads of damage, including medically recognised psychological harm and destruction or corruption of data not used professionally [VERIFY].
+5. DEFECT AND EVIDENCE. Review readiness for: court-ordered disclosure of relevant evidence; presumptions of defect or causation where a business fails to disclose, the product breaches mandatory safety requirements, or the case is technically complex; and the safety a person is entitled to expect, including cybersecurity and the effect of AI that keeps learning. List documentation to maintain.
+6. SOFTWARE AND UPDATES. Assess how control over updates affects liability and defences, the risk of failing to supply security updates, and the interaction with the Cyber Resilience Act.
+7. TIME LIMITS AND DEFENCES. List limitation and long-stop periods and defences such as development risk, noting member-state options [VERIFY].
+8. CONTRACTS AND INSURANCE. Recommend recourse and indemnity terms between businesses, and insurance review.
+
+RULES
+- Never state that liability is excluded or limited towards an injured person by contract; it cannot be.
+- Do not state national transposition details from memory; mark [VERIFY].
+- Do not predict the outcome of any claim.
+
+OUTPUT FORMAT
+Missing information; scope and regime table (Item | Product? | Regime | Basis); liable-operator table; damage points; defect and evidence readiness; software points; time limits and defences; contract and insurance actions. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A US maker of smart home cameras sells into the EU through a Dutch fulfilment centre and online marketplaces, with a cloud app and an AI motion-detection feature updated over the air.',
+      result:
+        'The cameras, firmware and app treated as products under the new regime for units placed on the market after the application date, the fulfilment provider identified as a potentially liable operator because no EU manufacturer or importer exists, a documentation plan for disclosure requests, and a flag that stopping security updates could support a defect claim.',
+    },
+  },
+  {
+    id: 'eu-gpsr-product-safety-checker',
+    name: 'GPSR Product Safety Checker',
+    description: 'Checks consumer products sold in the EU against the General Product Safety Regulation, including online listings.',
+    jurisdiction: 'eu',
+    category: 'regulatory',
+    tags: ['assessment', 'supply-chain', 'product-safety', 'consumer-protection', 'e-commerce'],
+    sources: [
+      { citation: 'Regulation (EU) 2023/988 (General Product Safety Regulation)', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'Applies from 13 December 2024 to consumer products not covered by specific Union harmonisation legislation, and to aspects not covered by it. Requires an EU responsible person, risk analysis, technical documentation, traceability, online listing information and accident notification.' },
+      { citation: 'Safety Gate and the Safety Business Gateway', authority: 'regulator', publisher: 'European Commission', jurisdiction: 'eu', url: 'https://ec.europa.eu', note: 'Rapid alert system and the portal through which businesses notify dangerous products and accidents.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer'],
+    relatedSkills: ['eu-product-liability-directive-readiness', 'eu-accessibility-act-readiness', 'eu-dsa-notice-action-triage'],
+    whatItDoes:
+      'Checks a consumer product, and the way it is sold, against the General Product Safety Regulation. It determines whether the product is within scope or governed by sector legislation, identifies the business’s role — manufacturer, importer, distributor, fulfilment service provider or online marketplace — and the economic operator in the EU that must be responsible for it. It then checks the internal risk analysis and technical documentation, product and packaging identification, warnings and instructions in the right languages, the information online listings must show, and the processes for accident notification, recalls and complaints.',
+    whenToUse:
+      'Before placing a consumer product on the EU market, when selling into the EU from outside it, when listing products on a marketplace, when a customer complaint suggests a safety risk, and when planning a recall. Marketplaces have their own duties and may delist products that do not show required information.',
+    inputs: [
+      { name: 'Product description', description: 'What it is, users including children, materials, connectivity and intended use.', required: true },
+      { name: 'Roles and establishment', description: 'Who manufactures, imports, distributes and fulfils, and where each is established.', required: true },
+      { name: 'Documentation', description: 'Risk analysis, test reports, technical documentation, labelling and instructions.' },
+      { name: 'Sales channels', description: 'Own website, marketplaces and listing content.' },
+      { name: 'Incident information', description: 'Complaints, accidents or safety concerns reported.' },
+    ],
+    outputs: [
+      { name: 'Scope and role analysis', description: 'Whether the GPSR applies and the business’s obligations by role.' },
+      { name: 'Responsible person check', description: 'The EU economic operator and how it is identified.' },
+      { name: 'Documentation and labelling gaps', description: 'Risk analysis, traceability, warnings and language gaps.' },
+      { name: 'Online listing check', description: 'Information required on distance-sales listings.' },
+      { name: 'Incident and recall plan', description: 'Accident notification, corrective action and recall steps.' },
+    ],
+    prompt: `You are an EU product safety lawyer checking compliance with the General Product Safety Regulation.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- The GPSR has applied since 13 December 2024 [VERIFY]. Products covered by specific harmonisation legislation follow that legislation, with the GPSR filling gaps.
+
+INPUTS
+- Product: <description, users including children, materials, connectivity, intended use>
+- Roles: <manufacturer, importer, distributor, fulfilment provider; establishment>
+- Documentation: <risk analysis, tests, technical documentation, labels, instructions>
+- Sales channels: <website, marketplaces, listings>
+- Incidents: <complaints, accidents, concerns>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. SCOPE. Decide whether the product is a consumer product within the GPSR and whether specific sector legislation applies instead or alongside.
+3. ROLES. Identify each operator’s role and obligations, and confirm that an economic operator established in the EU is responsible for the product and is named on the product, packaging or accompanying document [VERIFY].
+4. SAFETY ASSESSMENT. Check that an internal risk analysis covers foreseeable use and misuse, effects on other products, appearance and labelling, categories of vulnerable consumers including children, and cybersecurity for connected products. Check technical documentation and its retention period [VERIFY].
+5. TRACEABILITY AND LABELLING. Check type, batch or serial identification, manufacturer and responsible-person details, warnings and safety information in languages consumers can easily understand as set by each member state.
+6. ONLINE LISTINGS. Check that distance-sales offers show manufacturer and responsible-person details, product identification, an image, and warnings and safety information.
+7. INCIDENTS AND RECALLS. Set out the process for assessing complaints, notifying accidents and dangerous products through the Safety Business Gateway within the required time [VERIFY], corrective action, consumer notices and remedies on recall.
+8. MARKETPLACE DUTIES. If the business operates or sells on a marketplace, note duties for registration, cooperation and responding to authority orders.
+9. REMEDIATION. List fixes ordered by risk.
+
+RULES
+- Never state that a product is safe; report against the requirements.
+- Mark notification deadlines and retention periods [VERIFY].
+- Do not recommend delaying accident notification while a cause is investigated.
+
+OUTPUT FORMAT
+Missing information; scope finding; role and obligation table; responsible-person check; safety assessment gaps; traceability and labelling gaps; online listing check (Required item | Present); incident and recall plan; remediation. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A Chinese manufacturer sells kitchen gadgets into the EU via a marketplace with no EU importer, and a customer reports a burn from an overheating blender.',
+      result:
+        'The GPSR applies with no EU responsible person identified, so the product cannot lawfully be sold until one is appointed and named, listings missing manufacturer details and warnings, a risk analysis with no overheating scenario, and an incident plan treating the burn as an accident to notify through the Safety Business Gateway.',
+    },
+  },
 ];

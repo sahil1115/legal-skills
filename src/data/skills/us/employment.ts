@@ -850,4 +850,145 @@ Open with the coverage conclusion and whether the tool can lawfully be used toda
         'Tool found covered because recruiters only review candidates the tool ranks in the top tier, the vendor audit found expired and not specific to the employer’s deployment, re-audit data requirements identified including intersectional categories, a publication checklist and notices drafted with the 10-business-day lead time, use paused pending a current audit, and adverse-impact risk under discrimination law flagged separately for counsel.',
     },
   },
+  {
+    id: 'us-flsa-exemption-audit',
+    name: 'FLSA Overtime Exemption Audit',
+    description: 'Tests whether salaried roles meet an overtime exemption under federal and state law, role by role.',
+    jurisdiction: 'us',
+    category: 'employment',
+    tags: ['assessment', 'workforce', 'wage-and-hour', 'overtime', 'state-law'],
+    sources: [
+      { citation: 'Fair Labor Standards Act', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.dol.gov', note: 'Minimum wage and overtime, and the exemptions for executive, administrative, professional, computer, outside sales and highly compensated employees.' },
+      { citation: 'Department of Labor regulations on the white-collar exemptions', authority: 'regulator', publisher: 'US Department of Labor', jurisdiction: 'us', url: 'https://www.dol.gov', note: 'Salary level, salary basis and duties tests. The 2024 salary-level rule was vacated in litigation; confirm which threshold currently applies.' },
+      { citation: 'State wage and hour laws', authority: 'primary', jurisdiction: 'us', note: 'Several states set higher salary thresholds, different duties tests, daily overtime or no exemption for some roles. The stricter rule generally governs.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-worker-classification', 'us-pay-transparency-multistate-checker', 'us-employment-policy-checker'],
+    whatItDoes:
+      'Audits salaried roles treated as exempt from overtime. For each role it applies the three federal tests in order — salary level, salary basis and primary duties — using what the person actually does rather than the job title or description, then repeats the analysis under the law of each state where people in the role work. It flags practices that can destroy an exemption even when the role qualifies, such as improper deductions from salary, and estimates nothing: it lists the data needed to quantify back-pay exposure and the remediation choices, which are decisions for counsel.',
+    whenToUse:
+      'Before classifying a new role as exempt, after a reorganisation or pay change, when expanding into a new state, when a salary threshold changes, and when an employee or regulator raises an overtime complaint. Wage claims often proceed collectively, so a finding on one role can affect everyone in it.',
+    inputs: [
+      { name: 'Roles', description: 'Each role treated as exempt, with the job description and the exemption relied on.', required: true },
+      { name: 'Actual duties', description: 'What incumbents spend their time doing, from managers and incumbents, with rough percentages.', required: true },
+      { name: 'Pay facts', description: 'Salary, how it is paid, any deductions, bonuses and commissions.', required: true },
+      { name: 'Locations', description: 'States and cities where people in each role work, including remote workers.', required: true },
+    ],
+    outputs: [
+      { name: 'Role-by-role test results', description: 'Salary level, salary basis and duties findings under federal law.' },
+      { name: 'State overlay', description: 'Whether each state’s rule is stricter and the result under it.' },
+      { name: 'Practice red flags', description: 'Deductions, timekeeping and pay practices that may defeat the exemption.' },
+      { name: 'Exposure data list', description: 'Records needed to quantify any back pay, without estimating it.' },
+      { name: 'Remediation options', description: 'Reclassification, pay or duties changes for counsel to decide.' },
+    ],
+    prompt: `You are a US wage and hour lawyer auditing overtime exemptions.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- The 2024 federal salary-level rule was vacated in 2024 litigation, and an earlier threshold was understood to apply at drafting [VERIFY the current federal salary level and any new rulemaking].
+- State thresholds are often higher, many are indexed annually, and some states apply different duties tests or daily overtime [VERIFY each state].
+
+INPUTS
+- Roles: <each exempt role, job description, exemption relied on>
+- Actual duties: <time spent on each task, from incumbents and managers>
+- Pay: <salary, frequency, deductions, bonuses, commissions>
+- Locations: <states and cities, including remote workers>
+
+TASK
+1. MISSING INFORMATION. List what you need, especially evidence of actual duties rather than descriptions.
+2. SALARY LEVEL. For each role, compare pay with the federal level and each applicable state level, marking each figure [VERIFY]. Note whether bonuses may count toward the level under the applicable rule.
+3. SALARY BASIS. Check that a predetermined amount is paid regardless of the quantity or quality of work, and list any deductions or pay practices that may breach the basis test.
+4. DUTIES. Apply the duties test for the exemption claimed, based on actual work: for executive, managing a recognised department and directing two or more employees with real input on hiring and firing; for administrative, office work related to management or business operations with discretion and independent judgment on significant matters; for professional, advanced knowledge or creative work; and the specific tests for computer, outside sales and highly compensated employees. Give the facts for and against.
+5. STATE OVERLAY. For each state, state whether its test is stricter and the result.
+6. RED FLAGS. Identify practices that put exemptions at risk: deductions for partial-day absences, docking for performance, treating trainees or assistants as exempt, titles that overstate duties, and no records of hours.
+7. RESULT. For each role: LIKELY EXEMPT, AT RISK or LIKELY NON-EXEMPT, with the decisive factor.
+8. EXPOSURE DATA. List the records needed to quantify exposure (hours, pay history, periods, headcount) and note that limitation periods differ federally and by state [VERIFY]. Do not estimate amounts.
+9. OPTIONS. List remediation options for counsel: reclassification with or without salary conversion, duties changes, pay changes and timing.
+
+RULES
+- Duties are judged by what people actually do. Never rely on the job title or description alone.
+- Never state a salary threshold as settled; mark [VERIFY].
+- Do not estimate back pay, damages or penalties.
+- Do not recommend reclassification steps that could be retaliatory or that withhold wages already owed.
+
+OUTPUT FORMAT
+Missing information; a table per role (Test | Federal result | State results | Evidence); red flags; results summary; exposure data list; options. Close with: Assumptions made; [VERIFY] points; Decisions for counsel.`,
+    example: {
+      scenario:
+        'A 400-person company classifies its customer success managers, IT support specialists and junior marketing coordinators as exempt; staff work in Texas, New York, California and Washington.',
+      result:
+        'Customer success managers rated at risk on the administrative duties test, IT support specialists likely non-exempt because their work is help-desk troubleshooting, coordinators failing two state salary levels marked to verify, a red flag on partial-day salary deductions, and a list of timekeeping and pay records needed to size exposure.',
+    },
+  },
+  {
+    id: 'us-eeoc-charge-response-builder',
+    name: 'EEOC Charge Response Builder',
+    description: 'Plans the employer’s position statement for an EEOC or state agency discrimination charge, with a fact and document checklist.',
+    jurisdiction: 'us',
+    category: 'employment',
+    tags: ['drafting', 'workforce', 'disputes', 'discrimination', 'agency-response'],
+    sources: [
+      { citation: 'Title VII of the Civil Rights Act of 1964, the ADA, the ADEA and related federal anti-discrimination statutes', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.eeoc.gov', note: 'The substantive claims and the anti-retaliation provisions.' },
+      { citation: 'EEOC charge-handling procedures and guidance on position statements', authority: 'guidance', publisher: 'US Equal Employment Opportunity Commission', jurisdiction: 'us', url: 'https://www.eeoc.gov', note: 'How charges are processed, mediation, requests for information, and the possibility that a position statement is shared with the charging party.' },
+      { citation: 'State and local fair employment practices laws and agencies', authority: 'primary', jurisdiction: 'us', note: 'Often wider protected classes, different filing periods and dual filing with the EEOC.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-litigation-hold-builder', 'us-ada-fmla-interactive-process', 'global-workplace-investigation-planner', 'us-insurance-tender-tracker'],
+    whatItDoes:
+      'Plans the employer’s response to a charge of discrimination filed with the EEOC or a state or local agency. It checks the response deadline and timeliness questions, identifies each claimed basis and adverse action, and maps them to the legitimate reasons the employer says it acted on and the documents that prove those reasons existed at the time. It tests the story for the weaknesses agencies look for — shifting explanations, comparators treated differently, timing close to a complaint or leave request — and drafts the structure of a position statement written on the assumption that the charging party will read it. It does not create justifications after the fact.',
+    whenToUse:
+      'When a notice of charge arrives, when an agency issues a request for information, when deciding whether to accept mediation, and when a charge may lead to litigation. Issue a litigation hold immediately and notify any employment practices insurer; both have their own deadlines.',
+    inputs: [
+      { name: 'Charge', description: 'The notice and charge of discrimination with dates, bases and allegations.', required: true },
+      { name: 'Employment record', description: 'Personnel file, performance reviews, discipline, the decision documents and who made the decision.', required: true },
+      { name: 'Comparators and policies', description: 'Others in similar positions and how they were treated; the policies applied.', required: true },
+      { name: 'Complaint and leave history', description: 'Any complaints, accommodation requests or protected leave by the charging party, with dates.' },
+    ],
+    outputs: [
+      { name: 'Deadline and timeliness check', description: 'Response date, extension options and filing-period questions.' },
+      { name: 'Claims-to-reasons map', description: 'Each basis and action against the reason given and the contemporaneous evidence.' },
+      { name: 'Weakness assessment', description: 'Comparator, timing, consistency and retaliation risks.' },
+      { name: 'Position statement outline', description: 'Structure and draft sections for counsel to finalise.' },
+      { name: 'Exhibit and witness list', description: 'Documents to attach or withhold and people to interview.' },
+    ],
+    prompt: `You are a US employment defense lawyer preparing an employer’s response to an administrative charge of discrimination.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- Filing periods depend on whether a state or local agency also covers the claim, and agencies set response deadlines in their notices. Agency priorities and procedures change [VERIFY current EEOC and state agency practice].
+
+INPUTS
+- Charge: <notice and charge with dates, bases and allegations>
+- Employment record: <personnel file, reviews, discipline, decision documents, decision-makers>
+- Comparators and policies: <similarly situated employees and outcomes; policies applied>
+- Complaint and leave history: <complaints, accommodation requests, protected leave, with dates>
+
+TASK
+1. DEADLINE. State the response date from the notice and options for an extension. Confirm that a litigation hold and insurer notice are in place.
+2. TIMELINESS AND COVERAGE. Note any allegation that may fall outside the filing period and any coverage question (employer size, employee status) for counsel [VERIFY]. Do not rely on timeliness alone.
+3. CLAIMS MAP. List each protected basis, each adverse action and its date, the decision-maker, the reason the employer gives, and the documents created at the time that show the reason. Mark any reason with no contemporaneous record.
+4. RETALIATION CHECK. Set out the timeline of any complaint, accommodation request or leave against each adverse action, and identify who knew of the protected activity.
+5. COMPARATORS. Compare treatment of employees with similar roles, supervisors and conduct. Note differences that help and those that hurt.
+6. CONSISTENCY. Check whether the reason has been stated the same way everywhere: termination letter, internal emails, unemployment response, and what managers say now.
+7. POSITION STATEMENT OUTLINE. Draft sections: introduction; the employer and its policies; the charging party’s employment; the facts of each decision with document references; why each decision was legitimate and unrelated to the protected basis; response to each allegation; and conclusion. Write it on the assumption the charging party will read it.
+8. EXHIBITS AND WITNESSES. List documents to attach, those requiring confidentiality treatment, and witnesses to interview.
+9. MEDIATION. Set out factors bearing on whether to accept mediation, for the client to decide.
+
+RULES
+- Never offer a reason the employer did not rely on at the time, and never shift the explanation. If the record is thin, say so.
+- Never invent facts or comparators. Use [CLIENT TO CONFIRM].
+- Do not include anything that could be seen as retaliation, or personal attacks on the charging party.
+- Statements are made to a government agency; every factual assertion must be accurate and supported.
+
+OUTPUT FORMAT
+Deadline and timeliness; claims map (Basis | Action | Date | Decision-maker | Reason | Evidence); retaliation timeline; comparator table; consistency findings; position statement outline with draft sections; exhibit and witness lists; mediation factors. Close with: Assumptions made; [VERIFY] points; Risks for counsel.`,
+    example: {
+      scenario:
+        'A former warehouse supervisor files a charge alleging age discrimination and retaliation, claiming she was dismissed three weeks after complaining about a younger colleague’s comments.',
+      result:
+        'A claims map showing the attendance reason documented in two earlier warnings, a retaliation timeline flagging that the decision-maker learned of the complaint before the dismissal, a comparator who received a final warning instead of dismissal for similar attendance, an outline that addresses the timing directly, and a list of five witnesses to interview.',
+    },
+  },
 ];

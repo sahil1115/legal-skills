@@ -587,4 +587,347 @@ Open with: investment status, investor class, routes engaged, and the earliest r
         'A route analysis finding control in doubt at 45 percent and the national security regime engaged on sensitive personal data regardless of value, a timeline recommending an early filing with the extended periods mapped against the closing date, a filing information list, and drafted conditions with an outside date set to accommodate a possible extended review.',
     },
   },
+  {
+    id: 'ca-termination-clause-enforceability-reviewer',
+    name: 'Termination Clause Enforceability Check',
+    description: 'Tests a Canadian employment contract’s termination clause against the drafting errors that make it unenforceable.',
+    jurisdiction: 'ca',
+    category: 'employment',
+    tags: ['review', 'workforce', 'termination', 'employment-contract', 'drafting'],
+    sources: [
+      { citation: 'Provincial employment standards legislation (for example the Ontario Employment Standards Act, 2000) and the Canada Labour Code for federally regulated employers', authority: 'primary', jurisdiction: 'ca', url: 'https://laws-lois.justice.gc.ca', note: 'Minimum notice, severance and benefits continuation that a contract cannot undercut.' },
+      { citation: 'Appellate case law on termination clause interpretation', authority: 'primary', jurisdiction: 'ca', note: 'Courts, particularly in Ontario, have held that a clause breaching minimum standards in any part — including the for-cause language — can void the whole termination clause, restoring common-law reasonable notice. Identify current leading decisions in the province before relying on any.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['ca-termination-entitlements', 'global-employment-contract-reviewer', 'ca-worker-status-assessor'],
+    whatItDoes:
+      'Reviews the termination provisions of a Canadian employment contract and tests whether they are likely to be enforced to limit the employee to statutory minimums or an agreed amount. It reads every termination-related clause together — without cause, for cause, probation, benefits, bonus and equity — and looks for the errors courts have used to strike clauses down: language that could, in any circumstance, give less than the statutory minimum, a for-cause standard broader than the statutory misconduct standard, failure to continue benefits, discretion to dismiss "at any time", and ambiguity. It explains the consequence of failure — potentially common-law reasonable notice — and offers replacement wording for the province.',
+    whenToUse:
+      'When drafting or updating employment contract templates, before relying on a termination clause in a dismissal, when an employee or their lawyer challenges a clause, and when bringing on employees in a new province. Case law in this area moves; confirm with provincial counsel.',
+    inputs: [
+      { name: 'Contract', description: 'The employment contract, offer letter and any incorporated policies or plans.', required: true },
+      { name: 'Province and employer type', description: 'Province of employment, or federal regulation, and employer size and payroll.', required: true },
+      { name: 'Employee facts', description: 'Role, start date, pay and benefits, and when the contract was signed relative to the start date.' },
+      { name: 'Situation', description: 'Template review, planned dismissal or a challenge received.' },
+    ],
+    outputs: [
+      { name: 'Clause map', description: 'Every provision affecting termination with its wording.' },
+      { name: 'Minimum-standards test', description: 'Whether any reading could give less than statutory entitlements.' },
+      { name: 'Common enforceability risks', description: 'For-cause, discretion, benefits, ambiguity and consideration issues.' },
+      { name: 'Consequence analysis', description: 'What applies if the clause fails.' },
+      { name: 'Replacement wording', description: 'Revised clauses for the province, for counsel to confirm.' },
+    ],
+    prompt: `You are a Canadian employment lawyer testing a termination clause.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- Appellate courts, particularly in Ontario, have voided entire termination clauses where any part, including for-cause wording, could breach employment standards, and have scrutinised "at any time" and "sole discretion" language [VERIFY current leading cases and whether other provinces follow]. Statutory minimums vary by province and federal jurisdiction [VERIFY].
+
+INPUTS
+- Contract: <contract, offer letter, incorporated policies and plans>
+- Province and employer: <province or federal; size and payroll>
+- Employee facts: <role, start date, pay, benefits, signing date relative to start>
+- Situation: <template review, planned dismissal, challenge received>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. CLAUSE MAP. Extract every termination-related provision: without cause, for cause, probation, notice, pay in lieu, benefits continuation, bonus and incentive forfeiture, equity, resignation, and any "entire agreement" or severability clauses.
+3. MINIMUM-STANDARDS TEST. For each provision, test whether any reading or circumstance could give less than the statutory notice or pay in lieu, severance pay where applicable, benefits continuation and other entitlements. Read the clauses together, as courts do.
+4. FOR-CAUSE LANGUAGE. Compare any for-cause definition with the statutory standard for losing minimum entitlements, which is often narrower than common-law just cause [VERIFY]. Flag broader language.
+5. OTHER RISKS. Check: discretion to terminate "at any time" or "for any reason"; ambiguity; benefits or bonus forfeiture during the statutory notice period; whether the contract was signed before employment began or supported by fresh consideration; and changes to the role since signing.
+6. CONSEQUENCE. Explain what likely applies if the clause fails: common-law reasonable notice assessed on factors such as age, length of service, character of employment and availability of similar work [VERIFY], without estimating a notice period.
+7. REPLACEMENT WORDING. Draft revised clauses for the province, marked for counsel review.
+
+RULES
+- Never state that a clause is enforceable; give the risk level and reasons.
+- Do not estimate common-law notice periods or damages.
+- Mark statutory amounts and case law [VERIFY].
+- Do not draft clauses designed to give less than statutory minimums.
+
+OUTPUT FORMAT
+Missing information; clause map; minimum-standards table (Provision | Risk | Reason); for-cause comparison; other risks; consequence analysis; replacement wording. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'An Ontario software company’s template limits termination pay to "the minimum required by the ESA" but allows dismissal without notice for "any misconduct or poor performance" and lets the employer terminate "at its sole discretion, at any time".',
+      result:
+        'The without-cause wording rated acceptable on its own, the for-cause wording rated high risk because it is broader than the statutory standard, the "sole discretion, at any time" language flagged, a consequence analysis explaining that the whole clause may fall away, and replacement wording for counsel.',
+    },
+  },
+  {
+    id: 'ca-pipeda-privacy-program-assessor',
+    name: 'PIPEDA Privacy Program Assessor',
+    description: 'Assesses a private-sector privacy program against PIPEDA’s fair information principles and OPC guidance.',
+    jurisdiction: 'ca',
+    category: 'privacy',
+    tags: ['assessment', 'data-protection', 'programme-design', 'consent', 'accountability'],
+    sources: [
+      { citation: 'Personal Information Protection and Electronic Documents Act', authority: 'primary', publisher: 'Parliament of Canada', jurisdiction: 'ca', url: 'https://laws-lois.justice.gc.ca', note: 'Ten fair information principles, consent, breach of security safeguards reporting and record-keeping. Proposed replacement legislation died on the order paper in 2025; check for new bills.' },
+      { citation: 'Office of the Privacy Commissioner of Canada guidance, including guidelines for obtaining meaningful consent', authority: 'guidance', publisher: 'Office of the Privacy Commissioner of Canada', jurisdiction: 'ca', url: 'https://www.priv.gc.ca', note: 'How the OPC applies the principles to consent, accountability, cross-border transfers and new technologies.' },
+      { citation: 'Substantially similar provincial private-sector privacy laws (Quebec, Alberta, British Columbia)', authority: 'primary', jurisdiction: 'ca', note: 'Apply instead of PIPEDA to intra-provincial activity in those provinces; Quebec’s law has the most extensive obligations.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['ca-privacy-breach-assessor', 'ca-quebec-compliance-checker', 'global-privacy-notice-reviewer'],
+    whatItDoes:
+      'Assesses an organisation’s privacy program against PIPEDA’s ten fair information principles — accountability, identifying purposes, consent, limiting collection, limiting use, disclosure and retention, accuracy, safeguards, openness, individual access and challenging compliance — and against OPC guidance on meaningful consent, cross-border transfers and appropriate purposes. It first maps which law applies to which activity, since provincial laws displace PIPEDA in some cases, and then records gaps with evidence and a remediation plan. It includes the "no-go zones" the OPC treats as inappropriate purposes.',
+    whenToUse:
+      'When building or auditing a privacy program for a Canadian business, before launching a new product that uses personal information, during due diligence on a Canadian target, and when responding to a complaint to the OPC. Check whether replacement federal legislation has been reintroduced.',
+    inputs: [
+      { name: 'Organisation profile', description: 'Activities, provinces of operation, cross-border flows and whether employee data is federally regulated.', required: true },
+      { name: 'Processing inventory', description: 'Personal information collected, purposes, uses, disclosures and retention.', required: true },
+      { name: 'Program documents', description: 'Privacy policy, notices, consent flows, policies, training and breach records.', required: true },
+      { name: 'Service providers', description: 'Vendors processing personal information, including outside Canada.' },
+    ],
+    outputs: [
+      { name: 'Applicable-law map', description: 'Which law applies to which activity and data.' },
+      { name: 'Principle-by-principle assessment', description: 'Each principle marked met, partial or missing with evidence.' },
+      { name: 'Consent review', description: 'Whether consent is meaningful and the right form for each purpose.' },
+      { name: 'Appropriate-purpose check', description: 'Purposes tested against what a reasonable person would consider appropriate.' },
+      { name: 'Remediation plan', description: 'Gaps ordered by risk, with owners.' },
+    ],
+    prompt: `You are a Canadian privacy lawyer assessing a privacy program.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- PIPEDA remains in force. A bill to replace it with a new consumer privacy act died when Parliament was prorogued in 2025 [VERIFY whether new legislation has been introduced]. Quebec, Alberta and British Columbia have private-sector laws that apply instead of PIPEDA to activity within those provinces [VERIFY scope].
+
+INPUTS
+- Organisation: <activities, provinces, cross-border flows, federal or provincial employees>
+- Processing inventory: <data, purposes, uses, disclosures, retention>
+- Program documents: <policy, notices, consent flows, policies, training, breach records>
+- Service providers: <vendors, including outside Canada>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. APPLICABLE LAW. Map each activity to PIPEDA, a substantially similar provincial law, or neither (for example, employee data of provincially regulated employers outside the provinces with private-sector laws) [VERIFY].
+3. PRINCIPLES. Assess each of the ten principles as MET, PARTIAL or MISSING with evidence: accountability (designated person, policies, service-provider contracts); identifying purposes; consent; limiting collection; limiting use, disclosure and retention; accuracy; safeguards; openness; individual access; and challenging compliance.
+4. CONSENT. For each purpose, test whether consent is meaningful under OPC guidance: key elements emphasised, layered information, clear options for non-essential purposes, and express consent where data is sensitive or uses are outside reasonable expectations.
+5. APPROPRIATE PURPOSES. Test each purpose against what a reasonable person would consider appropriate in the circumstances, and flag any that resemble the OPC’s identified no-go zones [VERIFY].
+6. TRANSFERS. Check notice and contractual protections for processing outside Canada.
+7. BREACH RECORDS. Check that breaches of security safeguards are recorded and that those creating a real risk of significant harm are reported [VERIFY].
+8. REMEDIATION. Order gaps by risk.
+
+RULES
+- Never state that the program complies; report status.
+- Do not apply PIPEDA where a provincial law applies instead, or vice versa, without explaining the basis.
+- Mark statutory points [VERIFY].
+
+OUTPUT FORMAT
+Missing information; applicable-law map; principles table (Principle | Status | Evidence | Gap); consent review; appropriate-purpose findings; transfer and breach-record findings; remediation plan. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A Toronto-based retail chain with stores in four provinces runs a loyalty program, shares member data with an analytics firm in the United States and has no breach register.',
+      result:
+        'An applicable-law map putting the Quebec and Alberta stores under provincial law, PIPEDA for the rest and cross-border flows, consent rated partial because analytics sharing is buried in the policy, transfer notice missing, accountability partial because vendor contracts lack privacy terms, and a missing breach register flagged as a priority.',
+    },
+  },
+  {
+    id: 'ca-workplace-harassment-program-checker',
+    name: 'Workplace Harassment Program Checker',
+    description: 'Checks a Canadian employer’s harassment and violence program against federal or provincial requirements.',
+    jurisdiction: 'ca',
+    category: 'employment',
+    tags: ['assessment', 'workforce', 'programme-design', 'harassment', 'workplace-safety'],
+    sources: [
+      { citation: 'Provincial occupational health and safety statutes (for example the Ontario Occupational Health and Safety Act)', authority: 'primary', jurisdiction: 'ca', url: 'https://laws-lois.justice.gc.ca', note: 'Workplace harassment and violence policies, programs, investigations and training duties vary by province.' },
+      { citation: 'Canada Labour Code and Work Place Harassment and Violence Prevention Regulations', authority: 'regulator', publisher: 'Government of Canada', jurisdiction: 'ca', url: 'https://laws-lois.justice.gc.ca', note: 'For federally regulated employers: workplace assessment, prevention policy, training, resolution process and designated recipient.' },
+      { citation: 'Human rights legislation of the relevant jurisdiction', authority: 'primary', jurisdiction: 'ca', note: 'Prohibits harassment on protected grounds and creates a separate complaint route.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['global-workplace-investigation-planner', 'au-positive-duty-sexual-harassment-assessment', 'uk-worker-protection-harassment-audit'],
+    whatItDoes:
+      'Checks an employer’s workplace harassment and violence program against the regime that applies to it — the federal Canada Labour Code regulations for federally regulated workplaces, or the occupational health and safety and human rights laws of each province. It tests the policy content, the risk assessment, reporting channels including an alternative to the supervisor, the investigation process and its confidentiality, training, record keeping and annual review, and how domestic violence that may reach the workplace is addressed. It produces a gap list by jurisdiction and a remediation plan.',
+    whenToUse:
+      'When setting up or reviewing a harassment program, when expanding into a new province or becoming federally regulated, after a complaint exposes process gaps, and before an inspection. The federal regime has detailed timelines for resolution steps; provincial regimes differ.',
+    inputs: [
+      { name: 'Jurisdictions', description: 'Provinces where employees work, and whether the employer is federally regulated.', required: true },
+      { name: 'Program documents', description: 'Policy, program, reporting and investigation procedures, training materials and records.', required: true },
+      { name: 'Workforce profile', description: 'Size, sites, remote work, unionised status and joint health and safety committees.' },
+      { name: 'Recent issues', description: 'Complaints and how they were handled.' },
+    ],
+    outputs: [
+      { name: 'Applicable regime map', description: 'Which statutes and regulations apply to which workers.' },
+      { name: 'Requirement-by-requirement gap list', description: 'Policy, assessment, reporting, investigation, training and records.' },
+      { name: 'Process timeline check', description: 'Resolution and investigation timelines against requirements.' },
+      { name: 'Investigation process review', description: 'Confidentiality, impartiality and outcome communication.' },
+      { name: 'Remediation plan', description: 'Fixes by jurisdiction and priority.' },
+    ],
+    prompt: `You are a Canadian employment and health and safety lawyer reviewing a harassment and violence program.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- Federally regulated employers follow detailed regulations under the Canada Labour Code, including fixed timelines for steps in the resolution process [VERIFY]. Provinces set their own requirements, and several have amended them recently [VERIFY each province].
+
+INPUTS
+- Jurisdictions: <provinces; federal regulation>
+- Program documents: <policy, program, procedures, training, records>
+- Workforce: <size, sites, remote work, unions, committees>
+- Recent issues: <complaints and handling>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. REGIME MAP. Decide which regime applies to which workers, and whether human rights legislation adds requirements.
+3. POLICY. Check required content for each regime: definitions, how to report, an alternative recipient if the supervisor is involved, how investigations are conducted, confidentiality, outcomes communicated to the parties, and prohibition of reprisal.
+4. RISK ASSESSMENT. Check that a workplace assessment of harassment and violence risk has been done and reviewed as required, with the committee or representative where required [VERIFY].
+5. REPORTING AND RESOLUTION. Check channels, timelines for acknowledging and addressing notices, and options for informal resolution, investigation and conciliation where the regime provides them [VERIFY].
+6. INVESTIGATION. Check impartiality, competence of investigators, confidentiality, and written results to the complainant and respondent where required.
+7. TRAINING AND RECORDS. Check training content and frequency, record retention and annual reporting where required.
+8. DOMESTIC VIOLENCE AND REMOTE WORK. Check measures where domestic violence may affect the workplace and coverage of remote and off-site work.
+9. REMEDIATION. Order fixes by jurisdiction and risk.
+
+RULES
+- Never state that the program complies; report gaps.
+- Mark timelines and requirements [VERIFY].
+- Do not recommend confidentiality terms that prevent reporting to authorities.
+
+OUTPUT FORMAT
+Missing information; regime map; gap table (Requirement | Jurisdiction | Status | Gap); process timeline check; investigation review; training and records findings; remediation plan. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A trucking company is federally regulated for its drivers but has office staff in Ontario under a provincial program; it uses one policy for everyone with the HR director as the only reporting route.',
+      result:
+        'A regime map splitting drivers under the federal regulations and office staff under Ontario law, gaps including no workplace assessment for drivers, no alternative recipient when HR is involved, and missing federal resolution timelines, with a remediation plan producing a federal program and an Ontario policy.',
+    },
+  },
+  {
+    id: 'ca-aoda-accessibility-compliance',
+    name: 'AODA Accessibility Compliance Checker',
+    description: 'Checks an organisation against Ontario’s accessibility standards and reporting, with a note on federal obligations.',
+    jurisdiction: 'ca',
+    category: 'compliance',
+    tags: ['assessment', 'programme-design', 'accessibility', 'annual-reporting', 'customer-service'],
+    sources: [
+      { citation: 'Accessibility for Ontarians with Disabilities Act, 2005 and the Integrated Accessibility Standards Regulation', authority: 'primary', publisher: 'Government of Ontario', jurisdiction: 'ca', url: 'https://www.ontario.ca', note: 'Customer service, information and communications, employment, transportation and design of public spaces standards, and compliance reporting by organisation size.' },
+      { citation: 'Accessible Canada Act and Accessible Canada Regulations', authority: 'primary', publisher: 'Parliament of Canada', jurisdiction: 'ca', url: 'https://laws-lois.justice.gc.ca', note: 'For federally regulated entities: accessibility plans, feedback processes and progress reports.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer', 'public-sector', 'professional-services'],
+    relatedSkills: ['us-ada-website-accessibility-triage', 'eu-accessibility-act-readiness', 'ca-quebec-compliance-checker'],
+    whatItDoes:
+      'Checks an organisation with employees in Ontario against the AODA standards that apply to its sector and size — customer service, information and communications including website accessibility, employment, transportation and design of public spaces — and confirms its compliance reporting cycle. For federally regulated entities it maps the separate obligations under the Accessible Canada Act. It produces a requirement-by-requirement gap list, a draft policy and plan outline, and a reporting calendar.',
+    whenToUse:
+      'When an organisation starts operating in Ontario or crosses a size threshold, before a compliance report is due, when redesigning a website or hiring process, and after a complaint. Other provinces have their own accessibility laws at different stages; flag them for local review.',
+    inputs: [
+      { name: 'Organisation profile', description: 'Sector, number of employees in Ontario, public or private, and federal regulation.', required: true },
+      { name: 'Current documents', description: 'Accessibility policies, multi-year plan, training records and past compliance reports.', required: true },
+      { name: 'Customer and digital channels', description: 'Premises, websites and apps, feedback processes.' },
+      { name: 'Employment processes', description: 'Recruitment, accommodation, return to work and emergency response information.' },
+    ],
+    outputs: [
+      { name: 'Applicability map', description: 'Standards and requirements that apply by sector and size.' },
+      { name: 'Gap list', description: 'Each requirement marked met, partial or missing.' },
+      { name: 'Reporting calendar', description: 'Compliance report and plan update dates.' },
+      { name: 'Policy and plan outline', description: 'Structure for required policies and the multi-year plan.' },
+      { name: 'Federal and other-province flags', description: 'Additional obligations to check.' },
+    ],
+    prompt: `You are a Canadian accessibility compliance lawyer reviewing AODA obligations.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- AODA requirements and reporting deadlines depend on sector and the number of employees in Ontario [VERIFY current thresholds and the next reporting year]. Federally regulated entities have separate obligations under the Accessible Canada Act [VERIFY]. Other provinces have enacted accessibility laws at different stages [VERIFY].
+
+INPUTS
+- Organisation: <sector, Ontario employees, public or private, federal regulation>
+- Documents: <policies, multi-year plan, training records, past reports>
+- Customer and digital channels: <premises, websites, apps, feedback>
+- Employment processes: <recruitment, accommodation, return to work, emergency information>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. APPLICABILITY. Map the standards and requirements that apply to the organisation’s sector and size.
+3. GENERAL REQUIREMENTS. Check accessibility policies, a multi-year plan where required, training, and accessible procurement and self-service kiosks where applicable.
+4. CUSTOMER SERVICE. Check assistive devices, service animals, support persons, notice of disruptions, feedback and training.
+5. INFORMATION AND COMMUNICATIONS. Check feedback processes, accessible formats and communication supports on request, emergency information, and website and web content conformance with the specified WCAG level for organisations in scope [VERIFY].
+6. EMPLOYMENT. Check accessible recruitment notices, accommodation in assessment and hiring, individual accommodation plans, return-to-work processes, workplace emergency response information and performance management.
+7. OTHER STANDARDS. Flag transportation and design of public spaces where relevant.
+8. REPORTING. Set the compliance report calendar and plan updates.
+9. FEDERAL AND OTHER PROVINCES. Flag Accessible Canada Act obligations and other provinces’ laws for review.
+10. REMEDIATION. Order gaps by risk.
+
+RULES
+- Never state that the organisation complies; report gaps.
+- Mark thresholds, deadlines and technical standards [VERIFY].
+- Do not treat overlays as achieving web conformance.
+
+OUTPUT FORMAT
+Missing information; applicability map; gap table (Standard | Requirement | Status | Gap); reporting calendar; policy and plan outline; federal and other-province flags; remediation. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A private clinic network with 85 Ontario employees has a customer service policy from years ago, no multi-year plan, and a website that has never been tested for accessibility.',
+      result:
+        'An applicability map placing the network in the larger private-sector category, gaps in the multi-year plan, emergency response information for employees and website conformance, a compliance report date to verify, and an outline for the missing policies and plan.',
+    },
+  },
+  {
+    id: 'ca-worker-status-assessor',
+    name: 'Worker Status Assessor',
+    description: 'Assesses whether a Canadian worker is an employee, dependent contractor or independent contractor under each regime.',
+    jurisdiction: 'ca',
+    category: 'employment',
+    tags: ['assessment', 'workforce', 'worker-classification', 'independent-contractor', 'tax-controversy'],
+    sources: [
+      { citation: 'Employment standards, workers’ compensation and labour relations legislation of the relevant province', authority: 'primary', jurisdiction: 'ca', note: 'Each statute has its own definition of employee and its own tests; some provinces have created special rules for digital platform workers.' },
+      { citation: 'Canada Revenue Agency guidance on employee or self-employed status for CPP and EI', authority: 'guidance', publisher: 'Canada Revenue Agency', jurisdiction: 'ca', url: 'https://www.canada.ca', note: 'Payroll deductions, CPP and EI status rulings and the factors CRA applies.' },
+      { citation: 'Common-law tests for employment and dependent contractor status', authority: 'primary', jurisdiction: 'ca', note: 'Courts consider control, ownership of tools, chance of profit and risk of loss, integration and, for dependent contractors, economic dependence and exclusivity.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-worker-classification', 'uk-ir35-status-assessor', 'ca-termination-entitlements'],
+    whatItDoes:
+      'Assesses a worker relationship under each Canadian regime that may classify it differently: common-law employment for notice on termination, the intermediate dependent-contractor category that can carry reasonable notice, provincial employment standards and workers’ compensation, CPP and EI through the Canada Revenue Agency, and any platform-worker rules. It gathers the facts that matter — control, tools, chance of profit and risk of loss, integration, exclusivity and dependence — and produces a finding per regime, the exposure that follows, and options to restructure the relationship or the paperwork, for counsel to decide.',
+    whenToUse:
+      'Before engaging contractors for ongoing work, when a long-term contractor is ended, during a CRA payroll audit or a worker’s CPP and EI ruling request, when using platform-based workers, and during due diligence. Paperwork labels do not decide status; the actual relationship does.',
+    inputs: [
+      { name: 'Relationship facts', description: 'What the worker does, how work is directed, hours, tools, payment, exclusivity and duration.', required: true },
+      { name: 'Documents', description: 'The contract, invoices and any communications about the role.', required: true },
+      { name: 'Province', description: 'Where the work is done and any federal regulation.', required: true },
+      { name: 'Context', description: 'Number of similar workers, platform use and any dispute or audit.' },
+    ],
+    outputs: [
+      { name: 'Facts matrix', description: 'Each factor with the facts for and against employment.' },
+      { name: 'Finding per regime', description: 'Likely status under common law, employment standards, workers’ compensation and CPP/EI.' },
+      { name: 'Dependent-contractor analysis', description: 'Whether the intermediate category may apply and its effect.' },
+      { name: 'Exposure list', description: 'Obligations that follow from each finding, without amounts.' },
+      { name: 'Options', description: 'Changes to the relationship or documents for counsel to decide.' },
+    ],
+    prompt: `You are a Canadian employment lawyer assessing worker status.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- Status is assessed separately under each regime and can differ between them. Courts in several provinces recognise dependent contractors who may be owed reasonable notice [VERIFY the province]. Some provinces have introduced specific rules for digital platform workers [VERIFY].
+
+INPUTS
+- Relationship facts: <work, direction, hours, tools, payment, exclusivity, duration>
+- Documents: <contract, invoices, communications>
+- Province: <where work is done; federal regulation>
+- Context: <similar workers, platform use, dispute or audit>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. FACTS MATRIX. For each factor — control over what, how and when work is done; ownership of tools and equipment; chance of profit and risk of loss; ability to hire helpers or substitutes; integration into the business; exclusivity and economic dependence; duration and continuity; and the parties’ stated intention — record the facts for and against employment.
+3. COMMON LAW. Assess employee, dependent contractor or independent contractor at common law, with reasons.
+4. EMPLOYMENT STANDARDS. Assess status under the provincial statute’s definition and any platform-worker rules.
+5. WORKERS’ COMPENSATION. Assess coverage under the provincial scheme.
+6. CPP AND EI. Assess status using CRA’s approach and note the ruling and appeal route [VERIFY].
+7. EXPOSURE. List obligations that would follow from each finding: notice, vacation and overtime, workers’ compensation premiums, source deductions and remittances, sales tax issues. Do not estimate amounts.
+8. OPTIONS. Set out options: convert to employment, restructure the contractor relationship so it reflects real independence, or keep and document, with the risks of each.
+
+RULES
+- Never treat the contract label as decisive.
+- Never state status as settled; give the likely outcome and reasons.
+- Do not estimate liabilities.
+- Mark statutory definitions and procedures [VERIFY].
+
+OUTPUT FORMAT
+Missing information; facts matrix (Factor | Facts for employment | Facts against); findings table (Regime | Likely status | Reason); dependent-contractor analysis; exposure list; options. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A Vancouver marketing agency has engaged a designer as a contractor for four years, full time, using agency software and email, with no other clients and paid a fixed monthly fee.',
+      result:
+        'A facts matrix weighing heavily toward employment, a likely employee finding for CPP and EI and employment standards, a dependent-contractor analysis at minimum for notice purposes, an exposure list including source deductions, and options for conversion or restructuring.',
+    },
+  },
 ];

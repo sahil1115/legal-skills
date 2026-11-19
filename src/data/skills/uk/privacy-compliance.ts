@@ -495,4 +495,74 @@ Open with the recommended level, the key factors and any matter that must go to 
         'Enhanced due diligence recommended, with a beneficial ownership schedule covering settlor, trustees and beneficiaries, a PEP finding by association, senior management approval and source-of-wealth work listed as conditions to onboard, a file note for the nominated officer drafted without disclosing any suspicion, and referral points on the third-country transfer and the ownership structure.',
     },
   },
+  {
+    id: 'uk-pecr-cookies-marketing-checker',
+    name: 'PECR Cookies and Marketing Checker',
+    description: 'Checks cookies, tracking and electronic marketing against PECR as amended by the Data (Use and Access) Act 2025.',
+    jurisdiction: 'uk',
+    category: 'privacy',
+    tags: ['assessment', 'data-protection', 'cookies', 'direct-marketing', 'consent'],
+    sources: [
+      { citation: 'Privacy and Electronic Communications (EC Directive) Regulations 2003', authority: 'primary', publisher: 'UK Government', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Storage and access technologies, electronic marketing by email, text and calls, and the soft opt-in.' },
+      { citation: 'Data (Use and Access) Act 2025', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Added exemptions from cookie consent for some low-risk purposes, extended the soft opt-in to charities and raised PECR fines to UK GDPR levels. Main changes reported as commenced in 2026.' },
+      { citation: 'ICO guidance on storage and access technologies and direct marketing', authority: 'guidance', publisher: 'Information Commissioner’s Office', jurisdiction: 'uk', url: 'https://ico.org.uk', note: 'How the ICO reads consent, the exemptions and cookie banner design.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer', 'technology'],
+    relatedSkills: ['global-privacy-notice-reviewer', 'uk-gdpr-breach-assessor', 'ca-casl-compliance-checker'],
+    whatItDoes:
+      'Reviews a website or app’s cookies and similar technologies, and an organisation’s email, text and call marketing, against PECR. For tracking it inventories each technology, assigns it to strictly necessary, one of the newer exempt purposes such as limited first-party statistics, or consent-required, and tests the banner for valid consent: no pre-ticked boxes, reject as easy as accept, nothing set before consent. For marketing it tests whether each channel relies on consent or the soft opt-in, whether the opt-out works, and whether calls are screened against preference services. Higher fines now make PECR failures material.',
+    whenToUse:
+      'When launching or redesigning a site or app, when adding analytics, advertising or social tags, before a marketing campaign or list purchase, after the 2025 Act changes, and when the ICO writes about cookie compliance or complaints about marketing.',
+    inputs: [
+      { name: 'Tracking inventory', description: 'Cookies, pixels, SDKs and similar technologies with provider and purpose, or a scan output.', required: true },
+      { name: 'Consent experience', description: 'Screenshots or description of the banner and preference centre and when tags fire.', required: true },
+      { name: 'Marketing channels', description: 'Email, SMS, calls and messaging, how contacts are collected and the wording used.', required: true },
+      { name: 'Organisation type', description: 'Business, charity, or other, and B2C or B2B audiences.' },
+    ],
+    outputs: [
+      { name: 'Technology classification', description: 'Each technology as strictly necessary, exempt or consent-required, with reasons.' },
+      { name: 'Banner review', description: 'Consent validity findings and design fixes.' },
+      { name: 'Marketing channel review', description: 'Lawful basis under PECR per channel, opt-out and screening checks.' },
+      { name: 'Risk ranking', description: 'Findings ranked by exposure.' },
+      { name: 'Remediation list', description: 'Technical and process fixes.' },
+    ],
+    prompt: `You are a UK privacy lawyer reviewing compliance with PECR.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- The Data (Use and Access) Act 2025 amended PECR: new exemptions from consent for certain purposes such as limited statistical analytics, appearance and functionality preferences and some emergency or security uses, an extended soft opt-in for charities, and fines raised to UK GDPR levels. Main changes were reported as commenced in early 2026 [VERIFY commencement and the exact scope of each exemption against the Act and ICO guidance].
+- The analytics exemption is reported as narrow: it may not cover third-party analytics providers that use data for their own purposes or combine it with other data [VERIFY].
+
+INPUTS
+- Tracking inventory: <technologies, providers, purposes, or scan output>
+- Consent experience: <banner, preference centre, when tags fire>
+- Marketing channels: <email, SMS, calls, messaging; how contacts are collected; wording>
+- Organisation type: <business, charity, other; B2C or B2B>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. CLASSIFY TECHNOLOGIES. For each technology: STRICTLY NECESSARY (for the service requested), EXEMPT PURPOSE (name the exemption and test its conditions, including the information and opt-out it may require) [VERIFY], or CONSENT REQUIRED. Give reasons, and note when a provider’s own use of data takes a technology out of an exemption.
+3. BANNER. Test consent validity: specific, informed and unambiguous; no pre-ticked boxes or implied consent from scrolling; reject as prominent as accept; granular choices; withdrawal as easy as giving; and no consent-required technology set before consent.
+4. MARKETING. For each channel decide: consent required, soft opt-in available (existing customer, similar products, opt-out offered at collection and in every message; charities if extended) [VERIFY], or B2B rules for corporate subscribers. Check identification of the sender, working unsubscribe, and screening of calls against preference services.
+5. UK GDPR OVERLAP. Note where processing of the data collected also needs a UK GDPR lawful basis and privacy information.
+6. RISK RANKING. Rank findings by likely exposure.
+7. REMEDIATION. List fixes.
+
+RULES
+- Never state that the site or campaign complies; report findings.
+- Do not treat a technology as exempt without testing every condition.
+- Mark fines, exemptions and commencement [VERIFY].
+- Do not recommend banner designs that steer users towards accepting.
+
+OUTPUT FORMAT
+Missing information; technology table (Technology | Provider | Purpose | Classification | Reason); banner findings; marketing table (Channel | Basis | Opt-out | Issue); UK GDPR overlap; risk ranking; remediation. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'An online retailer loads a third-party analytics tool, a social pixel and an advertising tag before the banner appears, and emails everyone who has ever bought from it, including about unrelated partner products.',
+      result:
+        'The social pixel and advertising tag classified as consent-required and firing before consent, the analytics tool flagged as unlikely to fit the statistics exemption because the provider uses data for its own purposes, a banner without an equal reject option, and partner-product emails falling outside the soft opt-in.',
+    },
+  },
 ];

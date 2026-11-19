@@ -739,4 +739,223 @@ Open with the risk tier, the single most serious gap and whether payments or ref
         'A Stark analysis finding all thresholds met and the personal services exception not clearly met (term expired, no signed agreement, no fair-market-value support), an Anti-Kickback analysis flagging pay that rose with admissions as an intent indicator, a documentation gap list, remediation steps that preserve existing records and avoid backdating, and an escalation to counsel on the payments made during the lapse.',
     },
   },
+  {
+    id: 'us-tcpa-marketing-compliance',
+    name: 'TCPA Calls and Texts Checker',
+    description: 'Checks a calling or texting campaign for TCPA consent, Do-Not-Call, opt-out and state telemarketing risks.',
+    jurisdiction: 'us',
+    category: 'privacy',
+    tags: ['screening', 'assessment', 'consumer-protection', 'telemarketing', 'consent', 'state-law'],
+    sources: [
+      { citation: 'Telephone Consumer Protection Act', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.fcc.gov', note: 'Restrictions on autodialed and prerecorded or artificial-voice calls and texts, the national Do-Not-Call protections, and a private right of action with statutory damages.' },
+      { citation: 'FCC rules and orders implementing the TCPA', authority: 'regulator', publisher: 'Federal Communications Commission', jurisdiction: 'us', url: 'https://www.fcc.gov', note: 'Consent, revocation, calling-time and identification rules. Several recent orders have been vacated, stayed or delayed in part; check current status.' },
+      { citation: 'FTC Telemarketing Sales Rule', authority: 'regulator', publisher: 'Federal Trade Commission', jurisdiction: 'us', url: 'https://www.ftc.gov', note: 'The National Do Not Call Registry, abandoned-call and disclosure rules for telemarketing.' },
+      { citation: 'State telemarketing and "mini-TCPA" laws', authority: 'primary', jurisdiction: 'us', note: 'Several states add consent, calling-hour, registration and quiet-day rules, some with their own private actions.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer', 'financial-services'],
+    relatedSkills: ['global-marketing-claims-reviewer', 'us-privacy-request-router', 'us-fifty-state-survey'],
+    whatItDoes:
+      'Reviews a marketing or informational calling or texting programme against the rules that generate class actions: what technology places the call or sends the text, what consent is needed for that technology and content, how consent was captured and can be proved, Do-Not-Call scrubbing against national and internal lists, opt-out handling across channels, calling hours and identification, and state laws that add their own rules. It separates marketing from informational messages, tests the consent language and the record that proves it, and lists the evidence a defendant would need if a claim arrived.',
+    whenToUse:
+      'Before launching an SMS or outbound calling campaign, when buying leads or using a vendor to send messages, when changing a dialer or texting platform, and when a demand letter or class complaint alleges unwanted calls or texts. Statutory damages accrue per message, so programme design matters more than any single message.',
+    inputs: [
+      { name: 'Campaign description', description: 'Who is contacted, why, how often, with what content, and whether it is marketing or informational.', required: true },
+      { name: 'Technology', description: 'The dialer or texting platform, whether numbers are generated or stored and dialled automatically, and use of prerecorded or AI voice.', required: true },
+      { name: 'Consent capture', description: 'The form or flow where consent is given, its exact wording, and how records are stored.', required: true },
+      { name: 'Lists and opt-outs', description: 'Do-Not-Call scrubbing, internal suppression lists and how opt-outs are processed.' },
+      { name: 'States and vendors', description: 'States of recipients, lead sources and messaging vendors.' },
+    ],
+    outputs: [
+      { name: 'Message classification', description: 'Marketing or informational, and the technology category, for each stream.' },
+      { name: 'Consent gap analysis', description: 'Consent required versus consent obtained and provable.' },
+      { name: 'Do-Not-Call and opt-out review', description: 'Scrubbing, suppression, revocation handling and timing.' },
+      { name: 'State overlay', description: 'States with additional rules that apply to the campaign.' },
+      { name: 'Remediation and evidence list', description: 'Fixes before launch and records to keep for defense.' },
+    ],
+    prompt: `You are a US consumer-protection lawyer reviewing a calling or texting programme under the TCPA and related laws.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- An FCC rule requiring one-to-one consent for lead-generated consent was vacated by a federal appeals court in early 2025 [VERIFY]. FCC rules on revoking consent took effect in part, with some provisions delayed [VERIFY current status]. The scope of "automatic telephone dialing system" was narrowed by the Supreme Court in 2021, but prerecorded and artificial-voice rules apply regardless of dialer, and state laws may define autodialers more broadly [VERIFY].
+
+INPUTS
+- Campaign: <audience, purpose, frequency, content, marketing or informational>
+- Technology: <platform, how numbers are dialled or texted, prerecorded or AI voice>
+- Consent capture: <form or flow, exact wording, record storage>
+- Lists and opt-outs: <scrubbing, internal list, opt-out process>
+- States and vendors: <recipient states, lead sources, vendors>
+
+TASK
+1. MISSING INFORMATION. List what you need, especially the exact consent language and how consent records are stored.
+2. CLASSIFY. For each message stream, decide marketing or informational, and the technology category (manual, automated system, prerecorded or artificial voice including AI-generated voice, text). Explain the basis.
+3. CONSENT REQUIRED. State the type of consent each stream needs, and whether written consent with specific disclosures is required for marketing by automated means or prerecorded voice [VERIFY].
+4. CONSENT OBTAINED. Test the capture flow: clear and conspicuous disclosure, identification of the seller, the type of messages and technology, that consent is not a condition of purchase, the signature or click, and the record (timestamp, number, IP or page version). For purchased leads, test whether consent names your company and covers this campaign.
+5. DO-NOT-CALL. Check scrubbing against the national registry and internal list, frequency of scrubbing, established-business-relationship reliance, and wireless numbers.
+6. OPT-OUTS AND REVOCATION. Check that revocation by any reasonable means is honoured across channels and within the required time [VERIFY], and that confirmation messages comply.
+7. CALL CONDUCT. Check calling hours by recipient time zone, caller identification, abandoned-call limits, and reassigned-number checking.
+8. STATE OVERLAY. List states in scope with additional consent, hour, frequency, registration or holiday rules, each [VERIFY].
+9. VENDORS. Note liability risk from vendors and lead sellers and contract protections needed.
+10. REMEDIATION AND EVIDENCE. List fixes before launch, ordered by exposure, and the records to keep for each message.
+
+RULES
+- Never state that a campaign complies; give findings and risks.
+- Do not treat a vendor’s assurance of consent as proof; ask for the record.
+- Mark every time limit, calling-hour rule and damages figure [VERIFY].
+- Do not suggest techniques to evade identification or opt-outs.
+
+OUTPUT FORMAT
+Missing information; classification table (Stream | Marketing or informational | Technology | Consent needed); consent gap analysis; Do-Not-Call and opt-out findings; call-conduct findings; state overlay table; vendor points; remediation and evidence list. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A solar installer plans to text 80,000 homeowners from purchased leads using an AI voice follow-up call, with consent collected on comparison websites that list "marketing partners" behind a link.',
+      result:
+        'The texts and AI calls classified as marketing by automated and artificial-voice means, the lead consent flagged because it does not name the installer on the consent page itself, no reassigned-number check, four states with additional rules in scope, and a remediation list starting with re-consenting leads before launch.',
+    },
+  },
+  {
+    id: 'us-coppa-compliance-checker',
+    name: 'COPPA Compliance Checker',
+    description: 'Tests a website, app or game for COPPA coverage, parental consent, notices and the amended rule’s retention duties.',
+    jurisdiction: 'us',
+    category: 'privacy',
+    tags: ['assessment', 'data-protection', 'childrens-privacy', 'consent', 'programme-design'],
+    sources: [
+      { citation: 'Children’s Online Privacy Protection Act', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.ftc.gov', note: 'Applies to operators of services directed to children under 13 and to operators with actual knowledge that they collect personal information from a child.' },
+      { citation: 'FTC Children’s Online Privacy Protection Rule, as amended in 2025', authority: 'regulator', publisher: 'Federal Trade Commission', jurisdiction: 'us', url: 'https://www.ftc.gov', note: 'Notice, verifiable parental consent, separate consent for certain third-party disclosures, security programme and written retention policy. Most amended obligations applied from 22 April 2026.' },
+      { citation: 'State children’s and teen privacy and age-appropriate design laws', authority: 'primary', jurisdiction: 'us', note: 'Some states extend protections to teens or impose design duties; several face court challenges. Check status per state.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['technology', 'retail-consumer'],
+    relatedSkills: ['us-privacy-request-router', 'global-privacy-notice-reviewer', 'us-fifty-state-survey'],
+    whatItDoes:
+      'Works out whether COPPA applies to an online service — because it is directed to children under 13 in whole or part, or because the operator knows it collects data from children — and then checks the duties that follow: online and direct notices, verifiable parental consent before collection, separate consent where children’s data is disclosed to third parties for purposes such as targeted advertising, parental access and deletion, data minimisation, a written security programme and a published retention policy. It reviews the service’s actual data flows, including SDKs and ad networks, and flags state laws for teens.',
+    whenToUse:
+      'When designing or launching a service that children may use, when adding analytics, advertising or AI features to such a service, after the amended rule’s compliance date, and when responding to a regulator inquiry or app-store review. Mixed-audience services and general-audience services with known child users are where most mistakes happen.',
+    inputs: [
+      { name: 'Service description', description: 'What the service is, its content, characters, marketing and audience data.', required: true },
+      { name: 'Data flows', description: 'Data collected, from whom, by which SDKs and partners, and why.', required: true },
+      { name: 'Age handling', description: 'Any age screen, how it works, and what happens when a user indicates they are under 13.', required: true },
+      { name: 'Notices and consent flows', description: 'The privacy notice, any direct notice to parents and the consent method used.' },
+      { name: 'Retention and security', description: 'How long data is kept, deletion processes and the security programme.' },
+    ],
+    outputs: [
+      { name: 'Coverage analysis', description: 'Child-directed, mixed audience, general audience with actual knowledge, or out of scope.' },
+      { name: 'Data flow findings', description: 'Personal information collected, including persistent identifiers, and who receives it.' },
+      { name: 'Consent and notice gaps', description: 'Missing or deficient notices and consent, including separate third-party consent.' },
+      { name: 'Retention and security gaps', description: 'Against the written policy and programme requirements.' },
+      { name: 'Remediation plan', description: 'Fixes ordered by risk, with state-law flags.' },
+    ],
+    prompt: `You are a US privacy lawyer reviewing an online service under COPPA.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- The FTC amended the COPPA Rule in 2025; most amended obligations applied from 22 April 2026, including separate parental consent for certain third-party disclosures, a written information security programme and a published data retention policy [VERIFY the provisions with different dates].
+- State laws covering teens or design duties vary and several are subject to litigation [VERIFY per state].
+
+INPUTS
+- Service: <what it is; content, characters, marketing; audience data>
+- Data flows: <data, sources, SDKs and partners, purposes>
+- Age handling: <age screen and what happens for under-13 users>
+- Notices and consent: <privacy notice, direct notice, consent method>
+- Retention and security: <periods, deletion, security programme>
+
+TASK
+1. MISSING INFORMATION. List what you need, especially third-party SDKs and the audience evidence.
+2. COVERAGE. Assess whether the service is directed to children using factors such as subject matter, visual and audio content, animated characters, child-oriented activities, advertising, audience composition and intended audience. Classify: CHILD-DIRECTED, MIXED AUDIENCE, GENERAL AUDIENCE WITH ACTUAL KNOWLEDGE, or OUT OF SCOPE, with the evidence.
+3. PERSONAL INFORMATION. List every data element collected from child users, including persistent identifiers, photos, audio and geolocation, and any internal-operations exception relied on [VERIFY its conditions].
+4. NOTICES. Check the online notice and the direct notice to parents for required content, including third-party recipients and purposes.
+5. CONSENT. Check that verifiable parental consent is obtained before collection using an accepted method, and that separate consent is obtained for disclosures to third parties where the amended rule requires it [VERIFY scope].
+6. PARENTAL RIGHTS. Check review, deletion and refusal of further collection processes.
+7. MINIMISATION, RETENTION, SECURITY. Check that collection is no more than reasonably necessary for the activity, that a written retention policy exists and is published with purposes and timeframes, and that a written security programme exists.
+8. THIRD PARTIES. For each SDK or partner, state what it collects and whether it is a third-party disclosure needing consent.
+9. STATE OVERLAY. Flag state laws that may apply to children or teens using the service [VERIFY].
+10. REMEDIATION. Order fixes by risk.
+
+RULES
+- Never conclude that a service is not child-directed on the operator’s stated intent alone.
+- Do not treat an age screen that encourages false answers as effective.
+- Do not state penalty amounts or deadlines as settled; mark [VERIFY].
+- Do not suggest designs intended to avoid gaining knowledge of child users.
+
+OUTPUT FORMAT
+Missing information; coverage analysis; personal information table (Data | Collected by | Purpose | Consent basis); notice, consent and rights findings; minimisation, retention and security findings; third-party table; state overlay; remediation plan. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A puzzle game with cartoon animals is marketed to "families", uses an advertising SDK and an analytics SDK, and has no age screen; 30 percent of surveyed players are under 13.',
+      result:
+        'Classified as mixed audience on the content and audience evidence, the ad SDK’s persistent identifiers treated as personal information requiring consent and a separate third-party consent, no direct notice or retention policy, and a remediation plan starting with a neutral age screen and an ad-free experience for under-13 users.',
+    },
+  },
+  {
+    id: 'us-ftc-safeguards-rule-assessor',
+    name: 'FTC Safeguards Rule Assessor',
+    description: 'Assesses a non-bank financial business against the FTC Safeguards Rule, including the breach notice to the FTC.',
+    jurisdiction: 'us',
+    category: 'privacy',
+    tags: ['assessment', 'cybersecurity', 'financial-services', 'data-protection', 'programme-design'],
+    sources: [
+      { citation: 'Gramm-Leach-Bliley Act', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.ftc.gov', note: 'Safeguarding customer information held by financial institutions.' },
+      { citation: 'FTC Standards for Safeguarding Customer Information (Safeguards Rule)', authority: 'regulator', publisher: 'Federal Trade Commission', jurisdiction: 'us', url: 'https://www.ftc.gov', note: 'Applies to financial institutions within FTC jurisdiction, such as lenders, auto dealers, tax preparers and some fintechs. Requires a written information security programme with specified elements and notice to the FTC of certain security events.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['financial-services'],
+    relatedSkills: ['us-state-breach-notification-matrix', 'eu-nis2-supply-chain-vendor-risk', 'us-hipaa-baa-breach-assessor'],
+    whatItDoes:
+      'Decides whether a business is a financial institution within the FTC Safeguards Rule — the rule reaches many businesses that do not think of themselves as financial institutions — and then assesses its information security programme against the rule’s required elements: a qualified individual, a written risk assessment, specified safeguards such as access controls, encryption and multi-factor authentication, testing, training, service provider oversight, an incident response plan and annual reporting to the board. It includes a decision path for the rule’s notice to the FTC after a qualifying security event and points to state breach laws for notices to individuals.',
+    whenToUse:
+      'For auto dealers, mortgage brokers, payday and consumer lenders, tax preparers, finance companies, fintechs and others in the FTC’s jurisdiction; before a regulator inquiry or due diligence; after a security incident; and when an exemption for smaller institutions may apply.',
+    inputs: [
+      { name: 'Business activities', description: 'What the business does and whether it offers financial products or services to consumers.', required: true },
+      { name: 'Customer information held', description: 'Types and volume of consumer financial information and where it is stored.', required: true },
+      { name: 'Security programme', description: 'The written programme, risk assessment, controls in place and the qualified individual.', required: true },
+      { name: 'Service providers', description: 'Vendors with access to customer information and their contracts.' },
+      { name: 'Incident facts', description: 'For an incident, what happened, when discovered and how many consumers are affected.' },
+    ],
+    outputs: [
+      { name: 'Coverage determination', description: 'Whether the rule applies, and whether a small-institution exemption may apply.' },
+      { name: 'Element-by-element gap register', description: 'Each required element marked met, partial or missing.' },
+      { name: 'FTC notification decision', description: 'Whether an event appears to require notice to the FTC and by when.' },
+      { name: 'Board report outline', description: 'The annual report content for the qualified individual.' },
+      { name: 'Remediation roadmap', description: 'Gaps ordered by risk with owners.' },
+    ],
+    prompt: `You are a US privacy and cybersecurity lawyer assessing compliance with the FTC Safeguards Rule.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- The amended Safeguards Rule requires specified programme elements, and since 2024 notice to the FTC of a notification event involving the information of at least a stated number of consumers within a stated period after discovery [VERIFY the threshold and period]. Some elements are relaxed for institutions maintaining information about fewer than a stated number of consumers [VERIFY].
+
+INPUTS
+- Activities: <what the business does; consumer financial products or services>
+- Customer information: <types, volume, locations>
+- Programme: <written programme, risk assessment, controls, qualified individual>
+- Service providers: <vendors with access; contracts>
+- Incident facts: <for an incident: what, when discovered, consumers affected>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. COVERAGE. Decide whether the business is a financial institution under the rule and within FTC jurisdiction, with the reasoning; flag borderline activities. Check the small-institution exemption [VERIFY].
+3. ELEMENTS. Assess each required element as MET, PARTIAL or MISSING with evidence: designation of a qualified individual; a written risk assessment with criteria; safeguards including access controls, data inventory, encryption in transit and at rest, secure development, multi-factor authentication, disposal, change management and monitoring of user activity; continuous monitoring or periodic penetration testing and vulnerability assessment; training and qualified personnel; service provider selection, contracts and oversight; a written incident response plan; and periodic written reporting to the board or senior officer.
+4. FTC NOTIFICATION. If an incident is described, decide whether it appears to be a notification event (unauthorised acquisition of unencrypted customer information), whether the consumer threshold is met, and the deadline from discovery, showing the calculation [VERIFY]. Note that law-enforcement delay may be available on request [VERIFY]. Refer to the state breach matrix for notices to individuals.
+5. BOARD REPORT. Outline the annual report: overall status, material matters, risk assessment, risk management decisions, service provider arrangements, testing results, security events and recommendations.
+6. ROADMAP. Order gaps by risk with suggested owners.
+
+RULES
+- Never state that the business complies; report element status.
+- Do not state the notification threshold or deadline as settled; mark [VERIFY].
+- Do not invent controls or test results. Use [NOT EVIDENCED].
+- The FTC notice may be made public; draft any notice from facts only.
+
+OUTPUT FORMAT
+Missing information; coverage determination; gap register (Element | Status | Evidence | Gap); FTC notification decision; board report outline; remediation roadmap. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A multi-location used-car dealer that arranges financing discovers that a compromised employee email account exposed credit applications for about 2,300 customers.',
+      result:
+        'The dealer treated as a financial institution under the rule, a gap register showing no written risk assessment and multi-factor authentication missing on email, the incident treated as a likely notification event with the FTC deadline calculated from discovery and marked to verify, and a referral to the state breach matrix for customer notices.',
+    },
+  },
 ];

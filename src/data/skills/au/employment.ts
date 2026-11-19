@@ -481,4 +481,71 @@ Open with the overall assessment and the three highest-risk gaps. Then the secti
         'Duty scope confirmed including contractors at camp sites, risk assessment identifying camp accommodation, alcohol and supervisor power as the highest risks, standards rated with leadership and reporting weakest because complaints went to the supervisors’ own managers, WHS psychosocial overlap mapped, and a proportionate action plan starting with an independent reporting route and camp-specific controls.',
     },
   },
+  {
+    id: 'au-casual-employment-status-checker',
+    name: 'Casual Employment Status Checker',
+    description: 'Tests whether an Australian casual is a casual under the Fair Work Act definition and handles employee choice notices.',
+    jurisdiction: 'au',
+    category: 'employment',
+    tags: ['assessment', 'workforce', 'fair-work', 'casual-employment', 'worker-classification'],
+    sources: [
+      { citation: 'Fair Work Act 2009 (Cth), as amended by the Closing Loopholes legislation', authority: 'primary', publisher: 'Parliament of Australia', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'The definition of casual employee based on the real substance of the relationship, the employee choice pathway to permanent employment, the Casual Employment Information Statement and misrepresentation protections.' },
+      { citation: 'Modern awards and enterprise agreements', authority: 'regulator', publisher: 'Fair Work Commission', jurisdiction: 'au', url: 'https://www.fwc.gov.au', note: 'Casual loading, minimum engagements and conversion terms.' },
+      { citation: 'Fair Work Ombudsman guidance on casual employees', authority: 'guidance', publisher: 'Fair Work Ombudsman', jurisdiction: 'au', url: 'https://www.fairwork.gov.au', note: 'Guidance and the Casual Employment Information Statement.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['au-modern-award-matcher', 'au-award-compliance-checker', 'au-unfair-dismissal-assessor'],
+    whatItDoes:
+      'Tests whether a person engaged as a casual is a casual employee under the Fair Work Act definition, which looks at the real substance, practical reality and true nature of the relationship rather than only the contract: whether there is no firm advance commitment to continuing and indefinite work, judged by whether the employer can elect to offer work, the employee can elect to accept it, whether work is offered as required, whether others in the business do similar work as permanent employees, and whether there is a regular pattern of work. It then handles the employee choice pathway — the eligibility for a notification to change to permanent employment and the employer’s response grounds — and the information statement obligations.',
+    whenToUse:
+      'When engaging casuals, when a casual has worked a regular pattern for some time, when a casual gives a notification seeking permanent status, during a payroll or award audit, and when dismissing a long-term casual. Misclassification can trigger entitlement claims and penalties.',
+    inputs: [
+      { name: 'Engagement facts', description: 'Contract terms, how shifts are offered and accepted, roster patterns and the duration of engagement.', required: true },
+      { name: 'Business context', description: 'Employer size, comparable permanent roles and the applicable award or agreement.', required: true },
+      { name: 'Notification or request', description: 'Any notification from the employee seeking permanent employment.' },
+      { name: 'Records', description: 'Rosters, timesheets and information statements provided.' },
+    ],
+    outputs: [
+      { name: 'Definition test', description: 'Facts for and against casual status under each statutory indicator.' },
+      { name: 'Status finding', description: 'Likely casual or not, with the decisive facts.' },
+      { name: 'Employee choice analysis', description: 'Eligibility, response timeframe and permitted grounds to refuse.' },
+      { name: 'Information statement check', description: 'Whether the statement was given when required.' },
+      { name: 'Risk and remediation', description: 'Exposure areas and steps to take.' },
+    ],
+    prompt: `You are an Australian employment lawyer assessing casual employment status.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- The Fair Work Act definition of casual employee, amended by the Closing Loopholes legislation and applying from August 2024, looks to the real substance of the relationship and created an employee choice pathway to permanent employment, with different timing for small business employers [VERIFY periods, small business thresholds and response timeframes].
+
+INPUTS
+- Engagement facts: <contract, how shifts are offered and accepted, roster patterns, duration>
+- Business context: <employer size, comparable permanent roles, award or agreement>
+- Notification or request: <employee notification, if any>
+- Records: <rosters, timesheets, information statements>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. DEFINITION TEST. Assess whether there is no firm advance commitment to continuing and indefinite work, considering: whether the employer can elect to offer or not offer work and the employee can elect to accept or reject it; whether the employee works only as required according to needs; whether the role is described as casual; whether others in the business doing similar work are permanent; and whether there is a regular pattern of work. Also confirm the employee is entitled to a casual loading or casual rate.
+3. STATUS FINDING. State LIKELY CASUAL, AT RISK or LIKELY NOT CASUAL, with the decisive facts.
+4. EMPLOYEE CHOICE. If relevant, assess eligibility to notify a change to permanent employment, the employer’s consultation and response timeframe, the permitted grounds for refusal, and the dispute route [VERIFY].
+5. INFORMATION STATEMENT. Check that the Casual Employment Information Statement was given at the times required [VERIFY].
+6. MISREPRESENTATION. Flag any practice that may misrepresent permanent work as casual.
+7. RISK AND REMEDIATION. List exposure areas, such as leave entitlements, notice and unfair dismissal rights, and remediation steps.
+
+RULES
+- Never treat the contract label as decisive.
+- Mark time periods, thresholds and response deadlines [VERIFY].
+- Do not recommend reducing hours or ending engagement to defeat an employee choice notification.
+
+OUTPUT FORMAT
+Missing information; definition test table (Indicator | Facts | Points toward); status finding; employee choice analysis; information statement check; misrepresentation flags; risk and remediation. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A café chain has engaged a barista as a casual for 18 months on the same five weekday shifts, published four weeks ahead; she gives written notice that she wants to become permanent.',
+      result:
+        'A definition test pointing toward a firm advance commitment because of the fixed published roster, a likely-not-casual finding, an employee choice analysis with the response timeframe to verify and no apparent fair and reasonable ground to refuse, and a check showing the information statement was given only once.',
+    },
+  },
 ];

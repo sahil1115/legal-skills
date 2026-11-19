@@ -481,4 +481,143 @@ Open with a scope table (Offering | In scope? | Role | Key obligations | Exempti
         'A scope finding that the e-commerce service is in scope with no microenterprise exemption, a gap list noting the scan does not evidence conformity, draft accessibility information for the terms, and a check of importer obligations for listed hardware it sells.',
     },
   },
+  {
+    id: 'eu-green-claims-checker',
+    name: 'EU Green Claims Checker',
+    description: 'Checks environmental claims, labels and durability information against the EU green transition consumer rules.',
+    jurisdiction: 'eu',
+    category: 'compliance',
+    tags: ['review', 'consumer-protection', 'greenwashing', 'advertising', 'regulatory-change'],
+    sources: [
+      { citation: 'Directive (EU) 2024/825 (Empowering Consumers for the Green Transition)', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'Amends the Unfair Commercial Practices Directive and Consumer Rights Directive. National measures apply from 27 September 2026, banning generic environmental claims without recognised excellent performance, offset-based neutrality claims and unofficial sustainability labels, among others.' },
+      { citation: 'Directive 2005/29/EC (Unfair Commercial Practices Directive) as amended, and national transposition', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'Enforced through national law, which may add tolerance periods or detail.' },
+      { citation: 'European Commission Q&A on the green transition directive', authority: 'guidance', publisher: 'European Commission', jurisdiction: 'eu', url: 'https://commission.europa.eu', note: 'Interpretive guidance published in 2026.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer', 'energy-infrastructure'],
+    relatedSkills: ['global-marketing-claims-reviewer', 'eu-csrd-double-materiality-assessor', 'ca-advertising-claims-reviewer'],
+    whatItDoes:
+      'Reviews environmental and sustainability claims made to EU consumers — on packaging, websites, ads and product pages — against the rules that now apply under the green transition directive. It separates the practices that are prohibited outright, such as generic claims like "eco-friendly" without recognised excellent environmental performance, claims about the whole product when only part qualifies, neutrality claims based on offsetting and sustainability labels not based on a certification scheme or public authority, from claims that must be substantiated and must not mislead, including future performance claims that need a detailed, independently verified plan. It also checks durability, repairability and update information duties.',
+    whenToUse:
+      'Before launching packaging, campaigns or product pages in the EU, when auditing existing claims after the rules began to apply, when using third-party labels or carbon offsets in marketing, and when a regulator or competitor challenges a claim. National tolerance periods for existing stock vary, so check each market.',
+    inputs: [
+      { name: 'Claims and materials', description: 'All environmental claims, labels and logos with where they appear.', required: true },
+      { name: 'Evidence', description: 'Certifications, life-cycle data, offset arrangements and transition plans.', required: true },
+      { name: 'Markets', description: 'Member states where the materials will be used.', required: true },
+      { name: 'Product information', description: 'Durability, repair, spare parts and software update information.' },
+    ],
+    outputs: [
+      { name: 'Claims register', description: 'Every environmental claim and label with its type.' },
+      { name: 'Prohibited-practice check', description: 'Claims that fall within outright prohibitions.' },
+      { name: 'Substantiation review', description: 'Evidence held against each remaining claim.' },
+      { name: 'Durability and information duties', description: 'Guarantee, repair and update information to provide.' },
+      { name: 'Rewrites and national flags', description: 'Replacement wording and market-specific points.' },
+    ],
+    prompt: `You are an EU consumer-protection lawyer reviewing environmental claims.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- Directive (EU) 2024/825 required national measures to apply from 27 September 2026 without a general transition period; some member states have announced tolerance for goods already on the market [VERIFY per state]. A separate proposed Green Claims Directive was not adopted at drafting [VERIFY].
+
+INPUTS
+- Claims and materials: <claims, labels, logos, where used>
+- Evidence: <certifications, life-cycle data, offsets, transition plans>
+- Markets: <member states>
+- Product information: <durability, repair, spare parts, updates>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. CLAIMS REGISTER. List every express and implied environmental claim, including images, colours, names and labels, and classify it: generic, specific, product-level, company-level, future performance, offset-based, comparative, or label.
+3. PROHIBITED PRACTICES. Check each against the prohibitions: sustainability labels not based on a certification scheme or established by public authorities; generic environmental claims without recognised excellent environmental performance; claims about the entire product or business when only an aspect qualifies; claims that a product has a neutral, reduced or positive impact based on offsetting; presenting legal requirements as a distinctive feature; and the durability-related prohibitions [VERIFY the full list].
+4. SUBSTANTIATION. For claims not prohibited, check that evidence supports the claim as consumers would understand it, and that future performance claims are backed by a detailed, realistic implementation plan with measurable targets, verified independently [VERIFY].
+5. COMPARATIVE CLAIMS. Check that comparisons disclose method, products compared and update arrangements.
+6. INFORMATION DUTIES. Check durability, legal guarantee notices, commercial durability guarantees, repairability and software update information [VERIFY application].
+7. REWRITES. Provide replacement wording that the evidence supports, or recommend removal.
+8. NATIONAL FLAGS. List member-state points to verify, including tolerance periods and enforcement.
+
+RULES
+- Never state that a claim is lawful; report risk.
+- Do not rely on offsets to support a neutrality claim to consumers.
+- Mark national details and dates [VERIFY].
+- Do not suggest vaguer wording that keeps a misleading impression.
+
+OUTPUT FORMAT
+Missing information; claims register (Claim | Where | Type); prohibited-practice table (Claim | Prohibition | Result); substantiation table; comparative points; information duties; rewrites; national flags. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A beverage company sells bottles labelled "climate neutral" through an offset programme, with a self-created green leaf logo and a website pledge to be "net zero by 2035".',
+      result:
+        'The climate neutral claim flagged as an offset-based neutrality claim within the prohibitions, the leaf logo treated as a sustainability label not based on a certification scheme, the net zero pledge needing a published, independently verified plan, and rewrites limited to specific, evidenced statements about recycled content.',
+    },
+  },
+  {
+    id: 'eu-vertical-agreement-screener',
+    name: 'Vertical Agreement Competition Screener',
+    description: 'Screens distribution, supply and franchise terms against EU competition law and the vertical block exemption.',
+    jurisdiction: 'eu',
+    category: 'compliance',
+    tags: ['screening', 'review', 'competition-law', 'distribution', 'contract-lifecycle'],
+    sources: [
+      { citation: 'Treaty on the Functioning of the European Union, Article 101', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'The prohibition of agreements restricting competition and the conditions for exemption.' },
+      { citation: 'Commission Regulation (EU) 2022/720 (Vertical Block Exemption Regulation)', authority: 'primary', publisher: 'European Commission', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'Safe harbour for vertical agreements below market share thresholds, subject to hardcore and excluded restrictions. Expires in 2034.' },
+      { citation: 'Commission Guidelines on vertical restraints', authority: 'guidance', publisher: 'European Commission', jurisdiction: 'eu', url: 'https://competition-policy.ec.europa.eu', note: 'Interpretation of the regulation, including online sales, dual distribution and parity clauses.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer', 'technology'],
+    relatedSkills: ['us-antitrust-interaction-checker', 'global-contract-triage', 'eu-member-state-delta'],
+    whatItDoes:
+      'Screens a distribution, supply, agency, franchise or platform agreement for EU competition law risk. It checks whether the agreement is vertical and whether the parties’ market shares fall within the block exemption’s thresholds, then tests each restriction against the hardcore list — resale price maintenance, territorial and customer restrictions outside permitted exceptions, restrictions on online sales — and the excluded restrictions such as long non-competes and certain parity clauses. It distinguishes genuine agency, exclusive and selective distribution, and dual distribution where the supplier also competes with its distributors, and gives replacement wording.',
+    whenToUse:
+      'When drafting or renewing distribution, reseller, franchise, agency or marketplace agreements in the EU, when setting online sales policies or recommended prices, and when a distributor or authority raises a complaint. Hardcore restrictions carry significant fines and can make clauses void, so screen before signing.',
+    inputs: [
+      { name: 'Agreement', description: 'The agreement and policies such as pricing, online sales or selective distribution criteria.', required: true },
+      { name: 'Parties and markets', description: 'Who the parties are, their roles, the products and markets, and estimated market shares.', required: true },
+      { name: 'Commercial practice', description: 'How prices, territories, online sales and stock are managed in practice.' },
+      { name: 'Member states', description: 'Where the agreement operates, for national law overlays.' },
+    ],
+    outputs: [
+      { name: 'Framework analysis', description: 'Vertical or not, agency, distribution model, and block exemption eligibility.' },
+      { name: 'Hardcore restriction check', description: 'Each clause or practice tested against the hardcore list.' },
+      { name: 'Excluded restriction check', description: 'Non-competes, parity and other excluded terms.' },
+      { name: 'Risk ranking', description: 'Findings ranked by severity.' },
+      { name: 'Replacement wording', description: 'Compliant alternatives for each issue.' },
+    ],
+    prompt: `You are an EU competition lawyer screening a vertical agreement.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- Regulation (EU) 2022/720 applies until 31 May 2034 with market share thresholds for the safe harbour [VERIFY thresholds and any amendments]. National competition authorities apply Article 101 and their own national laws [VERIFY overlays].
+
+INPUTS
+- Agreement: <agreement and related policies>
+- Parties and markets: <roles, products, markets, estimated market shares>
+- Commercial practice: <prices, territories, online sales, stock>
+- Member states: <where it operates>
+
+TASK
+1. MISSING INFORMATION. List what you need, especially market share data.
+2. FRAMEWORK. Decide whether the agreement is vertical, whether it is genuine agency (agent bears no significant risks), and which distribution model applies: exclusive, selective, franchise, or other. Note dual distribution and information-exchange rules where the supplier competes downstream.
+3. BLOCK EXEMPTION. Test eligibility using the market share thresholds for both parties [VERIFY], and note where shares are uncertain.
+4. HARDCORE RESTRICTIONS. Test each clause and practice: fixed or minimum resale prices, including indirect pressure; territory or customer restrictions outside the exceptions for exclusive and selective systems; restrictions on cross-supplies within selective systems; restrictions on active or passive sales to end users in selective systems; and preventing the effective use of the internet to sell [VERIFY current interpretation].
+5. EXCLUDED RESTRICTIONS. Test non-compete obligations exceeding permitted duration or tacitly renewable, post-term non-competes, restrictions on selective distributors selling competing brands, and retail parity obligations on online intermediation services.
+6. OUTSIDE THE SAFE HARBOUR. Where the exemption is unavailable, note that an individual assessment of effects and efficiencies is required, for counsel.
+7. RISK RANKING. Rank findings.
+8. WORDING. Provide replacement clauses.
+
+RULES
+- Never state that an agreement is lawful or exempt; report findings and conditions.
+- Mark thresholds and interpretations [VERIFY].
+- Do not suggest informal practices that achieve a hardcore restriction indirectly.
+
+OUTPUT FORMAT
+Missing information; framework analysis; block exemption finding; hardcore table (Clause or practice | Restriction | Result); excluded restrictions table; individual assessment note; risk ranking; replacement wording. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A premium bicycle brand appoints selective dealers across six member states, bans sales on marketplaces, issues "minimum advertised prices" and requires dealers not to sell other brands for five years.',
+      result:
+        'A selective system eligible for the safe harbour subject to shares, the marketplace ban flagged as potentially permissible with justification while a ban on dealers’ own websites would not be, the minimum advertised price policy flagged as high risk of indirect resale price maintenance, and the five-year non-compete flagged as excluded, with replacement wording.',
+    },
+  },
 ];

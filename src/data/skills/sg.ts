@@ -467,4 +467,344 @@ Eight sections matching the tasks above, with the drafted clause presented as a 
         'A Singapore-seated three-arbitrator clause with the governing law of the arbitration agreement stated expressly, a pathology check that catches a conflicting jurisdiction clause in the linked services agreement, an enforcement note on both asset jurisdictions flagged for local confirmation, and an escalation tier redrafted with a defined 30-day endpoint.',
     },
   },
+  {
+    id: 'sg-employment-act-compliance-checker',
+    name: 'Employment Act Compliance Checker',
+    description: 'Checks Singapore employment terms and payroll practices against the Employment Act, including Part IV protections.',
+    jurisdiction: 'sg',
+    category: 'employment',
+    tags: ['assessment', 'workforce', 'singapore', 'wage-compliance', 'employment-contract'],
+    sources: [
+      { citation: 'Employment Act 1968', authority: 'primary', publisher: 'Singapore Statutes Online', jurisdiction: 'sg', url: 'https://sso.agc.gov.sg', note: 'Core provisions for employees, with additional protections on hours, overtime and rest days for workmen and non-workmen below salary thresholds.' },
+      { citation: 'Employment (Employment Records and Payslips) Regulations and key employment terms requirements', authority: 'regulator', publisher: 'Ministry of Manpower', jurisdiction: 'sg', url: 'https://www.mom.gov.sg', note: 'Written key employment terms, itemised payslips and employment records.' },
+      { citation: 'Ministry of Manpower guidance', authority: 'guidance', publisher: 'Ministry of Manpower', jurisdiction: 'sg', url: 'https://www.mom.gov.sg', note: 'Salary thresholds, leave, public holidays and calculation guidance; check for updates.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['sg-workplace-fairness-reviewer', 'sg-work-pass-planner', 'global-employment-contract-reviewer'],
+    whatItDoes:
+      'Checks a Singapore employer’s contracts and payroll practices against the Employment Act. It determines which employees are covered by the core provisions and which also receive the additional protections on hours of work, overtime, rest days and public holidays based on their role and salary. It then tests key employment terms, salary payment timing and permitted deductions, payslips and records, annual leave, sick leave and hospitalisation leave, public holidays, overtime calculation and caps, and termination notice. It produces a gap list and corrected terms.',
+    whenToUse:
+      'When setting up a Singapore entity, when updating employment contract templates, during a payroll audit, when salary thresholds change, and when a Ministry of Manpower inspection or employee claim arises. Managers and executives above a salary threshold are treated differently in parts of the Act.',
+    inputs: [
+      { name: 'Workforce profile', description: 'Roles, monthly basic salaries and whether workmen or not.', required: true },
+      { name: 'Contracts and key terms', description: 'Contract templates and the key employment terms issued.', required: true },
+      { name: 'Payroll practices', description: 'Salary period, payment dates, deductions, overtime and payslips.', required: true },
+      { name: 'Leave and hours', description: 'Working hours, rest days, leave policies and public holiday practice.' },
+    ],
+    outputs: [
+      { name: 'Coverage map', description: 'Who is covered by the core provisions and the additional protections.' },
+      { name: 'Requirement-by-requirement gap list', description: 'Key terms, payments, deductions, records, leave and hours.' },
+      { name: 'Overtime and rest day checks', description: 'Calculations and caps for covered employees.' },
+      { name: 'Termination terms review', description: 'Notice and payment on termination.' },
+      { name: 'Corrected terms', description: 'Proposed wording for templates and policies.' },
+    ],
+    prompt: `You are a Singapore employment lawyer checking compliance with the Employment Act.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- Part IV protections on hours, overtime and rest days apply to workmen and to non-workmen earning below salary thresholds, which are revised from time to time [VERIFY current thresholds]. The Workplace Fairness Act 2025 and tripartite guidelines on flexible work arrangements affect related practices [VERIFY commencement].
+
+INPUTS
+- Workforce: <roles, monthly basic salaries, workman or not>
+- Contracts and key terms: <templates and KETs issued>
+- Payroll: <salary period, payment dates, deductions, overtime, payslips>
+- Leave and hours: <working hours, rest days, leave, public holidays>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. COVERAGE. For each group, state whether the core provisions apply and whether Part IV protections apply, by role and salary [VERIFY thresholds].
+3. KEY EMPLOYMENT TERMS. Check that written key employment terms are issued within the required time and contain the required items [VERIFY].
+4. SALARY. Check the salary period, payment within the required time after the period ends, overtime payment timing, and that deductions are authorised and within limits [VERIFY].
+5. PAYSLIPS AND RECORDS. Check itemised payslips and records retention.
+6. HOURS, OVERTIME AND REST DAYS. For Part IV employees, check normal hours, overtime rate and monthly cap, rest day work and pay [VERIFY].
+7. LEAVE AND PUBLIC HOLIDAYS. Check annual leave, sick and hospitalisation leave after the qualifying period, public holiday entitlements and childcare-related leave under other statutes [VERIFY].
+8. TERMINATION. Check notice periods, salary in lieu, and payment of final salary within time.
+9. CORRECTED TERMS. Propose wording.
+
+RULES
+- Never state the employer complies; report gaps.
+- Mark thresholds, rates and deadlines [VERIFY].
+- Do not draft terms below statutory minimums.
+
+OUTPUT FORMAT
+Missing information; coverage map; gap table (Requirement | Status | Gap); overtime and rest day checks; termination review; corrected terms. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A Singapore logistics firm pays warehouse workers monthly on the 15th of the following month, issues no written key employment terms, and pays overtime at a flat hourly rate.',
+      result:
+        'Warehouse workers mapped as covered by Part IV as workmen, payment timing and missing key employment terms flagged as gaps, overtime rate and monthly cap checks failing, and corrected template wording for key terms and payroll.',
+    },
+  },
+  {
+    id: 'sg-companies-act-compliance-calendar',
+    name: 'Companies Act Compliance Calendar',
+    description: 'Builds a Singapore company’s annual compliance calendar and checks registers, AGM and annual return obligations.',
+    jurisdiction: 'sg',
+    category: 'corporate',
+    tags: ['programme-design', 'corporate-governance', 'singapore', 'annual-reporting', 'deadlines'],
+    sources: [
+      { citation: 'Companies Act 1967', authority: 'primary', publisher: 'Singapore Statutes Online', jurisdiction: 'sg', url: 'https://sso.agc.gov.sg', note: 'AGM and financial statements, annual return, registers including registers of registrable controllers and nominee directors, company secretary and resident director requirements.' },
+      { citation: 'ACRA guidance and filing requirements', authority: 'regulator', publisher: 'Accounting and Corporate Regulatory Authority', jurisdiction: 'sg', url: 'https://www.acra.gov.sg', note: 'Filing timelines, exemptions for private companies, and recent changes to registers and to nominee arrangements.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['global-board-minutes-drafter', 'uk-companies-house-idv-psc-tracker', 'sg-mas-notice-checker'],
+    whatItDoes:
+      'Builds a compliance calendar for a Singapore company from its financial year end and status: when financial statements must be prepared and circulated, whether and when an AGM is required or can be dispensed with, the annual return filing date, XBRL or other filing format requirements, and the tax filings that follow. It also checks the standing obligations that cause penalties: a resident director, a company secretary appointed within time, registered office, statutory registers including the register of registrable controllers and the register of nominee directors, and filings for changes in officers, shares and constitution.',
+    whenToUse:
+      'When a Singapore company is incorporated or acquired, at the start of each financial year, when changing financial year end or company status, before an ACRA filing deadline, and during due diligence. Small and dormant companies have exemptions with conditions.',
+    inputs: [
+      { name: 'Company profile', description: 'Name, UEN, incorporation date, type (private, exempt private, public), financial year end and whether listed.', required: true },
+      { name: 'Officers and controllers', description: 'Directors, secretary, shareholders and registrable controllers.', required: true },
+      { name: 'Registers and filings', description: 'Current registers and recent ACRA filings.' },
+      { name: 'Size and status', description: 'Revenue, assets, employees and whether dormant.' },
+    ],
+    outputs: [
+      { name: 'Annual calendar', description: 'Dates for financial statements, AGM, annual return and tax filings.' },
+      { name: 'AGM decision', description: 'Whether an AGM is required or can be dispensed with, and how.' },
+      { name: 'Standing obligations check', description: 'Resident director, secretary, registered office and registers.' },
+      { name: 'Event filings list', description: 'Filings triggered by changes in officers, shares or constitution.' },
+      { name: 'Exemptions review', description: 'Audit and filing exemptions and their conditions.' },
+    ],
+    prompt: `You are a Singapore corporate secretarial lawyer building a compliance calendar under the Companies Act.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- AGM and annual return timelines depend on whether the company is listed or private and on its financial year end; private companies may dispense with AGMs on conditions [VERIFY]. ACRA has changed register and nominee director requirements in recent years [VERIFY current requirements].
+
+INPUTS
+- Company: <name, UEN, incorporation date, type, financial year end, listed or not>
+- Officers and controllers: <directors, secretary, shareholders, registrable controllers>
+- Registers and filings: <current registers, recent filings>
+- Size and status: <revenue, assets, employees, dormancy>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. CALENDAR. From the financial year end, calculate the deadlines for: holding the AGM or circulating financial statements, filing the annual return, and corporate tax filings, showing the calculation [VERIFY].
+3. AGM. State whether an AGM is required, whether it can be dispensed with and the conditions, including sending financial statements to members [VERIFY].
+4. AUDIT AND FILING EXEMPTIONS. Assess the small company audit exemption and dormant company exemptions and their conditions [VERIFY].
+5. STANDING OBLIGATIONS. Check at least one ordinarily resident director, a company secretary appointed within the required time, a registered office, and registers of members, directors and officers, registrable controllers and nominee directors, and whether information is lodged with ACRA where required [VERIFY].
+6. EVENT FILINGS. List filings triggered by changes in directors, secretary, registered office, shares, controllers and constitution, with time limits [VERIFY].
+7. PENALTY RISKS. Flag current or past late filings and remediation.
+
+RULES
+- Never state a deadline as settled; show the calculation and mark [VERIFY].
+- Do not invent register contents; mark [NOT SUPPLIED].
+
+OUTPUT FORMAT
+Missing information; calendar table (Obligation | Deadline | Calculation); AGM decision; exemptions review; standing obligations table (Requirement | Status | Gap); event filings list; penalty risks. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A foreign group acquires a Singapore private company with a 31 March year end, discovers no register of registrable controllers, and its only resident director is about to resign.',
+      result:
+        'An annual calendar with AGM and annual return dates calculated from 31 March, a recommendation to dispense with the AGM if conditions are met, standing-obligation gaps for the missing controllers register and the resident director, and the event filings needed for the change of director.',
+    },
+  },
+  {
+    id: 'sg-pdpa-dnc-marketing-checker',
+    name: 'PDPA Do Not Call Checker',
+    description: 'Checks Singapore marketing messages and calls against the PDPA Do Not Call provisions and the Spam Control Act.',
+    jurisdiction: 'sg',
+    category: 'privacy',
+    tags: ['screening', 'data-protection', 'singapore', 'direct-marketing', 'consent'],
+    sources: [
+      { citation: 'Personal Data Protection Act 2012 (Do Not Call provisions) and related regulations', authority: 'primary', publisher: 'Singapore Statutes Online', jurisdiction: 'sg', url: 'https://sso.agc.gov.sg', note: 'Checking the Do Not Call Registry before sending specified messages to Singapore numbers, clear and unambiguous consent, identification, and prohibitions on dictionary attacks and address harvesting.' },
+      { citation: 'Spam Control Act 2007', authority: 'primary', publisher: 'Singapore Statutes Online', jurisdiction: 'sg', url: 'https://sso.agc.gov.sg', note: 'Unsolicited commercial electronic messages sent in bulk by email or SMS, with labelling and unsubscribe requirements.' },
+      { citation: 'PDPC advisory guidelines on the Do Not Call provisions', authority: 'guidance', publisher: 'Personal Data Protection Commission', jurisdiction: 'sg', url: 'https://www.pdpc.gov.sg', note: 'Exemptions, consent evidence and checking periods.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer', 'financial-services'],
+    relatedSkills: ['sg-pdpa-obligation-mapper', 'au-spam-dncr-marketing-checker', 'us-tcpa-marketing-compliance'],
+    whatItDoes:
+      'Reviews marketing calls, SMS, messaging-app and fax campaigns to Singapore numbers against the PDPA Do Not Call provisions, and bulk email and SMS against the Spam Control Act. It decides whether each message is a specified message, whether the organisation must check the Do Not Call Registry or holds clear and unambiguous consent in evidential form, whether exemptions apply for ongoing relationships, and whether identification and contact information are included. It also checks practices that are prohibited outright, such as sending to numbers generated by dictionary attacks, and the use of third-party vendors.',
+    whenToUse:
+      'Before a telemarketing or SMS campaign to Singapore numbers, when buying or sharing lists, when engaging vendors to send messages, and after a PDPC investigation or complaint. The checking obligation applies to each number and each campaign period.',
+    inputs: [
+      { name: 'Campaigns', description: 'Message type, channel, content and audience.', required: true },
+      { name: 'Consent and relationship', description: 'How numbers were obtained, consent wording and existing relationships.', required: true },
+      { name: 'Registry checks', description: 'How and when numbers are checked against the Do Not Call Registry.', required: true },
+      { name: 'Vendors', description: 'Third parties sending messages.' },
+    ],
+    outputs: [
+      { name: 'Message classification', description: 'Specified message or not, and Spam Control Act coverage.' },
+      { name: 'Consent and exemption review', description: 'Evidential consent and exemptions applied.' },
+      { name: 'Registry check review', description: 'Timing and validity of checks.' },
+      { name: 'Content checks', description: 'Identification, contact details and caller ID.' },
+      { name: 'Remediation list', description: 'Fixes for consent records, checking and vendors.' },
+    ],
+    prompt: `You are a Singapore data protection lawyer reviewing compliance with the PDPA Do Not Call provisions.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- The PDPA requires checking the Do Not Call Registry before sending specified messages to Singapore numbers unless clear and unambiguous consent in evidential form exists, with checks valid for a set period [VERIFY]. Amendments in 2020 added prohibitions on dictionary attacks and address harvesting and moved DNC enforcement to an administrative penalty regime [VERIFY].
+
+INPUTS
+- Campaigns: <type, channel, content, audience>
+- Consent and relationship: <how numbers were obtained, consent wording, existing relationships>
+- Registry checks: <method and timing>
+- Vendors: <third-party senders>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. CLASSIFY. Decide whether each message is a specified message (offering goods, services, land or business opportunities), noting exclusions, and whether bulk email or SMS falls under the Spam Control Act.
+3. CONSENT. Check whether clear and unambiguous consent was obtained in written or other accessible form for each number, and that it was not a condition of supply beyond what is reasonable.
+4. EXEMPTIONS. Assess any exemption for ongoing relationships and its conditions [VERIFY].
+5. REGISTRY CHECKS. Check that numbers were checked within the valid period before sending, for each register type (voice, text, fax), and that records are kept [VERIFY].
+6. CONTENT. Check identification of the sender, contact information and that caller ID is not concealed.
+7. PROHIBITED PRACTICES. Check for dictionary attacks, address-harvesting software and messages to numbers obtained by such means.
+8. VENDORS. Check responsibility where vendors send on the organisation’s behalf and contract controls.
+9. REMEDIATION. Order fixes by risk.
+
+RULES
+- Never state that a campaign complies; report findings.
+- Mark periods and penalties [VERIFY].
+- Do not treat a vendor’s list as consented without evidence.
+
+OUTPUT FORMAT
+Missing information; classification table; consent and exemption findings; registry check review; content checks; prohibited practice findings; vendor controls; remediation. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A Singapore property agency sends WhatsApp messages about new launches to 20,000 numbers from a list bought from a former colleague, checking the Registry once every quarter.',
+      result:
+        'Messages classified as specified messages, the bought list lacking evidential consent, quarterly checks flagged as exceeding the validity period, a risk that some numbers were harvested, and remediation including suppressing the list and checking before each campaign.',
+    },
+  },
+  {
+    id: 'sg-payment-services-licensing-triage',
+    name: 'Payment Services Act Licensing Triage',
+    description: 'Triages whether a Singapore payments or digital token business needs a licence under the Payment Services Act.',
+    jurisdiction: 'sg',
+    category: 'regulatory',
+    tags: ['screening', 'financial-services', 'singapore', 'licensing', 'digital-assets'],
+    sources: [
+      { citation: 'Payment Services Act 2019', authority: 'primary', publisher: 'Singapore Statutes Online', jurisdiction: 'sg', url: 'https://sso.agc.gov.sg', note: 'Regulated payment services, licence classes (money-changing, standard payment institution, major payment institution), thresholds, exclusions and user protection.' },
+      { citation: 'MAS notices and guidelines under the Payment Services Act, including on digital payment token services', authority: 'regulator', publisher: 'Monetary Authority of Singapore', jurisdiction: 'sg', url: 'https://www.mas.gov.sg', note: 'AML/CFT notices, technology risk, consumer protection measures for digital payment tokens, and the regime for services provided outside Singapore.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['financial-services', 'technology'],
+    relatedSkills: ['sg-mas-notice-checker', 'global-regulation-obligation-mapper', 'uk-aml-cdd-edd-assessor'],
+    whatItDoes:
+      'Takes a description of a business model and maps each activity to the payment services the Payment Services Act regulates — account issuance, domestic money transfer, cross-border money transfer, merchant acquisition, e-money issuance, digital payment token services and money-changing — and the exclusions. It then estimates which licence class is likely needed from the volumes and float you supply, flags the regime for digital token services offered from Singapore to customers outside it, and lists the main obligations that follow: AML/CFT, safeguarding, technology risk management and consumer protection.',
+    whenToUse:
+      'When launching a wallet, remittance, acquiring, crypto or embedded-payments product in or from Singapore, when changing the business model or volumes, before applying to MAS, and during due diligence. Operating without a required licence is an offence; the answer turns on precise facts about who holds funds and when.',
+    inputs: [
+      { name: 'Business model', description: 'Products, customer types, flows of funds and tokens, and who holds customer money.', required: true },
+      { name: 'Volumes and float', description: 'Monthly transaction values by service and average e-money float.', required: true },
+      { name: 'Location of customers and operations', description: 'Where the business is incorporated, operates and serves customers.', required: true },
+      { name: 'Partners', description: 'Banks, licensed partners and their roles.' },
+    ],
+    outputs: [
+      { name: 'Activity-to-service map', description: 'Each activity matched to a regulated service or exclusion.' },
+      { name: 'Licence class assessment', description: 'Likely licence class with the thresholds used.' },
+      { name: 'Cross-border and digital token flags', description: 'Special regimes that may apply.' },
+      { name: 'Key obligations', description: 'AML/CFT, safeguarding, technology risk and conduct.' },
+      { name: 'Questions for MAS or counsel', description: 'Points needing confirmation.' },
+    ],
+    prompt: `You are a Singapore fintech regulatory lawyer triaging Payment Services Act licensing.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- The Payment Services Act regulates seven payment services through three licence classes, with thresholds distinguishing standard and major payment institutions [VERIFY thresholds]. Amendments extended regulation to digital token services provided from Singapore to customers outside it, with a strict approach to licensing [VERIFY current position]. MAS has introduced consumer protection measures for digital payment token services [VERIFY].
+
+INPUTS
+- Business model: <products, customers, flows, who holds funds>
+- Volumes and float: <monthly values by service, average e-money float>
+- Location: <incorporation, operations, customer locations>
+- Partners: <banks, licensed partners, roles>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. MAP ACTIVITIES. For each activity, decide whether it is account issuance, domestic money transfer, cross-border money transfer, merchant acquisition, e-money issuance, a digital payment token service or money-changing, and check exclusions such as limited-purpose e-money or incidental services [VERIFY]. Explain the facts that decide it, especially who receives and holds funds.
+3. LICENCE CLASS. Using the volumes and float, assess whether a standard or major payment institution licence, a money-changing licence or none is likely needed [VERIFY thresholds].
+4. PARTNER MODELS. Assess whether relying on a licensed partner removes the need for a licence or only shifts some obligations.
+5. CROSS-BORDER AND TOKENS. Flag the regime for digital token services provided from Singapore to overseas customers and any restrictions on retail token services [VERIFY].
+6. OBLIGATIONS. List key obligations: AML/CFT notices, safeguarding of customer money for major institutions, technology risk management, user protection and disclosures, and consumer protection for token services.
+7. QUESTIONS. List points to confirm with counsel or MAS.
+
+RULES
+- Never conclude that no licence is needed without testing each activity.
+- Mark thresholds and regimes [VERIFY].
+- Do not suggest structuring to avoid regulation without genuine changes to the activity.
+
+OUTPUT FORMAT
+Missing information; activity map (Activity | Service or exclusion | Deciding facts); licence class assessment; partner model analysis; cross-border and token flags; obligations list; questions. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A start-up plans a multi-currency wallet for migrant workers that holds stored value, sends remittances abroad and lets users buy stablecoins, with projected monthly flows growing quickly.',
+      result:
+        'Account issuance, e-money issuance, cross-border money transfer and digital payment token services all mapped, a likely major payment institution licence once the projected volumes and float exceed thresholds to verify, safeguarding and technology risk obligations, and consumer protection measures for the stablecoin feature flagged.',
+    },
+  },
+  {
+    id: 'sg-retrenchment-exercise-planner',
+    name: 'Retrenchment Exercise Planner',
+    description: 'Plans a Singapore retrenchment: tripartite advisory steps, MOM notification, selection, benefits and communication.',
+    jurisdiction: 'sg',
+    category: 'employment',
+    tags: ['programme-design', 'workforce', 'singapore', 'redundancy', 'deadlines'],
+    sources: [
+      { citation: 'Employment Act 1968 and the Mandatory Retrenchment Notification requirements', authority: 'primary', publisher: 'Singapore Statutes Online', jurisdiction: 'sg', url: 'https://sso.agc.gov.sg', note: 'Employers meeting a size threshold must notify the Ministry of Manpower of retrenchments within a set number of working days.' },
+      { citation: 'Tripartite Advisory on Managing Excess Manpower and Responsible Retrenchment', authority: 'guidance', publisher: 'Ministry of Manpower, NTUC and SNEF', jurisdiction: 'sg', url: 'https://www.mom.gov.sg', note: 'Expectations on alternatives to retrenchment, consultation with unions, selection criteria, notice and retrenchment benefits.' },
+      { citation: 'Tripartite Guidelines on Fair Employment Practices and the Workplace Fairness Act 2025', authority: 'regulator', publisher: 'Ministry of Manpower', jurisdiction: 'sg', url: 'https://www.mom.gov.sg', note: 'Selection must not discriminate; the Workplace Fairness Act is commencing on a date to be confirmed.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['sg-employment-act-compliance-checker', 'sg-workplace-fairness-reviewer', 'uk-redundancy-consultation-planner'],
+    whatItDoes:
+      'Plans a retrenchment exercise in Singapore in line with the Employment Act and the tripartite advisory. It records the business reasons and the alternatives considered, checks whether a union must be consulted and how early, builds objective and non-discriminatory selection criteria, sets out notice and retrenchment benefit terms with reference to contract, collective agreement and prevailing norms, and calculates the Mandatory Retrenchment Notification deadline. It also covers support for affected employees, communication sequencing and the treatment of work pass holders.',
+    whenToUse:
+      'When a Singapore employer is considering headcount reductions, before any announcement, when unionised employees are affected, and when a retrenchment includes foreign employees on work passes. Tripartite guidance is not law in the same way as the Act, but it is the standard by which retrenchments are judged and wrongful dismissal claims assessed.',
+    inputs: [
+      { name: 'Proposal', description: 'Business reasons, roles affected, numbers and proposed dates.', required: true },
+      { name: 'Workforce data', description: 'Employer headcount, union recognition, service length, work pass holders and protected groups.', required: true },
+      { name: 'Terms', description: 'Employment contracts, collective agreements and past retrenchment practice.' },
+      { name: 'Alternatives considered', description: 'Measures considered before retrenchment.' },
+    ],
+    outputs: [
+      { name: 'Process plan', description: 'Steps in order, including alternatives, consultation and notification.' },
+      { name: 'Union consultation plan', description: 'When and how to consult where a union is recognised.' },
+      { name: 'Selection review', description: 'Criteria tested for objectivity and fairness.' },
+      { name: 'Benefits and notice', description: 'Notice and retrenchment benefits by group.' },
+      { name: 'MOM notification and timeline', description: 'Deadline calculation and communication sequence.' },
+    ],
+    prompt: `You are a Singapore employment lawyer planning a retrenchment exercise.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- Employers with at least a stated number of employees must notify MOM of retrenchments within a set number of working days after notifying affected employees [VERIFY threshold and deadline]. Retrenchment benefits are not mandated by statute for most employees but are expected by the tripartite advisory, with norms referenced to service [VERIFY]. The Workplace Fairness Act 2025 will make some discriminatory selection unlawful from its commencement [VERIFY date].
+
+INPUTS
+- Proposal: <business reasons, roles, numbers, dates>
+- Workforce: <headcount, union recognition, service, work pass holders, protected groups>
+- Terms: <contracts, collective agreements, past practice>
+- Alternatives: <measures considered>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. BUSINESS CASE AND ALTERNATIVES. Record the reasons and the alternatives considered, such as redeployment, reduced hours or training, as the advisory expects.
+3. UNION CONSULTATION. If a union is recognised, set out when to inform and consult and on what, under the collective agreement and the advisory [VERIFY timing].
+4. SELECTION. Test the criteria for objectivity, relevance to business needs and absence of discrimination on protected characteristics, and flag criteria that may disadvantage older workers, women returning from maternity leave or others.
+5. NOTICE AND BENEFITS. Set out notice under contract or the Act, and retrenchment benefits under contract, collective agreement or prevailing norms; calculate from supplied figures only.
+6. WORK PASS HOLDERS. Note steps to cancel passes and repatriation duties.
+7. MOM NOTIFICATION. Calculate the notification deadline from the date employees are notified, showing the calculation [VERIFY].
+8. COMMUNICATION AND SUPPORT. Sequence communications and list support such as job placement assistance and Workforce Singapore programmes.
+9. RISKS. Note wrongful dismissal claims and reputational risk.
+
+RULES
+- Never treat the tripartite advisory as optional for planning purposes.
+- Mark thresholds, deadlines and benefit norms [VERIFY].
+- Do not draft selection criteria that target protected groups.
+
+OUTPUT FORMAT
+Missing information; process plan table (Step | Timing | Owner); union consultation plan; selection review; benefits and notice table; work pass steps; MOM notification calculation; communication plan; risks. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A unionised electronics manufacturer with 300 Singapore staff plans to cut 40 roles after losing a customer, including 12 work pass holders, and wants to announce next week.',
+      result:
+        'A process plan requiring union consultation before the announcement, a selection review flagging a "last in, first out" plus age-linked criterion, benefits calculated from the collective agreement, work pass cancellation steps, and the MOM notification deadline calculated from the date employees are told.',
+    },
+  },
 ];

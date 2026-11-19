@@ -716,4 +716,145 @@ Open with whether a report is required and the deadline as a date and time. Then
         'Reporting business entity status confirmed on turnover, the 72-hour clock fixed from Saturday morning awareness rather than the Friday payment with the reasoning recorded, a report drafted with open fields marked, a parallel notifiable data breach assessment flagged as likely eligible given health information, insurer and law enforcement steps mapped, and a sanctions check on the recipient escalated before anything else.',
     },
   },
+  {
+    id: 'au-privacy-app-compliance-review',
+    name: 'Australian Privacy Principles Review',
+    description: 'Reviews an APP entity against the Australian Privacy Principles and the 2024 reforms, including ADM transparency.',
+    jurisdiction: 'au',
+    category: 'privacy',
+    tags: ['assessment', 'data-protection', 'programme-design', 'automated-decisions', 'regulatory-change'],
+    sources: [
+      { citation: 'Privacy Act 1988 (Cth) and the Australian Privacy Principles', authority: 'primary', publisher: 'Parliament of Australia', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'Collection, use and disclosure, cross-border disclosure, security, access and correction, and the privacy policy. Applies to APP entities including businesses above a turnover threshold and some smaller ones.' },
+      { citation: 'Privacy and Other Legislation Amendment Act 2024 (Cth)', authority: 'primary', publisher: 'Parliament of Australia', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'Statutory tort for serious invasions of privacy, automated decision-making transparency in privacy policies, a children’s online privacy code, new penalty tiers and OAIC powers, commencing in stages.' },
+      { citation: 'OAIC Australian Privacy Principles guidelines and guidance', authority: 'guidance', publisher: 'Office of the Australian Information Commissioner', jurisdiction: 'au', url: 'https://www.oaic.gov.au', note: 'The OAIC’s interpretation of each principle and guidance on automated decisions.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['au-privacy-ndb-assessor', 'global-privacy-notice-reviewer', 'au-ransomware-payment-notification-triage'],
+    whatItDoes:
+      'Reviews an organisation’s handling of personal information against the thirteen Australian Privacy Principles and the reforms made by the 2024 amending Act. It first checks whether the organisation is an APP entity, then works through open and transparent management, collection and notification, use and disclosure, direct marketing, cross-border disclosure, data quality, security and destruction, and access and correction. It covers the changes that raise exposure — the statutory tort for serious invasions of privacy, the new privacy policy disclosures about computer programs used in significant decisions, the expected children’s online privacy code, and tiered civil penalties and infringement notices.',
+    whenToUse:
+      'When building or refreshing a privacy program, before the automated decision-making disclosures take effect, when launching products that profile customers or serve children, during due diligence, and after an OAIC inquiry. A second tranche of reforms has been consulted on; check for new obligations.',
+    inputs: [
+      { name: 'Organisation profile', description: 'Entity type, turnover, activities and whether any small-business exemption exception applies.', required: true },
+      { name: 'Data inventory', description: 'Personal and sensitive information collected, sources, purposes, disclosures and overseas recipients.', required: true },
+      { name: 'Program documents', description: 'Privacy policy, collection notices, security measures, retention and access processes.', required: true },
+      { name: 'Automated decisions', description: 'Computer programs used to make or substantially assist decisions about individuals.' },
+      { name: 'Children', description: 'Whether services are likely to be accessed by children.' },
+    ],
+    outputs: [
+      { name: 'Coverage check', description: 'Whether the organisation is an APP entity and why.' },
+      { name: 'APP-by-APP assessment', description: 'Each principle marked met, partial or missing with evidence.' },
+      { name: 'Reform readiness', description: 'ADM disclosures, children’s code, statutory tort and penalty exposure.' },
+      { name: 'Privacy policy gaps', description: 'Required content not covered, including ADM disclosures.' },
+      { name: 'Remediation plan', description: 'Gaps ordered by risk.' },
+    ],
+    prompt: `You are an Australian privacy lawyer reviewing compliance with the Australian Privacy Principles.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- The Privacy and Other Legislation Amendment Act 2024 introduced a statutory tort for serious invasions of privacy, reported as in force from June 2025; privacy policy disclosures about automated decisions, reported as applying from 10 December 2026; and a children’s online privacy code to be registered by December 2026 [VERIFY each date and the code’s status]. A second tranche of reforms has been consulted on [VERIFY whether introduced].
+
+INPUTS
+- Organisation: <entity type, turnover, activities, exemptions>
+- Data inventory: <personal and sensitive information, sources, purposes, disclosures, overseas recipients>
+- Program documents: <policy, notices, security, retention, access processes>
+- Automated decisions: <programs making or substantially assisting decisions>
+- Children: <services likely to be accessed by children>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. COVERAGE. Decide whether the organisation is an APP entity, applying the small-business exemption and its exceptions [VERIFY threshold and exceptions].
+3. APP-BY-APP. Assess each principle as MET, PARTIAL or MISSING with evidence: open and transparent management; anonymity and pseudonymity; collection of solicited information, including sensitive information consent; unsolicited information; notification of collection; use and disclosure; direct marketing; cross-border disclosure and accountability for overseas recipients; government identifiers; data quality; security, including the reform clarifying technical and organisational measures; access; and correction.
+4. AUTOMATED DECISIONS. For each program that makes or substantially assists decisions that could significantly affect individuals’ rights or interests, list the privacy policy disclosures required [VERIFY].
+5. CHILDREN. If services are likely to be accessed by children, flag the children’s code and its expected obligations [VERIFY].
+6. STATUTORY TORT AND PENALTIES. Identify practices that could support a claim for a serious invasion of privacy and the penalty tiers and infringement notices that may apply [VERIFY].
+7. POLICY GAPS. List missing privacy policy content.
+8. REMEDIATION. Order gaps by risk.
+
+RULES
+- Never state that the organisation complies; report status.
+- Mark thresholds, dates and penalties [VERIFY].
+- Do not recommend relying on consent buried in terms and conditions.
+
+OUTPUT FORMAT
+Missing information; coverage finding; APP table (APP | Status | Evidence | Gap); ADM disclosure list; children’s code flags; tort and penalty exposure; policy gaps; remediation. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'An Australian online lender uses an automated scoring model to approve or decline applications, sends data to an offshore call centre and has a privacy policy last updated in 2021.',
+      result:
+        'APP entity status confirmed, cross-border disclosure rated partial because there is no contractual accountability for the call centre, the scoring model identified as requiring automated-decision disclosures in the privacy policy from the reported December 2026 date, and a remediation plan led by a refreshed policy and vendor terms.',
+    },
+  },
+  {
+    id: 'au-aml-ctf-tranche-2-readiness',
+    name: 'AML/CTF Tranche 2 Readiness',
+    description: 'Assesses whether an Australian lawyer, accountant or real estate business is now an AML/CTF reporting entity, and its gaps.',
+    jurisdiction: 'au',
+    category: 'compliance',
+    tags: ['assessment', 'programme-design', 'financial-services', 'money-laundering', 'customer-due-diligence'],
+    sources: [
+      { citation: 'Anti-Money Laundering and Counter-Terrorism Financing Act 2006 (Cth), as amended by the 2024 amending Act', authority: 'primary', publisher: 'Parliament of Australia', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'Extended regulation to tranche 2 professions and simplified obligations for existing reporting entities, on staged commencement dates.' },
+      { citation: 'AML/CTF Rules', authority: 'regulator', publisher: 'AUSTRAC', jurisdiction: 'au', url: 'https://www.austrac.gov.au', note: 'Detailed requirements for programs, customer due diligence, reporting and record keeping.' },
+      { citation: 'AUSTRAC guidance for newly regulated sectors', authority: 'guidance', publisher: 'AUSTRAC', jurisdiction: 'au', url: 'https://www.austrac.gov.au', note: 'Sector guides and starter programs.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['professional-services', 'financial-services'],
+    relatedSkills: ['uk-aml-cdd-edd-assessor', 'cross-sanctions-ownership-reconciler', 'au-director-duties-checker'],
+    whatItDoes:
+      'Works out whether a business in a newly regulated sector — legal practice, accounting, real estate, trust and company services, or dealing in precious stones and metals — provides designated services that make it a reporting entity under the amended AML/CTF regime, and from when. For those in scope it checks enrolment, the ML/TF risk assessment, the AML/CTF policies, the compliance officer and governance arrangements, customer due diligence including beneficial ownership and politically exposed persons, suspicious matter and threshold reporting, tipping-off controls, and record keeping. It also notes how legal professional privilege interacts with reporting.',
+    whenToUse:
+      'When a firm in a tranche 2 sector needs to confirm whether it is regulated, when preparing to enrol with AUSTRAC, when building or testing an AML/CTF program, and when an existing reporting entity is updating to the reformed obligations.',
+    inputs: [
+      { name: 'Business profile', description: 'Sector, services offered, client types, size and locations.', required: true },
+      { name: 'Service details', description: 'Which services involve buying or selling real estate, managing client money, creating or restructuring entities, or similar activities.', required: true },
+      { name: 'Current controls', description: 'Existing client onboarding, identity checks, risk assessment and policies.' },
+      { name: 'Governance', description: 'Who would be the compliance officer and senior manager, and the board or partners.' },
+    ],
+    outputs: [
+      { name: 'Designated service analysis', description: 'Which services are designated and from when.' },
+      { name: 'Enrolment and timing plan', description: 'Steps and dates for enrolment and compliance.' },
+      { name: 'Program gap analysis', description: 'Risk assessment, policies, governance and training.' },
+      { name: 'Customer due diligence review', description: 'Initial and ongoing CDD, beneficial owners and PEPs.' },
+      { name: 'Reporting and privilege notes', description: 'Suspicious matter reporting, tipping off and privilege.' },
+    ],
+    prompt: `You are an Australian AML/CTF lawyer assessing readiness for the reformed regime.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- The 2024 amending Act extended the regime to tranche 2 sectors, reported as from 1 July 2026, with reformed obligations for existing reporting entities from 31 March 2026 [VERIFY dates]. The AML/CTF Rules were remade to support the reforms [VERIFY current Rules].
+
+INPUTS
+- Business profile: <sector, services, clients, size, locations>
+- Service details: <real estate transactions, client money, entity creation or restructuring, similar activities>
+- Current controls: <onboarding, identity checks, risk assessment, policies>
+- Governance: <proposed compliance officer, senior manager, board or partners>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. DESIGNATED SERVICES. Map each service against the designated services for the sector, with the facts that decide it [VERIFY descriptions]. Identify services that are not designated.
+3. TIMING. State when obligations begin and the enrolment deadline [VERIFY].
+4. RISK ASSESSMENT. Check for a documented ML/TF risk assessment covering customers, services, delivery channels and jurisdictions.
+5. POLICIES AND GOVERNANCE. Check AML/CTF policies, senior manager approval, appointment of a compliance officer with required attributes, independent evaluation and staff due diligence and training [VERIFY].
+6. CUSTOMER DUE DILIGENCE. Check initial CDD, beneficial ownership, politically exposed persons, sanctions screening, enhanced due diligence triggers, simplified CDD where permitted, and ongoing CDD.
+7. REPORTING. Check suspicious matter reports, threshold transaction reports and international funds transfer instructions where relevant, with timeframes [VERIFY], and tipping-off controls.
+8. PRIVILEGE. Note how legal professional privilege may apply to information otherwise reportable and the process to claim it [VERIFY].
+9. RECORDS. Check record-keeping and retention.
+10. REMEDIATION. Order gaps by risk and deadline.
+
+RULES
+- Never state that a business is outside the regime without testing each service.
+- Never advise tipping off a customer or delaying a required report.
+- Mark dates, thresholds and timeframes [VERIFY].
+
+OUTPUT FORMAT
+Missing information; designated service table (Service | Designated? | Basis); timing and enrolment plan; program gap table; CDD review; reporting and privilege notes; record keeping; remediation plan. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A 12-lawyer Brisbane firm does conveyancing, sets up family trusts and companies, and holds client money in trust, with no AML program today.',
+      result:
+        'Conveyancing, trust and company formation and handling client money mapped as likely designated services, an enrolment plan with dates to verify, gaps across the risk assessment, policies and compliance officer appointment, a CDD process for beneficial owners of trusts, and a note on how privilege claims interact with suspicious matter reporting.',
+    },
+  },
 ];

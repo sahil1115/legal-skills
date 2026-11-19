@@ -318,4 +318,74 @@ Open with the role conclusion and the number of missing mandatory elements. Then
         'Product-improvement use flagged as making the vendor a controller for that purpose, the Article 28(3) checklist showing missing deletion-of-copies and instruction-infringement terms, the breach notice term already at without undue delay with a 48-hour period offered only as a labelled contractual preference, two non-EEA sub-processors found to lack a documented transfer tool, and replacement wording labelled by whether it is legally required.',
     },
   },
+  {
+    id: 'eu-legitimate-interests-assessment',
+    name: 'Legitimate Interests Assessment',
+    description: 'Runs the GDPR three-part legitimate interests test for a processing activity and records the balancing.',
+    jurisdiction: 'eu',
+    category: 'privacy',
+    tags: ['assessment', 'data-protection', 'gdpr', 'lawful-basis', 'recordkeeping'],
+    sources: [
+      { citation: 'Regulation (EU) 2016/679 (General Data Protection Regulation)', authority: 'primary', publisher: 'European Union', jurisdiction: 'eu', url: 'https://eur-lex.europa.eu', note: 'Legitimate interests as a lawful basis, the right to object, transparency and accountability duties.' },
+      { citation: 'EDPB guidelines on processing based on legitimate interests', authority: 'guidance', publisher: 'European Data Protection Board', jurisdiction: 'eu', url: 'https://www.edpb.europa.eu', note: 'The three-step test, reasonable expectations and mitigating measures. Check whether the guidelines have been finalised and updated.' },
+      { citation: 'Court of Justice of the European Union case law on legitimate interests', authority: 'primary', publisher: 'Court of Justice of the European Union', jurisdiction: 'eu', url: 'https://curia.europa.eu', note: 'The Court has addressed commercial interests, necessity and the balancing test in several decisions; identify the current leading cases before relying on any.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['eu-dpia-ropa-builder', 'global-privacy-notice-reviewer', 'eu-transfer-impact-assessor'],
+    whatItDoes:
+      'Documents whether a processing activity can rely on legitimate interests. It runs the three steps in order: identifying an interest that is lawful, clearly articulated and real and present; testing whether the processing is necessary for that interest or whether a less intrusive means would do; and balancing the interest against the individuals’ rights and reasonable expectations, considering the nature of the data, the relationship, the impact and vulnerable groups. It records the safeguards that tip the balance, such as an easy opt-out or pseudonymisation, and states where legitimate interests is the wrong basis, including where consent is required by other law.',
+    whenToUse:
+      'Before starting processing that will rely on legitimate interests — analytics, fraud prevention, direct marketing, intra-group transfers, AI model development, employee monitoring — when a regulator or customer asks for the assessment, and when an individual objects. Re-run it when the purpose, data or audience changes.',
+    inputs: [
+      { name: 'Processing description', description: 'Purpose, data categories, individuals, sources, recipients and retention.', required: true },
+      { name: 'Interest claimed', description: 'Whose interest, what it is and why it matters.', required: true },
+      { name: 'Context', description: 'The relationship with individuals, what they were told, and any vulnerable groups.', required: true },
+      { name: 'Safeguards', description: 'Measures in place or proposed to limit impact.' },
+    ],
+    outputs: [
+      { name: 'Purpose test', description: 'The interest stated precisely, with whether it is lawful, real and present.' },
+      { name: 'Necessity test', description: 'Whether the processing is necessary and less intrusive alternatives considered.' },
+      { name: 'Balancing test', description: 'Impact and expectations weighed against the interest, with safeguards.' },
+      { name: 'Conclusion and conditions', description: 'Whether the basis is available and on what conditions.' },
+      { name: 'Transparency and objection steps', description: 'What must be told to individuals and how objections are handled.' },
+    ],
+    prompt: `You are an EU data protection lawyer documenting a legitimate interests assessment.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- The EDPB issued guidelines on legitimate interests in 2024 [VERIFY whether finalised or revised]. The Court of Justice has ruled on legitimate interests in commercial contexts [VERIFY current leading cases]. Proposals to amend the GDPR were under discussion at drafting [VERIFY whether any are adopted].
+
+INPUTS
+- Processing: <purpose, data, individuals, sources, recipients, retention>
+- Interest claimed: <whose interest, what it is, why it matters>
+- Context: <relationship, what individuals were told, vulnerable groups>
+- Safeguards: <measures in place or proposed>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. SCOPE GATE. Check whether another basis is required or more appropriate: consent required by e-privacy rules for cookies or electronic marketing [VERIFY national law], special category data needing a separate condition, public authorities performing their tasks, or a legal obligation.
+3. PURPOSE TEST. State the interest precisely. Test that it is lawful, sufficiently clear and real and present rather than speculative.
+4. NECESSITY TEST. Test whether the processing is necessary for the interest: whether the same result could be achieved with less data, less intrusive means or a shorter retention.
+5. BALANCING TEST. Assess the individuals’ interests and rights: nature of the data, reasonable expectations given the relationship and context, the likely impact including on vulnerable people and children, the scale, and the status of the controller. Weigh against the interest.
+6. SAFEGUARDS. List measures that reduce impact and state which are needed for the balance to favour the controller: minimisation, pseudonymisation, a simple opt-out, retention limits, security, and transparency.
+7. CONCLUSION. State AVAILABLE, AVAILABLE WITH CONDITIONS or NOT AVAILABLE, with reasons.
+8. TRANSPARENCY AND OBJECTION. List the information to include in privacy notices, including the interest pursued, and the process for handling objections, including the absolute right to object to direct marketing.
+9. REVIEW TRIGGERS. List changes that require the assessment to be repeated.
+
+RULES
+- Never conclude the basis is available without completing all three steps.
+- Do not treat a business benefit alone as outweighing rights; weigh it.
+- Do not cite case law or guidance paragraphs from memory; mark [VERIFY].
+- A DPIA may also be needed; flag high-risk processing.
+
+OUTPUT FORMAT
+Missing information; scope gate; purpose test; necessity test; balancing table (Factor | Assessment | Weight); safeguards; conclusion; transparency and objection steps; review triggers. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A marketplace wants to use purchase histories of its EU customers to train a recommendation model and to target ads on third-party websites.',
+      result:
+        'The recommendation purpose assessed as available with conditions (pseudonymisation, a clear opt-out, retention limits), the third-party ad targeting failing the scope gate because cookie consent is required, a balancing table weighting reasonable expectations, and notice wording naming the interest pursued.',
+    },
+  },
 ];

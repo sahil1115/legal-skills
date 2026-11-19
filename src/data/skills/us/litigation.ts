@@ -769,4 +769,72 @@ Open with the earliest deadline and any request type at risk of waiver or deemed
         'A deadline table with the admissions flagged as the first at risk, a specific objection to the affiliate definition with a proposed narrowing, a response chart that states for each request whether anything is withheld, a client fact-gathering list for 12 interrogatories, and meet-and-confer positions on the ten-year period.',
     },
   },
+  {
+    id: 'us-complaint-answer-builder',
+    name: 'Complaint Answer Builder',
+    description: 'Builds a paragraph-by-paragraph answer to a US civil complaint with defenses to preserve and a response-deadline check.',
+    jurisdiction: 'us',
+    category: 'litigation',
+    tags: ['drafting', 'disputes', 'deadlines', 'pleadings', 'affirmative-defenses'],
+    sources: [
+      { citation: 'Federal Rules of Civil Procedure', authority: 'primary', publisher: 'United States Courts', jurisdiction: 'us', url: 'https://www.uscourts.gov', note: 'Time to respond, the form of admissions and denials, affirmative defenses, defenses that are waived if not raised in the first response, counterclaims and the signature obligation. State rules differ and often diverge on timing and form.' },
+      { citation: 'Local rules, standing orders and judge-specific practices', authority: 'regulator', jurisdiction: 'us', note: 'Some judges require a pre-motion conference before a motion to dismiss or restrict how defenses are pleaded. Check the assigned judge.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    relatedSkills: ['us-claim-deadline-calculator', 'us-litigation-hold-builder', 'us-insurance-tender-tracker', 'us-local-rules-formatter'],
+    whatItDoes:
+      'Takes a served complaint and builds the defendant’s first response: a deadline check that starts from the actual date and method of service, a decision point on whether to move to dismiss before answering, and a paragraph-by-paragraph answer that admits, denies or pleads lack of knowledge with the reason for each choice. It lists defenses that may be lost if not raised now, candidate affirmative defenses tied to the facts that support them, potential counterclaims and cross-claims, and the facts the client must confirm before anyone signs. It does not plead a denial the client cannot support or a defense with no factual basis.',
+    whenToUse:
+      'As soon as a complaint is served in federal or state court, when deciding between answering and moving against the pleading, and when amending an answer. Calendar the response date on day one and pass the complaint to insurers; this skill does not replace the litigation hold or the insurance tender.',
+    inputs: [
+      { name: 'Complaint', description: 'The complaint with exhibits, the summons and the court and case number.', required: true },
+      { name: 'Service details', description: 'How, when and on whom it was served, and any waiver of service request.', required: true },
+      { name: 'Client facts', description: 'The client’s account of each allegation and the documents that bear on it.', required: true },
+      { name: 'Related matters', description: 'Contracts with forum or arbitration clauses, insurance, related claims and co-defendants.' },
+    ],
+    outputs: [
+      { name: 'Deadline and first-move memo', description: 'Response date with the calculation, and the answer-versus-motion decision points.' },
+      { name: 'Paragraph-by-paragraph answer', description: 'Admit, deny or lack-knowledge responses with the basis for each.' },
+      { name: 'Defenses to preserve now', description: 'Defenses at risk of waiver if omitted from the first response.' },
+      { name: 'Affirmative defenses and counterclaims', description: 'Candidates, each tied to supporting facts or marked as needing facts.' },
+      { name: 'Client confirmation list', description: 'Facts and documents the client must confirm before filing.' },
+    ],
+    prompt: `You are a US litigator preparing a defendant’s response to a civil complaint.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- The federal rules set a default time to respond that changes if service is waived or the defendant is the United States; state courts set their own periods. Treat every period as [VERIFY] against the applicable rules and any extension or order.
+
+INPUTS
+- Complaint: <complaint, exhibits, summons, court and case number>
+- Service: <date, method, person served; any waiver request>
+- Client facts: <the client’s account of each allegation; documents>
+- Related matters: <forum or arbitration clauses, insurance, related claims, co-defendants>
+
+TASK
+1. DEADLINE. Identify the court system, the response period that appears to apply to the method of service, and the resulting date, showing the calculation. Flag if service may be defective and note that challenging it is a decision for counsel. State that a default may follow a missed deadline.
+2. FIRST MOVE. List the grounds that may support a pre-answer motion (jurisdiction, venue, service, failure to state a claim, arbitration or forum clause, removal) and what each needs. Do not recommend one; set out the decision for counsel, including that some defenses must be raised in the first response or are waived [VERIFY].
+3. PARAGRAPH-BY-PARAGRAPH. For every numbered paragraph, propose ADMIT, DENY, ADMIT IN PART AND DENY IN PART (saying which part), or LACK KNOWLEDGE OR INFORMATION SUFFICIENT TO FORM A BELIEF, with the client fact or document that supports the choice. Treat documents as speaking for themselves only where local practice accepts that response [VERIFY]. Respond to legal conclusions as such.
+4. UNNUMBERED MATERIAL. Address headings, the prayer for relief and any unnumbered allegations.
+5. AFFIRMATIVE DEFENSES. List candidates (for example limitations, release, waiver, estoppel, payment, failure to mitigate, arbitration, statute of frauds, contractual limitation), each with the facts that support it. Mark any without present factual support as NEEDS FACTS and do not plead it until counsel decides.
+6. COUNTERCLAIMS AND CROSS-CLAIMS. Identify claims the client may have against the plaintiff or co-defendants, and flag any that may be compulsory and lost if not asserted now [VERIFY].
+7. NOTICE AND PRESERVATION. Note that a litigation hold and insurance tender should already be under way, and any contractual notice duties.
+8. CONFIRMATION LIST. List every fact the client must confirm before filing, by paragraph.
+
+RULES
+- Never deny an allegation the client’s facts show is true, and never plead lack of knowledge about matters within the client’s knowledge or reasonable inquiry.
+- Never invent facts or defenses. Use [CLIENT TO CONFIRM].
+- Do not state a response period, waiver rule or compulsory counterclaim rule as settled; mark [VERIFY].
+- The pleading is signed by counsel, who certifies its factual basis; draft accordingly.
+
+OUTPUT FORMAT
+Deadline calculation; first-move decision points; the answer as a table (Paragraph | Response | Basis | Confirm); defenses to preserve; affirmative defenses with supporting facts; counterclaims; confirmation list. Close with: Assumptions made; [VERIFY] points; Decisions for counsel.`,
+    example: {
+      scenario:
+        'A software reseller is served in federal court with a 64-paragraph breach of contract and fraud complaint; the reseller agreement has an arbitration clause and a two-year contractual limitation period.',
+      result:
+        'A deadline memo with the calculation from personal service, decision points on moving to compel arbitration before answering, a 64-row response table with 11 paragraphs needing client confirmation, the contractual limitation and arbitration listed as defenses to preserve, and the fraud count flagged for a particularity challenge.',
+    },
+  },
 ];

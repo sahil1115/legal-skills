@@ -328,4 +328,142 @@ Open with whether the interest is perfected, where it ranks, and whether it woul
         'Retention of title terms characterised as a deemed security interest, two registrations found to name the trustee company ACN where the grantor contracted as trustee so the correct identifier was the trust ABN, one serial-numbered item registered without its serial number and assessed as seriously misleading, the PMSI flag never set on any registration so super-priority was unavailable behind an earlier general security agreement, and the goods at risk of vesting in the grantor quantified with the vulnerable period flagged for immediate verification.',
     },
   },
+  {
+    id: 'au-spam-dncr-marketing-checker',
+    name: 'Spam Act and Do Not Call Checker',
+    description: 'Checks Australian email, SMS and telemarketing for consent, identification, unsubscribe and Do Not Call compliance.',
+    jurisdiction: 'au',
+    category: 'privacy',
+    tags: ['screening', 'consumer-protection', 'direct-marketing', 'consent', 'telemarketing'],
+    sources: [
+      { citation: 'Spam Act 2003 (Cth) and Spam Regulations', authority: 'primary', publisher: 'Parliament of Australia', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'Commercial electronic messages require consent, sender identification and a functional unsubscribe facility.' },
+      { citation: 'Do Not Call Register Act 2006 (Cth) and the telemarketing industry standard', authority: 'primary', publisher: 'Parliament of Australia', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'Telemarketing and marketing faxes to registered numbers, calling hours and identification.' },
+      { citation: 'ACMA guidance and enforcement actions', authority: 'guidance', publisher: 'Australian Communications and Media Authority', jurisdiction: 'au', url: 'https://www.acma.gov.au', note: 'ACMA has issued significant penalties for spam and unsubscribe failures; its guidance shows how consent and unsubscribe are assessed.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer', 'financial-services'],
+    relatedSkills: ['au-privacy-app-compliance-review', 'uk-pecr-cookies-marketing-checker', 'us-tcpa-marketing-compliance'],
+    whatItDoes:
+      'Reviews an organisation’s commercial email, SMS, instant messaging and telemarketing in Australia. For electronic messages it tests whether each message is a commercial electronic message, whether consent is express or can be reasonably inferred from an existing relationship, whether the sender is identified, and whether the unsubscribe works, is free and is honoured within the required time. For calls it checks washing against the Do Not Call Register, the industry standard’s calling hours and identification rules, and consent for calls to registered numbers. It also covers messages sent through third-party marketers and affiliates and links to the privacy principle on direct marketing.',
+    whenToUse:
+      'Before an email or SMS campaign, when importing or buying a contact list, when engaging a telemarketing or affiliate partner, when designing sign-up flows and unsubscribe processes, and after an ACMA inquiry. Penalties can apply per message, so one bad list can be expensive.',
+    inputs: [
+      { name: 'Channels and campaigns', description: 'Email, SMS, messaging and calls, with sample content.', required: true },
+      { name: 'Consent sources', description: 'How each contact was obtained and the consent wording.', required: true },
+      { name: 'Unsubscribe and suppression', description: 'How unsubscribes are handled, systems and timing.', required: true },
+      { name: 'Partners', description: 'Third parties who send messages or make calls on the organisation’s behalf.' },
+    ],
+    outputs: [
+      { name: 'Message classification', description: 'Commercial electronic message or not, and designated sender exemptions.' },
+      { name: 'Consent review', description: 'Express or inferred consent for each source, and gaps.' },
+      { name: 'Identification and unsubscribe check', description: 'Required content and functional unsubscribe.' },
+      { name: 'Telemarketing review', description: 'Register washing, calling hours, identification.' },
+      { name: 'Remediation list', description: 'List clean-up, flow changes and partner controls.' },
+    ],
+    prompt: `You are an Australian marketing compliance lawyer reviewing Spam Act and Do Not Call compliance.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- The Spam Act requires consent, identification and a functional unsubscribe that must be actioned within a set time [VERIFY]. The telemarketing industry standard sets calling hours and identification rules [VERIFY current standard]. Proposals to reform direct marketing rules in the Privacy Act have been discussed [VERIFY].
+
+INPUTS
+- Channels and campaigns: <email, SMS, messaging, calls; samples>
+- Consent sources: <how contacts were obtained; consent wording>
+- Unsubscribe and suppression: <process, systems, timing>
+- Partners: <third parties sending or calling>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. CLASSIFY. Decide whether each message is a commercial electronic message, including mixed messages and transactional messages with marketing content, and whether any designated sender exemption applies [VERIFY].
+3. CONSENT. For each contact source, decide whether consent is express or can be reasonably inferred from conduct and an existing relationship. Purchased lists and scraped addresses need specific scrutiny. Confirm records exist to prove consent.
+4. IDENTIFICATION. Check that each message identifies the authorising organisation and how to contact it.
+5. UNSUBSCRIBE. Check that every message includes a functional, free unsubscribe, that unsubscribing does not require logging in or paying, and that requests are honoured within the required period [VERIFY].
+6. TELEMARKETING. Check that calls to numbers on the Do Not Call Register are washed or have consent, and that calling hours, identification and termination rules in the standard are followed [VERIFY].
+7. PARTNERS. Check responsibility for messages sent by affiliates and agents and contract controls.
+8. PRIVACY OVERLAP. Note APP 7 direct marketing requirements for the use of personal information.
+9. REMEDIATION. Order fixes by exposure.
+
+RULES
+- Never state that a campaign complies; report findings.
+- Do not treat a partner’s assurance of consent as proof.
+- Mark time limits and penalties [VERIFY].
+
+OUTPUT FORMAT
+Missing information; classification table; consent table (Source | Express or inferred | Evidence | Issue); identification and unsubscribe findings; telemarketing findings; partner controls; privacy overlap; remediation. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'An energy retailer texts promotional offers to former customers, uses an affiliate to email a purchased list, and requires customers to log in to change marketing preferences.',
+      result:
+        'Texts to former customers flagged as needing a careful inferred-consent analysis, the purchased list lacking provable consent, the login requirement treated as defeating a functional unsubscribe, and remediation including suppressing the purchased list and adding one-step unsubscribe.',
+    },
+  },
+  {
+    id: 'au-security-of-payment-claim-planner',
+    name: 'Security of Payment Claim Planner',
+    description: 'Plans or responds to a construction payment claim under Australian state security of payment legislation.',
+    jurisdiction: 'au',
+    category: 'contracts',
+    tags: ['drafting', 'disputes', 'construction', 'payment-claims', 'deadlines'],
+    sources: [
+      { citation: 'State and territory security of payment legislation (for example the Building and Construction Industry Security of Payment Act 1999 (NSW))', authority: 'primary', jurisdiction: 'au', url: 'https://www.legislation.gov.au', note: 'Each state and territory has its own Act with different timeframes, content requirements and adjudication procedures. Some states have reformed their Acts recently.' },
+      { citation: 'The construction contract', authority: 'primary', note: 'Reference dates or claim dates, payment terms and any provisions the legislation may override.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['energy-infrastructure'],
+    relatedSkills: ['au-ppsr-priority-checker', 'global-demand-letter-drafter', 'global-chronology-builder'],
+    whatItDoes:
+      'Plans a payment claim, payment schedule or adjudication application under the security of payment Act of the state or territory where the construction work is carried out. For a claimant it checks the entitlement to claim, the timing, the required content and endorsement, and service. For a respondent it calculates the deadline for a payment schedule and checks that every reason for withholding payment is stated, because reasons not raised may be lost in adjudication. It then sets out the adjudication timetable and the risks of missing a step, including liability for the full claimed amount.',
+    whenToUse:
+      'When a contractor or subcontractor wants to claim progress payments, when a principal or head contractor receives a payment claim, when considering adjudication, and when a payment dispute is escalating. Timeframes are short and strictly applied, so act on the day a claim is received.',
+    inputs: [
+      { name: 'Role and work', description: 'Claimant or respondent, the work, the site location and the parties.', required: true },
+      { name: 'Contract', description: 'The construction contract, especially payment terms and claim dates.', required: true },
+      { name: 'Claim or schedule', description: 'The payment claim or schedule if one exists, with dates of service.', required: true },
+      { name: 'Supporting records', description: 'Variations, defects, set-offs and correspondence.' },
+    ],
+    outputs: [
+      { name: 'Applicable Act and entitlement', description: 'Which Act applies and whether a claim can be made.' },
+      { name: 'Deadline calculator', description: 'Key dates calculated from service dates, with working shown.' },
+      { name: 'Content checklist', description: 'Required content for the claim or schedule.' },
+      { name: 'Reasons register', description: 'For respondents, every withholding reason with its evidence.' },
+      { name: 'Adjudication plan', description: 'Steps, timeframes and risks.' },
+    ],
+    prompt: `You are an Australian construction lawyer handling a security of payment matter.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- Each state and territory has its own security of payment Act with different timeframes and procedures, and several have been reformed [VERIFY the current Act for the state where the work is carried out].
+
+INPUTS
+- Role and work: <claimant or respondent; work; site location; parties>
+- Contract: <payment terms, claim dates>
+- Claim or schedule: <document and service dates>
+- Supporting records: <variations, defects, set-offs, correspondence>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. APPLICABLE ACT. Identify the Act by the location of the work and check that the contract is a construction contract for construction work or related goods and services within it, noting exclusions [VERIFY].
+3. ENTITLEMENT AND TIMING. For a claimant, check the entitlement to claim, the claim date or reference date, the limit on claims and any time bar, and service requirements [VERIFY].
+4. CONTENT. Check required content: identification of work, the claimed amount, and any required statement that the claim is made under the Act [VERIFY].
+5. DEADLINES. Calculate the deadline for a payment schedule, payment due dates and adjudication application windows from the service date, using business days as the Act defines them, showing the calculation [VERIFY].
+6. RESPONDENT REASONS. For a respondent, build a register of every reason for withholding payment, with its evidence, and warn that reasons omitted from the schedule may not be raised later in adjudication [VERIFY].
+7. ADJUDICATION. Set out the adjudication steps, response timeframes and the consequences of a determination, including enforcement and any right to suspend work.
+8. RISKS. Highlight the consequences of missing a step, such as liability for the full claimed amount.
+
+RULES
+- Never state a timeframe as settled; mark [VERIFY] and show the calculation.
+- Do not suggest omitting reasons from a payment schedule.
+- Do not advise on the merits of the underlying contractual dispute beyond identifying issues.
+
+OUTPUT FORMAT
+Missing information; applicable Act and entitlement; deadline table (Step | Date | Calculation); content checklist; reasons register (Reason | Amount | Evidence); adjudication plan; risks. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A Sydney head contractor receives a 1.2 million progress claim from a façade subcontractor on a Friday afternoon and believes 400,000 of it relates to defective work and unapproved variations.',
+      result:
+        'The NSW Act identified, a deadline table showing the payment schedule due date in business days with the calculation, a reasons register listing defects and variations with the evidence for each, a warning that unstated reasons may be lost in adjudication, and an adjudication plan.',
+    },
+  },
 ];

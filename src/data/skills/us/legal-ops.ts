@@ -318,4 +318,213 @@ Open with a one-line risk rating per candidate. Then: distinctiveness analysis; 
         'A triage report rating one candidate high risk against a live registration for closely related software, one as likely descriptive, and recommending the third for full search, with indicative identifications and a list of search gaps.',
     },
   },
+  {
+    id: 'us-dmca-takedown-triage',
+    name: 'DMCA Takedown and Counter-Notice',
+    description: 'Triages a copyright takedown notice or counter-notice and checks the safe-harbor steps a platform must follow.',
+    jurisdiction: 'us',
+    category: 'regulatory',
+    tags: ['screening', 'drafting', 'copyright', 'content-moderation', 'notice'],
+    sources: [
+      { citation: 'Digital Millennium Copyright Act (online service provider safe harbors)', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.copyright.gov', note: 'Notice-and-takedown, counter-notification, designated agent, repeat-infringer policy and the conditions for safe harbor. Also liability for knowing material misrepresentation in a notice.' },
+      { citation: 'US Copyright Office designated agent directory and guidance', authority: 'regulator', publisher: 'US Copyright Office', jurisdiction: 'us', url: 'https://www.copyright.gov', note: 'Agent designation must be current and is renewed periodically.' },
+      { citation: 'Copyright Act (fair use and infringement)', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.copyright.gov', note: 'Fair use must be considered before sending a takedown notice; whether a use is fair is fact-specific.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['technology', 'retail-consumer'],
+    relatedSkills: ['us-trademark-clearance-triage', 'global-demand-letter-drafter', 'eu-dsa-notice-action-triage'],
+    whatItDoes:
+      'Handles the three common roles in a DMCA dispute. For a platform that receives a takedown notice, it checks the notice for the statutory elements, sets out the steps needed to keep safe-harbor protection — prompt removal, notice to the user, counter-notice handling and the restoration window — and checks the repeat-infringer policy and designated agent. For a user whose content was removed, it builds a counter-notice and flags the consequences, including consent to jurisdiction. For a rights holder, it builds a notice and requires a fair-use consideration first. It separates copyright from trademark and other complaints that the DMCA process does not cover.',
+    whenToUse:
+      'When a platform, marketplace, host or app receives a takedown notice; when a creator or seller wants to challenge a removal; when a business wants content removed from a third-party site; and when reviewing whether a platform’s DMCA programme would support the safe harbor.',
+    inputs: [
+      { name: 'Your role', description: 'Platform or service provider, user whose content was removed, or rights holder.', required: true },
+      { name: 'Notice or content', description: 'The notice or counter-notice received, or the work and the allegedly infringing material.', required: true },
+      { name: 'Platform programme', description: 'For platforms: designated agent registration, repeat-infringer policy and takedown procedures.' },
+      { name: 'Use facts', description: 'How the material is used, its source, any licence, and facts bearing on fair use.' },
+    ],
+    outputs: [
+      { name: 'Element check', description: 'Whether the notice or counter-notice contains the statutory elements.' },
+      { name: 'Process steps and timeline', description: 'Actions and timing for the role, including the restoration window.' },
+      { name: 'Draft notice or counter-notice', description: 'A draft for review, with required statements.' },
+      { name: 'Risk flags', description: 'Fair use, misrepresentation, non-copyright claims and litigation risk.' },
+      { name: 'Programme gaps', description: 'For platforms, gaps that could cost safe-harbor protection.' },
+    ],
+    prompt: `You are a US copyright and platform lawyer handling a DMCA notice-and-takedown matter.
+
+INPUTS
+- Role: <platform or service provider / user whose content was removed / rights holder>
+- Notice or content: <notice or counter-notice received; or the work and the material at issue>
+- Platform programme: <designated agent, repeat-infringer policy, procedures>
+- Use facts: <how the material is used, source, licence, fair-use facts>
+
+TASK
+1. SCOPE. Confirm the complaint is about copyright. If it concerns trademark, defamation, privacy or contract, say that the DMCA process does not apply and route it elsewhere.
+2. ELEMENT CHECK. For a notice, check: signature of the owner or authorised agent; identification of the copyrighted work; identification of the infringing material and its location; contact information; a statement of good-faith belief that the use is not authorised; and a statement under penalty of perjury that the information is accurate and the sender is authorised. For a counter-notice, check the corresponding elements, including consent to jurisdiction and acceptance of service [VERIFY exact requirements].
+3. PLATFORM STEPS. Set out: prompt removal or disabling of access for a substantially compliant notice; notice to the user; forwarding a valid counter-notice; restoring the material within the statutory window unless the claimant files suit [VERIFY the window]; record keeping; and application of the repeat-infringer policy.
+4. USER STEPS. Explain the counter-notice option and its consequences, including consenting to jurisdiction and the possibility of being sued, and draft one only where the user states a good-faith belief that removal was a mistake or misidentification.
+5. RIGHTS-HOLDER STEPS. Before drafting a notice, require consideration of licence and fair use, listing the factors and the facts relevant to each, and note liability for knowing material misrepresentation.
+6. DRAFT. Draft the notice or counter-notice for the role with all required statements, using [TO COMPLETE] for missing facts.
+7. PROGRAMME GAPS. For platforms, check that the designated agent is registered and current, the repeat-infringer policy is adopted and actually applied, and notices are logged.
+8. RISK FLAGS. Identify litigation risk, misrepresentation risk, and urgency.
+
+RULES
+- Never conclude that a use is or is not fair; set out the factors and facts.
+- Never draft statements under penalty of perjury that the user cannot truthfully make.
+- Mark statutory windows and requirements [VERIFY].
+- Do not advise ignoring a substantially compliant notice.
+
+OUTPUT FORMAT
+Scope result; element check table (Element | Present | Note); steps and timeline for the role; draft notice or counter-notice; risk flags; programme gaps. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A print-on-demand marketplace receives a notice from a photographer covering 40 listings, two of which use the seller’s own photos and one of which is a trademark complaint about a logo.',
+      result:
+        'An element check confirming a substantially compliant notice for 37 listings, the trademark item routed out of the DMCA process, a step plan with the user notice and restoration window, a counter-notice draft for the seller on the two own-photo listings, and a gap showing the designated agent registration has lapsed.',
+    },
+  },
+  {
+    id: 'us-ftc-endorsement-reviewer',
+    name: 'FTC Endorsements and Reviews Check',
+    description: 'Checks influencer, testimonial and review practices against the FTC Endorsement Guides and the Reviews Rule.',
+    jurisdiction: 'us',
+    category: 'compliance',
+    tags: ['review', 'screening', 'consumer-protection', 'advertising', 'influencer-marketing'],
+    sources: [
+      { citation: 'FTC Guides Concerning the Use of Endorsements and Testimonials in Advertising', authority: 'guidance', publisher: 'Federal Trade Commission', jurisdiction: 'us', url: 'https://www.ftc.gov', note: 'Revised in 2023. Disclosure of material connections, endorser honesty, typicality of results and advertiser responsibility for endorsers.' },
+      { citation: 'FTC Trade Regulation Rule on the Use of Consumer Reviews and Testimonials', authority: 'regulator', publisher: 'Federal Trade Commission', jurisdiction: 'us', url: 'https://www.ftc.gov', note: 'In force since 2024. Prohibits fake and AI-generated fake reviews, buying positive or negative reviews, insider reviews without disclosure, review suppression and fake social-media indicators, with civil penalties.' },
+      { citation: 'FTC Act prohibition on unfair or deceptive acts or practices', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.ftc.gov', note: 'The underlying standard; state consumer-protection laws apply too.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer', 'technology'],
+    relatedSkills: ['global-marketing-claims-reviewer', 'ca-advertising-claims-reviewer', 'us-auto-renewal-auditor'],
+    whatItDoes:
+      'Reviews how a business uses endorsements, testimonials, influencers, affiliates, employees and customer reviews. It checks whether every material connection — payment, free product, commission, employment, family — is disclosed clearly where the endorsement appears; whether endorsements reflect the endorser’s honest experience and results consumers can generally expect; and whether review collection and display avoid practices the Reviews Rule prohibits, such as conditioning incentives on positive sentiment, suppressing negative reviews, or using fake or AI-generated reviews and bought followers. It produces a programme gap list, disclosure wording by platform and contract terms for creators.',
+    whenToUse:
+      'Before an influencer or affiliate campaign, when setting up a review-solicitation programme, when using customer testimonials or AI-generated content in ads, and when an FTC warning letter or complaint arrives. Advertisers are responsible for what their endorsers say, so the programme matters as much as individual posts.',
+    inputs: [
+      { name: 'Programme description', description: 'How influencers, affiliates, ambassadors, employees or customers are recruited, paid or rewarded.', required: true },
+      { name: 'Sample content', description: 'Posts, testimonials, review pages and ads, with platform and format.', required: true },
+      { name: 'Review practices', description: 'How reviews are requested, incentivised, moderated and displayed.' },
+      { name: 'Contracts and guidelines', description: 'Creator contracts, brand guidelines and monitoring processes.' },
+    ],
+    outputs: [
+      { name: 'Material connection map', description: 'Every relationship that requires disclosure, by endorser type.' },
+      { name: 'Content review', description: 'Findings on disclosure, honesty, typicality and claims for each sample.' },
+      { name: 'Reviews Rule check', description: 'Each prohibited practice tested against the programme.' },
+      { name: 'Disclosure wording by platform', description: 'Clear, placed disclosures for each format.' },
+      { name: 'Programme fixes', description: 'Contract terms, training, monitoring and takedown steps.' },
+    ],
+    prompt: `You are a US advertising lawyer reviewing endorsement, influencer and review practices.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- The FTC revised its Endorsement Guides in 2023 and its Consumer Reviews and Testimonials Rule took effect in 2024, allowing civil penalties for knowing violations [VERIFY current enforcement and any amendments].
+
+INPUTS
+- Programme: <how endorsers are recruited, paid or rewarded>
+- Sample content: <posts, testimonials, review pages, ads; platform and format>
+- Review practices: <requesting, incentives, moderation, display>
+- Contracts and guidelines: <creator contracts, guidelines, monitoring>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. MATERIAL CONNECTIONS. Identify each relationship that may require disclosure: payment, free or discounted product, commissions, sweepstakes entries, employment, family or business ties, and early access.
+3. DISCLOSURE TEST. For each sample, check that the disclosure is clear and conspicuous: in the endorsement itself, unavoidable, in plain words, in the same format (spoken in video, on-screen for the duration needed), and not hidden in a bio, behind "more" or among hashtags.
+4. HONESTY AND TYPICALITY. Check that endorsements reflect honest experience, that the endorser used the product, that results shown are generally achievable or the typical result is disclosed, and that the endorsement does not make a claim the advertiser could not substantiate.
+5. REVIEWS RULE. Test for: fake reviews or testimonials, including AI-generated ones, misrepresenting the reviewer or their experience; buying reviews or conditioning incentives on sentiment; undisclosed insider reviews; company-controlled review sites presented as independent; review suppression by threats or selective display; and selling or buying fake social-media indicators.
+6. ADVERTISER RESPONSIBILITY. Check training, contract terms requiring disclosure and truthful claims, monitoring and correction of non-compliant posts.
+7. DISCLOSURE WORDING. Propose disclosure wording for each platform and format used.
+8. FIXES. List programme fixes ordered by risk.
+
+RULES
+- Never state that a campaign complies; give findings.
+- Do not treat platform disclosure tools as sufficient without checking prominence.
+- Never suggest ways to generate, filter or present reviews that would mislead consumers.
+- Mark penalty and enforcement statements [VERIFY].
+
+OUTPUT FORMAT
+Missing information; material connection map (Endorser type | Connection | Disclosure needed); content review table (Sample | Disclosure | Honesty and typicality | Issue | Fix); Reviews Rule check (Practice | Present | Evidence); disclosure wording; programme fixes. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A supplement brand gives free product and a 15 percent affiliate commission to 120 creators, offers customers a discount for a five-star review, and shows only four- and five-star reviews on product pages.',
+      result:
+        'Material connections identified for both free product and commissions, disclosures in sample videos found only in captions, the five-star discount and selective display flagged as prohibited review practices, typicality issues in two weight-loss testimonials, and a fix list including a sentiment-neutral review request and creator contract terms.',
+    },
+  },
+  {
+    id: 'us-ada-website-accessibility-triage',
+    name: 'ADA Website Accessibility Triage',
+    description: 'Triages a website or app accessibility demand or audit under the ADA, with WCAG gap planning and response steps.',
+    jurisdiction: 'us',
+    category: 'regulatory',
+    tags: ['assessment', 'disputes', 'accessibility', 'demand-letter', 'remediation'],
+    sources: [
+      { citation: 'Americans with Disabilities Act (Title II and Title III)', authority: 'primary', publisher: 'United States Congress', jurisdiction: 'us', url: 'https://www.ada.gov', note: 'Title II covers state and local governments; Title III covers public accommodations. Whether and how Title III reaches websites varies between federal circuits.' },
+      { citation: 'DOJ Title II rule on web content and mobile app accessibility, as extended in 2026', authority: 'regulator', publisher: 'US Department of Justice', jurisdiction: 'us', url: 'https://www.ada.gov', note: 'Adopts WCAG 2.1 Level AA for state and local governments. Compliance dates were extended by one year in April 2026; DOJ signalled further rulemaking.' },
+      { citation: 'Web Content Accessibility Guidelines (WCAG)', authority: 'guidance', publisher: 'World Wide Web Consortium', url: 'https://www.w3.org', note: 'The technical standard used in settlements and in the Title II rule. No Title III regulation adopts a web standard.' },
+      { citation: 'State disability access laws', authority: 'primary', jurisdiction: 'us', note: 'Some states provide statutory damages for access violations, which drives demand letters and suits.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer', 'public-sector', 'technology'],
+    relatedSkills: ['eu-accessibility-act-readiness', 'us-demand-letter-responder', 'us-litigation-hold-builder'],
+    whatItDoes:
+      'Handles a website or mobile app accessibility problem from either direction. When a demand letter or lawsuit arrives, it checks who is claiming, under which title and state law, what barriers are alleged and whether they can be confirmed, and builds the response steps, including preservation, insurance notice and settlement terms to look for. When planning proactively, it scopes an audit against WCAG, prioritises the barriers that block key tasks such as checkout or account access, and sets out the governance — policy, testing, vendor contracts and a feedback channel — that makes a remediation plan credible. It treats overlay tools as no substitute for fixing code.',
+    whenToUse:
+      'When a business receives an accessibility demand letter or is sued, when a state or local government entity plans for the Title II rule, before a redesign or app launch, and when buying web or app development services. Serial filers target many businesses with similar claims, so speed and documentation matter.',
+    inputs: [
+      { name: 'Situation', description: 'Demand letter, lawsuit, regulator inquiry, or proactive planning.', required: true },
+      { name: 'Entity type', description: 'Public accommodation, state or local government, or other; locations and customers.', required: true },
+      { name: 'Digital properties', description: 'Websites, apps and kiosks in scope, and how they are built and maintained.', required: true },
+      { name: 'Claim documents', description: 'The letter or complaint and any barriers alleged.' },
+      { name: 'Existing work', description: 'Past audits, remediation, policies and vendor contracts.' },
+    ],
+    outputs: [
+      { name: 'Claim triage', description: 'Legal basis, forum, state-law exposure and urgency.' },
+      { name: 'Barrier verification plan', description: 'How to confirm alleged barriers and test key user journeys.' },
+      { name: 'Response steps', description: 'Preservation, insurance, counsel and settlement terms to consider.' },
+      { name: 'Remediation plan', description: 'Prioritised WCAG fixes, ownership and timelines.' },
+      { name: 'Governance checklist', description: 'Policy, testing, procurement and feedback measures.' },
+    ],
+    prompt: `You are a US disability access lawyer triaging a digital accessibility matter.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- The DOJ Title II rule adopts WCAG 2.1 Level AA for state and local governments; in April 2026 DOJ extended the compliance dates by one year and signalled further rulemaking [VERIFY current dates for the entity's size].
+- Title III has no web regulation; courts differ on whether websites not tied to a physical location are covered [VERIFY circuit law]. Some states provide statutory damages [VERIFY].
+
+INPUTS
+- Situation: <demand letter, lawsuit, inquiry, or proactive planning>
+- Entity type: <public accommodation, state or local government, other; locations>
+- Digital properties: <sites, apps, kiosks; how built and maintained>
+- Claim documents: <letter or complaint; barriers alleged>
+- Existing work: <audits, remediation, policies, vendor contracts>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. TRIAGE. Identify the claimant, forum, title relied on, state-law claims and damages exposure, deadlines, and whether the claimant or firm files serially (from facts supplied only).
+3. VERIFY BARRIERS. Plan how to confirm each alleged barrier with assistive-technology testing, and list key user journeys to test (navigation, search, forms, checkout, login, media).
+4. RESPONSE STEPS. List: preserve site versions and logs; notify insurers; engage counsel; avoid public statements; and settlement terms to consider (scope, standard, timeline, monitoring, fees) for counsel.
+5. REMEDIATION. Prioritise fixes by impact on key journeys, map them to WCAG success criteria, assign owners and realistic timelines, and note that overlays or widgets are not a substitute for code fixes.
+6. GOVERNANCE. Recommend an accessibility policy, a public statement with a feedback channel, testing in development, training, and procurement terms requiring accessible deliverables.
+7. TITLE II PATH. For public entities, map properties to the rule’s scope and exceptions and the applicable compliance date [VERIFY].
+
+RULES
+- Never state that a site is compliant or that a claim lacks merit; report findings and risks.
+- Do not recommend removing content or features to avoid a claim without counsel review.
+- Mark legal coverage and dates [VERIFY].
+
+OUTPUT FORMAT
+Missing information; triage summary; barrier verification plan; response steps; remediation table (Barrier | WCAG criterion | Journey | Priority | Owner | Timeline); governance checklist; Title II path if relevant. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'An online furniture retailer with two showrooms receives a demand letter alleging that a screen-reader user could not complete checkout, citing a state statute with statutory damages.',
+      result:
+        'Triage flagging the state statutory-damages exposure and a response deadline, a verification plan testing checkout with two screen readers, response steps including preservation and insurer notice, a remediation table prioritising unlabeled form fields and a keyboard trap at payment, and governance measures including vendor contract terms.',
+    },
+  },
 ];

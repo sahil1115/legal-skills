@@ -492,4 +492,74 @@ Open with the scope conclusion, the current status of the materiality determinat
         'Scope confirmed for a domestic filer, a dated escalation timeline showing a four-day gap before the disclosure committee was convened and flagged for explanation, a materiality decision record separating confirmed operational impact from unconfirmed data access, the Item 1.05 clock explained as running only from a determination, an Item 8.01 outline prepared as an alternative, and a risk factor still describing ransomware as hypothetical flagged for update.',
     },
   },
+  {
+    id: 'us-safe-convertible-note-reviewer',
+    name: 'SAFE and Convertible Note Reviewer',
+    description: 'Reviews a SAFE or convertible note: conversion mechanics, cap and discount, dilution and investor rights.',
+    jurisdiction: 'us',
+    category: 'corporate',
+    tags: ['review', 'corporate-transactions', 'venture-financing', 'securities', 'cap-table'],
+    sources: [
+      { citation: 'The SAFE, note, side letters and the company’s charter and cap table', authority: 'primary', note: 'Conversion, rights and priorities are set by these documents. Standard forms exist in several versions with materially different mechanics.' },
+      { citation: 'Federal securities laws and private offering exemptions', authority: 'primary', publisher: 'US Securities and Exchange Commission', jurisdiction: 'us', url: 'https://www.sec.gov', note: 'SAFEs and notes are securities; the offering needs an exemption and any required filings.' },
+      { citation: 'State corporate law of the issuer’s state of incorporation', authority: 'primary', jurisdiction: 'us', note: 'Board and stockholder approvals and authorised shares needed for conversion.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['technology'],
+    relatedSkills: ['us-private-offering-exemption', 'us-delaware-corporate-approval-planner', 'global-due-diligence-review'],
+    whatItDoes:
+      'Reviews an early-stage financing instrument — a SAFE (pre-money or post-money) or a convertible note — from the side of the company or the investor. It identifies the form and version, extracts the economics (valuation cap, discount, interest, maturity), and models conversion in a priced round, a sale of the company and a dissolution using the cap table and figures you supply, showing who is diluted and by how much. It reviews side letters and rights such as most-favoured-nation, pro rata and information rights, checks the corporate and securities steps needed to issue, and lists terms that depart from the standard form.',
+    whenToUse:
+      'When a founder is offered a SAFE or note, when an investor reviews one, when a company has issued several instruments with different terms and needs to see the combined effect, and before a priced round when conversions must be calculated. The model only uses figures you supply; a cap table professional should check the final numbers.',
+    inputs: [
+      { name: 'Instrument', description: 'The SAFE or note and any side letters.', required: true },
+      { name: 'Cap table', description: 'Current capitalisation, option pool and all outstanding convertible instruments.', required: true },
+      { name: 'Your side', description: 'Company or investor, and priorities.', required: true },
+      { name: 'Scenarios', description: 'Expected next-round size and pre-money valuation, or an exit value.' },
+      { name: 'Corporate status', description: 'State of incorporation, authorised shares and investor accreditation.' },
+    ],
+    outputs: [
+      { name: 'Instrument profile', description: 'Form, version and key economic terms with clause references.' },
+      { name: 'Conversion model', description: 'Shares issued and ownership under each scenario, with arithmetic shown.' },
+      { name: 'Rights and side-letter review', description: 'MFN, pro rata, information and other rights and their effect.' },
+      { name: 'Non-standard terms', description: 'Departures from the standard form and their effect.' },
+      { name: 'Issuance checklist', description: 'Approvals, exemption and filings to complete.' },
+    ],
+    prompt: `You are a US venture financing lawyer reviewing a SAFE or convertible note.
+
+INPUTS
+- Instrument: <SAFE or note and side letters>
+- Cap table: <capitalisation, option pool, all outstanding convertibles>
+- Your side: <company or investor; priorities>
+- Scenarios: <next-round size and pre-money valuation, or exit value>
+- Corporate status: <state of incorporation, authorised shares, investor accreditation>
+
+TASK
+1. MISSING INFORMATION. List what you need, especially all other outstanding convertibles.
+2. PROFILE. Identify the form and version (pre-money SAFE, post-money SAFE, note, custom), and extract: purchase amount or principal, valuation cap, discount, interest rate and maturity for notes, conversion triggers, the definition of the capitalisation used for the cap, and treatment on liquidity or dissolution. Quote the operative definitions.
+3. CONVERSION MODEL. Using only supplied figures, calculate conversion price and shares in each scenario: equity financing at the stated terms, a liquidity event, and dissolution. Show which of cap or discount applies and the arithmetic. Show ownership before and after for founders, the option pool, each convertible holder and new investors. Mark assumed figures [ASSUMED].
+4. STACKING. If several instruments exist, show their combined effect and note where a post-money cap means dilution falls on existing holders.
+5. RIGHTS. Review MFN, pro rata, information, board observer, and any rights in side letters, and their effect on later rounds.
+6. NON-STANDARD TERMS. Compare with the standard form where identifiable and list each departure with its effect for your side.
+7. NOTES SPECIFICALLY. For notes, review maturity consequences (repayment or conversion), security, subordination and default terms.
+8. ISSUANCE CHECKLIST. List board approval, stockholder approval if needed, authorised shares sufficient for conversion, the securities exemption and filings, investor representations, and state filings [VERIFY].
+9. RECOMMENDATIONS. List negotiation points for your side, most important first.
+
+RULES
+- Use only supplied figures; never assume a round size or valuation without marking it [ASSUMED].
+- Show all arithmetic so it can be checked.
+- Do not give tax advice; flag tax points such as interest on notes and qualified small business stock questions.
+- Do not state securities exemptions or filing deadlines as settled; mark [VERIFY].
+
+OUTPUT FORMAT
+Missing information; instrument profile table (Term | Value | Clause); conversion model tables per scenario; stacking analysis; rights review; non-standard terms; note-specific points; issuance checklist; recommendations. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A founder has already issued two post-money SAFEs totalling 1.5 million and is offered a third of 500,000 at a lower cap with an MFN side letter, ahead of an expected 6 million round.',
+      result:
+        'A model showing the three SAFEs converting for a combined stake that dilutes founders by several more points than expected, the MFN letter allowing the earlier holders to adopt the lower cap, a non-standard pro rata right flagged, and an issuance checklist noting authorised shares must be increased before the round.',
+    },
+  },
 ];

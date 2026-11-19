@@ -160,4 +160,74 @@ Open with the status check result and the date checked. Then the sections above,
         'Status check recording that the regime is not in force and secondary legislation is pending, the trial-to-paid and monthly plans identified as likely subscription contracts, a requirement register labelling reminder and cooling-off notices as enacted but not commenced with detailed timings awaiting regulations, a journey gap map showing cancellation requires a phone call, that change sequenced as a no-regret fix because hard-to-cancel journeys already carry risk under current law, and monitoring triggers set for the regulations.',
     },
   },
+  {
+    id: 'uk-business-lease-reviewer',
+    name: 'UK Business Lease Reviewer',
+    description: 'Reviews an English or Welsh commercial lease: security of tenure, rent review, repairs, breaks and alienation.',
+    jurisdiction: 'uk',
+    category: 'contracts',
+    tags: ['review', 'contract-lifecycle', 'real-estate', 'lease', 'break-clause'],
+    sources: [
+      { citation: 'Landlord and Tenant Act 1954 Part II', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Security of tenure for business tenants in England and Wales, and the procedure to contract out. Reform has been consulted on; check status.' },
+      { citation: 'Landlord and Tenant Act 1927, Landlord and Tenant Act 1988 and Landlord and Tenant (Covenants) Act 1995', authority: 'primary', publisher: 'UK Parliament', jurisdiction: 'uk', url: 'https://www.legislation.gov.uk', note: 'Consent to assignment and alterations, the cap on damages for disrepair at lease end, and liability after assignment including authorised guarantee agreements.' },
+      { citation: 'RICS professional standards on service charges and the Code for Leasing Business Premises', authority: 'guidance', publisher: 'Royal Institution of Chartered Surveyors', jurisdiction: 'uk', url: 'https://www.rics.org', note: 'Professional standards for surveyors that shape negotiations; not binding on the parties as law.' },
+    ],
+    lastReviewed: '2026-11-19',
+    reviewStatus: 'unverified',
+    version: '1.0.0',
+    industries: ['retail-consumer', 'professional-services'],
+    relatedSkills: ['us-commercial-lease-reviewer', 'au-retail-lease-reviewer', 'global-contract-key-terms-summary'],
+    whatItDoes:
+      'Reviews a commercial lease of premises in England or Wales for a tenant or landlord. It checks whether the lease is inside or contracted out of the 1954 Act and whether contracting out was done properly, then reviews rent and rent review (open market, index-linked or fixed, upwards-only, assumptions and disregards), repairing obligations against the building’s condition and any schedule of condition, service charge, break clauses and their conditions, alienation, alterations, use, insurance and reinstatement, and forfeiture. It flags the conditions that most often cause a break to fail and the costs a tenant carries at lease end.',
+    whenToUse:
+      'When negotiating heads of terms or a draft lease, before signing, before exercising a break or responding to a rent review, and when assigning or subletting. Leases in Scotland and Northern Ireland follow different law and are outside this skill.',
+    inputs: [
+      { name: 'Lease or heads of terms', description: 'The draft or completed lease with schedules, plans and any side letters.', required: true },
+      { name: 'Your side and the deal', description: 'Tenant or landlord, the commercial terms agreed and priorities.', required: true },
+      { name: 'Premises facts', description: 'Type, age and condition of the building, survey or schedule of condition, and planned use.', required: true },
+      { name: 'Contracting-out documents', description: 'Warning notice and declarations if the lease is to be outside the 1954 Act.' },
+    ],
+    outputs: [
+      { name: 'Security of tenure check', description: 'Whether the lease is protected or validly contracted out.' },
+      { name: 'Key terms table', description: 'Rent, review, term, break, repairs, service charge, alienation and use with clause references.' },
+      { name: 'Break clause risk review', description: 'Conditions and notice mechanics that could defeat a break.' },
+      { name: 'Exit cost picture', description: 'Repair, reinstatement and dilapidations exposure.' },
+      { name: 'Negotiation points', description: 'Drafted changes for your side.' },
+    ],
+    prompt: `You are a commercial property lawyer in England and Wales reviewing a business lease.
+
+CURRENT-LAW STATUS (as drafted 2026-11-19 — confirm each point before relying on it)
+- The Law Commission has consulted on reforming the 1954 Act security-of-tenure regime [VERIFY whether any change is in force]. Upwards-only rent review in new commercial leases has been the subject of proposed legislation [VERIFY current status]. Minimum energy efficiency standards apply to many lettings [VERIFY the current minimum].
+
+INPUTS
+- Lease or heads of terms: <document with schedules, plans, side letters>
+- Your side and the deal: <tenant or landlord; agreed terms; priorities>
+- Premises: <type, age, condition, survey or schedule of condition, use>
+- Contracting-out documents: <warning notice, declarations>
+
+TASK
+1. MISSING INFORMATION. List what you need.
+2. SECURITY OF TENURE. Decide whether the lease will be protected by the 1954 Act or contracted out, and check that the warning notice and declaration were given and made before the tenant became contractually bound, with the lease referring to them [VERIFY].
+3. KEY TERMS. Tabulate with clause references: parties and guarantor, demise and rights, term and dates, rent and payment, rent-free, rent review mechanism and assumptions and disregards, upwards-only or not, service charge and caps, insurance and rent suspension, repair and decoration, alterations, use, alienation, break, forfeiture, and energy performance provisions.
+4. BREAK CLAUSE. Identify conditions (vacant possession, payment of sums due, material compliance with covenants), notice mechanics and dates, and which conditions are strict; propose softening wording for a tenant.
+5. REPAIR AND EXIT. Compare the repair covenant with the building’s condition; recommend a schedule of condition where the tenant should not repair to a better standard than at the start; set out reinstatement and dilapidations exposure, including the statutory cap on damages for disrepair [VERIFY].
+6. ALIENATION. Review assignment, subletting and sharing, consent standards, preconditions and authorised guarantee agreements.
+7. SERVICE CHARGE. Review scope, exclusions, caps, sinking funds and reconciliation, against professional standards.
+8. NEGOTIATION POINTS. Draft changes for your side, most important first.
+
+RULES
+- Never state that the lease is protected or validly contracted out without the documents; mark [CONFIRM].
+- Quote break conditions exactly; precision decides whether a break works.
+- Mark statutory points and reforms [VERIFY].
+- Leases of Scottish or Northern Irish premises are out of scope.
+
+OUTPUT FORMAT
+Missing information; security of tenure finding; key terms table (Term | Provision | Clause | Comment); break clause review; repair and exit picture; alienation and service charge findings; negotiation points with wording. Close with: Assumptions made; [VERIFY] points.`,
+    example: {
+      scenario:
+        'A growing tech company is offered a ten-year lease of an older office floor with a tenant break at year five, full repairing obligations and an upwards-only open-market review.',
+      result:
+        'A finding that the lease will be contracted out and the warning notice must precede exchange, a break conditioned on full compliance with all covenants and vacant possession flagged as high-risk with softened wording proposed, a recommendation for a photographic schedule of condition to limit repair liability, and a cap on service charge increases.',
+    },
+  },
 ];
